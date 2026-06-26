@@ -1,0 +1,685 @@
+openapi: 3.2.0
+info:
+  title: Vocabest Core API
+  version: 1.0.0
+servers:
+  - url: /api/v1
+paths:
+  /users:
+    get:
+      operationId: listUsers
+      deprecated: true
+      description: DEPRECATED_TO_GRAPHQL. Collection queries should be routed to the GraphQL gateway.
+      responses:
+        "200":
+          description: OK
+    post:
+      operationId: createUser
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        "400":
+          description: Bad Request
+  /users/{userId}:
+    get:
+      operationId: getUserById
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        "404":
+          description: Not Found
+    put:
+      operationId: updateUser
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+        "404":
+          description: Not Found
+    delete:
+      operationId: deleteUser
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+
+  /users/{userId}/daily-progresses:
+    get:
+      operationId: listDailyProgresses
+      deprecated: true
+      description: DEPRECATED_TO_GRAPHQL. Collection queries should be routed to the GraphQL gateway.
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: OK
+    post:
+      operationId: createDailyProgress
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DailyProgressRequest'
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DailyProgressResponse'
+        "400":
+          description: Bad Request
+
+  /users/{userId}/daily-progresses/{dailyProgressId}:
+    get:
+      operationId: getDailyProgressById
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: dailyProgressId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DailyProgressResponse'
+        "404":
+          description: Not Found
+    put:
+      operationId: updateDailyProgress
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: dailyProgressId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DailyProgressRequest'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DailyProgressResponse'
+        "404":
+          description: Not Found
+    delete:
+      operationId: deleteDailyProgress
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: dailyProgressId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+
+  /users/{userId}/error-logs:
+    get:
+      operationId: listErrorLogs
+      deprecated: true
+      description: DEPRECATED_TO_GRAPHQL. Collection queries should be routed to the GraphQL gateway.
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: OK
+    post:
+      operationId: createErrorLog
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorLogRequest'
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorLogResponse'
+        "400":
+          description: Bad Request
+
+  /users/{userId}/error-logs/{errorLogId}:
+    get:
+      operationId: getErrorLogById
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: errorLogId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorLogResponse'
+        "404":
+          description: Not Found
+    put:
+      operationId: updateErrorLog
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: errorLogId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorLogRequest'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorLogResponse'
+        "404":
+          description: Not Found
+    delete:
+      operationId: deleteErrorLog
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: errorLogId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+
+  /users/{userId}/error-logs/{errorLogId}:recordFailure:
+    post:
+      operationId: recordFailure
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: errorLogId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ErrorLogActionRequest'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+
+  /quiz-questions:
+    get:
+      operationId: listQuizQuestions
+      deprecated: true
+      description: DEPRECATED_TO_GRAPHQL. Collection queries should be routed to the GraphQL gateway.
+      responses:
+        "200":
+          description: OK
+    post:
+      operationId: createQuizQuestion
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuizQuestionRequest'
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuizQuestionResponse'
+        "400":
+          description: Bad Request
+
+  /quiz-questions/{quizQuestionId}:
+    get:
+      operationId: getQuizQuestionById
+      parameters:
+        - name: quizQuestionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuizQuestionResponse'
+        "404":
+          description: Not Found
+    put:
+      operationId: updateQuizQuestion
+      parameters:
+        - name: quizQuestionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuizQuestionRequest'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/QuizQuestionResponse'
+        "404":
+          description: Not Found
+    delete:
+      operationId: deleteQuizQuestion
+      parameters:
+        - name: quizQuestionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+
+  /vocabulary-words:
+    get:
+      operationId: listVocabularyWords
+      deprecated: true
+      description: DEPRECATED_TO_GRAPHQL. Collection queries should be routed to the GraphQL gateway.
+      responses:
+        "200":
+          description: OK
+    post:
+      operationId: createVocabularyWord
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VocabularyWordRequest'
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VocabularyWordResponse'
+        "400":
+          description: Bad Request
+
+  /vocabulary-words/{vocabularyWordId}:
+    get:
+      operationId: getVocabularyWordById
+      parameters:
+        - name: vocabularyWordId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VocabularyWordResponse'
+        "404":
+          description: Not Found
+    put:
+      operationId: updateVocabularyWord
+      parameters:
+        - name: vocabularyWordId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VocabularyWordRequest'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/VocabularyWordResponse'
+        "404":
+          description: Not Found
+    delete:
+      operationId: deleteVocabularyWord
+      parameters:
+        - name: vocabularyWordId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+
+components:
+  schemas:
+    OperationStatus:
+      type: object
+      properties:
+        success:
+          type: boolean
+          example: true
+        message:
+          type: string
+          example: "Operation completed successfully"
+    UserRequest:
+      type: object
+      properties:
+        targetLevel:
+          type: string
+          example: "JUNIOR_HIGH"
+        learningStreak:
+          type: integer
+          example: 0
+        dailyTargetQuestions:
+          type: integer
+          example: 20
+    UserResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        targetLevel:
+          type: string
+          example: "JUNIOR_HIGH"
+        learningStreak:
+          type: integer
+          example: 0
+        dailyTargetQuestions:
+          type: integer
+          example: 20
+    DailyProgressRequest:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date-time
+          example: "2026-06-26T00:00:00Z"
+        completedQuestions:
+          type: integer
+          example: 10
+    DailyProgressResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        date:
+          type: string
+          format: date-time
+          example: "2026-06-26T00:00:00Z"
+        completedQuestions:
+          type: integer
+          example: 10
+    ErrorLogRequest:
+      type: object
+      properties:
+        wordId:
+          type: string
+          example: "word-uuid"
+        errorWeight:
+          type: integer
+          example: 1
+        nextReviewDate:
+          type: string
+          format: date-time
+          example: "2026-06-27T00:00:00Z"
+    ErrorLogResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        wordId:
+          type: string
+          example: "word-uuid"
+        errorWeight:
+          type: integer
+          example: 1
+        nextReviewDate:
+          type: string
+          format: date-time
+          example: "2026-06-27T00:00:00Z"
+    ErrorLogActionRequest:
+      type: object
+      properties:
+        reason:
+          type: string
+          example: "User answered incorrectly"
+    QuizQuestionRequest:
+      type: object
+      properties:
+        wordId:
+          type: string
+          example: "word-uuid"
+        contextualCloze:
+          type: string
+          example: "I usually _____ coffee in the morning."
+        translation:
+          type: string
+          example: "我通常早上喝咖啡。"
+        correctOption:
+          type: string
+          example: "drink"
+        distractor1:
+          type: string
+          example: "eat"
+        distractor2:
+          type: string
+          example: "run"
+        distractor3:
+          type: string
+          example: "sleep"
+        explanationRootAffix:
+          type: string
+          example: "dr- ink"
+        explanationMnemonic:
+          type: string
+          example: "think of a drink"
+        targetLevel:
+          type: string
+          example: "JUNIOR_HIGH"
+    QuizQuestionResponse:
+      allOf:
+        - $ref: '#/components/schemas/QuizQuestionRequest'
+        - type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: "123e4567-e89b-12d3-a456-426614174000"
+    VocabularyWordRequest:
+      type: object
+      properties:
+        word:
+          type: string
+          example: "drink"
+        partOfSpeech:
+          type: string
+          example: "verb"
+        translation:
+          type: string
+          example: "喝"
+        level:
+          type: string
+          example: "JUNIOR_1200"
+    VocabularyWordResponse:
+      allOf:
+        - $ref: '#/components/schemas/VocabularyWordRequest'
+        - type: object
+          properties:
+            id:
+              type: string
+              format: uuid
+              example: "123e4567-e89b-12d3-a456-426614174000"

@@ -1,0 +1,34 @@
+@startuml daily_progress_contract
+
+!pragma layout smetana
+skinparam packageStyle rectangle
+skinparam defaultFontName Inter
+
+package "adapter.in.web.rest" {
+  interface "DailyProgressRestController" <<RestController>> {
+    + createDailyProgress(req: DailyProgressRequest): ResponseEntity<DailyProgressResponse>
+    + updateDailyProgress(id: UUID, req: DailyProgressRequest): ResponseEntity<DailyProgressResponse>
+    + deleteDailyProgress(id: UUID): ResponseEntity<Void>
+    + getDailyProgressById(id: UUID): ResponseEntity<DailyProgressResponse>
+  }
+}
+
+package "adapter.in.web.graphql" {
+  interface "DailyProgressGraphQLResolver" <<GraphQLResolver>> {
+    + listDailyProgresses(filter: DailyProgressFilterInput): List<DailyProgress>
+  }
+}
+
+package "adapter.out.persistence" {
+  interface "DailyProgressRepository" <<Repository>> {
+    + save(entity: DailyProgress): DailyProgress
+    + findById(id: UUID): Optional<DailyProgress>
+    + findByExample(example: Example<DailyProgress>): List<DailyProgress>
+    + deleteById(id: UUID): void
+  }
+}
+
+"DailyProgressRestController"  ..> "DailyProgressRepository" : uses
+"DailyProgressGraphQLResolver" ..> "DailyProgressRepository" : uses
+
+@enduml

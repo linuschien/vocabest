@@ -1,0 +1,34 @@
+@startuml user_contract
+
+!pragma layout smetana
+skinparam packageStyle rectangle
+skinparam defaultFontName Inter
+
+package "adapter.in.web.rest" {
+  interface "UserRestController" <<RestController>> {
+    + createUser(req: UserRequest): ResponseEntity<UserResponse>
+    + updateUser(id: UUID, req: UserRequest): ResponseEntity<UserResponse>
+    + deleteUser(id: UUID): ResponseEntity<Void>
+    + getUserById(id: UUID): ResponseEntity<UserResponse>
+  }
+}
+
+package "adapter.in.web.graphql" {
+  interface "UserGraphQLResolver" <<GraphQLResolver>> {
+    + listUsers(filter: UserFilterInput): List<User>
+  }
+}
+
+package "adapter.out.persistence" {
+  interface "UserRepository" <<Repository>> {
+    + save(entity: User): User
+    + findById(id: UUID): Optional<User>
+    + findByExample(example: Example<User>): List<User>
+    + deleteById(id: UUID): void
+  }
+}
+
+"UserRestController"  ..> "UserRepository" : uses
+"UserGraphQLResolver" ..> "UserRepository" : uses
+
+@enduml

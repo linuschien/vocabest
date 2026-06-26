@@ -1,0 +1,34 @@
+@startuml quiz_question_contract
+
+!pragma layout smetana
+skinparam packageStyle rectangle
+skinparam defaultFontName Inter
+
+package "adapter.in.web.rest" {
+  interface "QuizQuestionRestController" <<RestController>> {
+    + createQuizQuestion(req: QuizQuestionRequest): ResponseEntity<QuizQuestionResponse>
+    + updateQuizQuestion(id: UUID, req: QuizQuestionRequest): ResponseEntity<QuizQuestionResponse>
+    + deleteQuizQuestion(id: UUID): ResponseEntity<Void>
+    + getQuizQuestionById(id: UUID): ResponseEntity<QuizQuestionResponse>
+  }
+}
+
+package "adapter.in.web.graphql" {
+  interface "QuizQuestionGraphQLResolver" <<GraphQLResolver>> {
+    + listQuizQuestions(filter: QuizQuestionFilterInput): List<QuizQuestion>
+  }
+}
+
+package "adapter.out.persistence" {
+  interface "QuizQuestionRepository" <<Repository>> {
+    + save(entity: QuizQuestion): QuizQuestion
+    + findById(id: UUID): Optional<QuizQuestion>
+    + findByExample(example: Example<QuizQuestion>): List<QuizQuestion>
+    + deleteById(id: UUID): void
+  }
+}
+
+"QuizQuestionRestController"  ..> "QuizQuestionRepository" : uses
+"QuizQuestionGraphQLResolver" ..> "QuizQuestionRepository" : uses
+
+@enduml

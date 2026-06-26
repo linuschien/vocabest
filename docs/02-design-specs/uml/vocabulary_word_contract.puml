@@ -1,0 +1,34 @@
+@startuml vocabulary_word_contract
+
+!pragma layout smetana
+skinparam packageStyle rectangle
+skinparam defaultFontName Inter
+
+package "adapter.in.web.rest" {
+  interface "VocabularyWordRestController" <<RestController>> {
+    + createVocabularyWord(req: VocabularyWordRequest): ResponseEntity<VocabularyWordResponse>
+    + updateVocabularyWord(id: UUID, req: VocabularyWordRequest): ResponseEntity<VocabularyWordResponse>
+    + deleteVocabularyWord(id: UUID): ResponseEntity<Void>
+    + getVocabularyWordById(id: UUID): ResponseEntity<VocabularyWordResponse>
+  }
+}
+
+package "adapter.in.web.graphql" {
+  interface "VocabularyWordGraphQLResolver" <<GraphQLResolver>> {
+    + listVocabularyWords(filter: VocabularyWordFilterInput): List<VocabularyWord>
+  }
+}
+
+package "adapter.out.persistence" {
+  interface "VocabularyWordRepository" <<Repository>> {
+    + save(entity: VocabularyWord): VocabularyWord
+    + findById(id: UUID): Optional<VocabularyWord>
+    + findByExample(example: Example<VocabularyWord>): List<VocabularyWord>
+    + deleteById(id: UUID): void
+  }
+}
+
+"VocabularyWordRestController"  ..> "VocabularyWordRepository" : uses
+"VocabularyWordGraphQLResolver" ..> "VocabularyWordRepository" : uses
+
+@enduml

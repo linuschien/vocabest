@@ -1,0 +1,76 @@
+Enum target_level {
+  JUNIOR_HIGH
+  SENIOR_HIGH
+}
+
+Enum vocabulary_level {
+  JUNIOR_1200
+  JUNIOR_800
+  SENIOR_7000
+}
+
+Table user {
+  id uuid [pk]
+  target_level target_level
+  learning_streak integer
+  daily_target_questions integer
+  created_at timestamp
+  updated_at timestamp
+  deleted_at timestamp
+}
+
+Table daily_progress {
+  id uuid [pk]
+  user_id uuid
+  date timestamp
+  completed_questions integer
+  created_at timestamp
+  updated_at timestamp
+  deleted_at timestamp
+}
+
+Table error_log {
+  id uuid [pk]
+  user_id uuid
+  vocabulary_word_id uuid
+  quiz_question_id uuid
+  error_weight integer
+  next_review_date timestamp
+  created_at timestamp
+  updated_at timestamp
+  deleted_at timestamp
+}
+
+Table quiz_question {
+  id uuid [pk]
+  vocabulary_word_id uuid
+  contextual_cloze varchar
+  translation varchar
+  correct_option varchar
+  distractor1 varchar
+  distractor2 varchar
+  distractor3 varchar
+  explanation_root_affix varchar
+  explanation_mnemonic varchar
+  target_level target_level
+  created_at timestamp
+  updated_at timestamp
+  deleted_at timestamp
+}
+
+Table vocabulary_word {
+  id uuid [pk]
+  word varchar
+  part_of_speech varchar
+  translation varchar
+  level vocabulary_level
+  created_at timestamp
+  updated_at timestamp
+  deleted_at timestamp
+}
+
+Ref: user.id < daily_progress.user_id [delete: cascade]
+Ref: user.id < error_log.user_id [delete: cascade]
+Ref: quiz_question.id < error_log.quiz_question_id [delete: set null]
+Ref: vocabulary_word.id < quiz_question.vocabulary_word_id [delete: set null]
+Ref: vocabulary_word.id < error_log.vocabulary_word_id [delete: set null]
