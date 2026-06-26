@@ -1,0 +1,109 @@
+@startuml
+skinparam style strictuml
+title Domain Model - Vocabest Core
+
+package "User & Learning Progress" {
+    class User <<Entity>> {
+        +String id
+        +TargetLevel targetLevel
+        +Integer learningStreak
+        +Integer dailyTargetQuestions
+    }
+
+    class DailyProgress <<Entity>> {
+        +String id
+        +DateTime date
+        +Integer completedQuestions
+    }
+
+    class ErrorLog <<Entity>> {
+        +String id
+        +String wordId
+        +Integer errorWeight
+        +DateTime nextReviewDate
+    }
+}
+
+package "Question Bank & Quizzes" {
+    class VocabularyWord <<Entity>> {
+        +String id
+        +String word
+        +String partOfSpeech
+        +String translation
+        +VocabularyLevel level
+    }
+
+    class QuizQuestion <<Entity>> {
+        +String id
+        +String wordId
+        +String contextualCloze
+        +String translation
+        +String correctOption
+        +String distractor1
+        +String distractor2
+        +String distractor3
+        +String explanationRootAffix
+        +String explanationMnemonic
+        +TargetLevel targetLevel
+    }
+}
+
+package "Persistence Contracts" {
+    interface UserRepository <<Interface>> {
+        +Create(User data): User
+        +GetById(String id): User?
+        +Update(String id, User delta): User
+        +Delete(String id): Boolean
+    }
+
+    interface DailyProgressRepository <<Interface>> {
+        +Create(DailyProgress data): DailyProgress
+        +GetById(String id): DailyProgress?
+        +Update(String id, DailyProgress delta): DailyProgress
+        +Delete(String id): Boolean
+    }
+
+    interface ErrorLogRepository <<Interface>> {
+        +Create(ErrorLog data): ErrorLog
+        +GetById(String id): ErrorLog?
+        +Update(String id, ErrorLog delta): ErrorLog
+        +Delete(String id): Boolean
+    }
+
+    interface QuizQuestionRepository <<Interface>> {
+        +Create(QuizQuestion data): QuizQuestion
+        +GetById(String id): QuizQuestion?
+        +Update(String id, QuizQuestion delta): QuizQuestion
+        +Delete(String id): Boolean
+    }
+
+    interface VocabularyWordRepository <<Interface>> {
+        +Create(VocabularyWord data): VocabularyWord
+        +GetById(String id): VocabularyWord?
+        +Update(String id, VocabularyWord delta): VocabularyWord
+        +Delete(String id): Boolean
+    }
+}
+
+' Relationships
+User "1" *-- "0..*" DailyProgress : "tracks"
+User "1" *-- "0..*" ErrorLog : "maintains"
+ErrorLog "0..*" o-- "1" QuizQuestion : "references"
+QuizQuestion "0..*" o-- "1" VocabularyWord : "tests"
+ErrorLog "0..*" o-- "1" VocabularyWord : "tracks"
+
+enum TargetLevel {
+    JUNIOR_HIGH
+    SENIOR_HIGH
+}
+
+enum VocabularyLevel {
+    JUNIOR_1200
+    JUNIOR_800
+    SENIOR_7000
+}
+
+note right of User : ID MUST be a UUID v4
+note right of ErrorLog : errorWeight increments on wrong answer
+note right of DailyProgress : date is midnight of user's timezone
+@enduml
