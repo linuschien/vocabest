@@ -1,0 +1,70 @@
+{
+  "ui_id": "error-review-board",
+  "domain_module": "UserAndLearningProgress",
+  "root_element": {
+    "id": "error-review-page",
+    "abstract_type": "Container",
+    "semantic_variant": "page",
+    "children": [
+      {
+        "id": "error-review-header",
+        "abstract_type": "Section",
+        "semantic_variant": "summary-section",
+        "children": [
+          {
+            "id": "error-review-title",
+            "abstract_type": "Heading",
+            "label": "Error Review Area"
+          },
+          {
+            "id": "start-review-trigger",
+            "abstract_type": "Trigger",
+            "semantic_variant": "primary",
+            "label": "Start Error Review Mode",
+            "behavior_ref": "Error Review Special Mode Entry",
+            "ux_hints": {
+              "primary_action_placement": "top-right"
+            }
+          }
+        ]
+      },
+      {
+        "id": "error-log-list-section",
+        "abstract_type": "Section",
+        "semantic_variant": "list-section",
+        "children": [
+          {
+            "id": "error-log-table",
+            "abstract_type": "Table",
+            "semantic_variant": "data-table",
+            "data_ref": "listErrorLogs",
+            "columns": [
+              {
+                "field": "wordId",
+                "label": "Vocabulary Word"
+              },
+              {
+                "field": "errorWeight",
+                "label": "Error Weight",
+                "sortable": true
+              },
+              {
+                "field": "nextReviewDate",
+                "label": "Next Review Date",
+                "sortable": true,
+                "default_sort": "asc"
+              }
+            ],
+            "ux_hints": {
+              "principles": [
+                "millers-law",
+                "fitts-law"
+              ],
+              "group_size_hint": 7
+            }
+          }
+        ]
+      }
+    ]
+  }
+}

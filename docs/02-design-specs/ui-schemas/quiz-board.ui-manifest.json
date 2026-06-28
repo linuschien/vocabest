@@ -1,0 +1,89 @@
+{
+  "ui_id": "quiz-board",
+  "domain_module": "QuestionBankAndQuizzes",
+  "root_element": {
+    "id": "quiz-page",
+    "abstract_type": "Container",
+    "semantic_variant": "page",
+    "children": [
+      {
+        "id": "question-section",
+        "abstract_type": "Section",
+        "semantic_variant": "summary-section",
+        "children": [
+          {
+            "id": "chinese-translation",
+            "abstract_type": "Text",
+            "label": "Translation",
+            "data_ref": "listQuizQuestions"
+          },
+          {
+            "id": "english-cloze",
+            "abstract_type": "Heading",
+            "label": "Contextual Cloze",
+            "data_ref": "listQuizQuestions",
+            "ux_hints": {
+              "principles": [
+                "visual-hierarchy:size"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "id": "options-grid",
+        "abstract_type": "Grid",
+        "semantic_variant": "card-grid",
+        "children": [
+          {
+            "id": "quiz-option-trigger",
+            "abstract_type": "Trigger",
+            "semantic_variant": "secondary",
+            "label": "Option",
+            "data_ref": "listQuizQuestions",
+            "behavior_ref": "Unlimited Practice and Positive Reinforcement",
+            "interactions": [
+              {
+                "on_event": "on_click",
+                "target_id": "ai-explanation-panel",
+                "behavior_ref": "AI Explanation Panel on Incorrect Answer"
+              }
+            ],
+            "ux_hints": {
+              "principles": [
+                "fitts-law",
+                "nielsen:feedback"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "id": "ai-explanation-panel",
+        "abstract_type": "Overlay",
+        "semantic_variant": "drawer",
+        "children": [
+          {
+            "id": "explanation-root-affix",
+            "abstract_type": "Text",
+            "label": "Root/Affix Explanation",
+            "data_ref": "listQuizQuestions"
+          },
+          {
+            "id": "explanation-mnemonic",
+            "abstract_type": "Text",
+            "label": "Mnemonic Explanation",
+            "data_ref": "listQuizQuestions"
+          },
+          {
+            "id": "next-question-trigger",
+            "abstract_type": "Trigger",
+            "semantic_variant": "primary",
+            "label": "Next Question",
+            "behavior_ref": "nielsen:control"
+          }
+        ]
+      }
+    ]
+  }
+}

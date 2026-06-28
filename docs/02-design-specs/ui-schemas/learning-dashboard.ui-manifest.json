@@ -1,0 +1,72 @@
+{
+  "ui_id": "learning-dashboard",
+  "domain_module": "UserAndLearningProgress",
+  "root_element": {
+    "id": "dashboard-page",
+    "abstract_type": "Container",
+    "semantic_variant": "page",
+    "children": [
+      {
+        "id": "progress-summary-section",
+        "abstract_type": "Section",
+        "semantic_variant": "summary-section",
+        "children": [
+          {
+            "id": "daily-progress-metric",
+            "abstract_type": "Metric",
+            "label": "Daily Progress",
+            "data_ref": "listDailyProgresses",
+            "ux_hints": {
+              "principles": [
+                "gestalt:proximity"
+              ]
+            }
+          },
+          {
+            "id": "learning-streak-metric",
+            "abstract_type": "Metric",
+            "label": "Learning Streak",
+            "data_ref": "getUserById",
+            "ux_hints": {
+              "principles": [
+                "gestalt:proximity"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "id": "quick-actions-bar",
+        "abstract_type": "Stack",
+        "semantic_variant": "action-bar",
+        "children": [
+          {
+            "id": "quick-start-trigger",
+            "abstract_type": "Trigger",
+            "semantic_variant": "primary",
+            "label": "Start Daily Task",
+            "behavior_ref": "QuickStart",
+            "ux_hints": {
+              "primary_action_placement": "top-left",
+              "principles": [
+                "fitts-law"
+              ]
+            }
+          },
+          {
+            "id": "error-review-entry-trigger",
+            "abstract_type": "Trigger",
+            "semantic_variant": "secondary",
+            "label": "Error Review",
+            "behavior_ref": "Error Review Special Mode Entry",
+            "ux_hints": {
+              "principles": [
+                "nielsen:visibility"
+              ]
+            }
+          }
+        ]
+      }
+    ]
+  }
+}
