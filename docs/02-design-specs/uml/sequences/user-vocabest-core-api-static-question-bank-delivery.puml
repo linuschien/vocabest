@@ -1,0 +1,28 @@
+@startuml user-vocabest-core-api-static-question-bank-delivery
+!pragma layout smetana
+skinparam packageStyle rectangle
+skinparam defaultFontName Inter
+
+actor Learner as Actor
+
+box "vocabest-core-api" #LightCyan
+  participant "QuizQuestionGraphQLResolver" as GraphQLAdapter <<Primary Adapter>>
+  participant "QuizQuestionRepository" as RepoAdapter <<Secondary Adapter>>
+end box
+
+Actor -> GraphQLAdapter : listQuizQuestions(filter)
+activate GraphQLAdapter
+
+note right of GraphQLAdapter
+  Filter applies TargetLevel (JUNIOR_HIGH/SENIOR_HIGH)
+end note
+
+GraphQLAdapter -> RepoAdapter : findByExample(example)
+activate RepoAdapter
+RepoAdapter --> GraphQLAdapter : List<QuizQuestion>
+deactivate RepoAdapter
+
+GraphQLAdapter --> Actor : List<QuizQuestion>
+deactivate GraphQLAdapter
+
+@enduml

@@ -1,0 +1,44 @@
+@startuml sys-vocabest-core-api-recording-a-failure-and-scheduling-review
+!pragma layout smetana
+skinparam packageStyle rectangle
+skinparam defaultFontName Inter
+
+actor System as Actor
+
+box "vocabest-core-api" #LightCyan
+  participant "ErrorLogRestController" as RestAdapter <<Primary Adapter>>
+  participant "ErrorLogCommandService" as ServicePort <<Primary Adapter>>
+  participant "ErrorLogRepository" as RepoAdapter <<Secondary Adapter>>
+end box
+
+Actor -> RestAdapter : recordFailure(id, req)
+activate RestAdapter
+note right of RestAdapter
+  Internal process triggered
+end note
+
+RestAdapter -> ServicePort : recordFailure(id, req)
+activate ServicePort
+
+ServicePort -> RepoAdapter : findById(id)
+activate RepoAdapter
+RepoAdapter --> ServicePort : Optional<ErrorLog>
+deactivate RepoAdapter
+
+note right of ServicePort
+  Increment errorWeight
+  Calculate nextReviewDate via SpacedRepetition logic
+end note
+
+ServicePort -> RepoAdapter : save(entity)
+activate RepoAdapter
+RepoAdapter --> ServicePort : ErrorLog
+deactivate RepoAdapter
+
+ServicePort --> RestAdapter : OperationStatus
+deactivate ServicePort
+
+RestAdapter --> Actor : ResponseEntity<OperationStatus>
+deactivate RestAdapter
+
+@enduml

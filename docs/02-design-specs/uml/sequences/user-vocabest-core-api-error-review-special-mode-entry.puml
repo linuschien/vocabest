@@ -1,0 +1,36 @@
+@startuml user-vocabest-core-api-error-review-special-mode-entry
+!pragma layout smetana
+skinparam packageStyle rectangle
+skinparam defaultFontName Inter
+
+actor Learner as Actor
+
+box "vocabest-core-api" #LightCyan
+  participant "ErrorLogGraphQLResolver" as GraphQLAdapter <<Primary Adapter>>
+  participant "ErrorLogQueryService" as ServicePort <<Primary Adapter>>
+  participant "ErrorLogRepository" as RepoAdapter <<Secondary Adapter>>
+end box
+
+Actor -> GraphQLAdapter : listErrorLogs(filter)
+activate GraphQLAdapter
+
+GraphQLAdapter -> ServicePort : listErrorLogs(filter)
+activate ServicePort
+
+ServicePort -> RepoAdapter : findByExample(example)
+activate RepoAdapter
+RepoAdapter --> ServicePort : List<ErrorLog>
+deactivate RepoAdapter
+
+ServicePort --> GraphQLAdapter : List<ErrorLog>
+deactivate ServicePort
+
+GraphQLAdapter --> Actor : List<ErrorLog>
+deactivate GraphQLAdapter
+
+note right of Actor
+  If pending review count > 0, enable ErrorReviewMode
+  Else, disable ErrorReviewMode entry
+end note
+
+@enduml

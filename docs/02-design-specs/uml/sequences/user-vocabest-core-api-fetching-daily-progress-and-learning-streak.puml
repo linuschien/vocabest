@@ -1,0 +1,46 @@
+@startuml user-vocabest-core-api-fetching-daily-progress-and-learning-streak
+!pragma layout smetana
+skinparam packageStyle rectangle
+skinparam defaultFontName Inter
+
+actor Learner as Actor
+
+box "vocabest-core-api" #LightCyan
+  participant "UserRestController" as UserRestAdapter <<Primary Adapter>>
+  participant "DailyProgressGraphQLResolver" as DailyProgressGraphQLAdapter <<Primary Adapter>>
+  participant "UserRepository" as UserRepoAdapter <<Secondary Adapter>>
+  participant "DailyProgressRepository" as DailyProgressRepoAdapter <<Secondary Adapter>>
+end box
+
+group Fetch User Profile
+  Actor -> UserRestAdapter : getUserById(id)
+  activate UserRestAdapter
+
+  UserRestAdapter -> UserRepoAdapter : findById(id)
+  activate UserRepoAdapter
+  UserRepoAdapter --> UserRestAdapter : Optional<User>
+  deactivate UserRepoAdapter
+
+  UserRestAdapter --> Actor : ResponseEntity<UserResponse>
+  deactivate UserRestAdapter
+end
+
+group Fetch Daily Progress & Streak
+  Actor -> DailyProgressGraphQLAdapter : listDailyProgresses(filter)
+  activate DailyProgressGraphQLAdapter
+
+  DailyProgressGraphQLAdapter -> DailyProgressRepoAdapter : findByExample(example)
+  activate DailyProgressRepoAdapter
+  DailyProgressRepoAdapter --> DailyProgressGraphQLAdapter : List<DailyProgress>
+  deactivate DailyProgressRepoAdapter
+
+  DailyProgressGraphQLAdapter --> Actor : List<DailyProgress>
+  deactivate DailyProgressGraphQLAdapter
+end
+
+note right of Actor
+  UI processes LearningStreak value
+  If date changed and completedQuestions == 0, Streak = 0
+end note
+
+@enduml
