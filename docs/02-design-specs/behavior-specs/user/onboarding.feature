@@ -16,7 +16,7 @@ Feature: System Cold Start and Data Pipeline (Onboarding)
 
   Scenario Outline: Static Question Bank Delivery
     Given a "Learner" with "TargetLevel" set to "<target_level>"
-    When the "Learner" makes a GET request to "QuizQuestionRestController.listQuizQuestions"
+    When the "Learner" makes a GraphQL query to "QuizQuestionGraphQLResolver.listQuizQuestions"
     Then the response must contain a "QuizQuestion" list
     And each "QuizQuestion" must include "contextualCloze", "translation", 1 correct option, and 3 distractors
     And the API response time must be less than 200 milliseconds
