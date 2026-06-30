@@ -1,0 +1,107 @@
+scalar UUID
+scalar DateTime
+
+enum TargetLevel {
+  JUNIOR_HIGH
+  SENIOR_HIGH
+}
+
+enum VocabularyLevel {
+  JUNIOR_BASIC_1200
+  JUNIOR_ADVANCED_800
+  SENIOR_LEVEL_1
+  SENIOR_LEVEL_2
+  SENIOR_LEVEL_3
+  SENIOR_LEVEL_4
+  SENIOR_LEVEL_5
+  SENIOR_LEVEL_6
+}
+
+type User {
+  id: UUID!
+  targetLevel: TargetLevel
+  learningStreak: Int
+  dailyTargetQuestions: Int
+  createdAt: DateTime
+  updatedAt: DateTime
+  deletedAt: DateTime
+}
+
+input UserFilterInput {
+  targetLevel: TargetLevel
+}
+
+type DailyProgress {
+  id: UUID!
+  userId: UUID
+  date: DateTime
+  completedQuestions: Int
+  createdAt: DateTime
+  updatedAt: DateTime
+  deletedAt: DateTime
+}
+
+input DailyProgressFilterInput {
+  userId: UUID
+}
+
+type ErrorLog {
+  id: UUID!
+  userId: UUID
+  vocabularyWordId: UUID
+  quizQuestionId: UUID
+  errorWeight: Int
+  nextReviewDate: DateTime
+  createdAt: DateTime
+  updatedAt: DateTime
+  deletedAt: DateTime
+}
+
+input ErrorLogFilterInput {
+  userId: UUID
+}
+
+type QuizQuestion {
+  id: UUID!
+  vocabularyWordId: UUID
+  contextualCloze: String
+  translation: String
+  correctOption: String
+  distractor1: String
+  distractor2: String
+  distractor3: String
+  explanationRootAffix: String
+  explanationMnemonic: String
+  targetLevel: TargetLevel
+  createdAt: DateTime
+  updatedAt: DateTime
+  deletedAt: DateTime
+}
+
+input QuizQuestionFilterInput {
+  targetLevel: TargetLevel
+}
+
+type VocabularyWord {
+  id: UUID!
+  word: String
+  partOfSpeech: String
+  translation: String
+  level: VocabularyLevel
+  examFrequency: Int
+  createdAt: DateTime
+  updatedAt: DateTime
+  deletedAt: DateTime
+}
+
+input VocabularyWordFilterInput {
+  level: VocabularyLevel
+}
+
+type Query {
+  listUsers(filter: UserFilterInput): [User]
+  listDailyProgresses(filter: DailyProgressFilterInput): [DailyProgress]
+  listErrorLogs(filter: ErrorLogFilterInput): [ErrorLog]
+  listQuizQuestions(filter: QuizQuestionFilterInput): [QuizQuestion]
+  listVocabularyWords(filter: VocabularyWordFilterInput): [VocabularyWord]
+}
