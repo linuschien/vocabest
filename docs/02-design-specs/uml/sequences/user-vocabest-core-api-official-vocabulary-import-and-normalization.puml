@@ -1,0 +1,36 @@
+@startuml user-vocabest-core-api-official-vocabulary-import-and-normalization
+
+!pragma layout smetana
+skinparam defaultFontName Inter
+skinparam sequenceMessageAlign center
+
+actor Admin
+participant "VocabularyWordRestController" as RestController <<PrimaryAdapter>>
+participant "VocabularyWordCommandService" as CommandService <<DomainService>>
+participant "VocabularyWordRepository" as Repository <<SecondaryAdapter>>
+
+Admin -> RestController : importBulk(req: VocabularyWordActionRequest)
+activate RestController
+
+RestController -> CommandService : importBulk(req)
+activate CommandService
+
+note right of CommandService
+  處理上傳檔案 (MD/CSV/JSON)
+  並套用去重規則與難度級別標記
+end note
+
+group Loop [For each normalized vocabulary word]
+  CommandService -> Repository : save(entity: VocabularyWord)
+  activate Repository
+  Repository --> CommandService : VocabularyWord
+  deactivate Repository
+end
+
+CommandService --> RestController : OperationStatus
+deactivate CommandService
+
+RestController --> Admin : ResponseEntity<OperationStatus>
+deactivate RestController
+
+@enduml
