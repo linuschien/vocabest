@@ -376,6 +376,23 @@ paths:
         "400":
           description: Bad Request
 
+  /quiz-questions:generateBatch:
+    post:
+      operationId: generateBatch
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/QuizQuestionActionRequest'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
+
   /quiz-questions/{quizQuestionId}:
     get:
       operationId: getQuizQuestionById
@@ -459,6 +476,23 @@ paths:
                 $ref: '#/components/schemas/VocabularyWordResponse'
         "400":
           description: Bad Request
+
+  /vocabulary-words:importBulk:
+    post:
+      operationId: importBulk
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/VocabularyWordActionRequest'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OperationStatus'
 
   /vocabulary-words/{vocabularyWordId}:
     get:
@@ -617,6 +651,18 @@ components:
         reason:
           type: string
           example: "User answered incorrectly"
+    QuizQuestionActionRequest:
+      type: object
+      properties:
+        batchSize:
+          type: integer
+          example: 50
+    VocabularyWordActionRequest:
+      type: object
+      properties:
+        sourceUrl:
+          type: string
+          example: "https://example.com/words.csv"
     QuizQuestionRequest:
       type: object
       properties:
@@ -673,7 +719,10 @@ components:
           example: "喝"
         level:
           type: string
-          example: "JUNIOR_1200"
+          example: "JUNIOR_BASIC_1200"
+        examFrequency:
+          type: integer
+          example: 5
     VocabularyWordResponse:
       allOf:
         - $ref: '#/components/schemas/VocabularyWordRequest'

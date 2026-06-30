@@ -10,11 +10,26 @@ package "adapter.in.web.rest" {
     + updateQuizQuestion(id: UUID, req: QuizQuestionRequest): ResponseEntity<QuizQuestionResponse>
     + deleteQuizQuestion(id: UUID): ResponseEntity<Void>
     + getQuizQuestionById(id: UUID): ResponseEntity<QuizQuestionResponse>
+    + generateBatch(req: QuizQuestionActionRequest): ResponseEntity<OperationStatus>
   }
 }
 
 package "adapter.in.web.graphql" {
   interface "QuizQuestionGraphQLResolver" <<GraphQLResolver>> {
+    + listQuizQuestions(filter: QuizQuestionFilterInput): List<QuizQuestion>
+  }
+}
+
+package "application.port.in" {
+  interface "QuizQuestionCommandService" <<Service>> {
+    + createQuizQuestion(req: QuizQuestionRequest): QuizQuestionResponse
+    + updateQuizQuestion(id: UUID, req: QuizQuestionRequest): QuizQuestionResponse
+    + deleteQuizQuestion(id: UUID): void
+    + generateBatch(req: QuizQuestionActionRequest): OperationStatus
+  }
+
+  interface "QuizQuestionQueryService" <<Service>> {
+    + getQuizQuestionById(id: UUID): QuizQuestionResponse
     + listQuizQuestions(filter: QuizQuestionFilterInput): List<QuizQuestion>
   }
 }
@@ -28,7 +43,10 @@ package "adapter.out.persistence" {
   }
 }
 
-"QuizQuestionRestController"  ..> "QuizQuestionRepository" : uses
-"QuizQuestionGraphQLResolver" ..> "QuizQuestionRepository" : uses
+"QuizQuestionRestController"  ..> "QuizQuestionCommandService" : uses
+"QuizQuestionRestController"  ..> "QuizQuestionQueryService" : uses
+"QuizQuestionGraphQLResolver" ..> "QuizQuestionQueryService" : uses
+"QuizQuestionCommandService"  ..> "QuizQuestionRepository" : uses
+"QuizQuestionQueryService"    ..> "QuizQuestionRepository" : uses
 
 @enduml

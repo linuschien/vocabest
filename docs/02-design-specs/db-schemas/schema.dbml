@@ -4,9 +4,14 @@ Enum target_level {
 }
 
 Enum vocabulary_level {
-  JUNIOR_1200
-  JUNIOR_800
-  SENIOR_7000
+  JUNIOR_BASIC_1200
+  JUNIOR_ADVANCED_800
+  SENIOR_LEVEL_1
+  SENIOR_LEVEL_2
+  SENIOR_LEVEL_3
+  SENIOR_LEVEL_4
+  SENIOR_LEVEL_5
+  SENIOR_LEVEL_6
 }
 
 Table user {
@@ -64,6 +69,7 @@ Table vocabulary_word {
   part_of_speech varchar
   translation varchar
   level vocabulary_level
+  exam_frequency integer
   created_at timestamp
   updated_at timestamp
   deleted_at timestamp
