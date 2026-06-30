@@ -483,7 +483,7 @@ paths:
       requestBody:
         required: true
         content:
-          application/json:
+          multipart/form-data:
             schema:
               $ref: '#/components/schemas/VocabularyWordActionRequest'
       responses:
@@ -654,15 +654,21 @@ components:
     QuizQuestionActionRequest:
       type: object
       properties:
-        batchSize:
+        maxWordsToProcess:
           type: integer
-          example: 50
+          description: "Limit the number of vocabulary words to process in this batch run to control AI API usage."
+          example: 100
+        targetLevel:
+          type: string
+          description: "Optional level to filter which words to process."
+          example: "JUNIOR_BASIC_1200"
     VocabularyWordActionRequest:
       type: object
       properties:
-        sourceUrl:
+        file:
           type: string
-          example: "https://example.com/words.csv"
+          format: binary
+          description: "The file (MD, CSV, JSON) containing the vocabulary list to import."
     QuizQuestionRequest:
       type: object
       properties:
