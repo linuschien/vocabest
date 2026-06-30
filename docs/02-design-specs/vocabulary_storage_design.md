@@ -13,9 +13,10 @@
 * **`partOfSpeech`** (String): 詞性，可存放縮寫（例如：`n.`, `v.`, `adj.`）
 * **`translation`** (String): 中文解釋
 * **`level`** (VocabularyLevel Enum): 所屬級別，包含：
-  * `JUNIOR_1200`
-  * `JUNIOR_800`
-  * `SENIOR_7000`
+  * `JUNIOR_BASIC_1200`
+  * `JUNIOR_ADVANCED_800`
+  * `SENIOR_LEVEL_1` 至 `SENIOR_LEVEL_6`
+* **`examFrequency`** (Integer): 歷屆考頻（1~5星），用於決定 AI 批次生成題目的數量 (參考 US-00-04)
 
 ### 與其他物件的關聯：
 * **QuizQuestion (測驗題目)**: `QuizQuestion` 擁有 `wordId`，多個題目（不同情境句）可以測試同一個單字。
@@ -41,3 +42,12 @@
 
 > [!TIP]
 > 靜態單字庫匯入後不會頻繁更動，可以考慮在系統啟動時載入 Redis 快取，以滿足 US-00-02 要求的「毫秒級題庫載入體驗」。
+
+---
+
+## 3. 靜態題庫批次生成 (Batch Generation)
+
+依據 **US-00-04**，匯入 `VocabularyWord` 後，系統將透過排程腳本呼叫 AI API 批次生成 `QuizQuestion`。
+* **題數決定**：系統會讀取 `examFrequency` (歷屆考頻)，高頻單字生成 3~5 題，低頻單字生成 1 題。
+* **誘答項邏輯**：AI 生成的誘答項 (`distractor1~3`) 必須符合該題單字的難度與詞性，且將優先選擇易混淆字。
+* **關聯寫入**：經過格式驗證後，寫入 `QuizQuestion` 表格並綁定對應的 `wordId`。

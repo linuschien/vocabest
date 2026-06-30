@@ -1,4 +1,4 @@
-@startuml
+@startuml VocabestCoreDomainModel
 skinparam style strictuml
 title Domain Model - Vocabest Core
 
@@ -31,6 +31,7 @@ package "Question Bank & Quizzes" {
         +String partOfSpeech
         +String translation
         +VocabularyLevel level
+        +Integer examFrequency
     }
 
     class QuizQuestion <<Entity>> {
@@ -98,9 +99,14 @@ enum TargetLevel {
 }
 
 enum VocabularyLevel {
-    JUNIOR_1200
-    JUNIOR_800
-    SENIOR_7000
+    JUNIOR_BASIC_1200
+    JUNIOR_ADVANCED_800
+    SENIOR_LEVEL_1
+    SENIOR_LEVEL_2
+    SENIOR_LEVEL_3
+    SENIOR_LEVEL_4
+    SENIOR_LEVEL_5
+    SENIOR_LEVEL_6
 }
 
 note right of User : ID MUST be a UUID v4
