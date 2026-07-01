@@ -5,6 +5,7 @@
 ## 系統角色 (System Actors)
 - **使用者 (Learner)**：進行單字學習與測驗的主要使用者。
 - **系統 (System)**：負責派送題目、驗證答案、計算間隔重複演算法與追蹤進度的後台機制。
+- **系統管理員 (Admin)**：負責維護字庫、題庫並能檢視全站使用者數據的角色。
 
 ## Epic 與模組清單 (Epic & Module List)
 - **[Epic 0: 系統冷啟動與資料管線 (Onboarding & Data Pipeline)](./US-00-onboarding-and-data-pipeline.md)**
@@ -24,3 +25,6 @@
   - US 3.2 答對時的正向增強
 - **[Epic 4: 個人化錯題追蹤 (Personalized Error Tracking)](./US-04-personalized-error-tracking.md)**
   - US 4.1 錯題自動收錄與演算法排程
+- **[Epic 5: 權限控制與後台管理 (Access Control & Admin Management)](./US-05-access-control-and-admin.md)**
+  - US 5.1 一般使用者個人資料存取限制
+  - US 5.2 系統管理員全站資料存取權限
