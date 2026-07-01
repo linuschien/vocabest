@@ -28,10 +28,17 @@ class DailyProgressGraphQLResolverTest {
 
     @Test
     void testListDailyProgresses() {
+        StepVerifier.create(resolver.listDailyProgresses(null))
+                .expectError(IllegalArgumentException.class)
+                .verify();
+    }
+
+    @Test
+    void testListDailyProgressesWithFilter() {
         UUID userId = UUID.randomUUID();
         DailyProgress dp = new DailyProgress(UUID.randomUUID(), userId, LocalDateTime.now(), 10, LocalDateTime.now(), LocalDateTime.now(), null);
         
-        when(repository.findAll()).thenReturn(Flux.just(dp));
+        when(repository.findAll(any(org.springframework.data.domain.Example.class))).thenReturn(Flux.just(dp));
 
         StepVerifier.create(resolver.listDailyProgresses(new DailyProgressFilterInput(userId)))
                 .expectNextMatches(e -> e.userId().equals(userId))

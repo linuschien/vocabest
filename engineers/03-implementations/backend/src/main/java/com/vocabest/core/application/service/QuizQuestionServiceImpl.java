@@ -4,6 +4,11 @@ import com.vocabest.core.adapter.in.web.dto.*;
 import com.vocabest.core.adapter.out.persistence.model.QuizQuestion;
 import com.vocabest.core.adapter.out.persistence.model.TargetLevel;
 import com.vocabest.core.adapter.out.persistence.repository.QuizQuestionRepository;
+import com.vocabest.core.adapter.out.persistence.repository.VocabularyWordRepository;
+import com.vocabest.core.adapter.out.persistence.model.VocabularyLevel;
+import com.vocabest.core.adapter.out.persistence.model.VocabularyWord;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import com.vocabest.core.application.port.in.QuizQuestionCommandService;
 import com.vocabest.core.application.port.in.QuizQuestionQueryService;
 import org.springframework.stereotype.Service;
@@ -17,9 +22,11 @@ import java.util.UUID;
 public class QuizQuestionServiceImpl implements QuizQuestionCommandService, QuizQuestionQueryService {
 
     private final QuizQuestionRepository repository;
+    private final VocabularyWordRepository vocabRepository;
 
-    public QuizQuestionServiceImpl(QuizQuestionRepository repository) {
+    public QuizQuestionServiceImpl(QuizQuestionRepository repository, VocabularyWordRepository vocabRepository) {
         this.repository = repository;
+        this.vocabRepository = vocabRepository;
     }
 
     @Override
@@ -49,7 +56,21 @@ public class QuizQuestionServiceImpl implements QuizQuestionCommandService, Quiz
 
     @Override
     public Mono<OperationStatus> generateBatch(QuizQuestionActionRequest req) {
-        return Mono.just(new OperationStatus(true, "Batch generated"));
+        VocabularyLevel vLevel = req.targetLevel().equals("JUNIOR_HIGH") ? 
+            VocabularyLevel.JUNIOR_BASIC_1200 : 
+            VocabularyLevel.SENIOR_LEVEL_1;
+        
+        VocabularyWord probe = new VocabularyWord(null, null, null, null, vLevel, 0, null, null, null);
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnoreNullValues()
+                .withIgnorePaths("examFrequency");
+        
+        return vocabRepository.findAll(Example.of(probe, matcher))
+                .take(req.maxWordsToProcess())
+                .map(word -> new QuizQuestion(null, word.id(), "Contextual cloze for " + word.word(), "Translation for " + word.word(), word.word(), "Distractor 1", "Distractor 2", "Distractor 3", "Root details", "Mnemonic details", TargetLevel.valueOf(req.targetLevel()), null, null, null))
+                .flatMap(repository::save)
+                .count()
+                .map(count -> new OperationStatus(true, "Batch generated for " + count + " questions"));
     }
 
     @Override
@@ -59,7 +80,13 @@ public class QuizQuestionServiceImpl implements QuizQuestionCommandService, Quiz
 
     @Override
     public Flux<QuizQuestionResponse> listQuizQuestions(QuizQuestionFilterInput filter) {
-        return repository.findAll().map(this::mapToResponse);
+        if (filter == null || filter.targetLevel() == null) {
+            return Flux.error(new IllegalArgumentException("Filter is required to prevent unauthorized data access"));
+        }
+        QuizQuestion probe = new QuizQuestion(null, null, null, null, null, null, null, null, null, null, TargetLevel.valueOf(filter.targetLevel()), null, null, null);
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnoreNullValues();
+        return repository.findAll(Example.of(probe, matcher)).map(this::mapToResponse);
     }
 
     private QuizQuestionResponse mapToResponse(QuizQuestion entity) {

@@ -2,6 +2,7 @@ package com.vocabest.core.application.service;
 
 import com.vocabest.core.adapter.in.web.dto.VocabularyWordRequest;
 import com.vocabest.core.adapter.in.web.dto.VocabularyWordActionRequest;
+import com.vocabest.core.adapter.in.web.dto.VocabularyWordFilterInput;
 import com.vocabest.core.adapter.out.persistence.model.VocabularyLevel;
 import com.vocabest.core.adapter.out.persistence.model.VocabularyWord;
 import com.vocabest.core.adapter.out.persistence.repository.VocabularyWordRepository;
@@ -78,18 +79,26 @@ class VocabularyWordServiceImplTest {
 
     @Test
     void testListVocabularyWords() {
-        VocabularyWord entity = new VocabularyWord(UUID.randomUUID(), "word", "verb", "trans", VocabularyLevel.JUNIOR_BASIC_1200, 1, LocalDateTime.now(), LocalDateTime.now(), null);
-        when(repository.findAll()).thenReturn(Flux.just(entity));
-
         StepVerifier.create(service.listVocabularyWords(null))
+                .expectError(IllegalArgumentException.class)
+                .verify();
+    }
+
+    @Test
+    void testListVocabularyWordsWithFilter() {
+        VocabularyWord entity = new VocabularyWord(UUID.randomUUID(), "word", "verb", "trans", VocabularyLevel.JUNIOR_BASIC_1200, 1, LocalDateTime.now(), LocalDateTime.now(), null);
+        when(repository.findAll(any(org.springframework.data.domain.Example.class))).thenReturn(Flux.just(entity));
+
+        StepVerifier.create(service.listVocabularyWords(new VocabularyWordFilterInput("JUNIOR_BASIC_1200")))
                 .expectNextCount(1)
                 .verifyComplete();
     }
 
     @Test
     void testImportBulk() {
+        when(repository.save(any())).thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
         StepVerifier.create(service.importBulk(new VocabularyWordActionRequest("file.csv")))
-                .expectNextMatches(res -> res.success())
+                .expectNextMatches(res -> res.success() && res.message().contains("words imported"))
                 .verifyComplete();
     }
 }

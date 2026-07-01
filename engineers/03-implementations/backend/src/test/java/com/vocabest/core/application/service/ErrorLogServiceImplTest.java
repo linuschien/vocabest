@@ -2,6 +2,7 @@ package com.vocabest.core.application.service;
 
 import com.vocabest.core.adapter.in.web.dto.ErrorLogRequest;
 import com.vocabest.core.adapter.in.web.dto.ErrorLogActionRequest;
+import com.vocabest.core.adapter.in.web.dto.ErrorLogFilterInput;
 import com.vocabest.core.adapter.out.persistence.model.ErrorLog;
 import com.vocabest.core.adapter.out.persistence.repository.ErrorLogRepository;
 import org.junit.jupiter.api.Test;
@@ -80,18 +81,30 @@ class ErrorLogServiceImplTest {
 
     @Test
     void testListErrorLogs() {
-        ErrorLog entity = new ErrorLog(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), null, 1, LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now(), null);
-        when(repository.findAll()).thenReturn(Flux.just(entity));
-
         StepVerifier.create(service.listErrorLogs(null))
+                .expectError(IllegalArgumentException.class)
+                .verify();
+    }
+
+    @Test
+    void testListErrorLogsWithFilter() {
+        ErrorLog entity = new ErrorLog(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), null, 1, LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now(), null);
+        when(repository.findAll(any(org.springframework.data.domain.Example.class))).thenReturn(Flux.just(entity));
+
+        StepVerifier.create(service.listErrorLogs(new ErrorLogFilterInput(entity.userId())))
                 .expectNextCount(1)
                 .verifyComplete();
     }
 
     @Test
     void testRecordFailure() {
-        StepVerifier.create(service.recordFailure(UUID.randomUUID(), new ErrorLogActionRequest("reason")))
-                .expectNextMatches(res -> res.success())
+        UUID id = UUID.randomUUID();
+        ErrorLog entity = new ErrorLog(id, UUID.randomUUID(), UUID.randomUUID(), null, 1, LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now(), null);
+        when(repository.findById(id)).thenReturn(Mono.just(entity));
+        when(repository.save(any())).thenReturn(Mono.just(new ErrorLog(id, entity.userId(), entity.vocabularyWordId(), entity.quizQuestionId(), 2, LocalDateTime.now().plusDays(2), entity.createdAt(), LocalDateTime.now(), entity.deletedAt())));
+
+        StepVerifier.create(service.recordFailure(id, new ErrorLogActionRequest("reason")))
+                .expectNextMatches(res -> res.success() && res.message().contains("New weight: 2"))
                 .verifyComplete();
     }
 }

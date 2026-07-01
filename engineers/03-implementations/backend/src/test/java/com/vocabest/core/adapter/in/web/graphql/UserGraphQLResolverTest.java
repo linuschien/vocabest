@@ -29,9 +29,16 @@ class UserGraphQLResolverTest {
 
     @Test
     void testListUsers() {
+        StepVerifier.create(resolver.listUsers(null))
+                .expectError(IllegalArgumentException.class)
+                .verify();
+    }
+
+    @Test
+    void testListUsersWithFilter() {
         User user = new User(UUID.randomUUID(), TargetLevel.JUNIOR_HIGH, 0, 20, LocalDateTime.now(), LocalDateTime.now(), null);
         
-        when(repository.findAll()).thenReturn(Flux.just(user));
+        when(repository.findAll(any(org.springframework.data.domain.Example.class))).thenReturn(Flux.just(user));
 
         StepVerifier.create(resolver.listUsers(new UserFilterInput("JUNIOR_HIGH")))
                 .expectNextMatches(e -> e.targetLevel() == TargetLevel.JUNIOR_HIGH)

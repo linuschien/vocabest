@@ -3,6 +3,8 @@ package com.vocabest.core.application.service;
 import com.vocabest.core.adapter.in.web.dto.*;
 import com.vocabest.core.adapter.out.persistence.model.ErrorLog;
 import com.vocabest.core.adapter.out.persistence.repository.ErrorLogRepository;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import com.vocabest.core.application.port.in.ErrorLogCommandService;
 import com.vocabest.core.application.port.in.ErrorLogQueryService;
 import org.springframework.stereotype.Service;
@@ -44,8 +46,11 @@ public class ErrorLogServiceImpl implements ErrorLogCommandService, ErrorLogQuer
 
     @Override
     public Mono<OperationStatus> recordFailure(UUID id, ErrorLogActionRequest req) {
-        // Implementation logic for recording failure
-        return Mono.just(new OperationStatus(true, "Failure recorded"));
+        return repository.findById(id)
+                .map(existing -> new ErrorLog(existing.id(), existing.userId(), existing.vocabularyWordId(), existing.quizQuestionId(),
+                        existing.errorWeight() + 1, LocalDateTime.now().plusDays(existing.errorWeight() + 1), existing.createdAt(), LocalDateTime.now(), existing.deletedAt()))
+                .flatMap(repository::save)
+                .map(saved -> new OperationStatus(true, "Failure recorded. New weight: " + saved.errorWeight()));
     }
 
     @Override
@@ -55,8 +60,14 @@ public class ErrorLogServiceImpl implements ErrorLogCommandService, ErrorLogQuer
 
     @Override
     public Flux<ErrorLogResponse> listErrorLogs(ErrorLogFilterInput filter) {
-        // In real implementation, use Example matcher
-        return repository.findAll().map(this::mapToResponse);
+        if (filter == null || filter.userId() == null) {
+            return Flux.error(new IllegalArgumentException("Filter is required to prevent unauthorized data access"));
+        }
+        ErrorLog probe = new ErrorLog(null, filter.userId(), null, null, 0, null, null, null, null);
+        ExampleMatcher matcher = ExampleMatcher.matching()
+                .withIgnoreNullValues()
+                .withIgnorePaths("errorWeight");
+        return repository.findAll(Example.of(probe, matcher)).map(this::mapToResponse);
     }
 
     private ErrorLogResponse mapToResponse(ErrorLog entity) {

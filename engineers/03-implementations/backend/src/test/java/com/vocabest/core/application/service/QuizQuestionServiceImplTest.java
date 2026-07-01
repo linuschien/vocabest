@@ -2,9 +2,13 @@ package com.vocabest.core.application.service;
 
 import com.vocabest.core.adapter.in.web.dto.QuizQuestionRequest;
 import com.vocabest.core.adapter.in.web.dto.QuizQuestionActionRequest;
+import com.vocabest.core.adapter.in.web.dto.QuizQuestionFilterInput;
 import com.vocabest.core.adapter.out.persistence.model.QuizQuestion;
 import com.vocabest.core.adapter.out.persistence.model.TargetLevel;
 import com.vocabest.core.adapter.out.persistence.repository.QuizQuestionRepository;
+import com.vocabest.core.adapter.out.persistence.repository.VocabularyWordRepository;
+import com.vocabest.core.adapter.out.persistence.model.VocabularyWord;
+import com.vocabest.core.adapter.out.persistence.model.VocabularyLevel;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -25,6 +29,9 @@ class QuizQuestionServiceImplTest {
 
     @Mock
     private QuizQuestionRepository repository;
+
+    @Mock
+    private VocabularyWordRepository vocabRepository;
 
     @InjectMocks
     private QuizQuestionServiceImpl service;
@@ -81,16 +88,27 @@ class QuizQuestionServiceImplTest {
 
     @Test
     void testListQuizQuestions() {
-        QuizQuestion entity = new QuizQuestion(UUID.randomUUID(), UUID.randomUUID(), "cloze", "trans", "opt", "d1", "d2", "d3", "root", "mnem", TargetLevel.JUNIOR_HIGH, LocalDateTime.now(), LocalDateTime.now(), null);
-        when(repository.findAll()).thenReturn(Flux.just(entity));
-
         StepVerifier.create(service.listQuizQuestions(null))
+                .expectError(IllegalArgumentException.class)
+                .verify();
+    }
+
+    @Test
+    void testListQuizQuestionsWithFilter() {
+        QuizQuestion entity = new QuizQuestion(UUID.randomUUID(), UUID.randomUUID(), "cloze", "trans", "opt", "d1", "d2", "d3", "root", "mnem", TargetLevel.JUNIOR_HIGH, LocalDateTime.now(), LocalDateTime.now(), null);
+        when(repository.findAll(any(org.springframework.data.domain.Example.class))).thenReturn(Flux.just(entity));
+
+        StepVerifier.create(service.listQuizQuestions(new QuizQuestionFilterInput("JUNIOR_HIGH")))
                 .expectNextCount(1)
                 .verifyComplete();
     }
 
     @Test
     void testGenerateBatch() {
+        VocabularyWord word = new VocabularyWord(UUID.randomUUID(), "test", "noun", "test", VocabularyLevel.JUNIOR_BASIC_1200, 1, null, null, null);
+        when(vocabRepository.findAll(any(org.springframework.data.domain.Example.class))).thenReturn(Flux.just(word));
+        when(repository.save(any())).thenReturn(Mono.just(new QuizQuestion(UUID.randomUUID(), word.id(), "c", "t", "o", "d1", "d2", "d3", "r", "m", TargetLevel.JUNIOR_HIGH, null, null, null)));
+
         StepVerifier.create(service.generateBatch(new QuizQuestionActionRequest(10, "JUNIOR_HIGH")))
                 .expectNextMatches(res -> res.success())
                 .verifyComplete();
