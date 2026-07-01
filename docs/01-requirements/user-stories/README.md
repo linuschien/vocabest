@@ -9,10 +9,9 @@
 
 ## Epic 與模組清單 (Epic & Module List)
 - **[Epic 0: 系統冷啟動與資料管線 (Onboarding & Data Pipeline)](./US-00-onboarding-and-data-pipeline.md)**
-  - US 0.1 動態難度分級選擇
-  - US 0.2 靜態題庫派送
-  - US 0.3 官方詞彙表匯入與正規化
-  - US 0.4 AI 批次生成靜態題庫
+  - US 0.1 首次登入與初始設定 (First Login & Onboarding)
+  - US 0.2 官方詞彙表匯入與正規化
+  - US 0.3 AI 批次生成靜態題庫
 - **[Epic 1: 學習儀表板與首頁 (Learning Dashboard)](./US-01-learning-dashboard.md)**
   - US 1.1 一鍵啟動測驗
   - US 1.2 進度與連勝追蹤 (微型成就感)
