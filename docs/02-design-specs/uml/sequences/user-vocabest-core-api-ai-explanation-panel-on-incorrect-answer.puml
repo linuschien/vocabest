@@ -7,7 +7,7 @@ actor Learner as Actor
 
 box "vocabest-core-api" #LightCyan
   participant "ErrorLogRestController" as RestAdapter <<Primary Adapter>>
-  participant "ErrorLogCommandService" as ServicePort <<Primary Adapter>>
+  participant "ErrorLogCommandService" as ServicePort <<DomainService>>
   participant "ErrorLogRepository" as RepoAdapter <<Secondary Adapter>>
 end box
 
