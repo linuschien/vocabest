@@ -477,6 +477,29 @@ paths:
         "400":
           description: Bad Request
 
+  /api/agui/{agentId}/chat:
+    post:
+      operationId: streamAgentChat
+      parameters:
+        - name: agentId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AguiChatRequest'
+      responses:
+        "200":
+          description: Server-Sent Events stream of the agent's response and tool callbacks.
+          content:
+            text/event-stream:
+              schema:
+                $ref: '#/components/schemas/AguiEvent'
+
   /vocabulary-words:importBulk:
     post:
       operationId: importBulk
@@ -554,6 +577,45 @@ paths:
 
 components:
   schemas:
+    AguiChatRequest:
+      type: object
+      properties:
+        threadId:
+          type: string
+        runId:
+          type: string
+        messages:
+          type: array
+          items:
+            type: object
+            description: "ChatMessageDto representation"
+        context:
+          type: array
+          items:
+            type: object
+            description: "ContextDto representation"
+        tools:
+          type: array
+          items:
+            type: object
+            description: "FrontendToolDto representation"
+    AguiEvent:
+      type: object
+      properties:
+        type:
+          type: string
+          example: "TEXT_MESSAGE_CONTENT"
+        messageId:
+          type: string
+        role:
+          type: string
+        delta:
+          type: string
+        toolCallId:
+          type: string
+        toolCallName:
+          type: string
+      description: "Polymorphic Server-Sent Event payload based on the 'type' field."
     OperationStatus:
       type: object
       properties:
