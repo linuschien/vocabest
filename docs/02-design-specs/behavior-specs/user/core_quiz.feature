@@ -28,7 +28,8 @@ Feature: Core Quiz Loop and Instant Feedback
   Scenario Outline: AI Explanation Panel on Incorrect Answer
     Given a "Learner" viewing a "QuizQuestion" with ID "<word_id>"
     When the "Learner" selects a "distractor"
-    Then the selected button indicates an error
+    Then the selected button indicates an error (turns red)
+    And the "correctOption" button is revealed (turns green)
     And the "AIExplanationPanel" appears showing "explanationRootAffix" and "explanationMnemonic"
     And the quiz flow pauses until the "Learner" manually clicks next
     And a POST request is made to "ErrorLogRestController.recordFailure" to log the error for "<word_id>"
