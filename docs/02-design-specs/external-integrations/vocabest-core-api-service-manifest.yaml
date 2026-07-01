@@ -113,6 +113,13 @@ adapters:
     port:
       interface: "VocabularyWordQueryService"
       layer: "domain.ports.input"
+  - name: "QuizCoachAgentAdapter"
+    type: "Primary"
+    tech: "Spring AI 2.0.0+ / AGUI Protocol"
+    stereotype: "<<Agent>>"
+    port:
+      interface: "AguiAgent"
+      layer: "domain.ports.input"
   - name: "DailyProgressRepositoryAdapter"
     type: "Secondary"
     tech: "Spring Data R2DBC (H2)"
@@ -147,4 +154,11 @@ adapters:
     stereotype: "<<Repository>>"
     port:
       interface: "VocabularyWordRepository"
+      layer: "domain.ports.output"
+  - name: "SpringAiLlmAdapter"
+    type: "Secondary"
+    tech: "Spring AI 2.0.0+ / LLM API"
+    stereotype: "<<Port>>"
+    port:
+      interface: "LlmPort"
       layer: "domain.ports.output"
