@@ -10,7 +10,8 @@
 | **目標學制** | `TargetLevel` | 系統推播題庫的難度基準。 | Enum: `JUNIOR_HIGH` (國中會考 1200/2000字), `SENIOR_HIGH` (高中學測 7000字) |
 | **今日進度** | `DailyProgress` | 當日完成的題數統計。 | |
 | **連續學習天數** | `LearningStreak` | 連續登入並完成測驗的天數，提供微型成就感。 | 以火焰圖標表示。如中斷則歸零或依特定規則遞減。 |
-| **錯題本** | `ErrorLog` | 紀錄使用者答錯的單字與相關題目。 | 每答錯一次，對應單字的錯誤權重 (+1)。 |
+| **單字熟練度** | `WordMastery` | 紀錄使用者對特定單字的掌握狀態。 | 包含錯誤權重 (Error Weight) 與下次複習日期 (Next Review Date)。每個使用者對每個單字僅有一筆狀態。 |
+| **錯題紀錄** | `ErrorEvent` | 紀錄使用者具體答錯了哪一道題目。 | Append-only 的歷史紀錄，關聯至具體的 `QuizQuestion`。 |
 
 ### 題庫與測驗 (Question Bank & Quizzes)
 | 術語 | 英文 / 代碼 | 定義 | 備註 / 約束 |
