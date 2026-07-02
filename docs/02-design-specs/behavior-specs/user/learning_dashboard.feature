@@ -5,7 +5,7 @@ Feature: Learning Dashboard
 
   Scenario Outline: Fetching Daily Progress and Streak
     Given an existing "Learner" with progress records
-    When a GET request is made via the "DailyProgressRestControllerAdapter"
+    When a GraphQL query is made via the "DailyProgressGraphQLResolverAdapter"
     Then the external promise is fulfilled with a "200 OK" response
     And the payload contains "dailyCompletedQuestions" and "learningStreak"
 
@@ -15,7 +15,7 @@ Feature: Learning Dashboard
 
   Scenario Outline: Checking for Pending Error Reviews
     Given a "Learner" has pending errors in the "WordMastery" queue
-    When a request for pending errors is made via the "ErrorEventRestControllerAdapter"
+    When a GraphQL query for pending errors is made via the "WordMasteryGraphQLResolverAdapter"
     Then the external promise is fulfilled with a "200 OK" response
     And the payload indicates the count of pending errors is greater than 0
 
@@ -25,7 +25,7 @@ Feature: Learning Dashboard
 
   Scenario Outline: Browsing the Word Bank
     Given the "WordBank" contains multiple words
-    When a paginated GET request is made via the "WordBankRestControllerAdapter" with filters
+    When a paginated GraphQL query is made via the "WordBankGraphQLResolverAdapter" with filters
     Then the external promise is fulfilled with a "200 OK" response
     And the response contains a list of words matching the "TargetLevel" and fuzzy search query
 

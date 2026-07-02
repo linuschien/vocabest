@@ -13,14 +13,14 @@ Feature: Access Control and Admin Management
       | ${USER_1}  | ${USER_1}      | 200 OK          |
       | ${USER_1}  | ${USER_2}      | 403 Forbidden   |
 
-  Scenario Outline: Admin Access to Global Data
+  Scenario Outline: Admin Access to Global User Data (GraphQL)
     Given an "Admin" authenticated user
-    When the "Admin" requests global user progress via the "UserRestControllerAdapter"
+    When the "Admin" requests a global user list via the "UserGraphQLResolverAdapter" ("listUsers")
     Then the external promise is fulfilled with a "200 OK" response
 
     Examples:
-      | admin_id   | target_user_id | expected_status |
-      | ${ADMIN_1} | ${USER_2}      | 200 OK          |
+      | admin_id   | query  | expected_status |
+      | ${ADMIN_1} | "{}"   | 200 OK          |
 
   Scenario Outline: Learner Forbidden from Admin Ports
     Given a "Learner" authenticated user

@@ -5,7 +5,7 @@ Feature: Core Quiz Loop and Instant Feedback
 
   Scenario Outline: Fetching Contextual Cloze Questions
     Given the system has available "QuizQuestion" records
-    When a GET request is made via the "QuizQuestionRestControllerAdapter"
+    When a "nextQuestion" request is made via the "UserRestControllerAdapter"
     Then the external promise is fulfilled with a "200 OK" response
     And the payload contains the context sentence, translation, and 4 shuffled options
 
@@ -15,7 +15,7 @@ Feature: Core Quiz Loop and Instant Feedback
 
   Scenario Outline: Receiving Instant Feedback for Correct Answer
     Given a "QuizQuestion" and the Learner knows the correct option
-    When the answer is submitted via the "QuizQuestionRestControllerAdapter"
+    When the answer is submitted via the "UserRestControllerAdapter" ("submitAnswer")
     Then the external promise is fulfilled with a "200 OK" response
     And the response indicates the answer is "CORRECT"
 
@@ -25,7 +25,7 @@ Feature: Core Quiz Loop and Instant Feedback
 
   Scenario Outline: Receiving Instant Feedback and AI Explanation for Wrong Answer
     Given a "QuizQuestion"
-    When the wrong answer is submitted via the "QuizQuestionRestControllerAdapter"
+    When the wrong answer is submitted via the "UserRestControllerAdapter" ("submitAnswer")
     Then the external promise is fulfilled with a "200 OK" response
     And the response indicates the answer is "WRONG"
     And the response payload includes the "AIExplanationPanel" contents
