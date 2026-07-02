@@ -1,0 +1,34 @@
+@startuml word_mastery_contract
+
+!pragma layout smetana
+skinparam packageStyle rectangle
+skinparam defaultFontName Inter
+
+package "adapter.in.web.rest" {
+  interface "WordMasteryRestController" <<RestController>> {
+    + createWordMastery(req: WordMasteryRequest): ResponseEntity<WordMasteryResponse>
+    + updateWordMastery(id: UUID, req: WordMasteryRequest): ResponseEntity<WordMasteryResponse>
+    + deleteWordMastery(id: UUID): ResponseEntity<Void>
+    + getWordMasteryById(id: UUID): ResponseEntity<WordMasteryResponse>
+  }
+}
+
+package "adapter.in.web.graphql" {
+  interface "WordMasteryGraphQLResolver" <<GraphQLResolver>> {
+    + listWordMasteries(filter: WordMasteryFilterInput): List<WordMastery>
+  }
+}
+
+package "adapter.out.persistence" {
+  interface "WordMasteryRepository" <<Repository>> {
+    + save(entity: WordMastery): WordMastery
+    + findById(id: UUID): Optional<WordMastery>
+    + findByExample(example: Example<WordMastery>): List<WordMastery>
+    + deleteById(id: UUID): void
+  }
+}
+
+"WordMasteryRestController"  ..> "WordMasteryRepository" : uses
+"WordMasteryGraphQLResolver" ..> "WordMasteryRepository" : uses
+
+@enduml

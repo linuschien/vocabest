@@ -1,24 +1,20 @@
+Enum role {
+  LEARNER
+  ADMIN
+}
+
 Enum target_level {
   JUNIOR_HIGH
   SENIOR_HIGH
 }
 
-Enum vocabulary_level {
-  JUNIOR_BASIC_1200
-  JUNIOR_ADVANCED_800
-  SENIOR_LEVEL_1
-  SENIOR_LEVEL_2
-  SENIOR_LEVEL_3
-  SENIOR_LEVEL_4
-  SENIOR_LEVEL_5
-  SENIOR_LEVEL_6
-}
-
 Table user {
   id uuid [pk]
+  email varchar
+  role role
   target_level target_level
-  learning_streak integer
   daily_target_questions integer
+  learning_streak integer
   created_at timestamp
   updated_at timestamp
   deleted_at timestamp
@@ -27,20 +23,24 @@ Table user {
 Table daily_progress {
   id uuid [pk]
   user_id uuid
-  date timestamp
-  completed_questions integer
+  date date
+  target_questions integer
+  answered_questions integer
+  correct_questions integer
+  wrong_questions integer
   created_at timestamp
   updated_at timestamp
   deleted_at timestamp
 }
 
-Table error_log {
+Table word_bank {
   id uuid [pk]
-  user_id uuid
-  vocabulary_word_id uuid
-  quiz_question_id uuid
-  error_weight integer
-  next_review_date timestamp
+  word varchar
+  parts_of_speech varchar
+  chinese_translation text
+  target_level target_level
+  difficulty_level integer
+  exam_frequency integer
   created_at timestamp
   updated_at timestamp
   deleted_at timestamp
@@ -48,35 +48,45 @@ Table error_log {
 
 Table quiz_question {
   id uuid [pk]
-  vocabulary_word_id uuid
-  contextual_cloze varchar
-  translation varchar
-  correct_option varchar
+  word_bank_id uuid
+  contextual_cloze text
+  chinese_translation text
+  correct_answer varchar
   distractor1 varchar
   distractor2 varchar
   distractor3 varchar
-  explanation_root_affix varchar
-  explanation_mnemonic varchar
-  target_level target_level
+  explanation_root_affix text
+  explanation_mnemonic text
   created_at timestamp
   updated_at timestamp
   deleted_at timestamp
 }
 
-Table vocabulary_word {
+Table word_mastery {
   id uuid [pk]
-  word varchar
-  part_of_speech varchar
-  translation varchar
-  level vocabulary_level
-  exam_frequency integer
+  user_id uuid
+  word_bank_id uuid
+  error_weight integer
+  next_review_date timestamp
+  created_at timestamp
+  updated_at timestamp
+  deleted_at timestamp
+}
+
+Table error_event {
+  id uuid [pk]
+  user_id uuid
+  quiz_question_id uuid
+  timestamp timestamp
+  selected_distractor varchar
   created_at timestamp
   updated_at timestamp
   deleted_at timestamp
 }
 
 Ref: user.id < daily_progress.user_id [delete: cascade]
-Ref: user.id < error_log.user_id [delete: cascade]
-Ref: quiz_question.id < error_log.quiz_question_id [delete: set null]
-Ref: vocabulary_word.id < quiz_question.vocabulary_word_id [delete: set null]
-Ref: vocabulary_word.id < error_log.vocabulary_word_id [delete: set null]
+Ref: user.id < word_mastery.user_id [delete: cascade]
+Ref: user.id < error_event.user_id [delete: cascade]
+Ref: word_bank.id < quiz_question.word_bank_id [delete: cascade]
+Ref: word_bank.id < word_mastery.word_bank_id [delete: set null]
+Ref: quiz_question.id < error_event.quiz_question_id [delete: set null]

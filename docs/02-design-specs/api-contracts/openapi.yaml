@@ -1,18 +1,11 @@
-openapi: 3.2.0
+openapi: 3.1.1
 info:
   title: Vocabest Core API
-  version: 1.0.0
+  version: "1.0.0"
 servers:
   - url: /api/v1
 paths:
   /users:
-    get:
-      operationId: listUsers
-      deprecated: true
-      description: DEPRECATED_TO_GRAPHQL. Collection queries should be routed to the GraphQL gateway.
-      responses:
-        "200":
-          description: OK
     post:
       operationId: createUser
       requestBody:
@@ -20,16 +13,48 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserRequest'
+              $ref: "#/components/schemas/UserRequest"
       responses:
         "201":
           description: Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserResponse'
+                $ref: "#/components/schemas/UserResponse"
         "400":
-          description: Bad Request
+          $ref: "#/components/responses/BadRequest"
+    get:
+      operationId: listUsers
+      deprecated: true
+      description: "Deprecated: Collection GET is banned. Use GraphQL gateway instead."
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/UserResponse"
+  /users:onboard:
+    post:
+      operationId: onboardUser
+      description: "Registers and onboards a new user if not exists"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UserOnboardRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UserResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
   /users/{userId}:
     get:
       operationId: getUserById
@@ -46,9 +71,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserResponse'
+                $ref: "#/components/schemas/UserResponse"
         "404":
-          description: Not Found
+          $ref: "#/components/responses/NotFound"
     put:
       operationId: updateUser
       parameters:
@@ -63,16 +88,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserRequest'
+              $ref: "#/components/schemas/UserRequest"
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserResponse'
+                $ref: "#/components/schemas/UserResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
         "404":
-          description: Not Found
+          $ref: "#/components/responses/NotFound"
     delete:
       operationId: deleteUser
       parameters:
@@ -86,58 +113,43 @@ paths:
         "204":
           description: No Content
         "404":
-          description: Not Found
+          $ref: "#/components/responses/NotFound"
 
-  /users/{userId}/daily-progresses:
+  /dailyProgresses:
+    post:
+      operationId: createDailyProgress
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DailyProgressRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DailyProgressResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
     get:
       operationId: listDailyProgresses
       deprecated: true
-      description: DEPRECATED_TO_GRAPHQL. Collection queries should be routed to the GraphQL gateway.
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
+      description: "Deprecated: Collection GET is banned. Use GraphQL gateway instead."
       responses:
         "200":
           description: OK
-    post:
-      operationId: createDailyProgress
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/DailyProgressRequest'
-      responses:
-        "201":
-          description: Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DailyProgressResponse'
-        "400":
-          description: Bad Request
-
-  /users/{userId}/daily-progresses/{dailyProgressId}:
+                type: array
+                items:
+                  $ref: "#/components/schemas/DailyProgressResponse"
+  /dailyProgresses/{dailyProgressId}:
     get:
       operationId: getDailyProgressById
       parameters:
-        - name: userId
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
         - name: dailyProgressId
           in: path
           required: true
@@ -150,18 +162,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DailyProgressResponse'
+                $ref: "#/components/schemas/DailyProgressResponse"
         "404":
-          description: Not Found
+          $ref: "#/components/responses/NotFound"
     put:
       operationId: updateDailyProgress
       parameters:
-        - name: userId
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
         - name: dailyProgressId
           in: path
           required: true
@@ -173,25 +179,21 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/DailyProgressRequest'
+              $ref: "#/components/schemas/DailyProgressRequest"
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/DailyProgressResponse'
+                $ref: "#/components/schemas/DailyProgressResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
         "404":
-          description: Not Found
+          $ref: "#/components/responses/NotFound"
     delete:
       operationId: deleteDailyProgress
       parameters:
-        - name: userId
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
         - name: dailyProgressId
           in: path
           required: true
@@ -202,59 +204,44 @@ paths:
         "204":
           description: No Content
         "404":
-          description: Not Found
+          $ref: "#/components/responses/NotFound"
 
-  /users/{userId}/error-logs:
-    get:
-      operationId: listErrorLogs
-      deprecated: true
-      description: DEPRECATED_TO_GRAPHQL. Collection queries should be routed to the GraphQL gateway.
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-      responses:
-        "200":
-          description: OK
+  /wordBanks:
     post:
-      operationId: createErrorLog
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
+      operationId: createWordBank
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ErrorLogRequest'
+              $ref: "#/components/schemas/WordBankRequest"
       responses:
         "201":
           description: Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorLogResponse'
+                $ref: "#/components/schemas/WordBankResponse"
         "400":
-          description: Bad Request
-
-  /users/{userId}/error-logs/{errorLogId}:
+          $ref: "#/components/responses/BadRequest"
     get:
-      operationId: getErrorLogById
+      operationId: listWordBanks
+      deprecated: true
+      description: "Deprecated: Collection GET is banned. Use GraphQL gateway instead."
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/WordBankResponse"
+  /wordBanks/{wordBankId}:
+    get:
+      operationId: getWordBankById
       parameters:
-        - name: userId
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - name: errorLogId
+        - name: wordBankId
           in: path
           required: true
           schema:
@@ -266,19 +253,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorLogResponse'
+                $ref: "#/components/schemas/WordBankResponse"
         "404":
-          description: Not Found
+          $ref: "#/components/responses/NotFound"
     put:
-      operationId: updateErrorLog
+      operationId: updateWordBank
       parameters:
-        - name: userId
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - name: errorLogId
+        - name: wordBankId
           in: path
           required: true
           schema:
@@ -289,26 +270,22 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ErrorLogRequest'
+              $ref: "#/components/schemas/WordBankRequest"
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ErrorLogResponse'
+                $ref: "#/components/schemas/WordBankResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
         "404":
-          description: Not Found
+          $ref: "#/components/responses/NotFound"
     delete:
-      operationId: deleteErrorLog
+      operationId: deleteWordBank
       parameters:
-        - name: userId
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - name: errorLogId
+        - name: wordBankId
           in: path
           required: true
           schema:
@@ -318,46 +295,9 @@ paths:
         "204":
           description: No Content
         "404":
-          description: Not Found
+          $ref: "#/components/responses/NotFound"
 
-  /users/{userId}/error-logs/{errorLogId}:recordFailure:
-    post:
-      operationId: recordFailure
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-        - name: errorLogId
-          in: path
-          required: true
-          schema:
-            type: string
-            format: uuid
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/ErrorLogActionRequest'
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/OperationStatus'
-
-  /quiz-questions:
-    get:
-      operationId: listQuizQuestions
-      deprecated: true
-      description: DEPRECATED_TO_GRAPHQL. Collection queries should be routed to the GraphQL gateway.
-      responses:
-        "200":
-          description: OK
+  /quizQuestions:
     post:
       operationId: createQuizQuestion
       requestBody:
@@ -365,35 +305,30 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/QuizQuestionRequest'
+              $ref: "#/components/schemas/QuizQuestionRequest"
       responses:
         "201":
           description: Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/QuizQuestionResponse'
+                $ref: "#/components/schemas/QuizQuestionResponse"
         "400":
-          description: Bad Request
-
-  /quiz-questions:generateBatch:
-    post:
-      operationId: generateBatch
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/QuizQuestionActionRequest'
+          $ref: "#/components/responses/BadRequest"
+    get:
+      operationId: listQuizQuestions
+      deprecated: true
+      description: "Deprecated: Collection GET is banned. Use GraphQL gateway instead."
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/OperationStatus'
-
-  /quiz-questions/{quizQuestionId}:
+                type: array
+                items:
+                  $ref: "#/components/schemas/QuizQuestionResponse"
+  /quizQuestions/{quizQuestionId}:
     get:
       operationId: getQuizQuestionById
       parameters:
@@ -409,9 +344,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/QuizQuestionResponse'
+                $ref: "#/components/schemas/QuizQuestionResponse"
         "404":
-          description: Not Found
+          $ref: "#/components/responses/NotFound"
     put:
       operationId: updateQuizQuestion
       parameters:
@@ -426,16 +361,18 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/QuizQuestionRequest'
+              $ref: "#/components/schemas/QuizQuestionRequest"
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/QuizQuestionResponse'
+                $ref: "#/components/schemas/QuizQuestionResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
         "404":
-          description: Not Found
+          $ref: "#/components/responses/NotFound"
     delete:
       operationId: deleteQuizQuestion
       parameters:
@@ -449,79 +386,44 @@ paths:
         "204":
           description: No Content
         "404":
-          description: Not Found
+          $ref: "#/components/responses/NotFound"
 
-  /vocabulary-words:
-    get:
-      operationId: listVocabularyWords
-      deprecated: true
-      description: DEPRECATED_TO_GRAPHQL. Collection queries should be routed to the GraphQL gateway.
-      responses:
-        "200":
-          description: OK
+  /wordMasteries:
     post:
-      operationId: createVocabularyWord
+      operationId: createWordMastery
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/VocabularyWordRequest'
+              $ref: "#/components/schemas/WordMasteryRequest"
       responses:
         "201":
           description: Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/VocabularyWordResponse'
+                $ref: "#/components/schemas/WordMasteryResponse"
         "400":
-          description: Bad Request
-
-  /api/agui/{agentId}/chat:
-    post:
-      operationId: streamAgentChat
-      parameters:
-        - name: agentId
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/AguiChatRequest'
-      responses:
-        "200":
-          description: Server-Sent Events stream of the agent's response and tool callbacks.
-          content:
-            text/event-stream:
-              schema:
-                $ref: '#/components/schemas/AguiEvent'
-
-  /vocabulary-words:importBulk:
-    post:
-      operationId: importBulk
-      requestBody:
-        required: true
-        content:
-          multipart/form-data:
-            schema:
-              $ref: '#/components/schemas/VocabularyWordActionRequest'
-      responses:
-        "200":
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/OperationStatus'
-
-  /vocabulary-words/{vocabularyWordId}:
+          $ref: "#/components/responses/BadRequest"
     get:
-      operationId: getVocabularyWordById
+      operationId: listWordMasteries
+      deprecated: true
+      description: "Deprecated: Collection GET is banned. Use GraphQL gateway instead."
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/WordMasteryResponse"
+  /wordMasteries/{wordMasteryId}:
+    get:
+      operationId: getWordMasteryById
       parameters:
-        - name: vocabularyWordId
+        - name: wordMasteryId
           in: path
           required: true
           schema:
@@ -533,13 +435,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/VocabularyWordResponse'
+                $ref: "#/components/schemas/WordMasteryResponse"
         "404":
-          description: Not Found
+          $ref: "#/components/responses/NotFound"
     put:
-      operationId: updateVocabularyWord
+      operationId: updateWordMastery
       parameters:
-        - name: vocabularyWordId
+        - name: wordMasteryId
           in: path
           required: true
           schema:
@@ -550,20 +452,22 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/VocabularyWordRequest'
+              $ref: "#/components/schemas/WordMasteryRequest"
       responses:
         "200":
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/VocabularyWordResponse'
+                $ref: "#/components/schemas/WordMasteryResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
         "404":
-          description: Not Found
+          $ref: "#/components/responses/NotFound"
     delete:
-      operationId: deleteVocabularyWord
+      operationId: deleteWordMastery
       parameters:
-        - name: vocabularyWordId
+        - name: wordMasteryId
           in: path
           required: true
           schema:
@@ -573,49 +477,101 @@ paths:
         "204":
           description: No Content
         "404":
-          description: Not Found
+          $ref: "#/components/responses/NotFound"
+
+  /errorEvents:
+    post:
+      operationId: createErrorEvent
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ErrorEventRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEventResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+    get:
+      operationId: listErrorEvents
+      deprecated: true
+      description: "Deprecated: Collection GET is banned. Use GraphQL gateway instead."
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ErrorEventResponse"
+  /errorEvents/{errorEventId}:
+    get:
+      operationId: getErrorEventById
+      parameters:
+        - name: errorEventId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEventResponse"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    put:
+      operationId: updateErrorEvent
+      parameters:
+        - name: errorEventId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ErrorEventRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorEventResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
+    delete:
+      operationId: deleteErrorEvent
+      parameters:
+        - name: errorEventId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: No Content
+        "404":
+          $ref: "#/components/responses/NotFound"
 
 components:
   schemas:
-    AguiChatRequest:
-      type: object
-      properties:
-        threadId:
-          type: string
-        runId:
-          type: string
-        messages:
-          type: array
-          items:
-            type: object
-            description: "ChatMessageDto representation"
-        context:
-          type: array
-          items:
-            type: object
-            description: "ContextDto representation"
-        tools:
-          type: array
-          items:
-            type: object
-            description: "FrontendToolDto representation"
-    AguiEvent:
-      type: object
-      properties:
-        type:
-          type: string
-          example: "TEXT_MESSAGE_CONTENT"
-        messageId:
-          type: string
-        role:
-          type: string
-        delta:
-          type: string
-        toolCallId:
-          type: string
-        toolCallName:
-          type: string
-      description: "Polymorphic Server-Sent Event payload based on the 'type' field."
     OperationStatus:
       type: object
       properties:
@@ -625,18 +581,36 @@ components:
         message:
           type: string
           example: "Operation completed successfully"
-    UserRequest:
+    UserOnboardRequest:
       type: object
       properties:
+        email:
+          type: string
+          example: "user@example.com"
         targetLevel:
           type: string
           example: "JUNIOR_HIGH"
-        learningStreak:
-          type: integer
-          example: 0
         dailyTargetQuestions:
           type: integer
           example: 20
+    UserRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          example: "user@example.com"
+        role:
+          type: string
+          example: "LEARNER"
+        targetLevel:
+          type: string
+          example: "JUNIOR_HIGH"
+        dailyTargetQuestions:
+          type: integer
+          example: 20
+        learningStreak:
+          type: integer
+          example: 5
     UserResponse:
       type: object
       properties:
@@ -644,159 +618,234 @@ components:
           type: string
           format: uuid
           example: "123e4567-e89b-12d3-a456-426614174000"
+        email:
+          type: string
+          example: "user@example.com"
+        role:
+          type: string
+          example: "LEARNER"
         targetLevel:
           type: string
           example: "JUNIOR_HIGH"
-        learningStreak:
-          type: integer
-          example: 0
         dailyTargetQuestions:
           type: integer
           example: 20
+        learningStreak:
+          type: integer
+          example: 5
     DailyProgressRequest:
       type: object
       properties:
         date:
           type: string
           format: date-time
-          example: "2026-06-26T00:00:00Z"
-        completedQuestions:
+          example: "2026-07-02T00:00:00Z"
+        targetQuestions:
+          type: integer
+          example: 20
+        answeredQuestions:
+          type: integer
+          example: 15
+        correctQuestions:
           type: integer
           example: 10
+        wrongQuestions:
+          type: integer
+          example: 5
     DailyProgressResponse:
       type: object
       properties:
         id:
           type: string
           format: uuid
-          example: "123e4567-e89b-12d3-a456-426614174000"
+          example: "123e4567-e89b-12d3-a456-426614174001"
         date:
           type: string
           format: date-time
-          example: "2026-06-26T00:00:00Z"
-        completedQuestions:
+          example: "2026-07-02T00:00:00Z"
+        targetQuestions:
+          type: integer
+          example: 20
+        answeredQuestions:
+          type: integer
+          example: 15
+        correctQuestions:
           type: integer
           example: 10
-    ErrorLogRequest:
+        wrongQuestions:
+          type: integer
+          example: 5
+    WordBankRequest:
       type: object
       properties:
-        wordId:
+        word:
           type: string
-          example: "word-uuid"
-        errorWeight:
+          example: "apple"
+        partsOfSpeech:
+          type: string
+          example: "n."
+        chineseTranslation:
+          type: string
+          example: "蘋果"
+        targetLevel:
+          type: string
+          example: "JUNIOR_HIGH"
+        difficultyLevel:
           type: integer
           example: 1
-        nextReviewDate:
-          type: string
-          format: date-time
-          example: "2026-06-27T00:00:00Z"
-    ErrorLogResponse:
+        examFrequency:
+          type: integer
+          example: 5
+    WordBankResponse:
       type: object
       properties:
         id:
           type: string
           format: uuid
-          example: "123e4567-e89b-12d3-a456-426614174000"
-        wordId:
+          example: "123e4567-e89b-12d3-a456-426614174002"
+        word:
           type: string
-          example: "word-uuid"
-        errorWeight:
-          type: integer
-          example: 1
-        nextReviewDate:
+          example: "apple"
+        partsOfSpeech:
           type: string
-          format: date-time
-          example: "2026-06-27T00:00:00Z"
-    ErrorLogActionRequest:
-      type: object
-      properties:
-        reason:
+          example: "n."
+        chineseTranslation:
           type: string
-          example: "User answered incorrectly"
-    QuizQuestionActionRequest:
-      type: object
-      properties:
-        maxWordsToProcess:
-          type: integer
-          description: "Limit the number of vocabulary words to process in this batch run to control AI API usage."
-          example: 100
-        targetLevel:
-          type: string
-          description: "Optional level to filter which words to process."
-          example: "JUNIOR_BASIC_1200"
-    VocabularyWordActionRequest:
-      type: object
-      properties:
-        file:
-          type: string
-          format: binary
-          description: "The file (MD, CSV, JSON) containing the vocabulary list to import."
-    QuizQuestionRequest:
-      type: object
-      properties:
-        wordId:
-          type: string
-          example: "word-uuid"
-        contextualCloze:
-          type: string
-          example: "I usually _____ coffee in the morning."
-        translation:
-          type: string
-          example: "我通常早上喝咖啡。"
-        correctOption:
-          type: string
-          example: "drink"
-        distractor1:
-          type: string
-          example: "eat"
-        distractor2:
-          type: string
-          example: "run"
-        distractor3:
-          type: string
-          example: "sleep"
-        explanationRootAffix:
-          type: string
-          example: "dr- ink"
-        explanationMnemonic:
-          type: string
-          example: "think of a drink"
+          example: "蘋果"
         targetLevel:
           type: string
           example: "JUNIOR_HIGH"
-    QuizQuestionResponse:
-      allOf:
-        - $ref: '#/components/schemas/QuizQuestionRequest'
-        - type: object
-          properties:
-            id:
-              type: string
-              format: uuid
-              example: "123e4567-e89b-12d3-a456-426614174000"
-    VocabularyWordRequest:
-      type: object
-      properties:
-        word:
-          type: string
-          example: "drink"
-        partOfSpeech:
-          type: string
-          example: "verb"
-        translation:
-          type: string
-          example: "喝"
-        level:
-          type: string
-          example: "JUNIOR_BASIC_1200"
+        difficultyLevel:
+          type: integer
+          example: 1
         examFrequency:
           type: integer
           example: 5
-    VocabularyWordResponse:
-      allOf:
-        - $ref: '#/components/schemas/VocabularyWordRequest'
-        - type: object
-          properties:
-            id:
-              type: string
-              format: uuid
-              example: "123e4567-e89b-12d3-a456-426614174000"
+    QuizQuestionRequest:
+      type: object
+      properties:
+        contextualCloze:
+          type: string
+          example: "I eat an ___ every day."
+        chineseTranslation:
+          type: string
+          example: "我每天吃一顆蘋果。"
+        correctAnswer:
+          type: string
+          example: "apple"
+        distractor1:
+          type: string
+          example: "banana"
+        distractor2:
+          type: string
+          example: "orange"
+        distractor3:
+          type: string
+          example: "grape"
+        explanationRootAffix:
+          type: string
+          example: "No specific root"
+        explanationMnemonic:
+          type: string
+          example: "A for Apple"
+    QuizQuestionResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174003"
+        contextualCloze:
+          type: string
+          example: "I eat an ___ every day."
+        chineseTranslation:
+          type: string
+          example: "我每天吃一顆蘋果。"
+        correctAnswer:
+          type: string
+          example: "apple"
+        distractor1:
+          type: string
+          example: "banana"
+        distractor2:
+          type: string
+          example: "orange"
+        distractor3:
+          type: string
+          example: "grape"
+        explanationRootAffix:
+          type: string
+          example: "No specific root"
+        explanationMnemonic:
+          type: string
+          example: "A for Apple"
+    WordMasteryRequest:
+      type: object
+      properties:
+        errorWeight:
+          type: integer
+          example: 2
+        nextReviewDate:
+          type: string
+          format: date-time
+          example: "2026-07-05T00:00:00Z"
+    WordMasteryResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174004"
+        errorWeight:
+          type: integer
+          example: 2
+        nextReviewDate:
+          type: string
+          format: date-time
+          example: "2026-07-05T00:00:00Z"
+    ErrorEventRequest:
+      type: object
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+          example: "2026-07-02T10:00:00Z"
+        selectedDistractor:
+          type: string
+          example: "banana"
+    ErrorEventResponse:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174005"
+        timestamp:
+          type: string
+          format: date-time
+          example: "2026-07-02T10:00:00Z"
+        selectedDistractor:
+          type: string
+          example: "banana"
+
+  responses:
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: "Invalid parameter format"
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            type: object
+            properties:
+              error:
+                type: string
+                example: "Resource not found"

@@ -10,11 +10,25 @@ package "adapter.in.web.rest" {
     + updateUser(id: UUID, req: UserRequest): ResponseEntity<UserResponse>
     + deleteUser(id: UUID): ResponseEntity<Void>
     + getUserById(id: UUID): ResponseEntity<UserResponse>
+    + onboardUser(req: UserOnboardRequest): ResponseEntity<UserResponse>
   }
 }
 
 package "adapter.in.web.graphql" {
   interface "UserGraphQLResolver" <<GraphQLResolver>> {
+    + listUsers(filter: UserFilterInput): List<User>
+  }
+}
+
+package "application.port.in" {
+  interface "UserCommandService" <<Service>> {
+    + createUser(req: UserRequest): User
+    + updateUser(id: UUID, req: UserRequest): User
+    + deleteUser(id: UUID): void
+    + onboardUser(req: UserOnboardRequest): User
+  }
+  interface "UserQueryService" <<Service>> {
+    + getUserById(id: UUID): User
     + listUsers(filter: UserFilterInput): List<User>
   }
 }
@@ -28,7 +42,10 @@ package "adapter.out.persistence" {
   }
 }
 
-"UserRestController"  ..> "UserRepository" : uses
-"UserGraphQLResolver" ..> "UserRepository" : uses
+"UserRestController"  ..> "UserCommandService" : uses
+"UserRestController"  ..> "UserQueryService" : uses
+"UserGraphQLResolver" ..> "UserQueryService" : uses
+"UserCommandService"  ..> "UserRepository" : uses
+"UserQueryService"    ..> "UserRepository" : uses
 
 @enduml

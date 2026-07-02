@@ -1,0 +1,34 @@
+@startuml word_bank_contract
+
+!pragma layout smetana
+skinparam packageStyle rectangle
+skinparam defaultFontName Inter
+
+package "adapter.in.web.rest" {
+  interface "WordBankRestController" <<RestController>> {
+    + createWordBank(req: WordBankRequest): ResponseEntity<WordBankResponse>
+    + updateWordBank(id: UUID, req: WordBankRequest): ResponseEntity<WordBankResponse>
+    + deleteWordBank(id: UUID): ResponseEntity<Void>
+    + getWordBankById(id: UUID): ResponseEntity<WordBankResponse>
+  }
+}
+
+package "adapter.in.web.graphql" {
+  interface "WordBankGraphQLResolver" <<GraphQLResolver>> {
+    + listWordBanks(filter: WordBankFilterInput): List<WordBank>
+  }
+}
+
+package "adapter.out.persistence" {
+  interface "WordBankRepository" <<Repository>> {
+    + save(entity: WordBank): WordBank
+    + findById(id: UUID): Optional<WordBank>
+    + findByExample(example: Example<WordBank>): List<WordBank>
+    + deleteById(id: UUID): void
+  }
+}
+
+"WordBankRestController"  ..> "WordBankRepository" : uses
+"WordBankGraphQLResolver" ..> "WordBankRepository" : uses
+
+@enduml

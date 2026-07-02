@@ -1,0 +1,34 @@
+@startuml error_event_contract
+
+!pragma layout smetana
+skinparam packageStyle rectangle
+skinparam defaultFontName Inter
+
+package "adapter.in.web.rest" {
+  interface "ErrorEventRestController" <<RestController>> {
+    + createErrorEvent(req: ErrorEventRequest): ResponseEntity<ErrorEventResponse>
+    + updateErrorEvent(id: UUID, req: ErrorEventRequest): ResponseEntity<ErrorEventResponse>
+    + deleteErrorEvent(id: UUID): ResponseEntity<Void>
+    + getErrorEventById(id: UUID): ResponseEntity<ErrorEventResponse>
+  }
+}
+
+package "adapter.in.web.graphql" {
+  interface "ErrorEventGraphQLResolver" <<GraphQLResolver>> {
+    + listErrorEvents(filter: ErrorEventFilterInput): List<ErrorEvent>
+  }
+}
+
+package "adapter.out.persistence" {
+  interface "ErrorEventRepository" <<Repository>> {
+    + save(entity: ErrorEvent): ErrorEvent
+    + findById(id: UUID): Optional<ErrorEvent>
+    + findByExample(example: Example<ErrorEvent>): List<ErrorEvent>
+    + deleteById(id: UUID): void
+  }
+}
+
+"ErrorEventRestController"  ..> "ErrorEventRepository" : uses
+"ErrorEventGraphQLResolver" ..> "ErrorEventRepository" : uses
+
+@enduml

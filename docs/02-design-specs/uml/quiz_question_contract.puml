@@ -10,7 +10,6 @@ package "adapter.in.web.rest" {
     + updateQuizQuestion(id: UUID, req: QuizQuestionRequest): ResponseEntity<QuizQuestionResponse>
     + deleteQuizQuestion(id: UUID): ResponseEntity<Void>
     + getQuizQuestionById(id: UUID): ResponseEntity<QuizQuestionResponse>
-    + generateBatch(req: QuizQuestionActionRequest): ResponseEntity<OperationStatus>
   }
 }
 
@@ -19,39 +18,6 @@ package "adapter.in.web.graphql" {
     + listQuizQuestions(filter: QuizQuestionFilterInput): List<QuizQuestion>
   }
 }
-
-package "application.port.in" {
-  interface "QuizQuestionCommandService" <<Service>> {
-    + createQuizQuestion(req: QuizQuestionRequest): QuizQuestionResponse
-    + updateQuizQuestion(id: UUID, req: QuizQuestionRequest): QuizQuestionResponse
-    + deleteQuizQuestion(id: UUID): void
-    + generateBatch(req: QuizQuestionActionRequest): OperationStatus
-  }
-
-  interface "QuizQuestionQueryService" <<Service>> {
-    + getQuizQuestionById(id: UUID): QuizQuestionResponse
-    + listQuizQuestions(filter: QuizQuestionFilterInput): List<QuizQuestion>
-  }
-}
-
-package "application.agent" {
-  abstract class "AbstractAguiAgent" {
-    + streamChat(req: AguiChatRequest): Flux<ServerSentEvent<AguiEvent>>
-    # getSystemInstruction(req: AguiChatRequest): String
-  }
-
-  class "QuizCoachAgent" <<Agent>> {
-    # getSystemInstruction(req: AguiChatRequest): String
-    + getTools(): List<String>
-  }
-
-  class "GetQuestionContextTool" <<BackendTool>> implements Function {
-    + apply(req: ContextRequest): String
-  }
-}
-
-"QuizCoachAgent" -up-|> "AbstractAguiAgent"
-"QuizCoachAgent" ..> "GetQuestionContextTool" : registers
 
 package "adapter.out.persistence" {
   interface "QuizQuestionRepository" <<Repository>> {
@@ -62,21 +28,7 @@ package "adapter.out.persistence" {
   }
 }
 
-package "adapter.out.llm" {
-  interface "LlmPort" <<Port>> {
-    + stream(prompt: Prompt): Flux<ChatResponse>
-    + isGemmaModel(): boolean
-    + getDefaultOptions(): ChatOptions
-  }
-}
-
-"QuizQuestionRestController"  ..> "QuizQuestionCommandService" : uses
-"QuizQuestionRestController"  ..> "QuizQuestionQueryService" : uses
-"QuizQuestionGraphQLResolver" ..> "QuizQuestionQueryService" : uses
-"QuizQuestionCommandService"  ..> "QuizQuestionRepository" : uses
-"QuizQuestionQueryService"    ..> "QuizQuestionRepository" : uses
-
-"GetQuestionContextTool" ..> "QuizQuestionQueryService" : uses
-"AbstractAguiAgent" ..> "LlmPort" : uses
+"QuizQuestionRestController"  ..> "QuizQuestionRepository" : uses
+"QuizQuestionGraphQLResolver" ..> "QuizQuestionRepository" : uses
 
 @enduml
