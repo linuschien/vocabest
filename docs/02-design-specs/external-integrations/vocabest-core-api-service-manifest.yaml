@@ -8,13 +8,15 @@ adapters:
     port:
       interface: "DailyProgressRestController"
       layer: "domain.ports.input"
-  - name: "ErrorLogRestControllerAdapter"
+
+  - name: "ErrorEventRestControllerAdapter"
     type: "Primary"
     tech: "Spring WebFlux + Reactor Netty"
     stereotype: "<<RestController>>"
     port:
-      interface: "ErrorLogRestController"
+      interface: "ErrorEventRestController"
       layer: "domain.ports.input"
+
   - name: "QuizQuestionRestControllerAdapter"
     type: "Primary"
     tech: "Spring WebFlux + Reactor Netty"
@@ -22,6 +24,7 @@ adapters:
     port:
       interface: "QuizQuestionRestController"
       layer: "domain.ports.input"
+
   - name: "UserRestControllerAdapter"
     type: "Primary"
     tech: "Spring WebFlux + Reactor Netty"
@@ -29,13 +32,23 @@ adapters:
     port:
       interface: "UserRestController"
       layer: "domain.ports.input"
-  - name: "VocabularyWordRestControllerAdapter"
+
+  - name: "WordBankRestControllerAdapter"
     type: "Primary"
     tech: "Spring WebFlux + Reactor Netty"
     stereotype: "<<RestController>>"
     port:
-      interface: "VocabularyWordRestController"
+      interface: "WordBankRestController"
       layer: "domain.ports.input"
+
+  - name: "WordMasteryRestControllerAdapter"
+    type: "Primary"
+    tech: "Spring WebFlux + Reactor Netty"
+    stereotype: "<<RestController>>"
+    port:
+      interface: "WordMasteryRestController"
+      layer: "domain.ports.input"
+
   - name: "DailyProgressGraphQLResolverAdapter"
     type: "Primary"
     tech: "Spring for GraphQL + Reactor Netty"
@@ -43,13 +56,15 @@ adapters:
     port:
       interface: "DailyProgressGraphQLResolver"
       layer: "domain.ports.input"
-  - name: "ErrorLogGraphQLResolverAdapter"
+
+  - name: "ErrorEventGraphQLResolverAdapter"
     type: "Primary"
     tech: "Spring for GraphQL + Reactor Netty"
     stereotype: "<<GraphQLResolver>>"
     port:
-      interface: "ErrorLogGraphQLResolver"
+      interface: "ErrorEventGraphQLResolver"
       layer: "domain.ports.input"
+
   - name: "QuizQuestionGraphQLResolverAdapter"
     type: "Primary"
     tech: "Spring for GraphQL + Reactor Netty"
@@ -57,6 +72,7 @@ adapters:
     port:
       interface: "QuizQuestionGraphQLResolver"
       layer: "domain.ports.input"
+
   - name: "UserGraphQLResolverAdapter"
     type: "Primary"
     tech: "Spring for GraphQL + Reactor Netty"
@@ -64,62 +80,39 @@ adapters:
     port:
       interface: "UserGraphQLResolver"
       layer: "domain.ports.input"
-  - name: "VocabularyWordGraphQLResolverAdapter"
+
+  - name: "WordBankGraphQLResolverAdapter"
     type: "Primary"
     tech: "Spring for GraphQL + Reactor Netty"
     stereotype: "<<GraphQLResolver>>"
     port:
-      interface: "VocabularyWordGraphQLResolver"
+      interface: "WordBankGraphQLResolver"
       layer: "domain.ports.input"
-  - name: "ErrorLogCommandServiceAdapter"
+
+  - name: "WordMasteryGraphQLResolverAdapter"
     type: "Primary"
-    tech: "Spring Context"
+    tech: "Spring for GraphQL + Reactor Netty"
+    stereotype: "<<GraphQLResolver>>"
+    port:
+      interface: "WordMasteryGraphQLResolver"
+      layer: "domain.ports.input"
+
+  - name: "UserCommandServiceAdapter"
+    type: "Primary"
+    tech: "Spring Boot"
     stereotype: "<<Service>>"
     port:
-      interface: "ErrorLogCommandService"
+      interface: "UserCommandService"
       layer: "domain.ports.input"
-  - name: "ErrorLogQueryServiceAdapter"
+
+  - name: "UserQueryServiceAdapter"
     type: "Primary"
-    tech: "Spring Context"
+    tech: "Spring Boot"
     stereotype: "<<Service>>"
     port:
-      interface: "ErrorLogQueryService"
+      interface: "UserQueryService"
       layer: "domain.ports.input"
-  - name: "QuizQuestionCommandServiceAdapter"
-    type: "Primary"
-    tech: "Spring Context"
-    stereotype: "<<Service>>"
-    port:
-      interface: "QuizQuestionCommandService"
-      layer: "domain.ports.input"
-  - name: "QuizQuestionQueryServiceAdapter"
-    type: "Primary"
-    tech: "Spring Context"
-    stereotype: "<<Service>>"
-    port:
-      interface: "QuizQuestionQueryService"
-      layer: "domain.ports.input"
-  - name: "VocabularyWordCommandServiceAdapter"
-    type: "Primary"
-    tech: "Spring Context"
-    stereotype: "<<Service>>"
-    port:
-      interface: "VocabularyWordCommandService"
-      layer: "domain.ports.input"
-  - name: "VocabularyWordQueryServiceAdapter"
-    type: "Primary"
-    tech: "Spring Context"
-    stereotype: "<<Service>>"
-    port:
-      interface: "VocabularyWordQueryService"
-      layer: "domain.ports.input"
-  - name: "QuizCoachAgentAdapter"
-    type: "Primary"
-    tech: "Spring AI 2.0.0+ / AGUI Protocol"
-    stereotype: "<<Agent>>"
-    port:
-      interface: "AguiAgent"
-      layer: "domain.ports.input"
+
   - name: "DailyProgressRepositoryAdapter"
     type: "Secondary"
     tech: "Spring Data R2DBC (H2)"
@@ -127,13 +120,15 @@ adapters:
     port:
       interface: "DailyProgressRepository"
       layer: "domain.ports.output"
-  - name: "ErrorLogRepositoryAdapter"
+
+  - name: "ErrorEventRepositoryAdapter"
     type: "Secondary"
     tech: "Spring Data R2DBC (H2)"
     stereotype: "<<Repository>>"
     port:
-      interface: "ErrorLogRepository"
+      interface: "ErrorEventRepository"
       layer: "domain.ports.output"
+
   - name: "QuizQuestionRepositoryAdapter"
     type: "Secondary"
     tech: "Spring Data R2DBC (H2)"
@@ -141,6 +136,7 @@ adapters:
     port:
       interface: "QuizQuestionRepository"
       layer: "domain.ports.output"
+
   - name: "UserRepositoryAdapter"
     type: "Secondary"
     tech: "Spring Data R2DBC (H2)"
@@ -148,17 +144,19 @@ adapters:
     port:
       interface: "UserRepository"
       layer: "domain.ports.output"
-  - name: "VocabularyWordRepositoryAdapter"
+
+  - name: "WordBankRepositoryAdapter"
     type: "Secondary"
     tech: "Spring Data R2DBC (H2)"
     stereotype: "<<Repository>>"
     port:
-      interface: "VocabularyWordRepository"
+      interface: "WordBankRepository"
       layer: "domain.ports.output"
-  - name: "SpringAiLlmAdapter"
+
+  - name: "WordMasteryRepositoryAdapter"
     type: "Secondary"
-    tech: "Spring AI 2.0.0+ / LLM API"
-    stereotype: "<<Port>>"
+    tech: "Spring Data R2DBC (H2)"
+    stereotype: "<<Repository>>"
     port:
-      interface: "LlmPort"
+      interface: "WordMasteryRepository"
       layer: "domain.ports.output"
