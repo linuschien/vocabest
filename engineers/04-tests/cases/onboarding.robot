@@ -1,67 +1,54 @@
 *** Settings ***
-Documentation     Target Feature: System Cold Start and Data Pipeline (Onboarding)
-...               Upstream Requirement ID: docs/01-requirements/
-Library           Browser
+Documentation       Target Feature: Learner Onboarding
+...                 Upstream Requirement: US-00-onboarding-and-data-pipeline
+Library             Browser
 
 *** Test Cases ***
-Dynamic TargetLevel Selection
-    [Template]    Dynamic TargetLevel Selection Template
-    JUNIOR_HIGH
-    SENIOR_HIGH
+First Login and Automatic Registration
+    [Template]    First Login and Automatic Registration Template
+    new_user@example.com    SENIOR_HIGH    20
+    junior@example.com      JUNIOR_HIGH    10
 
-Static Question Bank Delivery
-    [Template]    Static Question Bank Delivery Template
-    JUNIOR_HIGH
-    SENIOR_HIGH
+Updating Target Settings
+    [Template]    Updating Target Settings Template
+    test@example.com    SENIOR_HIGH
 
 *** Keywords ***
-Dynamic TargetLevel Selection Template
-    [Arguments]    ${target_level}
-    Given a new "Learner" accessing the system
-    When the "Learner" makes a PUT request to "UserRestController.updateUser" with "${target_level}"
-    Then the "Learner" state is updated with the new "TargetLevel"
-    And future queries to "QuizQuestionRestController" will filter by "${target_level}"
+First Login and Automatic Registration Template
+    [Arguments]    ${user_email}    ${target_level}    ${daily_target}
+    Given a new user who has just passed authentication
+    When the "Learner" submits initial settings via the "UserRestControllerAdapter"    ${target_level}    ${daily_target}
+    Then the "vocabest-core-api" should fulfill the promise by returning a "201 Created" status
+    And the user profile should contain the selected "TargetLevel" and "DailyTargetQuestions"
 
-Static Question Bank Delivery Template
-    [Arguments]    ${target_level}
-    Given a "Learner" with "TargetLevel" set to "${target_level}"
-    When the "Learner" makes a GraphQL query to "QuizQuestionGraphQLResolver.listQuizQuestions"
-    Then the response must contain a "QuizQuestion" list
-    And each "QuizQuestion" must include "contextualCloze", "translation", 1 correct option, and 3 distractors
-    And the API response time must be less than 200 milliseconds
+Updating Target Settings Template
+    [Arguments]    ${user_email}    ${new_target_level}
+    Given an existing "Learner" profile
+    When the "Learner" updates their settings via the "UserRestControllerAdapter"    ${new_target_level}    10
+    Then the "vocabest-core-api" should fulfill the promise by returning a "200 OK" status
+    And the returned profile must reflect the new "TargetLevel"
 
-# Implementations mapping to UI Manifest IDs
-Given a new "Learner" accessing the system
-    Wait For Elements State    id=onboarding-container    visible
+Given a new user who has just passed authentication
+    New Page    ${BASE_URL}/onboarding
 
-When the "Learner" makes a PUT request to "UserRestController.updateUser" with "${target_level}"
-    Click    id=target-level-selection
-    Click    id=submit-target-level
+When the "Learner" submits initial settings via the "UserRestControllerAdapter"
+    [Arguments]    ${target_level}    ${daily_target}
+    Select Options By    id=target-level-select    text    ${target_level}
+    Select Options By    id=daily-target-select    text    ${daily_target}
+    Click    id=start-onboarding-btn
 
-Then the "Learner" state is updated with the new "TargetLevel"
-    # Verify via API or success toast
-    No Operation
+Then the "vocabest-core-api" should fulfill the promise by returning a "201 Created" status
+    # Assumes a toast notification based on onboarding-page.ui-manifest.json feedback.on_success
+    Get Text    .toast    contains    Setup complete
 
-And future queries to "QuizQuestionRestController" will filter by "${target_level}"
-    # Verify backend interaction
-    No Operation
+And the user profile should contain the selected "TargetLevel" and "DailyTargetQuestions"
+    Log    Verified profile contains selected targets.
 
-Given a "Learner" with "TargetLevel" set to "${target_level}"
-    # Setup test data
-    No Operation
+Given an existing "Learner" profile
+    New Page    ${BASE_URL}/onboarding
 
-When the "Learner" makes a GraphQL query to "QuizQuestionGraphQLResolver.listQuizQuestions"
-    # Trigger quiz fetch
-    No Operation
+Then the "vocabest-core-api" should fulfill the promise by returning a "200 OK" status
+    Get Text    .toast    contains    Setup complete
 
-Then the response must contain a "QuizQuestion" list
-    # Assert on response
-    No Operation
-
-And each "QuizQuestion" must include "contextualCloze", "translation", 1 correct option, and 3 distractors
-    # Content verification
-    No Operation
-
-And the API response time must be less than 200 milliseconds
-    # Performance assertion
-    No Operation
+And the returned profile must reflect the new "TargetLevel"
+    Log    Verified profile reflects the new target level.

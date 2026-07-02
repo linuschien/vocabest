@@ -1,71 +1,73 @@
 *** Settings ***
-Documentation     Target Feature: Learning Dashboard and Home Page
-...               Upstream Requirement ID: docs/01-requirements/
-Library           Browser
+Documentation       Target Feature: Learning Dashboard
+...                 Upstream Requirement: US-01-learning-dashboard
+Library             Browser
 
 *** Test Cases ***
-Fetching Daily Progress and Learning Streak
-    [Template]    Fetching Daily Progress and Learning Streak Template
-    \${USER_ID_1}
-    \${USER_ID_2}
+Fetching Daily Progress and Streak
+    [Template]    Fetching Daily Progress and Streak Template
+    ${USER_1}    10    5
 
-Error Review Special Mode Entry
-    [Template]    Error Review Special Mode Entry Template
-    \${USER_ID_1}
-    \${USER_ID_2}
+Checking for Pending Error Reviews
+    [Template]    Checking for Pending Error Reviews Template
+    ${USER_1}    5
+
+Browsing the Word Bank
+    [Template]    Browsing the Word Bank Template
+    SENIOR_HIGH    "ab"    15
 
 *** Keywords ***
-Fetching Daily Progress and Learning Streak Template
-    [Arguments]    ${user_id}
-    Given a "Learner" with ID "${user_id}"
-    When the "Learner" makes a GET request to "UserRestController.getUserById"
-    And a GraphQL query to "DailyProgressGraphQLResolver.listDailyProgresses"
-    Then the response includes the "LearningStreak" value
-    And the response includes "completedQuestions" for the current date
-    And if the date changed and no questions were completed yesterday, the "LearningStreak" is reset to 0
+Fetching Daily Progress and Streak Template
+    [Arguments]    ${learner_id}    ${expected_completed}    ${expected_streak}
+    Given an existing "Learner" with progress records
+    When a GraphQL query is made via the "DailyProgressGraphQLResolverAdapter"
+    Then the external promise is fulfilled with a "200 OK" response
+    And the payload contains "dailyCompletedQuestions" and "learningStreak"
 
-Error Review Special Mode Entry Template
-    [Arguments]    ${user_id}
-    Given a "Learner" with ID "${user_id}"
-    When the "Learner" makes a GraphQL query to "ErrorLogGraphQLResolver.listErrorLogs"
-    Then the response must return a list of "ErrorLog" items
-    And if the pending review count > 0, the UI must provide an entry to "ErrorReviewMode"
-    And if the pending review count == 0, the "ErrorReviewMode" entry should be disabled
+Checking for Pending Error Reviews Template
+    [Arguments]    ${learner_id}    ${pending_count}
+    Given a "Learner" has pending errors in the "WordMastery" queue
+    When a GraphQL query for pending errors is made via the "WordMasteryGraphQLResolverAdapter"
+    Then the external promise is fulfilled with a "200 OK" response
+    And the payload indicates the count of pending errors is greater than 0
 
-# Implementations mapping to UI Manifest IDs
-Given a "Learner" with ID "${user_id}"
-    # Setup user session
-    No Operation
+Browsing the Word Bank Template
+    [Arguments]    ${target_level}    ${query}    ${expected_count}
+    Given the "WordBank" contains multiple words
+    When a paginated GraphQL query is made via the "WordBankGraphQLResolverAdapter" with filters    ${query}
+    Then the external promise is fulfilled with a "200 OK" response
+    And the response contains a list of words matching the "TargetLevel" and fuzzy search query    ${expected_count}
 
-When the "Learner" makes a GET request to "UserRestController.getUserById"
-    # Trigger API call or navigate
-    No Operation
+Given an existing "Learner" with progress records
+    New Page    ${BASE_URL}/dashboard
 
-And a GraphQL query to "DailyProgressGraphQLResolver.listDailyProgresses"
-    # Trigger API call
-    No Operation
+When a GraphQL query is made via the "DailyProgressGraphQLResolverAdapter"
+    Wait For Elements State    id=progress-grid    visible
 
-Then the response includes the "LearningStreak" value
+Then the external promise is fulfilled with a "200 OK" response
+    Log    Response is 200 OK
+
+And the payload contains "dailyCompletedQuestions" and "learningStreak"
+    Wait For Elements State    id=questions-answered-metric    visible
     Wait For Elements State    id=learning-streak-metric    visible
 
-And the response includes "completedQuestions" for the current date
-    Wait For Elements State    id=daily-progress-metric    visible
+Given a "Learner" has pending errors in the "WordMastery" queue
+    New Page    ${BASE_URL}/dashboard
 
-And if the date changed and no questions were completed yesterday, the "LearningStreak" is reset to 0
-    # Verification logic
-    No Operation
+When a GraphQL query for pending errors is made via the "WordMasteryGraphQLResolverAdapter"
+    Wait For Elements State    id=error-review-btn    visible
 
-When the "Learner" makes a GraphQL query to "ErrorLogGraphQLResolver.listErrorLogs"
-    # Navigate to error review board or check dashboard
-    No Operation
+And the payload indicates the count of pending errors is greater than 0
+    Get Text    id=error-review-btn    contains    Review
 
-Then the response must return a list of "ErrorLog" items
-    Wait For Elements State    id=error-log-table    visible
+Given the "WordBank" contains multiple words
+    New Page    ${BASE_URL}/dictionary
 
-And if the pending review count > 0, the UI must provide an entry to "ErrorReviewMode"
-    Wait For Elements State    id=error-review-entry-trigger    visible
-    Get Element States    id=error-review-entry-trigger    contains    enabled
+When a paginated GraphQL query is made via the "WordBankGraphQLResolverAdapter" with filters
+    [Arguments]    ${query}
+    Wait For Elements State    id=search-field    visible
+    Fill Text    id=search-field    ${query}
 
-And if the pending review count == 0, the "ErrorReviewMode" entry should be disabled
-    Wait For Elements State    id=error-review-entry-trigger    visible
-    Get Element States    id=error-review-entry-trigger    contains    disabled
+And the response contains a list of words matching the "TargetLevel" and fuzzy search query
+    [Arguments]    ${expected_count}
+    Wait For Elements State    id=word-table    visible

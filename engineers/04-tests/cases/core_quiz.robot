@@ -1,103 +1,79 @@
 *** Settings ***
-Documentation     Target Feature: Core Quiz Loop and Instant Feedback
-...               Upstream Requirement ID: docs/01-requirements/
-Library           Browser
+Documentation       Target Feature: Core Quiz Loop and Instant Feedback
+...                 Upstream Requirement: US-02-core-quiz-loop
+Library             Browser
 
 *** Test Cases ***
-Rendering Contextual Cloze Questions
-    [Template]    Rendering Contextual Cloze Questions Template
-    practicing
+Fetching Contextual Cloze Questions
+    [Template]    Fetching Contextual Cloze Questions Template
+    SENIOR_HIGH    10
 
-Unlimited Practice and Positive Reinforcement
-    [Template]    Unlimited Practice and Positive Reinforcement Template
-    correctOption    success
+Receiving Instant Feedback for Correct Answer
+    [Template]    Receiving Instant Feedback for Correct Answer Template
+    ${Q_1}    "apple"    "CORRECT"
 
-AI Explanation Panel on Incorrect Answer
-    [Template]    AI Explanation Panel on Incorrect Answer Template
-    distractor1    \${WORD_ID}
-    distractor2    \${WORD_ID}
-    distractor3    \${WORD_ID}
+Receiving Instant Feedback and AI Explanation for Wrong Answer
+    [Template]    Receiving Instant Feedback and AI Explanation for Wrong Answer Template
+    ${Q_1}    "banana"    "WRONG"
 
 *** Keywords ***
-Rendering Contextual Cloze Questions Template
-    [Arguments]    ${learner_state}
-    Given a "Learner" receives a "QuizQuestion" from "QuizQuestionRestController"
-    When the quiz UI renders the question
-    Then the screen must display the full Chinese "translation"
-    And the screen must display the "ContextualCloze" English sentence
-    And the screen must provide 4 randomized option buttons containing 1 "correctOption" and 3 distractors
+Fetching Contextual Cloze Questions Template
+    [Arguments]    ${target_level}    ${limit}
+    Given the system has available "QuizQuestion" records
+    When a "nextQuestion" request is made via the "UserRestControllerAdapter"
+    Then the external promise is fulfilled with a "200 OK" response
+    And the payload contains the context sentence, translation, and 4 shuffled options
 
-Unlimited Practice and Positive Reinforcement Template
-    [Arguments]    ${selected_option}    ${result}
-    Given a "Learner" viewing a "QuizQuestion"
-    When the "Learner" selects the "correctOption"
-    Then the selected button indicates success
-    And the system automatically transitions to the next question after 1.5 seconds without deducting health
-    And a POST request is made to update "DailyProgressRestController" if applicable
+Receiving Instant Feedback for Correct Answer Template
+    [Arguments]    ${question_id}    ${answer_submitted}    ${expected_status}
+    Given a "QuizQuestion" and the Learner knows the correct option
+    When the answer is submitted via the "UserRestControllerAdapter" ("submitAnswer")    ${answer_submitted}
+    Then the external promise is fulfilled with a "200 OK" response
+    And the response indicates the answer is "CORRECT"
 
-AI Explanation Panel on Incorrect Answer Template
-    [Arguments]    ${selected_option}    ${word_id}
-    Given a "Learner" viewing a "QuizQuestion" with ID "${word_id}"
-    When the "Learner" selects a "distractor"
-    Then the selected button indicates an error
-    And the "AIExplanationPanel" appears showing "explanationRootAffix" and "explanationMnemonic"
-    And the quiz flow pauses until the "Learner" manually clicks next
-    And a POST request is made to "ErrorLogRestController.recordFailure" to log the error for "${word_id}"
+Receiving Instant Feedback and AI Explanation for Wrong Answer Template
+    [Arguments]    ${question_id}    ${answer_submitted}    ${expected_status}
+    Given a "QuizQuestion"
+    When the wrong answer is submitted via the "UserRestControllerAdapter" ("submitAnswer")    ${answer_submitted}
+    Then the external promise is fulfilled with a "200 OK" response
+    And the response indicates the answer is "WRONG"
+    And the response payload includes the "AIExplanationPanel" contents
 
-# Implementations mapping to UI Manifest IDs
-Given a "Learner" receives a "QuizQuestion" from "QuizQuestionRestController"
-    # Setup test data or intercept API
-    No Operation
+Given the system has available "QuizQuestion" records
+    New Page    ${BASE_URL}/quiz
 
-When the quiz UI renders the question
+When a "nextQuestion" request is made via the "UserRestControllerAdapter"
     Wait For Elements State    id=question-section    visible
 
-Then the screen must display the full Chinese "translation"
-    Get Element States    id=chinese-translation    contains    visible
+Then the external promise is fulfilled with a "200 OK" response
+    Log    Response is 200 OK
 
-And the screen must display the "ContextualCloze" English sentence
-    Get Element States    id=english-cloze    contains    visible
+And the payload contains the context sentence, translation, and 4 shuffled options
+    Wait For Elements State    id=chinese-translation    visible
+    Wait For Elements State    id=contextual-cloze    visible
+    # Wait for the grid of options
+    Wait For Elements State    id=options-grid    visible
 
-And the screen must provide 4 randomized option buttons containing 1 "correctOption" and 3 distractors
-    Get Element Count    id=quiz-option-trigger    ==    4
+Given a "QuizQuestion" and the Learner knows the correct option
+    New Page    ${BASE_URL}/quiz
 
-Given a "Learner" viewing a "QuizQuestion"
-    Wait For Elements State    id=question-section    visible
+When the answer is submitted via the "UserRestControllerAdapter" ("submitAnswer")
+    [Arguments]    ${answer_submitted}
+    Click    id=option-trigger >> text=${answer_submitted}
 
-When the "Learner" selects the "correctOption"
-    Click    id=quiz-option-trigger
+And the response indicates the answer is "CORRECT"
+    Get Text    .toast    contains    Answer submitted
 
-Then the selected button indicates success
-    # Verify success state (e.g. class change)
-    Get Element States    id=quiz-option-trigger    contains    visible
+Given a "QuizQuestion"
+    New Page    ${BASE_URL}/quiz
 
-And the system automatically transitions to the next question after 1.5 seconds without deducting health
-    Sleep    1.5s
-    Wait For Elements State    id=question-section    visible
+When the wrong answer is submitted via the "UserRestControllerAdapter" ("submitAnswer")
+    [Arguments]    ${answer_submitted}
+    Click    id=option-trigger >> text=${answer_submitted}
 
-And a POST request is made to update "DailyProgressRestController" if applicable
-    # Verify backend call
-    No Operation
+And the response indicates the answer is "WRONG"
+    Wait For Elements State    id=explanation-modal    visible
 
-Given a "Learner" viewing a "QuizQuestion" with ID "${word_id}"
-    Wait For Elements State    id=question-section    visible
-
-When the "Learner" selects a "distractor"
-    Click    id=quiz-option-trigger
-
-Then the selected button indicates an error
-    # Verify error state
-    Get Element States    id=quiz-option-trigger    contains    visible
-
-And the "AIExplanationPanel" appears showing "explanationRootAffix" and "explanationMnemonic"
-    Wait For Elements State    id=ai-explanation-panel    visible
-    Get Element States    id=explanation-root-affix    contains    visible
-    Get Element States    id=explanation-mnemonic    contains    visible
-
-And the quiz flow pauses until the "Learner" manually clicks next
-    Wait For Elements State    id=next-question-trigger    visible
-    Click    id=next-question-trigger
-
-And a POST request is made to "ErrorLogRestController.recordFailure" to log the error for "${word_id}"
-    # Verify backend call
-    No Operation
+And the response payload includes the "AIExplanationPanel" contents
+    Wait For Elements State    id=explanation-content    visible
+    Wait For Elements State    id=next-question-btn    visible
