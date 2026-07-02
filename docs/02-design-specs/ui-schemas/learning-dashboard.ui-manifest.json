@@ -1,72 +1,128 @@
 {
-  "ui_id": "learning-dashboard",
-  "domain_module": "UserAndLearningProgress",
-  "root_element": {
-    "id": "dashboard-page",
-    "abstract_type": "Container",
-    "semantic_variant": "page",
-    "children": [
-      {
-        "id": "progress-summary-section",
-        "abstract_type": "Section",
-        "semantic_variant": "summary-section",
+    "ui_id": "learning-dashboard",
+    "domain_module": "DailyProgress",
+    "root_element": {
+        "id": "dashboard-container",
+        "abstract_type": "Container",
+        "semantic_variant": "page",
+        "label": "Learning Dashboard",
         "children": [
-          {
-            "id": "daily-progress-metric",
-            "abstract_type": "Metric",
-            "label": "Daily Progress",
-            "data_ref": "listDailyProgresses",
-            "ux_hints": {
-              "principles": [
-                "gestalt:proximity"
-              ]
+            {
+                "id": "global-header-section",
+                "abstract_type": "Section",
+                "semantic_variant": "summary-section",
+                "label": "Header",
+                "children": [
+                    {
+                        "id": "avatar-dropdown-btn",
+                        "abstract_type": "Trigger",
+                        "semantic_variant": "icon",
+                        "label": "User Menu",
+                        "interactions": [
+                            {
+                                "on_event": "on_click",
+                                "target_id": "avatar-dropdown-modal",
+                                "behavior_ref": "nielsen:control"
+                            }
+                        ],
+                        "ux_hints": {
+                            "primary_action_placement": "top-right"
+                        }
+                    }
+                ]
+            },
+            {
+                "id": "progress-section",
+                "abstract_type": "Section",
+                "semantic_variant": "summary-section",
+                "label": "Today's Progress",
+                "children": [
+                    {
+                        "id": "progress-grid",
+                        "abstract_type": "Grid",
+                        "semantic_variant": "kpi-grid",
+                        "label": "Key Metrics",
+                        "data_ref": "getDailyProgressById",
+                        "children": [
+                            {
+                                "id": "questions-answered-metric",
+                                "abstract_type": "Metric",
+                                "label": "Questions Answered",
+                                "data_ref": "getDailyProgressById"
+                            },
+                            {
+                                "id": "learning-streak-metric",
+                                "abstract_type": "Metric",
+                                "label": "Learning Streak",
+                                "data_ref": "getUserById"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": "quick-start-section",
+                "abstract_type": "Section",
+                "semantic_variant": "summary-section",
+                "label": "Quick Start",
+                "children": [
+                    {
+                        "id": "quick-start-stack",
+                        "abstract_type": "Stack",
+                        "semantic_variant": "action-bar",
+                        "label": "Actions",
+                        "children": [
+                            {
+                                "id": "start-daily-task-btn",
+                                "abstract_type": "Trigger",
+                                "semantic_variant": "primary",
+                                "label": "Start Today's Task",
+                                "behavior_ref": "US-01-01: 一鍵啟動測驗",
+                                "ux_hints": {
+                                    "principles": ["fitts-law", "visual-hierarchy:size"],
+                                    "primary_action_placement": "top-left"
+                                }
+                            },
+                            {
+                                "id": "error-review-btn",
+                                "abstract_type": "Trigger",
+                                "semantic_variant": "secondary",
+                                "label": "Review Errors",
+                                "behavior_ref": "US-01-03: 錯題複習專區入口"
+                            },
+                            {
+                                "id": "nav-dictionary-btn",
+                                "abstract_type": "Trigger",
+                                "semantic_variant": "secondary",
+                                "label": "Vocabulary Dictionary",
+                                "behavior_ref": "US-01-04: 單字總覽與檢索"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": "avatar-dropdown-modal",
+                "abstract_type": "Overlay",
+                "semantic_variant": "modal",
+                "label": "User Menu",
+                "children": [
+                    {
+                        "id": "nav-settings-btn",
+                        "abstract_type": "Trigger",
+                        "semantic_variant": "secondary",
+                        "label": "Personal Settings",
+                        "behavior_ref": "US-05-01: 一般使用者個人資料存取限制"
+                    },
+                    {
+                        "id": "nav-admin-btn",
+                        "abstract_type": "Trigger",
+                        "semantic_variant": "secondary",
+                        "label": "Admin Dashboard",
+                        "behavior_ref": "US-05-02: 系統管理員全站資料存取權限"
+                    }
+                ]
             }
-          },
-          {
-            "id": "learning-streak-metric",
-            "abstract_type": "Metric",
-            "label": "Learning Streak",
-            "data_ref": "getUserById",
-            "ux_hints": {
-              "principles": [
-                "gestalt:proximity"
-              ]
-            }
-          }
         ]
-      },
-      {
-        "id": "quick-actions-bar",
-        "abstract_type": "Stack",
-        "semantic_variant": "action-bar",
-        "children": [
-          {
-            "id": "quick-start-trigger",
-            "abstract_type": "Trigger",
-            "semantic_variant": "primary",
-            "label": "Start Daily Task",
-            "behavior_ref": "QuickStart",
-            "ux_hints": {
-              "primary_action_placement": "top-left",
-              "principles": [
-                "fitts-law"
-              ]
-            }
-          },
-          {
-            "id": "error-review-entry-trigger",
-            "abstract_type": "Trigger",
-            "semantic_variant": "secondary",
-            "label": "Error Review",
-            "behavior_ref": "Error Review Special Mode Entry",
-            "ux_hints": {
-              "principles": [
-                "nielsen:visibility"
-              ]
-            }
-          }
-        ]
-      }
-    ]
-  }
+    }
 }

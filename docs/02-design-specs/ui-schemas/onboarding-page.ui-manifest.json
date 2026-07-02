@@ -1,57 +1,75 @@
 {
-  "ui_id": "onboarding-page",
-  "domain_module": "UserAndLearningProgress",
-  "root_element": {
-    "id": "onboarding-container",
-    "abstract_type": "Container",
-    "semantic_variant": "page",
-    "children": [
-      {
-        "id": "target-level-form-section",
-        "abstract_type": "Section",
-        "semantic_variant": "form-section",
+    "ui_id": "onboarding-page",
+    "domain_module": "User",
+    "root_element": {
+        "id": "onboarding-container",
+        "abstract_type": "Container",
+        "semantic_variant": "page",
+        "label": "Welcome to Vocabest",
         "children": [
-          {
-            "id": "onboarding-title",
-            "abstract_type": "Heading",
-            "label": "Welcome! Choose Your Target Level"
-          },
-          {
-            "id": "target-level-selection",
-            "abstract_type": "Selection",
-            "semantic_variant": "radio",
-            "label": "Target Level",
-            "behavior_ref": "nielsen:control",
-            "ux_hints": {
-              "principles": [
-                "hicks-law"
-              ],
-              "max_visible_options": 2
+            {
+                "id": "onboarding-form-section",
+                "abstract_type": "Section",
+                "semantic_variant": "form-section",
+                "label": "Initial Setup",
+                "ux_hints": {
+                    "principles": ["millers-law"],
+                    "group_size_hint": 3
+                },
+                "children": [
+                    {
+                        "id": "target-level-select",
+                        "abstract_type": "Selection",
+                        "semantic_variant": "dropdown",
+                        "label": "Target Level",
+                        "required": true,
+                        "behavior_ref": "nielsen:flexibility",
+                        "ux_hints": {
+                            "max_visible_options": 7
+                        }
+                    },
+                    {
+                        "id": "daily-target-select",
+                        "abstract_type": "Selection",
+                        "semantic_variant": "dropdown",
+                        "label": "Daily Target Questions",
+                        "required": true,
+                        "behavior_ref": "nielsen:flexibility",
+                        "ux_hints": {
+                            "max_visible_options": 5
+                        }
+                    },
+                    {
+                        "id": "start-onboarding-btn",
+                        "abstract_type": "Trigger",
+                        "semantic_variant": "primary",
+                        "label": "Start Learning",
+                        "data_ref": "onboardUser",
+                        "behavior_ref": "US-00-01: First Login & Onboarding",
+                        "ux_hints": {
+                            "principles": ["fitts-law", "visual-hierarchy:size"],
+                            "primary_action_placement": "top-left"
+                        },
+                        "feedback": {
+                            "on_success": {
+                                "type": "toast",
+                                "message_key": "Setup complete"
+                            },
+                            "on_error": {
+                                "type": "dialog",
+                                "message_key": "Failed to save settings"
+                            }
+                        },
+                        "interactions": [
+                            {
+                                "on_event": "on_submit",
+                                "target_id": "onboarding-form-section",
+                                "behavior_ref": "nielsen:feedback"
+                            }
+                        ]
+                    }
+                ]
             }
-          },
-          {
-            "id": "submit-target-level",
-            "abstract_type": "Trigger",
-            "semantic_variant": "primary",
-            "label": "Start Learning",
-            "data_ref": "updateUser",
-            "behavior_ref": "nielsen:feedback",
-            "feedback": {
-              "on_success": {
-                "type": "toast",
-                "message_key": "Settings saved successfully"
-              },
-              "on_error": {
-                "type": "dialog",
-                "message_key": "Failed to save settings. Please try again."
-              }
-            },
-            "ux_hints": {
-              "primary_action_placement": "top-right"
-            }
-          }
         ]
-      }
-    ]
-  }
+    }
 }
