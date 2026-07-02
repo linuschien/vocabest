@@ -16,6 +16,7 @@
   - US 1.1 一鍵啟動測驗
   - US 1.2 進度與連勝追蹤 (微型成就感)
   - US 1.3 錯題複習專區入口
+  - US 1.4 單字總覽與檢索 (Vocabulary Dictionary)
 - **[Epic 2: 核心測驗循環 (Core Quiz Loop)](./US-02-core-quiz-loop.md)**
   - US 2.1 情境克漏字渲染
   - US 2.2 無限制刷題機制
