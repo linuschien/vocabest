@@ -114,6 +114,52 @@ paths:
           description: No Content
         "404":
           $ref: "#/components/responses/NotFound"
+  /users/{userId}:nextQuestion:
+    post:
+      operationId: getNextQuestion
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/QuizQuestionResponse"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /users/{userId}:submitAnswer:
+    post:
+      operationId: submitAnswer
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SubmitAnswerRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SubmitAnswerResponse"
+        "400":
+          $ref: "#/components/responses/BadRequest"
+        "404":
+          $ref: "#/components/responses/NotFound"
 
   /dailyProgresses:
     post:
@@ -581,6 +627,31 @@ components:
         message:
           type: string
           example: "Operation completed successfully"
+    SubmitAnswerRequest:
+      type: object
+      properties:
+        questionId:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174003"
+        selectedDistractor:
+          type: string
+          example: "banana"
+    SubmitAnswerResponse:
+      type: object
+      properties:
+        isCorrect:
+          type: boolean
+          example: false
+        correctAnswer:
+          type: string
+          example: "apple"
+        explanationRootAffix:
+          type: string
+          example: "No specific root"
+        explanationMnemonic:
+          type: string
+          example: "A for Apple"
     UserOnboardRequest:
       type: object
       properties:
