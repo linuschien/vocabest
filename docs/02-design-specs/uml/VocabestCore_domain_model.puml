@@ -1,51 +1,58 @@
-@startuml VocabestCoreDomainModel
+@startuml
 skinparam style strictuml
 title Domain Model - Vocabest Core
 
-package "User & Learning Progress" {
+package "Core Domain" {
     class User <<Entity>> {
         +String id
-        +TargetLevel targetLevel
-        +Integer learningStreak
+        +String email
+        +Role role <<Enum>>
+        +TargetLevel targetLevel <<Enum>>
         +Integer dailyTargetQuestions
+        +Integer learningStreak
     }
 
     class DailyProgress <<Entity>> {
         +String id
         +DateTime date
-        +Integer completedQuestions
+        +Integer targetQuestions
+        +Integer answeredQuestions
+        +Integer correctQuestions
+        +Integer wrongQuestions
     }
 
-    class ErrorLog <<Entity>> {
-        +String id
-        +String wordId
-        +Integer errorWeight
-        +DateTime nextReviewDate
-    }
-}
-
-package "Question Bank & Quizzes" {
-    class VocabularyWord <<Entity>> {
+    class WordBank <<Entity>> {
         +String id
         +String word
-        +String partOfSpeech
-        +String translation
-        +VocabularyLevel level
+        +String partsOfSpeech
+        +String chineseTranslation
+        +TargetLevel targetLevel <<Enum>>
+        +Integer difficultyLevel
         +Integer examFrequency
     }
 
     class QuizQuestion <<Entity>> {
         +String id
-        +String wordId
         +String contextualCloze
-        +String translation
-        +String correctOption
+        +String chineseTranslation
+        +String correctAnswer
         +String distractor1
         +String distractor2
         +String distractor3
         +String explanationRootAffix
         +String explanationMnemonic
-        +TargetLevel targetLevel
+    }
+
+    class WordMastery <<Entity>> {
+        +String id
+        +Integer errorWeight
+        +DateTime nextReviewDate
+    }
+
+    class ErrorEvent <<Entity>> {
+        +String id
+        +DateTime timestamp
+        +String selectedDistractor
     }
 }
 
@@ -64,10 +71,10 @@ package "Persistence Contracts" {
         +Delete(String id): Boolean
     }
 
-    interface ErrorLogRepository <<Interface>> {
-        +Create(ErrorLog data): ErrorLog
-        +GetById(String id): ErrorLog?
-        +Update(String id, ErrorLog delta): ErrorLog
+    interface WordBankRepository <<Interface>> {
+        +Create(WordBank data): WordBank
+        +GetById(String id): WordBank?
+        +Update(String id, WordBank delta): WordBank
         +Delete(String id): Boolean
     }
 
@@ -78,38 +85,38 @@ package "Persistence Contracts" {
         +Delete(String id): Boolean
     }
 
-    interface VocabularyWordRepository <<Interface>> {
-        +Create(VocabularyWord data): VocabularyWord
-        +GetById(String id): VocabularyWord?
-        +Update(String id, VocabularyWord delta): VocabularyWord
+    interface WordMasteryRepository <<Interface>> {
+        +Create(WordMastery data): WordMastery
+        +GetById(String id): WordMastery?
+        +Update(String id, WordMastery delta): WordMastery
+        +Delete(String id): Boolean
+    }
+
+    interface ErrorEventRepository <<Interface>> {
+        +Create(ErrorEvent data): ErrorEvent
+        +GetById(String id): ErrorEvent?
+        +Update(String id, ErrorEvent delta): ErrorEvent
         +Delete(String id): Boolean
     }
 }
 
 ' Relationships
-User "1" *-- "0..*" DailyProgress : "tracks"
-User "1" *-- "0..*" ErrorLog : "maintains"
-ErrorLog "0..*" o-- "1" QuizQuestion : "references"
-QuizQuestion "0..*" o-- "1" VocabularyWord : "tests"
-ErrorLog "0..*" o-- "1" VocabularyWord : "tracks"
+User "1" *-- "*" DailyProgress : "tracks"
+User "1" *-- "*" WordMastery : "owns"
+User "1" *-- "*" ErrorEvent : "generates"
+WordBank "1" *-- "*" QuizQuestion : "composes"
+WordMastery "*" o-- "1" WordBank : "references"
+ErrorEvent "*" o-- "1" QuizQuestion : "references"
+
+enum Role {
+    LEARNER
+    ADMIN
+}
 
 enum TargetLevel {
     JUNIOR_HIGH
     SENIOR_HIGH
 }
 
-enum VocabularyLevel {
-    JUNIOR_BASIC_1200
-    JUNIOR_ADVANCED_800
-    SENIOR_LEVEL_1
-    SENIOR_LEVEL_2
-    SENIOR_LEVEL_3
-    SENIOR_LEVEL_4
-    SENIOR_LEVEL_5
-    SENIOR_LEVEL_6
-}
-
 note right of User : ID MUST be a UUID v4
-note right of ErrorLog : errorWeight increments on wrong answer
-note right of DailyProgress : date is midnight of user's timezone
 @enduml
