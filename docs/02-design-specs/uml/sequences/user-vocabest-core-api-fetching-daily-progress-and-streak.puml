@@ -1,0 +1,24 @@
+@startuml user-vocabest-core-api-fetching-daily-progress-and-streak
+
+!pragma layout smetana
+skinparam defaultFontName Inter
+
+actor Learner
+
+box "vocabest-core-api"
+  participant "DailyProgressGraphQLResolverAdapter" as PrimaryAdapter <<Primary>>
+  participant "DailyProgressRepositoryAdapter" as SecondaryAdapter <<Secondary>>
+end box
+
+Learner -> PrimaryAdapter : listDailyProgresses(filter: DailyProgressFilterInput)
+activate PrimaryAdapter
+
+PrimaryAdapter -> SecondaryAdapter : findByExample(example: Example<DailyProgress>)
+activate SecondaryAdapter
+SecondaryAdapter --> PrimaryAdapter : List<DailyProgress>
+deactivate SecondaryAdapter
+
+PrimaryAdapter --> Learner : 200 OK
+deactivate PrimaryAdapter
+
+@enduml

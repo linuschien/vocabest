@@ -1,0 +1,20 @@
+@startuml sys-vocabest-core-api-asynchronous-mastery-update-on-wrong-answer
+
+!pragma layout smetana
+skinparam defaultFontName Inter
+
+participant "DomainLogic" as Domain
+participant "ErrorEventRepositoryAdapter" as ErrorEventRepository <<Secondary>>
+participant "WordMasteryRepositoryAdapter" as WordMasteryRepository <<Secondary>>
+
+Domain -> ErrorEventRepository : save(entity: ErrorEvent)
+activate ErrorEventRepository
+ErrorEventRepository --> Domain : ErrorEvent
+deactivate ErrorEventRepository
+
+Domain -> WordMasteryRepository : save(entity: WordMastery)
+activate WordMasteryRepository
+WordMasteryRepository --> Domain : WordMastery
+deactivate WordMasteryRepository
+
+@enduml

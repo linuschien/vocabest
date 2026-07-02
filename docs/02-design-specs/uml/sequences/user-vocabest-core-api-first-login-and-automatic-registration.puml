@@ -1,0 +1,31 @@
+@startuml user-vocabest-core-api-first-login-and-automatic-registration
+
+!pragma layout smetana
+skinparam defaultFontName Inter
+
+actor Learner
+
+box "vocabest-core-api"
+  participant "UserRestControllerAdapter" as PrimaryAdapter <<Primary>>
+  participant "UserCommandServiceAdapter" as DomainService <<Service>>
+  participant "UserRepositoryAdapter" as SecondaryAdapter <<Secondary>>
+end box
+
+Learner -> PrimaryAdapter : onboardUser(req: UserOnboardRequest)
+activate PrimaryAdapter
+
+PrimaryAdapter -> DomainService : onboardUser(req)
+activate DomainService
+
+DomainService -> SecondaryAdapter : save(entity: User)
+activate SecondaryAdapter
+SecondaryAdapter --> DomainService : User
+deactivate SecondaryAdapter
+
+DomainService --> PrimaryAdapter : User
+deactivate DomainService
+
+PrimaryAdapter --> Learner : ResponseEntity<UserResponse> (201 Created)
+deactivate PrimaryAdapter
+
+@enduml

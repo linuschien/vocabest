@@ -1,0 +1,24 @@
+@startuml user-vocabest-core-api-browsing-the-word-bank
+
+!pragma layout smetana
+skinparam defaultFontName Inter
+
+actor Learner
+
+box "vocabest-core-api"
+  participant "WordBankGraphQLResolverAdapter" as PrimaryAdapter <<Primary>>
+  participant "WordBankRepositoryAdapter" as SecondaryAdapter <<Secondary>>
+end box
+
+Learner -> PrimaryAdapter : listWordBanks(filter: WordBankFilterInput)
+activate PrimaryAdapter
+
+PrimaryAdapter -> SecondaryAdapter : findByExample(example: Example<WordBank>)
+activate SecondaryAdapter
+SecondaryAdapter --> PrimaryAdapter : List<WordBank>
+deactivate SecondaryAdapter
+
+PrimaryAdapter --> Learner : 200 OK
+deactivate PrimaryAdapter
+
+@enduml

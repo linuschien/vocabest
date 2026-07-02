@@ -1,0 +1,29 @@
+@startuml user-vocabest-core-api-learner-restricted-to-own-data
+
+!pragma layout smetana
+skinparam defaultFontName Inter
+
+actor Learner
+
+box "vocabest-core-api"
+  participant "DailyProgressRestControllerAdapter" as PrimaryAdapter <<Primary>>
+  participant "DailyProgressRepositoryAdapter" as SecondaryAdapter <<Secondary>>
+end box
+
+Learner -> PrimaryAdapter : getDailyProgressById(id: UUID)
+activate PrimaryAdapter
+
+PrimaryAdapter -> SecondaryAdapter : findById(id: UUID)
+activate SecondaryAdapter
+
+alt authorized access
+    SecondaryAdapter --> PrimaryAdapter : Optional<DailyProgress>
+    PrimaryAdapter --> Learner : ResponseEntity<DailyProgressResponse> (200 OK)
+else unauthorized access
+    PrimaryAdapter --> Learner : ResponseEntity<DailyProgressResponse> (403 Forbidden)
+end
+
+deactivate SecondaryAdapter
+deactivate PrimaryAdapter
+
+@enduml

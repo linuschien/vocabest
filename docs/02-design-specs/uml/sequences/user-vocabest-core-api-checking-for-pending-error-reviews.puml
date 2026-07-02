@@ -1,0 +1,24 @@
+@startuml user-vocabest-core-api-checking-for-pending-error-reviews
+
+!pragma layout smetana
+skinparam defaultFontName Inter
+
+actor Learner
+
+box "vocabest-core-api"
+  participant "WordMasteryGraphQLResolverAdapter" as PrimaryAdapter <<Primary>>
+  participant "WordMasteryRepositoryAdapter" as SecondaryAdapter <<Secondary>>
+end box
+
+Learner -> PrimaryAdapter : listWordMasteries(filter: WordMasteryFilterInput)
+activate PrimaryAdapter
+
+PrimaryAdapter -> SecondaryAdapter : findByExample(example: Example<WordMastery>)
+activate SecondaryAdapter
+SecondaryAdapter --> PrimaryAdapter : List<WordMastery>
+deactivate SecondaryAdapter
+
+PrimaryAdapter --> Learner : 200 OK
+deactivate PrimaryAdapter
+
+@enduml

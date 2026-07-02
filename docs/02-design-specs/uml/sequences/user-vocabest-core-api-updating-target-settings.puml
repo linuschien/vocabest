@@ -1,0 +1,31 @@
+@startuml user-vocabest-core-api-updating-target-settings
+
+!pragma layout smetana
+skinparam defaultFontName Inter
+
+actor Learner
+
+box "vocabest-core-api"
+  participant "UserRestControllerAdapter" as PrimaryAdapter <<Primary>>
+  participant "UserCommandServiceAdapter" as DomainService <<Service>>
+  participant "UserRepositoryAdapter" as SecondaryAdapter <<Secondary>>
+end box
+
+Learner -> PrimaryAdapter : updateUser(id: UUID, req: UserRequest)
+activate PrimaryAdapter
+
+PrimaryAdapter -> DomainService : updateUser(id, req)
+activate DomainService
+
+DomainService -> SecondaryAdapter : save(entity: User)
+activate SecondaryAdapter
+SecondaryAdapter --> DomainService : User
+deactivate SecondaryAdapter
+
+DomainService --> PrimaryAdapter : User
+deactivate DomainService
+
+PrimaryAdapter --> Learner : ResponseEntity<UserResponse> (200 OK)
+deactivate PrimaryAdapter
+
+@enduml

@@ -1,0 +1,31 @@
+@startuml user-vocabest-core-api-receiving-instant-feedback-for-correct-answer
+
+!pragma layout smetana
+skinparam defaultFontName Inter
+
+actor Learner
+
+box "vocabest-core-api"
+  participant "UserRestControllerAdapter" as PrimaryAdapter <<Primary>>
+  participant "UserCommandServiceAdapter" as DomainService <<Service>>
+  participant "UserRepositoryAdapter" as SecondaryAdapter <<Secondary>>
+end box
+
+Learner -> PrimaryAdapter : submitAnswer(userId: UUID, req: SubmitAnswerRequest)
+activate PrimaryAdapter
+
+PrimaryAdapter -> DomainService : submitAnswer(userId, req)
+activate DomainService
+
+DomainService -> SecondaryAdapter : findById(id: UUID)
+activate SecondaryAdapter
+SecondaryAdapter --> DomainService : Optional<User>
+deactivate SecondaryAdapter
+
+DomainService --> PrimaryAdapter : SubmitAnswerResponse
+deactivate DomainService
+
+PrimaryAdapter --> Learner : ResponseEntity<SubmitAnswerResponse> (200 OK, CORRECT)
+deactivate PrimaryAdapter
+
+@enduml

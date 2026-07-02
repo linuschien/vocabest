@@ -1,0 +1,18 @@
+@startuml user-vocabest-core-api-learner-forbidden-from-admin-ports
+
+!pragma layout smetana
+skinparam defaultFontName Inter
+
+actor Learner
+
+box "vocabest-core-api"
+  participant "WordBankRestControllerAdapter" as PrimaryAdapter <<Primary>>
+end box
+
+Learner -> PrimaryAdapter : createWordBank(req: WordBankRequest)
+activate PrimaryAdapter
+
+PrimaryAdapter --> Learner : ResponseEntity<WordBankResponse> (403 Forbidden)
+deactivate PrimaryAdapter
+
+@enduml

@@ -1,0 +1,31 @@
+@startuml user-vocabest-core-api-admin-access-to-global-user-data-graphql
+
+!pragma layout smetana
+skinparam defaultFontName Inter
+
+actor Admin
+
+box "vocabest-core-api"
+  participant "UserGraphQLResolverAdapter" as PrimaryAdapter <<Primary>>
+  participant "UserQueryServiceAdapter" as DomainService <<Service>>
+  participant "UserRepositoryAdapter" as SecondaryAdapter <<Secondary>>
+end box
+
+Admin -> PrimaryAdapter : listUsers(filter: UserFilterInput)
+activate PrimaryAdapter
+
+PrimaryAdapter -> DomainService : listUsers(filter)
+activate DomainService
+
+DomainService -> SecondaryAdapter : findByExample(example: Example<User>)
+activate SecondaryAdapter
+SecondaryAdapter --> DomainService : List<User>
+deactivate SecondaryAdapter
+
+DomainService --> PrimaryAdapter : List<User>
+deactivate DomainService
+
+PrimaryAdapter --> Admin : 200 OK
+deactivate PrimaryAdapter
+
+@enduml

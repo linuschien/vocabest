@@ -1,0 +1,19 @@
+@startuml sys-vocabest-core-api-mastery-decay-on-correct-answer-in-review-mode
+
+!pragma layout smetana
+skinparam defaultFontName Inter
+
+participant "DomainLogic" as Domain
+participant "WordMasteryRepositoryAdapter" as WordMasteryRepository <<Secondary>>
+
+Domain -> WordMasteryRepository : findById(id: UUID)
+activate WordMasteryRepository
+WordMasteryRepository --> Domain : Optional<WordMastery>
+deactivate WordMasteryRepository
+
+Domain -> WordMasteryRepository : save(entity: WordMastery)
+activate WordMasteryRepository
+WordMasteryRepository --> Domain : WordMastery
+deactivate WordMasteryRepository
+
+@enduml

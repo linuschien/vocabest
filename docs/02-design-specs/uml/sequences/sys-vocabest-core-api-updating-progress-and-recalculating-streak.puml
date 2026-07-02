@@ -1,0 +1,19 @@
+@startuml sys-vocabest-core-api-updating-progress-and-recalculating-streak
+
+!pragma layout smetana
+skinparam defaultFontName Inter
+
+participant "DomainLogic" as Domain
+participant "DailyProgressRepositoryAdapter" as SecondaryAdapter <<Secondary>>
+
+Domain -> SecondaryAdapter : findById(id: UUID)
+activate SecondaryAdapter
+SecondaryAdapter --> Domain : Optional<DailyProgress>
+deactivate SecondaryAdapter
+
+Domain -> SecondaryAdapter : save(entity: DailyProgress)
+activate SecondaryAdapter
+SecondaryAdapter --> Domain : DailyProgress
+deactivate SecondaryAdapter
+
+@enduml
