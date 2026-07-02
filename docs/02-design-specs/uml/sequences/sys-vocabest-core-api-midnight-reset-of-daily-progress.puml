@@ -3,12 +3,21 @@
 !pragma layout smetana
 skinparam defaultFontName Inter
 
-participant "InternalScheduler" as Scheduler
+participant "DomainLogic" as Domain
 participant "DailyProgressRepositoryAdapter" as SecondaryAdapter <<Secondary>>
 
-Scheduler -> SecondaryAdapter : save(entity: DailyProgress)
+note over Domain: Triggered upon Learner Login\nEvaluates if progress is from previous day
+
+Domain -> SecondaryAdapter : findById(id: UUID)
 activate SecondaryAdapter
-SecondaryAdapter --> Scheduler : DailyProgress
+SecondaryAdapter --> Domain : Optional<DailyProgress>
 deactivate SecondaryAdapter
+
+opt is new day
+    Domain -> SecondaryAdapter : save(entity: DailyProgress)
+    activate SecondaryAdapter
+    SecondaryAdapter --> Domain : DailyProgress
+    deactivate SecondaryAdapter
+end
 
 @enduml
