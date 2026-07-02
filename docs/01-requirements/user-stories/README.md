@@ -19,7 +19,7 @@
 - **[Epic 2: 核心測驗循環 (Core Quiz Loop)](./US-02-core-quiz-loop.md)**
   - US 2.1 情境克漏字渲染
   - US 2.2 無限制刷題機制
-- **[Epic 3: AI 即時教練回饋 (AI Instant Feedback)](./US-03-ai-instant-feedback.md)**
+- **[Epic 3: 即時解析回饋 (Instant Feedback)](./US-03-instant-feedback.md)**
   - US 3.1 答錯時的深度解析與記憶法
   - US 3.2 答對時的正向增強
 - **[Epic 4: 個人化錯題追蹤 (Personalized Error Tracking)](./US-04-personalized-error-tracking.md)**
