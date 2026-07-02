@@ -1,27 +1,25 @@
-Feature: System Cold Start and Data Pipeline (Onboarding)
-  As a Learner
-  I want to select my TargetLevel and receive static question banks quickly
-  So that I get an appropriate and lag-free quiz experience
+Feature: Learner Onboarding
+  As a System and Learner
+  I want to automatically create a profile on first login and select target levels
+  So that the Learner can start using the system smoothly
 
-  Scenario Outline: Dynamic TargetLevel Selection
-    Given a new "Learner" accessing the system
-    When the "Learner" makes a PUT request to "UserRestController.updateUser" with "<target_level>"
-    Then the "Learner" state is updated with the new "TargetLevel"
-    And future queries to "QuizQuestionRestController" will filter by "<target_level>"
-
-    Examples:
-      | target_level |
-      | JUNIOR_HIGH  |
-      | SENIOR_HIGH  |
-
-  Scenario Outline: Static Question Bank Delivery
-    Given a "Learner" with "TargetLevel" set to "<target_level>"
-    When the "Learner" makes a GraphQL query to "QuizQuestionGraphQLResolver.listQuizQuestions"
-    Then the response must contain a "QuizQuestion" list
-    And each "QuizQuestion" must include "contextualCloze", "translation", 1 correct option, and 3 distractors
-    And the API response time must be less than 200 milliseconds
+  Scenario Outline: First Login and Automatic Registration
+    Given a new user who has just passed authentication
+    When the "Learner" submits initial settings via the "UserRestControllerAdapter"
+    Then the "vocabest-core-api" should fulfill the promise by returning a "201 Created" status
+    And the user profile should contain the selected "TargetLevel" and "DailyTargetQuestions"
 
     Examples:
-      | target_level |
-      | JUNIOR_HIGH  |
-      | SENIOR_HIGH  |
+      | user_email           | target_level | daily_target |
+      | new_user@example.com | SENIOR_HIGH  | 20           |
+      | junior@example.com   | JUNIOR_HIGH  | 10           |
+
+  Scenario Outline: Updating Target Settings
+    Given an existing "Learner" profile
+    When the "Learner" updates their settings via the "UserRestControllerAdapter"
+    Then the "vocabest-core-api" should fulfill the promise by returning a "200 OK" status
+    And the returned profile must reflect the new "TargetLevel"
+
+    Examples:
+      | user_email       | new_target_level |
+      | test@example.com | SENIOR_HIGH      |
