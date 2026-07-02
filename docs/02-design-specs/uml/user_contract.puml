@@ -11,6 +11,8 @@ package "adapter.in.web.rest" {
     + deleteUser(id: UUID): ResponseEntity<Void>
     + getUserById(id: UUID): ResponseEntity<UserResponse>
     + onboardUser(req: UserOnboardRequest): ResponseEntity<UserResponse>
+    + getNextQuestion(userId: UUID): ResponseEntity<QuizQuestionResponse>
+    + submitAnswer(userId: UUID, req: SubmitAnswerRequest): ResponseEntity<SubmitAnswerResponse>
   }
 }
 
@@ -26,10 +28,12 @@ package "application.port.in" {
     + updateUser(id: UUID, req: UserRequest): User
     + deleteUser(id: UUID): void
     + onboardUser(req: UserOnboardRequest): User
+    + submitAnswer(userId: UUID, req: SubmitAnswerRequest): SubmitAnswerResponse
   }
   interface "UserQueryService" <<Service>> {
     + getUserById(id: UUID): User
     + listUsers(filter: UserFilterInput): List<User>
+    + getNextQuestion(userId: UUID): QuizQuestionResponse
   }
 }
 
