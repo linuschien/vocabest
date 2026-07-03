@@ -1543,7 +1543,6 @@ INSERT INTO word_bank (id, word, parts_of_speech, chinese_translation, target_le
 ('7320fc64-08a7-4ccc-a928-345b31449b3c', 'ruler', 'n.', '尺;統治者', 'JUNIOR_HIGH', 1, 2),
 ('ebd8cf64-b66b-4086-9cd5-df14f1c22a8f', 'run', 'v., n.', '(v.)跑 (n.)跑;連續的演出;趨勢,動向;擠兌', 'JUNIOR_HIGH', 1, 25),
 ('7dc8c9f4-2c58-4740-8e57-7bb54c2581fa', 'rush', 'v., n.', '(v.)催促;急送 (n.)急速行動;(交通等的)繁忙;搶購', 'JUNIOR_HIGH', 2, 1),
-('6728f9c6-bf6d-4adc-b669-b75146174d01', 's', 'n.', '字母s', 'JUNIOR_HIGH', 1, 0),
 ('ee38933f-dd91-4253-9706-29631979b035', 'sad', 'adj.', '難過的', 'JUNIOR_HIGH', 1, 30),
 ('c0ec0be7-642d-41cd-b9d2-2a5446cfdcfa', 'safe', 'adj., n.', '(adj.)安全的 (n.)保險箱', 'JUNIOR_HIGH', 1, 24),
 ('cce94d88-7400-4b4b-8b0c-ab2f365a6f1f', 'safety', 'n.', '安全', 'JUNIOR_HIGH', 2, 1),

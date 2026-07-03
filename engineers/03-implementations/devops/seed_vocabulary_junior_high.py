@@ -90,6 +90,8 @@ def extract_official_words(lines):
     # Join with comma to prevent missing commas across lines or pages
     text = ",".join(cleaned_lines)
     
+    # Remove plural suffix (s) before splitting by parentheses
+    text = text.replace('(s)', '')
     # Replace slashes and parentheses with commas so they get split
     text = text.replace('/', ',').replace('(', ',').replace(')', ',')
     
