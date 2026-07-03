@@ -50,7 +50,7 @@ apple [ˋæp!] n. 蘋果
 April/Apr. [ˋeprəl] n. 四月
 are [ɑr] (第二人稱) vi. 是
 area [ˋɛrɪə] n. 面積
-arm (1) [ɑrm] n. 手臂
+arm [ɑrm] n. 手臂
 army[ˋɑrmɪ] n. 軍隊
 around[əˋraʊnd] adv. / prep. 到處
 art[ɑrt] n. 藝術
@@ -727,7 +727,7 @@ rise [raɪz] vi. 上升
 river [ˋrɪvɚ] n. 河
 road [rod] n. 道路
 robot [ˋrobət] n. 機器人
-rock [rɑk] (1) n. 岩石
+rock [rɑk] n. 岩石
 roll [rol] vi. 滾動
 roof [ruf] n. 屋頂
 room [rum] n. 房間
