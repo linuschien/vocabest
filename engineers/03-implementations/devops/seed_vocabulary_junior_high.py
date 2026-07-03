@@ -14,7 +14,8 @@ def parse_tsv(filepath):
         '名詞': 'n.', '動詞': 'v.', '形容詞': 'adj.', '副詞': 'adv.',
         '介系詞': 'prep.', '代名詞': 'pron.', '連接詞': 'conj.',
         '助動詞': 'aux.', '片語': 'phr.', '數字': 'num.',
-        '感嘆詞': 'int.', '冠詞': 'art.'
+        '感嘆詞': 'int.', '感歎詞': 'int.', '冠詞': 'art.',
+        '縮寫': 'abbr.', '縮短形': 'abbr.'
     }
 
     with open(filepath, 'r', encoding='utf-8') as f:
