@@ -44,20 +44,37 @@ def parse_tsv(filepath):
         # Regex to find [POS] translation
         matches = re.finditer(r'\[(.*?)\]([^[\]]*)', definition)
         matched_any = False
+        parsed_parts = []
         for m in matches:
             matched_any = True
             tag = m.group(1).strip()
-            content = m.group(2).strip().strip(';')
+            content = m.group(2).strip()
+            if content.endswith(';'):
+                content = content[:-1].strip()
             
             # Map tag or use it directly with a dot fallback
-            std_tag = POS_MAPPING.get(tag.lower(), POS_MAPPING.get(tag, tag + '.'))
-            if std_tag not in pos_list:
-                pos_list.append(std_tag)
-                
-            if content:
-                chinese_list.append(f"({std_tag}){content}")
+            if tag.lower() in POS_MAPPING or tag in POS_MAPPING:
+                std_tag = POS_MAPPING.get(tag.lower(), POS_MAPPING.get(tag))
+                if std_tag not in pos_list:
+                    pos_list.append(std_tag)
+                parsed_parts.append({"tag": std_tag, "content": content})
             else:
-                chinese_list.append(f"({std_tag})")
+                if parsed_parts:
+                    parsed_parts[-1]["content"] += f" [{tag}] {content}"
+                    parsed_parts[-1]["content"] = parsed_parts[-1]["content"].strip()
+                else:
+                    parsed_parts.append({"tag": "", "content": f"[{tag}] {content}".strip()})
+                    
+        for part in parsed_parts:
+            tag = part["tag"]
+            content = part["content"]
+            if tag:
+                if content:
+                    chinese_list.append(f"({tag}){content}")
+                else:
+                    chinese_list.append(f"({tag})")
+            else:
+                chinese_list.append(content)
                 
         if not matched_any and definition:
             chinese_list.append(definition)

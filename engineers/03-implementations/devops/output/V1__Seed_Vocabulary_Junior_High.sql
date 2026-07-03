@@ -447,7 +447,7 @@ INSERT INTO word_bank (id, word, parts_of_speech, chinese_translation, target_le
 ('3acd6dc0-ea51-4af6-8052-f6a13ec49df3', 'day', 'n.', '白天;日', 'JUNIOR_HIGH', 1, 174),
 ('3e576094-72f8-433d-8642-2e736fb2b4bd', 'dead', 'adj.', '死的', 'JUNIOR_HIGH', 1, 13),
 ('43d673d5-6980-4d1b-bff7-377d045fd0c2', 'deaf', 'adj.', '聾的', 'JUNIOR_HIGH', 2, 0),
-('1ec4a2b2-701f-4b78-bb8c-d2705e93a5d9', 'deal', 'v., (+with)., n.', '(v.)處理;對付;對待 ((+with).) (n.)交易', 'JUNIOR_HIGH', 1, 8),
+('1ec4a2b2-701f-4b78-bb8c-d2705e93a5d9', 'deal', 'v., n.', '(v.)處理;對付;對待 [(+with)] (n.)交易', 'JUNIOR_HIGH', 1, 8),
 ('c8ab73e5-ae8a-42dd-a961-92b45c4478b9', 'dear', 'adj., adv., int., n.', '(adj.)親愛的 (adv.)疼愛地;高價地,昂貴地 (int.)哎呀 (n.)(常作稱呼)親愛的(人)', 'JUNIOR_HIGH', 1, 39),
 ('d594830b-dfca-410a-b559-5aab1b884de5', 'death', 'n.', '死亡', 'JUNIOR_HIGH', 1, 3),
 ('095a401e-ae64-458b-aee3-ac70f36e4169', 'debate', 'v., n.', '(v.)辯論 (n.)辯論', 'JUNIOR_HIGH', 2, 0),
