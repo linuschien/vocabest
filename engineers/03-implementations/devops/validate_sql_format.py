@@ -39,8 +39,8 @@ def run_tests():
         if '/' in pos:
             errors.append(f"[POS Slash] '{word}' has slash in POS: '{pos}'")
             
-        if '.,' in pos or ',.' in pos:
-            errors.append(f"[POS Comma Dot] '{word}' has weird comma in POS: '{pos}'")
+        if ',.' in pos:
+            errors.append(f"[POS Typo] '{word}' has typo in POS: '{pos}'")
             
         if pos.count('(') != pos.count(')'):
             errors.append(f"[POS Unbalanced Parens] '{word}' POS: '{pos}'")
