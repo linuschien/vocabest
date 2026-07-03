@@ -112,10 +112,10 @@ def parse_91():
     # The lookahead `|\Z` ensures we don't accidentally stop at a newline inside a translation.
     pattern = re.compile(
         r'^([^\n\[【\u4e00-\u9fa5]+?)\s*'  
-        r'(?:\[.+?\]\s*)*'            
+        r'(?:\[[^\]]+\]\s*)*'            
         r'(n\.|v\.|adj\.|adv\.|prep\.|conj\.|pron\.|art\.|vi\.|vt\.|a\.|int\.|aux\.|phr\.|abbr\.)\s*' 
         r'(.+?)'                      
-        r'(?=\n[^\n\[【\u4e00-\u9fa5]+?(?:\s*\[.+?\])?\s*(?:n\.|v\.|adj\.|adv\.|prep\.|conj\.|pron\.|art\.|vi\.|vt\.|a\.|int\.|aux\.|phr\.|abbr\.)|\Z)', 
+        r'(?=\n[^\n\[【\u4e00-\u9fa5]+?(?:\s*\[[^\]]+\])?\s*(?:n\.|v\.|adj\.|adv\.|prep\.|conj\.|pron\.|art\.|vi\.|vt\.|a\.|int\.|aux\.|phr\.|abbr\.)|\Z)', 
         re.MULTILINE | re.DOTALL
     )
 
@@ -135,7 +135,7 @@ def parse_91():
             trans = trans.replace('\n', '')
             trans = re.sub(r'\s+', ' ', trans)
             
-            tokens = re.split(r'[\s/]+', raw_word)
+            tokens = re.split(r'\s*/\s*', raw_word)
             for t in tokens:
                 t = t.strip('()1234567890').lower()
                 if t:
