@@ -1,181 +1,197 @@
+import os
 import re
 import uuid
-import os
 
-script_dir = os.path.dirname(os.path.abspath(__file__))
-project_root = os.path.abspath(os.path.join(script_dir, "../../../"))
-docs_dir = os.path.join(project_root, "docs/01-requirements/PRD")
-output_dir = os.path.join(script_dir, "output")
-os.makedirs(output_dir, exist_ok=True)
-
-def parse_markdown(filepath, difficulty_level):
+def parse_tsv(filepath):
+    """Parses a TSV file and returns a dictionary of words mapping to their metadata."""
     words_data = {}
-    with open(filepath, 'r', encoding='utf-8') as f:
-        content = f.read()
-
-    pages = content.split('\x0c')
     
-    for i, page in enumerate(pages):
-        if not page.strip():
+    POS_MAPPING = {
+        'n': 'n.', 'v': 'v.', 'vt': 'vt.', 'vi': 'vi.', 
+        'adj': 'adj.', 'adv': 'adv.', 'prep': 'prep.', 
+        'pron': 'pron.', 'conj': 'conj.', 'num': 'num.', 
+        'art': 'art.', 'int': 'int.', 'aux': 'aux.', '片': 'phr.',
+        '名詞': 'n.', '動詞': 'v.', '形容詞': 'adj.', '副詞': 'adv.',
+        '介系詞': 'prep.', '代名詞': 'pron.', '連接詞': 'conj.',
+        '助動詞': 'aux.', '片語': 'phr.', '數字': 'num.',
+        '感嘆詞': 'int.', '冠詞': 'art.'
+    }
+
+    with open(filepath, 'r', encoding='utf-8') as f:
+        lines = f.readlines()
+        
+    for line in lines[1:]: # Skip header
+        parts = [p.strip() for p in line.strip('\n').split('\t') if p.strip()]
+        if not parts:
             continue
             
-        words_and_mixed = []
-        pure_defs = []
+        word = parts[0].lower()
+        # Some words might have multiple spaces like 'contact  lens', normalize spaces
+        word = re.sub(r'\s+', ' ', word)
         
-        for line in page.split('\n'):
-            l = line.strip()
-            if not l: continue
-            if '單字' in l or '解釋' in l or 'Powered by' in l or l.isdigit(): continue
-            
-            # Check if it starts with English letter
-            if re.match(r'^[a-zA-Z]', l):
-                # Check for inline Chinese (mixed line)
-                match = re.search(r'([\u4e00-\u9fff].*)$', l)
-                if match:
-                    word = l[:match.start()].strip()
-                    inline_def = match.group(1).strip()
-                    words_and_mixed.append( (word, inline_def) )
-                else:
-                    words_and_mixed.append( (l, None) )
-            else:
-                pure_defs.append(l)
-                
-        pure_word_count = sum(1 for w, d in words_and_mixed if d is None)
+        definition = parts[1] if len(parts) > 1 else ""
+        freq_str = parts[2] if len(parts) > 2 else ""
         
-        # Merge multi-line definitions
-        while len(pure_defs) > pure_word_count and len(pure_defs) > 0:
-            merged = False
-            for j in range(len(pure_defs) - 1):
-                if not re.search(r'[\)\]a-zA-Z]$', pure_defs[j]): 
-                    pure_defs[j] = pure_defs[j] + pure_defs[j+1]
-                    del pure_defs[j+1]
-                    merged = True
-                    break
-            if not merged:
-                pure_defs[-2] = pure_defs[-2] + pure_defs[-1]
-                del pure_defs[-1]
+        try:
+            freq = int(freq_str)
+        except ValueError:
+            freq = 0
+            
+        pos_list = []
+        chinese_list = []
+        
+        # Regex to find [POS] translation
+        matches = re.finditer(r'\[(.*?)\]([^[\]]*)', definition)
+        matched_any = False
+        for m in matches:
+            matched_any = True
+            tag = m.group(1).strip()
+            content = m.group(2).strip().strip(';')
+            
+            # Map tag or use it directly with a dot fallback
+            std_tag = POS_MAPPING.get(tag.lower(), POS_MAPPING.get(tag, tag + '.'))
+            if std_tag not in pos_list:
+                pos_list.append(std_tag)
                 
-        def_index = 0
-        for word, inline_def in words_and_mixed:
-            if inline_def is not None:
-                definition = inline_def
+            if content:
+                chinese_list.append(f"({std_tag}){content}")
             else:
-                if def_index < len(pure_defs):
-                    definition = pure_defs[def_index]
-                    def_index += 1
-                else:
-                    definition = ""
-            
-            POS_MAPPING = {
-                'n': 'n.', 'v': 'v.', 'vt': 'vt.', 'vi': 'vi.', 
-                'adj': 'adj.', 'adv': 'adv.', 'prep': 'prep.', 
-                'pron': 'pron.', 'conj': 'conj.', 'num': 'num.', 
-                'art': 'art.', 'int': 'int.', 'aux': 'aux.', '片': 'phr.',
-                '名詞': 'n.', '動詞': 'v.', '形容詞': 'adj.', '副詞': 'adv.',
-                '介系詞': 'prep.', '代名詞': 'pron.', '連接詞': 'conj.',
-                '助動詞': 'aux.', '片語': 'phr.', '數字': 'num.',
-                '感嘆詞': 'int.'
-            }
-            pos_pattern = r'[\(\[](' + '|'.join(POS_MAPPING.keys()) + r')[\)\]]'
-            
-            parts = re.split(pos_pattern, definition, flags=re.IGNORECASE)
-            reconstructed = []
-            texts_only = []
-            found_pos = []
-            
-            for k in range(1, len(parts), 2):
-                original_tag = parts[k].lower()
-                if original_tag not in POS_MAPPING:
-                    original_tag = parts[k]
+                chinese_list.append(f"({std_tag})")
                 
-                std_tag = POS_MAPPING.get(original_tag, original_tag + '.')
-                
-                if std_tag not in found_pos:
-                    found_pos.append(std_tag)
-                    
-                text = parts[k-1].strip()
-                if text:
-                    reconstructed.append(f"({std_tag}){text}")
-                    texts_only.append(text)
-                else:
-                    reconstructed.append(f"({std_tag})")
-                    
-            if parts[-1].strip():
-                if reconstructed:
-                    reconstructed[-1] += " " + parts[-1].strip()
-                else:
-                    reconstructed.append(parts[-1].strip())
-                texts_only.append(parts[-1].strip())
-                    
-            pos = ", ".join(found_pos)
-            if len(found_pos) <= 1:
-                chinese = " ".join(texts_only)
-            else:
-                chinese = " ".join(reconstructed)
+        if not matched_any and definition:
+            chinese_list.append(definition)
             
-            if word not in words_data or words_data[word]['difficulty_level'] > difficulty_level:
-                words_data[word] = {
-                    'word': word,
-                    'parts_of_speech': pos,
-                    'chinese_translation': chinese,
-                    'target_level': 'JUNIOR_HIGH',
-                    'difficulty_level': difficulty_level,
-                    'exam_frequency': 3
-                }
+        pos_str = ", ".join(pos_list)
+        chinese_str = " ".join(chinese_list)
+        
+        # If there's only 1 POS type, strip the prefixes from Chinese translation
+        if len(set(pos_list)) <= 1 and pos_list:
+            chinese_str = " ".join([re.sub(r'^\(.*?\)','', c).strip() for c in chinese_list])
+            
+        words_data[word] = {
+            'word': word,
+            'parts_of_speech': pos_str,
+            'chinese_translation': chinese_str,
+            'exam_frequency': freq
+        }
+        
     return words_data
 
-def generate_sql(words_dict, output_filepath):
-    sql_statements = []
-    sql_statements.append("/* Seed Data for JUNIOR_HIGH Vocabulary */")
-    sql_statements.append("INSERT INTO word_bank (id, word, parts_of_speech, chinese_translation, target_level, difficulty_level, exam_frequency) VALUES")
-    
-    values = []
-    for word, data in words_dict.items():
-        w_id = str(uuid.uuid4())
-        w_word = data['word'].replace("'", "''")
-        w_pos = data['parts_of_speech'].replace("'", "''")
-        w_chinese = data['chinese_translation'].replace("'", "''")
-        w_level = data['target_level']
-        w_diff = data['difficulty_level']
-        w_freq = data['exam_frequency']
+def extract_official_words(lines):
+    cleaned_lines = []
+    for l in lines:
+        l = l.strip()
+        if not l or l.isdigit() or l.startswith('表'):
+            continue
+        # Remove prefix "A-  "
+        l = re.sub(r'^[A-Z]-\s*', '', l)
+        cleaned_lines.append(l)
         
-        values.append(f"('{w_id}', '{w_word}', '{w_pos}', '{w_chinese}', '{w_level}', {w_diff}, {w_freq})")
+    # Join with comma to prevent missing commas across lines or pages
+    text = ",".join(cleaned_lines)
     
-    # Join values with comma and end with semicolon
-    sql_statements.append(",\n".join(values) + ";")
+    # Replace slashes and parentheses with commas so they get split
+    text = text.replace('/', ',').replace('(', ',').replace(')', ',')
     
-    with open(output_filepath, 'w', encoding='utf-8') as f:
-        f.write("\n".join(sql_statements))
-        f.write("\n")
-        
+    words = set()
+    parts = [p.strip() for p in text.split(',')]
+    for p in parts:
+        p = re.sub(r'\s+', ' ', p)
+        # Verify it has alphabet letters
+        if p and any(c.isalpha() for c in p):
+            words.add(p.lower())
+    return words
+
 def main():
-    print("Starting Junior High vocabulary data pipeline...")
+    print("Starting Junior High vocabulary data pipeline (TSV + Official MD)...")
     
-    basic_path = os.path.join(docs_dir, "國中基礎1200單字.md")
-    advanced_path = os.path.join(docs_dir, "國中進階800字.md")
+    script_dir = os.path.dirname(os.path.abspath(__file__))
+    output_dir = os.path.join(script_dir, "output")
+    os.makedirs(output_dir, exist_ok=True)
     
-    print("Parsing basic 1200...")
-    basic_words = parse_markdown(basic_path, 1)
+    project_root = os.path.abspath(os.path.join(script_dir, "../../.."))
+    docs_dir = os.path.join(project_root, "docs/01-requirements/PRD")
     
-    print("Parsing advanced 800...")
-    advanced_words = parse_markdown(advanced_path, 2)
+    # Parse TSV files
+    print("Parsing TSV files...")
+    basic_tsv = parse_tsv(os.path.join(docs_dir, "國中基礎1200單字.txt"))
+    advanced_tsv = parse_tsv(os.path.join(docs_dir, "國中進階800字.txt"))
     
-    print("Merging datasets and deduplicating...")
-    final_words = {}
-    for w, d in advanced_words.items():
-        final_words[w] = d
+    # Extract official words
+    print("Extracting official words from curriculum guidelines...")
+    md_file = os.path.join(docs_dir, "十二年國民基本教育課程綱要語文領域-英語文.md")
+    with open(md_file, 'r', encoding='utf-8') as f:
+        all_lines = f.readlines()
         
-    for w, d in basic_words.items():
-        if w in final_words:
-            final_words[w] = d
-        else:
-            final_words[w] = d
-            
-    print(f"Total unique words: {len(final_words)}")
+    official_basic = extract_official_words(all_lines[5154:5323])
+    official_advanced = extract_official_words(all_lines[5325:5452])
     
-    sql_output = os.path.join(output_dir, "V1__Seed_Vocabulary_Junior_High.sql")
-    print(f"Generating SQL file to {sql_output} ...")
-    generate_sql(final_words, sql_output)
+    # Combine datasets
+    final_words = {}
+    
+    # 1. First load all TSV words, assigning difficulty based on Official MD presence
+    print("Merging TSV datasets and assigning official difficulties...")
+    for origin_dict, default_diff in [(basic_tsv, 1), (advanced_tsv, 2)]:
+        for w, data in origin_dict.items():
+            diff = default_diff
+            if w in official_basic:
+                diff = 1
+            elif w in official_advanced:
+                diff = 2
+            
+            # If word is completely new or has a lower difficulty from official check, apply it
+            if w not in final_words or final_words[w]['difficulty_level'] > diff:
+                final_words[w] = {
+                    'id': str(uuid.uuid4()),
+                    'word': data['word'],
+                    'parts_of_speech': data['parts_of_speech'],
+                    'chinese_translation': data['chinese_translation'],
+                    'target_level': 'JUNIOR_HIGH',
+                    'difficulty_level': diff,
+                    'exam_frequency': data['exam_frequency']
+                }
+
+    # 2. Add missing official words as FIXMEs
+    print("Injecting missing official words as FIXMEs...")
+    for official_set, diff in [(official_basic, 1), (official_advanced, 2)]:
+        for w in official_set:
+            if w not in final_words:
+                final_words[w] = {
+                    'id': str(uuid.uuid4()),
+                    'word': w,
+                    'parts_of_speech': '[FIXME]',
+                    'chinese_translation': '[FIXME]',
+                    'target_level': 'JUNIOR_HIGH',
+                    'difficulty_level': diff,
+                    'exam_frequency': 0
+                }
+
+    print(f"Total unique words prepared: {len(final_words)}")
+    
+    # Sort alphabetically
+    sorted_words = sorted(final_words.values(), key=lambda x: x['word'].lower())
+    
+    # Generate SQL
+    output_path = os.path.join(output_dir, "V1__Seed_Vocabulary_Junior_High.sql")
+    print(f"Generating SQL file to {output_path} ...")
+    
+    with open(output_path, 'w', encoding='utf-8') as f:
+        f.write("/* Seed Data for JUNIOR_HIGH Vocabulary */\n")
+        f.write("INSERT INTO word_bank (id, word, parts_of_speech, chinese_translation, target_level, difficulty_level, exam_frequency) VALUES\n")
+        
+        for i, data in enumerate(sorted_words):
+            # Escape single quotes for SQL insertion
+            w = data['word'].replace("'", "''")
+            pos = data['parts_of_speech'].replace("'", "''")
+            trans = data['chinese_translation'].replace("'", "''")
+            
+            is_last = (i == len(sorted_words) - 1)
+            line = f"('{data['id']}', '{w}', '{pos}', '{trans}', '{data['target_level']}', {data['difficulty_level']}, {data['exam_frequency']})"
+            if is_last:
+                f.write(line + ";\n")
+            else:
+                f.write(line + ",\n")
+                
     print("Done!")
 
 if __name__ == "__main__":
