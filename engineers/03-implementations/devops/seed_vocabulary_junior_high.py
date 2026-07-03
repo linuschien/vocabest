@@ -122,6 +122,26 @@ def extract_official_words(lines):
             words.add(p.lower())
     return words
 
+def load_existing_sql_state(filepath):
+    """Loads existing SQL seed data to preserve UUIDs and manual translations."""
+    if not os.path.exists(filepath):
+        return {}
+    state = {}
+    with open(filepath, 'r', encoding='utf-8') as f:
+        for line in f:
+            match = re.search(r"\('([a-f0-9\-]{36})',\s*'(.*?)',\s*'(.*?)',\s*'(.*?)',", line)
+            if match:
+                uuid_str = match.group(1)
+                word = match.group(2).replace("''", "'")
+                pos = match.group(3).replace("''", "'")
+                trans = match.group(4).replace("''", "'")
+                state[word] = {
+                    'uuid': uuid_str,
+                    'parts_of_speech': pos,
+                    'chinese_translation': trans
+                }
+    return state
+
 def main():
     print("Starting Junior High vocabulary data pipeline (TSV + Official MD)...")
     
@@ -149,6 +169,10 @@ def main():
     # Combine datasets
     final_words = {}
     
+    output_path = os.path.join(output_dir, "V1__Seed_Vocabulary_Junior_High.sql")
+    print("Loading existing SQL state to preserve UUIDs and manual translations...")
+    existing_state = load_existing_sql_state(output_path)
+    
     # 1. First load all TSV words, assigning difficulty based on Official MD presence
     print("Merging TSV datasets and assigning official difficulties...")
     for origin_dict, default_diff in [(basic_tsv, 1), (advanced_tsv, 2)]:
@@ -162,7 +186,7 @@ def main():
             # If word is completely new or has a lower difficulty from official check, apply it
             if w not in final_words or final_words[w]['difficulty_level'] > diff:
                 final_words[w] = {
-                    'id': str(uuid.uuid4()),
+                    'id': existing_state.get(w, {}).get('uuid', str(uuid.uuid4())),
                     'word': data['word'],
                     'parts_of_speech': data['parts_of_speech'],
                     'chinese_translation': data['chinese_translation'],
@@ -176,11 +200,21 @@ def main():
     for official_set, diff in [(official_basic, 1), (official_advanced, 2)]:
         for w in official_set:
             if w not in final_words:
+                pos = '[FIXME]'
+                trans = '[FIXME]'
+                
+                # Preserve existing manual translations if present
+                if w in existing_state:
+                    if existing_state[w]['parts_of_speech'] != '[FIXME]':
+                        pos = existing_state[w]['parts_of_speech']
+                    if existing_state[w]['chinese_translation'] != '[FIXME]':
+                        trans = existing_state[w]['chinese_translation']
+
                 final_words[w] = {
-                    'id': str(uuid.uuid4()),
+                    'id': existing_state.get(w, {}).get('uuid', str(uuid.uuid4())),
                     'word': w,
-                    'parts_of_speech': '[FIXME]',
-                    'chinese_translation': '[FIXME]',
+                    'parts_of_speech': pos,
+                    'chinese_translation': trans,
                     'target_level': 'JUNIOR_HIGH',
                     'difficulty_level': diff,
                     'exam_frequency': 0
@@ -192,7 +226,6 @@ def main():
     sorted_words = sorted(final_words.values(), key=lambda x: x['word'].lower())
     
     # Generate SQL
-    output_path = os.path.join(output_dir, "V1__Seed_Vocabulary_Junior_High.sql")
     print(f"Generating SQL file to {output_path} ...")
     
     with open(output_path, 'w', encoding='utf-8') as f:
