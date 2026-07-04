@@ -7665,7 +7665,7 @@ zoom v./n.
 附錄
 Cardinal Numbers
 one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen,
-fifteen, sixteen, seventeen, eighteen, nineteen, twenty, twenty-one, twenty-two, twentythree, twenty-four, twenty-five, thirty, thirty-one, thirty-two, thirty-three, thirty-four, forty,
+fifteen, sixteen, seventeen, eighteen, nineteen, twenty, twenty-one, twenty-two, twenty-three, twenty-four, twenty-five, thirty, thirty-one, thirty-two, thirty-three, thirty-four, forty,
 fifty, sixty, seventy, eighty, ninety, one hundred, one thousand, one million, one billion
 Ordinal Numbers
 first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth,

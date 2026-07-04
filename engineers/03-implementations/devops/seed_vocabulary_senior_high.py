@@ -257,6 +257,43 @@ def parse_111():
                 }
             buffer = []
             
+    # Now parse the appendix
+    appendix_start = -1
+    for i, line in enumerate(lines):
+        if "附錄" in line and i > 0 and "104" in lines[i-1]:
+            appendix_start = i
+            break
+            
+    if appendix_start != -1:
+        appendix_text = ""
+        for line in lines[appendix_start:]:
+            line = line.strip()
+            if not line or line in ('附錄', '104'): continue
+            
+            # Skip headers (no commas and starts with uppercase)
+            if ',' not in line and line[0].isupper():
+                continue
+            else:
+                if appendix_text and not appendix_text.strip().endswith(','):
+                    appendix_text += ","
+                appendix_text += " " + line
+                
+        items = [item.strip() for item in appendix_text.split(',')]
+        # Filter out empty items
+        items = [item for item in items if item]
+        
+        for item in items:
+            expanded = expand_word(item)
+            for w in expanded:
+                if not w: continue
+                # Only add if it's not already in the main list, or if we want to overwrite?
+                # Actually, appendix words are level 0. If they are already in the main list (e.g. Monday), we shouldn't overwrite their level!
+                if w.lower() not in dict_111:
+                    dict_111[w.lower()] = {
+                        'word': w,
+                        'level': 0,
+                    }
+                    
     return dict_111
 
 def load_existing_sql_state(filepath):
