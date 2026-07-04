@@ -7,8 +7,7 @@ according to [əˋkɔrdɪŋ tu] prep. 根據
 across [əˋkrɔs] prep. 穿過
 act [æ kt] vt. 扮演
 action [ˋækʃən] n. 行動
-actor/actress [ˋæktɚ]/ [ˋæktrɪs]
-n. 男演員/女演員
+actor/actress [ˋæktɚ]/ [ˋæktrɪs] n. 男演員/女演員
 add [æ d] vt. 添加
 address [əˋdrɛs] n. 地址
 adult [əˋdʌlt] n. 成人
@@ -211,9 +210,7 @@ cub [kʌb] n. 幼獸
 cup [kʌp] n. 杯子
 cut [kʌt] vt. 切、剪
 cute [kjut] adj. 可愛的
-daddy/dad/papa/pa/pop
-[ˋdædɪ]/ [dæd]/ [ˋpɑpə]/ [pɑ]/ [pɑp]
-n. 爸爸
+daddy/dad/papa/pa/pop [ˋdædɪ] [dæd] [ˋpɑpə] [pɑ] [pɑp] n. 爸爸
 dance [dæ ns] vi. 跳舞
 dancer [ˋdænsɚ] n. 舞蹈家
 danger [ˋdendʒɚ] n. 危險
@@ -285,8 +282,7 @@ even [ˋivən] adv.甚至 adj.偶數的
 evening [ˋivnɪŋ] n. 傍晚
 ever [ˋɛvɚ] adv. 從來
 every [ˋɛvrɪ] adj. 每個
-examination/exam
-[ɪg͵zæməˋneʃən]/[ɪgˋzæm] n.考試
+examination/exam [ɪg͵zæməˋneʃən]/[ɪgˋzæm] n.考試
 examine [ɪgˋzæmɪn] vt. 檢查
 example [ɪgˋzæmp!] n. 例子
 except [ɪkˋsɛpt] prep.除了…之外
@@ -368,16 +364,13 @@ go [go] vi. 去
 god/goddess [gɑd]/ [ˋgɑdɪs] n.神/女神
 gold [gold] n. 黃金
 good [gʊd] adj. 好的
-good-bye/goodbye/bye-bye
-/bye [ˌgʊdˈbaɪ]/ [baɪ] n. 再見
+good-bye/goodbye/bye-bye/bye [ˌgʊdˈbaɪ]/ [baɪ] n. 再見
 goose [gus] n. 鵝
 grand [græ nd] adj. 雄偉的
 grandchild [ˋgrænd͵tʃaɪld]n. 孫子女
 granddaughter [ˋgræn͵dɔtɚ] n. 孫女
-grandfather/grandpa
-[ˋgrænd͵fɑðɚ]/ [ˋgrændpɑ] n. 爺爺
-grandmother/grandma
-[ˋgrænd͵mʌðɚ]/ [ˋgrændmɑ] n.奶奶
+grandfather/grandpa [ˋgrænd͵fɑðɚ]/ [ˋgrændpɑ] n. 爺爺
+grandmother/grandma [ˋgrænd͵mʌðɚ]/ [ˋgrændmɑ] n.奶奶
 grandson [ˋgrænd͵sʌn] n.孫子
 grass [græ s] n. 草
 gray/grey [gre] adj. 灰色的
@@ -523,8 +516,7 @@ loud [laʊd] adj. 大聲的
 love [lʌv] vt. n. 愛
 low [lo] adj. 低的
 lucky [ˋlʌkɪ] adj. 幸運的
-lunch/luncheon
-[lʌntʃ]/ [ˋlʌntʃən] n. 午餐
+lunch/luncheon [lʌntʃ]/ [ˋlʌntʃən] n. 午餐
 machine [məˋʃin] n. 機器
 mad [mæ d] adj. 發飆的
 mail [mel] n. 郵件
@@ -554,8 +546,7 @@ Miss/miss [mɪs] n. 小姐
 miss [mɪs] vt. 想念
 mistake [mɪˋstek] n. 錯誤
 moment [ˋmomənt] n. 瞬間
-mommy/momma/mom/
-[ˋmɑmɪ]/ [ˋmɑmə]/ [mɑm] n.媽媽
+mommy/momma/mom/ [ˋmɑmɪ]/ [ˋmɑmə]/ [mɑm] n.媽媽
 Monday/Mon. [ˋmʌnde] n.星期一
 money [ˋmʌnɪ] n. 錢
 monkey [ˋmʌŋkɪ] n. 猴子
@@ -640,8 +631,7 @@ own [on] adj. 自己的 vt. 擁有
 page [pedʒ] n. 頁
 paint [pent] vt. 塗
 pair [pɛr] n. 一對
-pants /trousers
-[pæ nts]/ [ˋtraʊzɚz] n. 褲子
+pants /trousers [pæ nts]/ [ˋtraʊzɚz] n. 褲子
 paper [ˋpepɚ] n. 紙
 parent(s) [ˋpɛrənt] n. 雙親
 park [pɑrk] n. 公園 vt. vi. 停車
@@ -672,8 +662,7 @@ pocket [ˋpɑkɪt] n. 口袋
 poetry [ˋpoɪtrɪ] n. 詩(總稱)
 point [pɔɪnt] vi.指向 n.尖端
 police [pəˋlis] n. 警察
-policeman/cop
-[pəˋlismən] /[kɑp] n. 警察
+policeman/cop [pəˋlismən] /[kɑp] n. 警察
 pond [pɑnd] n. 池塘
 pool [pul] n. 水池
 poor [pʊr] adj. 貧窮的
@@ -758,8 +747,7 @@ school [skul] n. 學校
 sea [si] n. 海洋
 season [ˋsizn] n. 季節
 seat [sit] n. 座位
-second [ˋsɛkənd]
-adj. n. 第二(的) n.秒
+second [ˋsɛkənd] adj. n. 第二(的) n.秒
 see [si] vt. 看見
 seed [sid] n. 種子
 seem [sim] vi. 似乎
@@ -790,7 +778,7 @@ shine [ʃaɪn] vi. 發光 vt. 擦亮 n. 光亮
 ship [ʃɪp] n. 船
 shirt [ʃɝt] n. 襯衫
 shoe(s) [ʃu] n. 鞋子
-shop [ʃɑp] store[stor] n. 商店
+shop/store n. 商店
 shop [ʃɑp] n. 商店 vi. 購物
 shore [ʃɔr] n. 海濱
 short [ʃɔrt] adj. 短的；矮的
@@ -895,8 +883,7 @@ tale [tel] n. 故事
 talk [tɔk] vi. 講話
 tall [tɔl] adj. 高大的
 taste [test] vt. vi. 嚐
-taxicab/taxi/cab
-[ˋtæksɪ͵kæ b] n. 計程車
+taxicab/taxi/cab [ˋtæksɪ͵kæ b] n. 計程車
 tea [ti] n. 茶
 teach [titʃ] vt. vi. 教授
 teacher [ˋtitʃɚ] n. 教師
@@ -1073,13 +1060,11 @@ altogether [͵ɔltəˋgɛðɚ] adv. 完全
 amount [əˋmaʊnt] n.數量
 ancient [ˋenʃənt] adj.古代的
 ankle [ˋæŋk!] n.足踝
-anybody/anyone [ˋɛnɪ͵bɑdɪ]/ [ˋɛnɪ͵wʌn]
-pron.任何人
+anybody/anyone [ˋɛnɪ͵bɑdɪ]/ [ˋɛnɪ͵wʌn] pron.任何人
 anyhow [ˋɛnɪ͵haʊ] adv.無論如何
 anytime [ˋɛnɪ͵taɪm] adv.任何時候
 anyway [ˋɛnɪ͵we] adv.無論如何
-anywhere/anyplace
-[ˋɛnɪ͵hwɛr]/ [ˋɛnɪ͵ples] adv.在任何地方
+anywhere/anyplace [ˋɛnɪ͵hwɛr]/ [ˋɛnɪ͵ples] adv.在任何地方
 apartment [əˋpɑrtmənt] n. 公寓房間
 appearance [əˋpɪrəns] n. 顯露
 appetite [ˋæpə͵taɪt] n.食慾
@@ -1163,7 +1148,7 @@ broad [brɔd] adj. 寬的
 broadcast [ˋbrɔd͵kæst] n. vt. vi. 廣播
 brunch [brʌntʃ] n. 早午餐
 brush [brʌʃ] n. vt. vi. 刷(子)
-bun [bʌn] /roll [rol] n. 小圓麵包
+bun/roll n. 小圓麵包
 bundle [ˋbʌnd!] n. vt. vi. 捆
 burn [bɝn] vt. vi. n. 發熱；燒傷
 burst [bɝst] vi. vt. n. 爆炸
@@ -1512,8 +1497,7 @@ honest [ˋɑnɪst] adj. 誠實的
 honey [ˋhʌnɪ] n. 蜂蜜
 hop [hɑp] vi. vt. 單足跳
 hospital [ˋhɑspɪt!] n. 醫院
-host[host] /hostess[ˋhostɪs]
-n. 主人; 男女主持人
+host/hostess n. 主人; 男女主持人
 hotel [hoˋtɛl] n. 旅館
 however [haʊˋɛvɚ] adv. 然而
 hum [hʌm] vi. vt. n. 發嗡嗡聲
@@ -1566,8 +1550,7 @@ kingdom [ˋkɪŋdəm] n. 王國
 knock [nɑk] vi. vt. n. 相撞
 knowledge [ˋnɑlɪdʒ] n. 知識
 koala [koˋɑlə] n. 無尾熊
-ladybug [ˋledɪ͵bʌg]/ladybird [ˋledɪ͵bɝd]
-n. 瓢蟲
+ladybug/ladybird n. 瓢蟲
 lane [len] n. 小路
 language [ˋlæŋgwɪdʒ] n. 語言
 lantern [ˋlæntɚn] n. 燈籠
@@ -1805,8 +1788,7 @@ produce [prəˋdjus] vt. vi. 出產
 producer [prəˋdjusɚ] n. 生產者
 progress [prəˋgrɛs] vi. 進行
  [ˋprɑgrɛs] n. 進步
-project [ˋprɑdʒɛkt] n.企劃 [prəˋdʒɛkt]
-vt.計畫 [prəˋdʒɛkt] vt. vi.投射；伸出
+project [ˋprɑdʒɛkt] n.企劃 [prəˋdʒɛkt] vt.計畫 [prəˋdʒɛkt] vt. vi.投射；伸出
 promise [ˋprɑmɪs] n. vt. vi. 承諾
 pronounce [prəˋnaʊns] vt. vi. 發音
 propose [prəˋpoz] vt. vi. 提議
@@ -1839,8 +1821,7 @@ recent [ˋrisnt] adj. 最近的
 record [ˋrɛkɚd] n. 記錄；唱片
  [rɪˋkɔrd] 記錄
 rectangle [rɛkˋtæŋg!] n.矩形
-refrigerator/fridge/icebox
-[rɪˋfrɪdʒə͵retɚ] / [frɪdʒ] n. 冰箱
+refrigerator/fridge/icebox [rɪˋfrɪdʒə͵retɚ] / [frɪdʒ] n. 冰箱
 refuse [rɪˋfjuz] vt. vi. 拒絕
 regard [rɪˋgɑrd] n. 關心 vt. vi. 注重
 region [ˋridʒən] n. 地區
@@ -2024,8 +2005,7 @@ tip [tɪp] n. 小費 vi. vt. 踮著腳走；給小費
 title [ˋtaɪt!] n. 標題
 toast [tost] n. vt. vi. 敬酒
 toe [to] n. 腳趾
-tofu [ˋtofu] /
-bean curd [bin kɝd] n. 豆腐
+tofu/bean curd n. 豆腐
 toilet [ˋtɔɪlɪt] n. 廁所
 tomato [təˋmeto] n. 番茄
 tongue [tʌŋ] n. 舌頭
@@ -2042,8 +2022,8 @@ traffic [ˋtræfɪk] n. 交通
 trap [træ p] n. vt. vi. (設)陷阱
 travel [ˋtræv!] n. vt. vi. 旅行
 treasure [ˋtrɛʒɚ] n. 財寶 vt. 珍愛
-treat [trit(mənt)] (ment) vt. (n. )
- 治療；處理；請客 n. 請客
+treat vt. 治療；處理；請客
+treatment n. 請客
 trial [ˋtraɪəl] n. 考驗
 triangle [ˋtraɪ͵æŋg!] n. 三角（形）
 trick [trɪk] n. 詭計 vt. vi. 哄騙
@@ -2082,7 +2062,7 @@ volleyball [ˋvɑlɪ͵bɔl] n. 排球
 vote [vot] n. vi. vt. 投票
 voter [ˋvotɚ] n. 投票人
 waist [west] n. 腰部
-waiter [ˋwetɚ] /waitress[ˋwetrɪs] n. 服務生
+waiter/waitress n. 服務生
 wake [wek] vi. vt. 醒來 n. 守靈
 wallet [ˋwɑlɪt] n. 皮夾
 waterfall [ˋwɔtɚ͵fɔl] n. 瀑布
@@ -2094,8 +2074,7 @@ weekday [ˋwik͵de] n. 平日
 western [ˋwɛstɚn] adj. 西方的
 wet [wɛt] adj. 潮濕的
 whale [hwel] n. 鯨
-whatever [hwɑtˋɛvɚ]
-pron. adj.任何…的事物
+whatever [hwɑtˋɛvɚ] pron. adj.任何…的事物
 wheel [hwil] n. 輪子
 whenever [hwɛnˋɛvɚ] conj. adv. 每當
 wherever [hwɛrˋɛvɚ] conj. adv.無論在哪裡
@@ -2350,8 +2329,7 @@ couch [kaʊtʃ] n.長沙發
 countable [ˋkaʊntəb!] a.可計算的；可數的
 coward [ˋkaʊɚd] n.懦夫，膽怯者
 cradle [ˋkred!] n.搖籃
-crash [kræ ʃ]
- vi.n.碰撞；(飛機等)墜毀；【電腦】當機
+crash [kræ ʃ] vi.n.碰撞；(飛機等)墜毀；【電腦】當機
 crawl [krɔl] vi.爬
 creative [krɪˋetɪv] a.有創意的
 creator [krɪˋetɚ] n.創造者
@@ -2454,8 +2432,7 @@ employer [ɪmˋplɔɪɚ] n.僱主
 empty [ˋɛmptɪ] a.空的；未佔用的
 enable [ɪnˋeb!] vt.使能夠…
 energetic [͵ɛnɚˋdʒɛtɪk] a.精力旺盛的
-engage [ɪnˋgedʒ]
- vt.吸引；佔用(時間、精力)；使訂婚
+engage [ɪnˋgedʒ] vt.吸引；佔用(時間、精力)；使訂婚
 engagement [ɪnˋgedʒmənt] n.訂婚
 engine [ˋɛndʒən] n.引擎；火車頭；消防車
 engineer [͵ɛndʒəˋnɪr] n.工程師
@@ -2560,8 +2537,7 @@ grocery [ˋgrosərɪ] n.食品雜貨(店)[C]
 guardian [ˋgɑrdɪən] n.保護者；【律】監護人
 guidance [ˋgaɪdns] n.指導；引導
 gum [gʌm] n.口香糖[U] 同：chewing gum
-gymnasium [dʒɪmˋnezɪəm]
-n.體育館；健身房(gym)
+gymnasium [dʒɪmˋnezɪəm] n.體育館；健身房(gym)
 hairdresser [ˋhɛr͵drɛsɚ] n.美髮師
 hallway [ˋhɔl͵we] n.【美】玄關；門廳，走廊
 handful [ˋhændfəl] n.一把，一握[C][(+of)]
@@ -2575,8 +2551,7 @@ hatch [hæ tʃ] vt.孵出
 hawk [hɔk] n.鷹，隼
 hay [he] n.乾草
 headline [ˋhɛd͵laɪn] n.(報紙等的)標題；頭條
-headquarters [ˋhɛdˋkwɔrtɚz]
-n.(軍，警的)司令部，總部
+headquarters [ˋhɛdˋkwɔrtɚz] n.(軍，警的)司令部，總部
 heal [hil] vt.治癒 vi.痊癒
 heap [hip] n.(一)堆，堆積[C][(+of)]
 heaven [ˋhɛvən] n.(常大寫)天國；上帝[U]
@@ -2711,8 +2686,7 @@ lung [lʌŋ] n.肺，肺臟
 magical [ˋmædʒɪk!] a.魔術的，魔法的
 magnet [ˋmægnɪt] n.磁鐵，磁石
 maid [med] n.少女，(未婚的)年輕女子；女僕
-major [ˋmedʒɚ]
-a.較大的；較多的；主要的；主修的；
+major [ˋmedʒɚ] a.較大的；較多的；主要的；主修的；
 成年的；【音】大調的
 n.成年人；陸軍少校；主修；【音】大調
 vi.主修 [(+in)]
@@ -2726,8 +2700,7 @@ manager [ˋmænɪdʒɚ] n.負責人；主任，經理
 mankind [ˋmæn͵kaɪnd] n.[U]男人；人類
 manners [ˋmænɚz] n.禮貌；規矩
 marble [ˋmɑrb!] n.大理石[U]；彈珠[C]
-march [mɑrtʃ] n.行軍；遊行抗議；進行曲[C]
- vi.(齊步)前進；行軍
+march [mɑrtʃ] n.行軍；遊行抗議；進行曲[C] vi.(齊步)前進；行軍
 marvelous [ˋmɑrvələs] a.令人驚歎的；非凡的
 mathematical [͵mæθəˋmætɪk!] a.數學的
 mathematics [͵mæθəˋmætɪks] n.數學(math)
@@ -2759,8 +2732,7 @@ mighty [ˋmaɪtɪ] a.強大的；強有力的
 mill [mɪl] n.磨坊；麵粉廠
 millionaire [͵mɪljənˋɛr] n.百萬富翁
 miner [ˋmaɪnɚ] n.礦工
-minor [ˋmaɪnɚ]
-a.較小的；較少的；次要的；未成年的；
+minor [ˋmaɪnɚ] a.較小的；較少的；次要的；未成年的；
 (大學學科)副修的；【音】小調的
 n.未成年人；副修科目
 vi.【主美】副修，兼修[(+in)]
@@ -2874,8 +2846,7 @@ pilot [ˋpaɪlət] n.領航員；(飛機等的)駕駛員
 pine [paɪn] n.松樹[C] ；松木[U]
 pint [paɪnt] n.品脫(英美容量或液量名)
 pit [pɪt] n.窪坑，凹處
-pity [ˋpɪtɪ] n.憐憫；同情[U]；可惜的事，憾事[C]
- vt.同情…
+pity [ˋpɪtɪ] n.憐憫；同情[U]；可惜的事，憾事[C] vt.同情…
 plastic [ˋplæstɪk] a.塑膠的；塑性的
 plenty [ˋplɛntɪ] n.豐富；充足
 plug [plʌg] n.插頭，插塞 vt.把...塞住，堵塞
@@ -3348,9 +3319,8 @@ alert [əˋlɝt] a.警覺的；警惕的 n.警戒，警報
 vt.使警覺；使注意
 allowance [əˋlaʊəns] n.零用錢；津貼，補貼
 同：pocket money
-aluminum [əˋlumɪnəm] n.鋁[U]
-a.m./am/A.M./AM n.【拉】午前
- = ante meridiem (= before noon)
+aluminum [əˋlumɪnəm] n.鋁[U] 
+a.m./am/A.M./AM adv.【拉】午前(= ante meridiem)
 amateur [ˋæmə͵tʃʊr] n.業餘從事者
 ambitious [æmˋbɪʃəs] a.有雄心的；野心勃勃
 的
@@ -3456,16 +3426,14 @@ blade [bled] n.刀身，劍身；刀片
 blend [blɛnd] vt.vi.使混和，使混雜；使交融
 blessing [ˋblɛsɪŋ] n.(上帝的)賜福；祝福
 blink [blɪŋk] vi.vt.n.眨眼睛；瞇著眼看[(+at)]
-bloom [blum] n.(尤指觀賞的)花；開花(期)[U]
-vi.開花
+bloom [blum] n.(尤指觀賞的)花；開花(期)[U] vi.開花
 blossom [ˋblɑsəm] n.(尤指果樹的)花[C];開
 花(期)[U]
  vi.開花
 blush [blʌʃ] vi.n.(因害羞，尷尬等而)臉紅
 boast [bost] vi.n.自吹自擂；誇耀；吹牛
  [(+about/of)]
-bond [bɑnd] n.結合力；聯結；契約，約定[C]
-vt.vi.黏合；結合
+bond [bɑnd] n.結合力；聯結；契約，約定[C] vt.vi.黏合；結合
 bounce [baʊns] vt.vi.n.(球)彈起，彈回；蹦跳
 bracelet [ˋbreslɪt] n.手鐲；臂鐲
 brassiere [brəˋzɪr] n.胸罩 = bra [brɑ]
@@ -3788,8 +3756,7 @@ diploma [dɪˋplomə] n.畢業文憑，學位證書
 diplomat [ˋdɪpləmæ t] n.外交官
 disadvantage [͵dɪsədˋvæntɪdʒ] n.不利；損害
 disaster [dɪˋzæstɚ] n.災害，災難，不幸[C][U]
-discipline [ˋdɪsəplɪn] n.紀律，風紀；教養[U]
- vt.訓練，訓導
+discipline [ˋdɪsəplɪn] n.紀律，風紀；教養[U] vt.訓練，訓導
 disconnect [͵dɪskəˋnɛkt] vt.使分離，分開
 discourage [dɪsˋkɝɪdʒ] vt.使洩氣；勸阻
 discouragement [dɪsˋkɝɪdʒmənt] n.沮喪，氣
@@ -3818,8 +3785,7 @@ dominate [ˋdɑmə͵net] vt.vi.支配，統治，控
 dormitory [ˋdɔrmə͵torɪ] n.學生宿舍(dorm)
 download [ˋdaʊn͵lod] vt.下載
 doze [doz] vi.n.打瞌睡，打盹
-draft [dræ ft] n.草稿[C]；【美】徵兵[U]
- vt.起草；徵兵
+draft [dræ ft] n.草稿[C]；【美】徵兵[U] vt.起草；徵兵
 dread [drɛd] vt.vi.懼怕；擔心
 [+to-v][+v-ing][+(that)]
  n.懼怕；擔心
@@ -4123,10 +4089,8 @@ humidity [hjuˋmɪdətɪ] n.濕氣，濕度[U]
 hurricane [ˋhɝɪ͵ken] n.颶風，暴風雨
 hydrogen [ˋhaɪdrədʒən] n.【化】氫[U]
 iceberg [ˋaɪs͵bɝg] n.冰山；冷峻的人
-identical [aɪˋdɛntɪk!]
-a.同一的；完全相同的；(雙胞)同卵的
-identification/ID [aɪ͵dɛntəfəˋkeʃən]
-n.認出；識別；身分證明；身分證
+identical [aɪˋdɛntɪk!] a.同一的；完全相同的；(雙胞)同卵的
+identification/ID [aɪ͵dɛntəfəˋkeʃən] n.認出；識別；身分證明；身分證
 identify [aɪˋdɛntə͵faɪ] vt.確認；識別 vi.認
 同…
 idiom [ˋɪdɪəm] n.慣用語；成語
@@ -4137,8 +4101,7 @@ ignorant [ˋɪgnərənt] a.無知的，不學無術的；
 不知道的
 illustrate [ˋɪləstret] vt.(用圖，實例等)說明，
 闡明
-illustration [ɪ͵lʌsˋtreʃən]
-n.說明，圖示[U]；實例；插圖[C]
+illustration [ɪ͵lʌsˋtreʃən] n.說明，圖示[U]；實例；插圖[C]
 imaginable [ɪˋmædʒɪnəb!] a.可想像得到的
 imaginary [ɪˋmædʒə͵nɛrɪ] a.想像中的；虛構
 的
@@ -4146,8 +4109,7 @@ imaginative [ɪˋmædʒə͵netɪv] a.有想像力的
 imitate [ˋɪmə͵tet] vt.模仿
 imitation [͵ɪməˋteʃən] n.模仿，模擬[U]；
 仿製品；贗品[C]
-immigrant [ˋɪməgrənt] n.(外來)移民，僑民[C]
-a.移入的
+immigrant [ˋɪməgrənt] n.(外來)移民，僑民[C] a.移入的
 immigrate [ˋɪmə͵gret] vi.遷移；遷入
 immigration [͵ɪməˋgreʃən] n.移居；
 【美】(總稱)(外來的)移民
@@ -4167,8 +4129,7 @@ inflation [ɪnˋfleʃən] n.通貨膨脹[U][C]；充氣；
 膨脹[U]
 influential [͵ɪnflʊˋɛnʃəl] a.有影響力的；有權
 勢的
-information [͵ɪnfɚˋmeʃən]
-n.消息；情報；資訊[U]；詢問處
+information [͵ɪnfɚˋmeʃən] n.消息；情報；資訊[U]；詢問處
 informative [ɪnˋfɔrmətɪv] a.教育性的；見聞
 廣博的
 ingredient [ɪnˋgridɪənt] n.(烹調的)原料；
@@ -4180,8 +4141,7 @@ innocence [ˋɪnəsns] n.無罪；清白；天真無邪，
 input [ˋɪn͵pʊt] n.vt.投入；輸入
 insert [ɪnˋsɝt] vt.插入；嵌入
 inspection [ɪnˋspɛkʃən] n.檢查，檢驗
-inspiration [͵ɪnspəˋreʃən]
-n.靈感[U]；鼓舞人心的人(或事物)[C]
+inspiration [͵ɪnspəˋreʃən] n.靈感[U]；鼓舞人心的人(或事物)[C]
 inspire [ɪnˋspaɪr] vt.vi.鼓舞，激勵
 install [ɪnˋstɔl] vt.安裝，設置
 instinct [ˋɪnstɪŋkt] n.本能；天性[(+to-v)]；直
@@ -4239,8 +4199,7 @@ n.較年少者；等級較低者；晚輩
 keen [kin] a.熱心的，熱衷的；渴望的；敏
 銳的
 knuckle [ˋnʌk!] n.指(根)關節
-labor [ˋlebɚ] n.勞動[U]；勞工 [U]；陣痛[U]
-vi.勞動
+labor [ˋlebɚ] n.勞動[U]；勞工 [U]；陣痛[U] vi.勞動
 laboratory [ˋlæbrə͵torɪ] n.實驗室，研究室
 (lab)
 lag [læ g] n.vi.vt.走得慢；落後；延遲
@@ -4329,8 +4288,7 @@ messy [ˋmɛsɪ] a.凌亂的; 雜亂的; 邋遢的
 microscope [ˋmaɪkrə͵skop] n.顯微鏡[C]
 mild [maɪld] a.溫和的，溫柔的
 mineral [ˋmɪnərəl] n.礦物；礦泉水 a.礦物的
-minimum [ˋmɪnəməm] n.最小量，最小數[C]
- a.最小的，最少的，最
+minimum [ˋmɪnəməm] n.最小量，最小數[C] a.最小的，最少的，最
 低的
 minister [ˋmɪnɪstɚ] n.部長；大臣；牧師
 ministry [ˋmɪnɪstrɪ] n.(常大寫)(政府的)部
@@ -4490,9 +4448,8 @@ plentiful [ˋplɛntɪfəl] a.豐富的，充足的
 plot [plɑt] n.陰謀；祕密計畫；(小說，戲劇
 等的)情節
 plural [ˋplʊrəl] n.複數[U] a.【文】複數的
-p.m./pm/P.M./PM [ˋpiˋɛm]
- 1.下午；午後(= post meridiem)
- 2.首相；內閣總理(= Prime Minister)
+p.m./pm/P.M./PM [ˋpiˋɛm] adv. 下午；午後(= post meridiem)
+ n. 首相；內閣總理(= Prime Minister)
 poisonous [ˋpɔɪznəs] a.有毒的；有害的
 polish [ˋpɑlɪʃ] vt.vi.磨光，擦亮 n.磨光粉；
 擦亮劑
@@ -4659,8 +4616,7 @@ retreat [rɪˋtrit] n.撤退；隱退處；休養所
 vi.vt.撤退，退卻
 reunion [riˋjunjən] n.再聯合；(親友等的)團
 聚，重聚
-revenge [rɪˋvɛndʒ] vt.替…報仇[(+on/upon)]
-n.報仇；報復[U][(+for/on)]
+revenge [rɪˋvɛndʒ] vt.替…報仇[(+on/upon)] n.報仇；報復[U][(+for/on)]
 revise [rɪˋvaɪz] vt.vi.修訂；校訂
 revision [rɪˋvɪʒən] n.修訂；修訂本，訂正版
 [C]
@@ -4836,8 +4792,7 @@ transportation [͵trænspɚˋteʃən] n.運輸[U];運
 輸工具
 tremendous [trɪˋmɛndəs] a.巨大的，極大的
 tribal [traɪb!] a.部落的，種族的[C]
-triumph [ˋtraɪəmf] n.(大)勝利；(大)成功[C]
- vi.獲得勝利(或成功)
+triumph [ˋtraɪəmf] n.(大)勝利；(大)成功[C] vi.獲得勝利(或成功)
 troublesome [ˋtrʌb!səm] a.麻煩的，棘手的
 tug-of-war [tʌg əv wɔr] n.拔河(比賽)
 twinkle [ˋtwɪŋk!] n.vi.(星等)閃爍；閃耀
@@ -4924,8 +4879,7 @@ affection [ə`fɛkʃən] n.情愛
 agenda [ə`dʒɛndə] n.議程
 agony [`æ gənɪ] n.痛苦
 agricultural [͵ægrɪ`kʌltʃərəl] adj.農業的
-AI/artificial intelligence
-[͵ɑrtə`fɪʃəl] [ɪn`tɛlədʒəns] n.人工智慧
+AI/artificial intelligence [͵ɑrtə`fɪʃəl] [ɪn`tɛlədʒəns] n.人工智慧
 airtight [`ɛr͵taɪt] adj.密閉的
 airway [`ɛr͵we] n.呼吸道；(礦井的)風道
 aisle [aɪl] n.走道；通道
@@ -5056,17 +5010,12 @@ cautious [`kɔʃəs] adj.小心的；謹慎的
 celebrity [sɪ`lɛbrətɪ] n.名人；名流；名聲
 celery [`sɛlərɪ] n.芹菜
 cellar [`sɛlɚ] n.地窖；地下室；酒窖
-cell-phone/cellphone/cellular phone/mobile
-phone
-[`sɛlfon] [`sɛljʊlɚ] [`mobɪl]
- n.手機
+cell-phone/cellphone/cellular phone/mobile phone [`sɛlfon] [`sɛljʊlɚ] [`mobɪl] n.手機
 cello [`tʃɛlo] n.大提琴
-Celsius / Centigrade / centigrade
-[`sɛlsɪəs] [`sɛntə͵gred] n.攝氏 adj.攝氏的
+Celsius / Centigrade / centigrade [`sɛlsɪəs] [`sɛntə͵gred] n.攝氏 adj.攝氏的
 ceremony [`sɛrə͵monɪ] n.典禮；儀式
 certificate [sɚ`tɪfəkɪt] n.證書
-chairperson [`tʃɛr͵pɝsn]
-n.議長；主席(無性別歧視)
+chairperson [`tʃɛr͵pɝsn] n.議長；主席(無性別歧視)
 chair/chairman [`tʃɛrmən] n.主席
 chairwoman [`tʃɛr͵wʊmən] n.女主席
 chant [tʃæ nt] n.vt.vi.反覆地唱；吟誦
@@ -5125,8 +5074,7 @@ compound [`kɑmpaʊnd] n.混合物
 [kɑm`paʊnd] vt.合成
 comprehend [͵kɑmprɪ`hɛnd] vt.理解
 comprehension [͵kɑmprɪ`hɛnʃən] n.理解力
-compromise [`kɑmprə͵maɪz]
-n.vt.vi.妥協；讓步
+compromise [`kɑmprə͵maɪz] n.vt.vi.妥協；讓步
 compute [kəm`pjut] vt.vi.n.計算
 computerize [kəm`pjutə͵raɪz] vt.使電腦化
 comrade [`kɑmræ d] n.夥伴
@@ -5161,8 +5109,7 @@ corrupt [kə`rʌpt] vt.vi.adj.腐敗(的)
 counsel [`kaʊns!] n.vt.vi.忠告；商議
 counselor [`kaʊns!ɚ] n.顧問；輔導員
 cozy [`kozɪ] adj.舒適的
-counterclockwise [͵kaʊntɚ`klɑk͵waɪz]
- adj.adv.逆時針的(地)
+counterclockwise [͵kaʊntɚ`klɑk͵waɪz] adj.adv.逆時針的(地)
 coupon [`kupɑn] n.折價券；優待券
 courtyard [`kort`jɑrd] n.庭院
 cowardly [`kaʊɚdlɪ] adj.adv.膽小的(地)
@@ -5349,7 +5296,7 @@ gust [gʌst] n.強風；爆發
 gut [gʌt] n.腸子；內臟；勇氣
 gypsy [`dʒɪpsɪ] n.吉普賽人
 hail [hel] n.冰雹 n.vt.歡呼
-hairstyle [`hɛr͵staɪl] / hairdo [`hɛr͵du] n.髮
+hairstyle/hairdo n.髮
 型
 handicap [`hæ ndɪ͵kæ p] n.障礙 vt.妨礙
 handicraft [`hæ ndɪ͵kræ ft] n.手工藝品
@@ -5372,11 +5319,9 @@ herb [hɝb] n.藥草；草本植物
 hermit [`hɝmɪt] n.隱士
 heroic [hɪ`roɪk] adj.英雄的
 heterosexual [͵hɛtərə`sɛkʃʊəl] adj.異性戀的
-hi-fi [`haɪ`faɪ] / high fidelity [fɪ`dɛlətɪ] n.高傳
-真
+hi-fi/high fidelity n.高傳真
 hijack [ˈhaɪdʒæ k] vt.n.劫持
-hiss [hɪs] vt.vi.發出嘶嘶(噓)聲 n.嘶嘶(噓)
-聲
+hiss [hɪs] vt.vi.發出嘶嘶(噓)聲 n.嘶嘶(噓)聲
 hoarse [hors] adj.沙啞的
 hockey [`hɑkɪ] n.曲棍球
 homosexual [͵homə`sɛkʃʊəl] adj.n.同性戀
@@ -6046,8 +5991,7 @@ abnormal [æ b`nɔrm!] adj.異常的
 aboriginal [͵æbə`rɪdʒən!] adj.原生的
 aborigine [æ bə`rɪdʒəni] n.原住民
 abound [ə`baʊnd] vi.充滿
-absentminded [`æ bsnt`maɪndɪd]
-adj.心不在焉的
+absentminded [`æ bsnt`maɪndɪd] adj.心不在焉的
 abstraction [æ b`stræ kʃən] n.抽象
 abundance [ə`bʌndəns] n.充裕
 abuse [ə`bjus] n.vt.虐待
@@ -6072,11 +6016,9 @@ adaptation [͵ædæp`teʃən] n.適應
 addict [əˋdɪkt] vt.使…沉迷
 [`æ dɪkt] n.入迷的人；上癮者
 addiction [ə`dɪkʃən] n.濫用；上癮
-administer / administrate
-[əd`mɪnəstɚ] [əd`mɪnə͵stret] vt.管理
+administer / administrate [əd`mɪnəstɚ] [əd`mɪnə͵stret] vt.管理
 administration [əd͵mɪnə`streʃən] n.管理
-administrative [əd`mɪnə͵stretɪv]
- adj.管理上的；行政的
+administrative [əd`mɪnə͵stretɪv] adj.管理上的；行政的
 administrator [əd`mɪnə͵stretɚ] n.管理者
 advocate [ˋædvə͵ket] vt.提倡
  [`æ dvəkɪt] n.提倡者
@@ -6134,8 +6076,7 @@ attic [`æ tɪk] n.閣樓
 auction [`ɔkʃən] n.vt.拍賣
 authentic [ɔ`θɛntɪk] adj.真實的
 authorize [`ɔθə͵raɪz] vt.授權
-autograph / signature
-[`ɔtə͵græ f] [`sɪgnətʃɚ] n.簽名
+autograph / signature [`ɔtə͵græ f] [`sɪgnətʃɚ] n.簽名
 autonomy [ɔ`tɑnəmɪ] n.自治
 aviation [͵evɪ`eʃən] n.飛行
 awesome [`ɔsəm] adj.令人敬畏的
@@ -6237,11 +6178,9 @@ compile [kəm`paɪl] vt.編輯
 complement [`kɑmpləmənt] n.補充物
 complexion [kəm`plɛkʃən] n.面色
 complexity [kəm`plɛksətɪ] n.複雜(性)
-complication [͵kɑmplə`keʃən]
-n.複雜(化)；併發症[C]
+complication [͵kɑmplə`keʃən] n.複雜(化)；併發症[C]
 component [kəm`ponənt] n.零件；成分
-comprehensive [͵kɑmprɪ`hɛnsɪv]
- adj.無所不包的；有理解力的
+comprehensive [͵kɑmprɪ`hɛnsɪv] adj.無所不包的；有理解力的
 comprise [kəm`praɪz] vt.包括
 concede [kən`sid] vt.(勉強)承認
 conceit [kən`sit] n.自滿
@@ -6253,9 +6192,7 @@ confer [kən`fɝ] vt.授予(學位等)
 confidential [͵kɑnfə`dɛnʃəl] adj.機密的
 conform [kən`fɔrm] vi.遵守；符合
 confrontation [͵kɑnfrʌn`teʃən] n.對抗
-congressman [`kɑŋgrəsmən]/
-congresswoman [`kɑŋgrəs͵wʊmən]
-n.美國國會議員
+congressman/congresswoman n.美國國會議員
 conquest [`kɑŋkwɛst] n.征服
 conscientious [͵kɑnʃɪ`ɛnʃəs] adj.憑良心的
 consensus [kən`sɛnsəs] n.一致；合意
@@ -6304,8 +6241,7 @@ crumble [`krʌmb!] vt.vi.粉碎；崩潰
 crust [krʌst] n.派餅皮；地殼
 cultivate [`kʌltə͵vet] vt.培育
 cumulative [`kjʊmjʊ͵letɪv] adj.累計的
-customary [`kʌstəm͵ɛrɪ]
- adj.合乎習俗的；按慣例的
+customary [`kʌstəm͵ɛrɪ] adj.合乎習俗的；按慣例的
 daffodil [`dæ fədɪl] n.黃水仙
 dandruff [`dæ ndrəf] n.頭皮屑
 daybreak [`de͵brek] n.黎明
@@ -6376,8 +6312,7 @@ dispensable [dɪ`spɛnsəb!] adj.非必要的
 disperse [dɪ`spɝs] vt.vi.驅散
 displace [dɪs`ples] vt.(從原地)移開
 displease [dɪs`pliz] vt.vi.使人不高興
-disposable [dɪ`spozəb!]
- adj.可任意處理的；用完即丟棄的
+disposable [dɪ`spozəb!] adj.可任意處理的；用完即丟棄的
 disposal [dɪ`spoz!] n.處理
 disregard [͵dɪsrɪ`gɑrd] vt.n.不顧；漠視
 dissident [`dɪsədənt] adj.n.意見不同的(人)
@@ -6390,13 +6325,11 @@ distrust [dɪs`trʌst] vt.n.不信任；懷疑
 disturbance [dɪs`tɝbəns] n.擾亂；打擾
 diverse [daɪ`vɝs] adj.不同的；多元的
 diversify [daɪ`vɝsə͵faɪ] vt.vi.使多樣化
-diversion [daɪ`vɝʒən]
-n.轉移；分散注意力；娛樂
+diversion [daɪ`vɝʒən] n.轉移；分散注意力；娛樂
 diversity [daɪ`vɝsətɪ] n.差異；多樣性
 divert [daɪ`vɝt] vt.vi.轉移；使分心
 doctrine [`dɑktrɪn] n.教義；信條
-documentary [͵dɑkjə`mɛntərɪ]
- adj.n.文件的；記錄影片
+documentary [͵dɑkjə`mɛntərɪ] adj.n.文件的；記錄影片
 dome [dom] n.圓屋頂
 donate [`donet] vt.捐贈
 donation [do`neʃən] n.捐贈(物)
@@ -6417,11 +6350,9 @@ eccentric [ɪk`sɛntrɪk] adj.古怪的
 ecology [ɪ`kɑlədʒɪ] n.生態學
 ecstasy [`ɛkstəsɪ] n.狂喜；迷幻藥
 edible [`ɛdəb!] adj.可食的
-editorial [͵ɛdə`tɔrɪəl]
-adj.n.編輯(上)的；(報刊的)社論
+editorial [͵ɛdə`tɔrɪəl] adj.n.編輯(上)的；(報刊的)社論
 electron [ɪ`lɛktrɑn] n.電子
-eligible [`ɛlɪdʒəb!]
-adj.有資格當選的；法律上合格的
+eligible [`ɛlɪdʒəb!] adj.有資格當選的；法律上合格的
 elite [ ɪ`lit] n.精英
 eloquence [`ɛləkwəns] n.雄辯；口才
 eloquent [`ɛləkwənt] adj.雄辯的
@@ -6502,8 +6433,7 @@ foresee [for`si] vt.預見；預知
 formidable [`fɔrmɪdəb!] adj.可怕的；難克服的
 formulate [`fɔrmjə͵let] vt.使公式化
 forsake [fɚ`sek] vt.遺棄；背棄
-forthcoming [͵forθ`kʌmɪŋ]
-adj.即將到來的；隨時可得的
+forthcoming [͵forθ`kʌmɪŋ] adj.即將到來的；隨時可得的
 fortify [`fɔrtə͵faɪ] vt.加強；支持
 foster [`fɔstɚ] vt.adj.養育；收養的
 fracture [`fræ ktʃɚ] (n.) 斷裂；骨折
@@ -6524,8 +6454,7 @@ glamour [`glæ mɚ] n.魅力；妖豔
 glassware [`glæs͵wɛr] n.玻璃器皿
 glisten [`glɪsn] vi.n.閃耀；閃光
 gloomy [`glumɪ] adj.陰鬱的
-GMO/genetically modified organism
- [dʒə`nɛtɪk!ɪ][`mɑdə͵faɪd][`ɔrgən͵ɪzəm]
+GMO/genetically modified organism [dʒə`nɛtɪk!ɪ][`mɑdə͵faɪd][`ɔrgən͵ɪzəm]
  n.基因改造生物
 graph [græ f] n.圖表；圖解
 graphic [`græ fɪk] adj.寫實的；圖解的
@@ -6540,21 +6469,18 @@ hail [hel] n.冰雹
 harass [`hæ rəs] vt.使…煩惱；騷擾
 harassment [`hæ rəsmənt] n.煩惱；騷擾
 hazard [`hæ zɚd] n.危害(物)
-hemisphere [`hɛməs͵fɪr]
-n.(地球的)半球；半球體
+hemisphere [`hɛməs͵fɪr] n.(地球的)半球；半球體
 hereafter [͵hɪr`æ ftɚ] adv.此後；來世
 heritage [`hɛrətɪdʒ] n.遺產
 heroin [`hɛro͵ɪn] n.海洛因
-highlight [`haɪ͵laɪt]
-vt.照亮 n.最突出(或最精彩)的部分
+highlight [`haɪ͵laɪt] vt.照亮 n.最突出(或最精彩)的部分
 honorary [`ɑnə͵rɛrɪ] adj.名譽上的
 hormone [`hɔrmon] n.荷爾蒙
 hospitable [`hɑspɪtəb!] adj.好客的
 hospitality [͵hɑspɪ`tæ lətɪ] n.好客；殷勤
 hospitalize [`hɑspɪt!͵aɪz] vt.使…住院治療
 hostility [hɑs`tɪlətɪ] n.敵意；敵視
-humanitarian [hju͵mænə`tɛrɪən]
-adj.n.人道主義的；人道主義者
+humanitarian [hju͵mænə`tɛrɪən] adj.n.人道主義的；人道主義者
 humiliate [hju`mɪlɪ͵et] vt.羞辱；使丟臉
 hunch [hʌntʃ] n.預感；肉峰；隆起 vt.vi. 隆起
 hurdle [`hɝd!] n.vt.跳欄；跨(欄)
@@ -6573,8 +6499,7 @@ imposing [ɪm`pozɪŋ] adj.壯觀的；
 imprison [ɪm`prɪzn] vt.監禁
 imprisonment [ɪm`prɪznmənt] n.監禁
 incentive [ɪn`sɛntɪv] n.動機
-incidental [͵ɪnsə`dɛnt!]
-adj.附帶的；偶然發生的
+incidental [͵ɪnsə`dɛnt!] adj.附帶的；偶然發生的
 incline [ɪn`klaɪn] vi.vt.傾斜；心裡傾向
 inclusive [ɪn`klusɪv] adj.包含的
 indignation[͵ɪndɪg`neʃən] n.憤慨
@@ -6582,10 +6507,8 @@ inevitable [ɪn`ɛvətəb!] adj.不可避免的
 infectious [ɪn`fɛkʃəs] adj.傳染性的
 infer [ɪn`fɝ] vt.vi.推論；意味著…
 inference [`ɪnfərəns] n.推論
-ingenious [ɪn`dʒinjəs]
-adj.巧妙的；心靈手巧的；足智多謀的
-ingenuity [͵ɪndʒə`nuətɪ]
-n.足智多謀；巧妙；精巧的裝置
+ingenious [ɪn`dʒinjəs] adj.巧妙的；心靈手巧的；足智多謀的
+ingenuity [͵ɪndʒə`nuətɪ] n.足智多謀；巧妙；精巧的裝置
 inhabit [ɪn`hæ bɪt] vt.棲息於…
 inhabitant [ɪn`hæ bətənt] n.居民；居住者
 inherent[ɪn`hɪrənt] adj.固有的；與生俱來的
@@ -6600,8 +6523,7 @@ insight [`ɪn͵saɪt] n.洞察力
 insistence [ɪn`sɪstəns] n.堅持
 installation[͵ɪnstə`leʃən] n.就任；安裝裝置
 installment [ɪn`stɔlmənt] n.分期付款
-institution [͵ɪnstə`tjuʃən]
- n.制度；公共團體；機構；建立
+institution [͵ɪnstə`tjuʃən] n.制度；公共團體；機構；建立
 intact [ɪn`tæ kt] adj.完整無缺的
 integrate [`ɪntə͵gret] vt.vi.使結合；使完整
 integration [͵ɪntə`greʃən] n.整合
@@ -6618,8 +6540,7 @@ intruder [ɪn`trudɚ] n.侵入者
 invaluable [ɪn`væ ljəb!] adj.無價的
 inventory [`ɪnvən͵torɪ] n.存貨清單；庫存
 investigator [ɪn`vɛstə͵getɚ] n.調查者
-IQ / intelligence quotient
- [ɪn`tɛlədʒəns] [`kwoʃənt] n.智力商數
+IQ / intelligence quotient [ɪn`tɛlədʒəns] [`kwoʃənt] n.智力商數
 ironic [aɪ`rɑnɪk] adj.冷嘲的
 irony [`aɪrənɪ] n.諷刺
 irritable [`ɪrətəb!] adj.易怒的
@@ -6645,12 +6566,10 @@ lunatic [`lunə͵tɪk] adj.瘋的
 lure [lʊr] vt.n.引誘
 lush [lʌʃ] adj.蒼翠繁茂的
 lyric [`lɪrɪk] n.抒情的 n.抒情詩；歌詞
-magnitude [`mæ gnə͵tjud]
-n.重要；強度；(地震)震級
+magnitude [`mæ gnə͵tjud] n.重要；強度；(地震)震級
 malaria [mə`lɛrɪə] n.瘧疾
 manipulate [mə`nɪpjə͵let] vt.操作；操弄
-manuscript [`mæ njə͵skrɪpt]
-n.手稿 adj.手寫的；原稿的
+manuscript [`mæ njə͵skrɪpt] n.手稿 adj.手寫的；原稿的
 mar [mɑr] n.污點
 massacre [`mæ səkɚ] n.大屠殺
 mastery [`mæ stərɪ] n.支配；熟練
@@ -6690,10 +6609,8 @@ morality [mə`ræ lətɪ] n.道德
 motto [`mɑto] n.座右銘
 mournful [`mornfəl] adj.憂傷的
 mouthpiece [`maʊθ͵pis] n.(樂器的)吹口
-spokesperson[`spoks͵pɝsn]
-n.代言人(spokesman/spokeswoman)
-municipal [mju`nɪsəp!]
-adj.市政的；地方自治的
+spokesperson[`spoks͵pɝsn] n.代言人(spokesman/spokeswoman)
+municipal [mju`nɪsəp!] adj.市政的；地方自治的
 mute [mjut] adj.沈默的；啞的；無聲的
 mythology [mɪ`θɑlədʒɪ] n.神話
 narrate [næ `ret] vt.vi.敘述；作旁白
@@ -6708,8 +6625,7 @@ negotiation [nɪ͵goʃɪ`eʃən] n.談判
 neon [`ni͵ɑn] n.霓虹燈
 neutral [`njutrəl] adj.中立的；不確定的
 newlywed [`njulɪ͵wɛd] n.新婚夫婦
-newscaster [`njuz͵kæstɚ]
- n.新聞廣播員(anchorman/anchorwoman)
+newscaster [`njuz͵kæstɚ] n.新聞廣播員(anchorman/anchorwoman)
 nomination [͵nɑmə`neʃən] n.提名；任命
 nominee [͵nɑmə`ni] n.被提名人
 norm [nɔrm] n.基準；常模
@@ -6990,8 +6906,7 @@ spike [spaɪk] n.大釘；釘鞋
 spiral [`spaɪrəl] n.螺旋 adj.螺旋(形)的
  vi.盤旋 vt.使呈螺旋形
 spire [spaɪr] n.尖塔 vt.給…裝尖頂 vi.聳立
-spokesperson / spokesman / spokeswoman
-[`spoks͵pɝsn] / [`spoksmən] [`spoks͵wʊmən]
+spokesperson / spokesman / spokeswoman [`spoks͵pɝsn] / [`spoksmən] [`spoks͵wʊmən]
 n.發言人
 sponsor [`spɑnsɚ] n.發起者；贊助者 vt.資助
 spontaneous [spɑn`tenɪəs] adj.自發的
@@ -7097,8 +7012,7 @@ trigger [`trɪgɚ] n.扳機 vt.扣扳機；引起
 triumphant [traɪ`ʌmfənt] adj.勝利的
 trivial [`trɪvɪəl] adj.瑣細的；不重要的
 trophy [`trofɪ] n.戰利品；獎杯
-tropic [`trɑpɪk] n.回歸線；熱帶[the P]
- adj.熱帶的
+tropic [`trɑpɪk] n.回歸線；熱帶[the P] adj.熱帶的
 truant [`truənt] n.逃學者 adj.逃學的 vi.逃學
 truce [trus] n.停戰
 tuberculosis [tju͵bɝkjə`losɪs] n.結核病[U]
@@ -7169,8 +7083,7 @@ vulnerable [`vʌlnərəb!] adj.易受傷的
 wardrobe [`wɔrd͵rob] n.衣櫥
 warfare [`wɔr͵fɛr] n.戰爭
 warranty [`wɔrəntɪ] n.保證書；擔保
-waterproof / watertight
-[`wɑtɚ͵pruf] [`wɑtɚ`taɪt] adj.防水的
+waterproof / watertight [`wɑtɚ͵pruf] [`wɑtɚ`taɪt] adj.防水的
 whatsoever [ˌwɑtsoˈɛvɚ] pron.adv.adj.
  任何事物；無論甚麼(的)
 windshield [`wɪnd͵ʃild] n.擋風玻璃

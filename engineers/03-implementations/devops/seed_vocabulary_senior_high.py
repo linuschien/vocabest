@@ -112,10 +112,10 @@ def parse_91():
     # The lookahead `|\Z` ensures we don't accidentally stop at a newline inside a translation.
     pattern = re.compile(
         r'^([^\n\[【\u4e00-\u9fa5]+?)\s*'  
-        r'(?:\[[^\]]+\]\s*)*'            
+        r'(?:[/\s]*\[[^\]]+\]\s*)*'            
         r'(n\.|v\.|adj\.|adv\.|prep\.|conj\.|pron\.|art\.|vi\.|vt\.|a\.|int\.|aux\.|phr\.|abbr\.)\s*' 
         r'(.+?)'                      
-        r'(?=\n[^\n\[【\u4e00-\u9fa5]+?(?:\s*\[[^\]]+\])?\s*(?:n\.|v\.|adj\.|adv\.|prep\.|conj\.|pron\.|art\.|vi\.|vt\.|a\.|int\.|aux\.|phr\.|abbr\.)|\Z)', 
+        r'(?=\n[^\n\[【\u4e00-\u9fa5]+?(?:[/\s]*\[[^\]]+\]\s*)*\s*(?:n\.|v\.|adj\.|adv\.|prep\.|conj\.|pron\.|art\.|vi\.|vt\.|a\.|int\.|aux\.|phr\.|abbr\.)|\Z)', 
         re.MULTILINE | re.DOTALL
     )
 
@@ -137,36 +137,29 @@ def parse_91():
             
             tokens = re.split(r'\s*/\s*', raw_word)
             for t in tokens:
-                t = t.strip('()1234567890').lower()
-                if t:
-                    display_word = raw_word.split('/')[0].split('(')[0].strip()
-                    if not display_word: display_word = t
-                    if not display_word: continue
+                clean_t = t.strip('()1234567890').lower()
+                if not clean_t: continue
+                
+                if clean_t not in dict_91:
+                    dict_91[clean_t] = []
                     
-                    if t not in dict_91:
-                        dict_91[t] = []
-                        
-                    # Standardize POS
-                    clean_pos = format_pos(pos.replace('a.', 'adj.'))
-                    clean_trans = clean_translation(trans)
-                    clean_trans = clean_trans.replace(' 同：tap1', '')
-                    clean_trans = clean_trans.replace('`midɪə', 'midɪə')
-                    
-                    display_word = display_word.replace('’', "'")
-                    
-                    already_has = False
-                    for entry in dict_91[t]:
-                        if entry['trans'] == clean_trans:
-                            already_has = True
-                            break
-                    if not already_has:
-                        dict_91[t].append({
-                            'word': display_word,
-                            'pos': clean_pos,
-                            'trans': clean_trans,
-                            'level': current_level,
-                            'used': False
-                        })
+                display_word = raw_word.split('/')[0].split('(')[0].strip()
+                if not display_word: display_word = clean_t
+                
+                clean_pos = format_pos(pos.replace('a.', 'adj.'))
+                clean_trans = clean_translation(trans)
+                clean_trans = clean_trans.replace(' 同：tap1', '')
+                clean_trans = clean_trans.replace('`midɪə', 'midɪə')
+                
+                display_word = display_word.replace('’', "'")
+                
+                dict_91[clean_t].append({
+                    'word': display_word,
+                    'pos': clean_pos,
+                    'trans': clean_trans,
+                    'level': current_level,
+                    'token': clean_t
+                })
                         
     return dict_91
 
@@ -206,7 +199,7 @@ def main():
                     else:
                         trans_parts.append(entry['trans'])
                     entry['used'] = True
-                    used_91_words.add(entry['word'])
+                    used_91_words.add(entry['token'])
                 trans = " ".join(trans_parts)
                 
                 if not pos and entries:
@@ -220,18 +213,14 @@ def main():
             'trans': trans
         }
         
-    invalid_pos_words = {'a.', 'v.', 'adj.', 'adv.', 'n.', 'vt.', 'vi.', 'prep.', 'conj.', 'pron.', 'art.', 'a', 'an', 'the', 'vt.vi.', 'vi.vt.', 'vt.vi'}
-    
     for key_91, entries in dict_91.items():
         for data_91 in entries:
-            w = data_91['word']
-            if w in used_91_words: continue
-            if not w: continue
+            t = data_91['token']
+            if t in used_91_words: continue
+            
+            w = t
             if w.lower() in final_entries: continue
-            if not re.match(r'^[a-zA-Z]', w): continue
-            if w.lower() in invalid_pos_words: continue
-            if len(w) <= 2 and w.endswith('.'): continue
-                
+            
             trans_parts = []
             for entry in entries:
                 entry_pos = entry['pos']
@@ -246,8 +235,8 @@ def main():
             final_entries[w.lower()] = {
                 'word': w,
                 'pos': data_91['pos'],
-                'level': data_91['level'],
-                'trans': trans
+                'trans': trans,
+                'level': data_91['level']
             }
             used_91_words.add(w)
 
@@ -260,7 +249,7 @@ def main():
         state = {}
         with open(filepath, 'r', encoding='utf-8') as f:
             for line in f:
-                match = re.search(r"\('([a-f0-9\-]{36})',\s*'(.*?)',\s*'(.*?)',\s*'(.*?)',", line)
+                match = re.search(r"^\('([a-f0-9\-]{36})',\s*'((?:[^']|'')*)',\s*'((?:[^']|'')*)',\s*'((?:[^']|'')*)',", line)
                 if match:
                     uuid_str = match.group(1)
                     word = match.group(2).replace("''", "'")
