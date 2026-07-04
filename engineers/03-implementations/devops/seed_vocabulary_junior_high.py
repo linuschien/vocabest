@@ -146,7 +146,7 @@ def extract_official_words(lines):
         p = re.sub(r'\s+', ' ', p)
         # Verify it has alphabet letters
         if p and any(c.isalpha() for c in p):
-            words.add(p.lower())
+            words.add(p)
     return words
 
 def load_existing_sql_state(filepath):
