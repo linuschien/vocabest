@@ -331,75 +331,65 @@ def main():
 
     final_entries = {}
     
-    # Base list is 91
-    for token_91, entries_91 in dict_91.items():
-        w = entries_91[0]['word']
-        lookup_key = token_91
-        
-        if lookup_key in dict_108:
-            data_108 = dict_108[lookup_key]
-            pos = data_108['pos']
-            trans = data_108['trans']
-            lvl = dict_111[lookup_key]['level'] if lookup_key in dict_111 else data_108['level']
-            freq = data_108['exam_frequency']
+    all_keys = set(dict_91.keys()) | set(dict_108.keys()) | set(dict_111.keys())
+    
+    final_entries = {}
+    for k in sorted(all_keys):
+        # 1. Determine base word string (casing)
+        if k in dict_111:
+            w = dict_111[k]['word']
+        elif k in dict_108:
+            w = dict_108[k]['word']
         else:
-            # Fallback to 91
-            # Combine if multiple entries
+            w = dict_91[k][0]['word']
+            
+        # 2. Determine Level (111 > 108 > 91)
+        if k in dict_111:
+            lvl = dict_111[k]['level']
+        elif k in dict_108:
+            lvl = dict_108[k]['level']
+        else:
+            lvl = dict_91[k][0]['level']
+            
+        # 3. Determine POS, Trans, Freq (108 > 91 > FIXME)
+        if k in dict_108:
+            pos = dict_108[k]['pos']
+            trans = dict_108[k]['trans']
+            freq = dict_108[k]['exam_frequency']
+        elif k in dict_91:
             pos_set = []
             trans_parts = []
-            for entry in entries_91:
+            for entry in dict_91[k]:
                 entry_pos = entry['pos']
                 if entry_pos and entry_pos not in pos_set:
                     pos_set.append(entry_pos)
                 
-                # if multiple entries, prefix with pos
-                if entry_pos and (len(entries_91) > 1 or ',' in entry_pos):
+                if entry_pos and (len(dict_91[k]) > 1 or ',' in entry_pos):
                     trans_parts.append(f"({entry_pos}){entry['trans']}")
                 else:
                     trans_parts.append(entry['trans'])
                     
             pos = ", ".join(pos_set)
             trans = " ".join(trans_parts)
-            lvl = dict_111[lookup_key]['level'] if lookup_key in dict_111 else entries_91[0]['level']
             freq = 0
             
+            # Hardcoded fallbacks for 91 missing pos
             if not pos.strip():
-                wl = w.lower()
-                if wl == 'according to': pos = 'phr.'
-                elif wl in ('good-bye', 'bye-bye', 'cell-phone', 'cellular phone', 'hairstyle', 'hi-fi', 'motion picture', 'wed.', 'wednesday'): pos = 'n.'
-                elif wl == 'pm': pos = 'adv.'
+                if k == 'according to': pos = 'phr.'
+                elif k in ('good-bye', 'bye-bye', 'cell-phone', 'cellular phone', 'hairstyle', 'hi-fi', 'motion picture', 'wed.', 'wednesday'): pos = 'n.'
+                elif k == 'pm': pos = 'adv.'
+        else:
+            pos = "[FIXME]"
+            trans = "[FIXME]"
+            freq = 0
             
-        final_entries[w.lower()] = {
+        final_entries[k] = {
             'word': w,
             'pos': pos,
             'trans': trans,
             'level': lvl,
             'exam_frequency': freq
         }
-        
-    # Add missing words from 111
-    for token_111, data_111 in dict_111.items():
-        w = data_111['word']
-        if w.lower() not in final_entries:
-            if w.lower() in dict_108:
-                data_108 = dict_108[w.lower()]
-                pos = data_108['pos']
-                trans = data_108['trans']
-                lvl = data_111['level']
-                freq = data_108['exam_frequency']
-            else:
-                pos = "[FIXME]"
-                trans = "[FIXME]"
-                lvl = data_111['level']
-                freq = 0
-                
-            final_entries[w.lower()] = {
-                'word': w,
-                'pos': pos,
-                'trans': trans,
-                'level': lvl,
-                'exam_frequency': freq
-            }
             
     print(f"Total merged entries: {len(final_entries)}")
     
