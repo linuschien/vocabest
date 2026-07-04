@@ -11,14 +11,55 @@ def run_tests():
     with open(sql_file, 'r', encoding='utf-8') as f:
         content = f.read()
         
-    # Extract all values tuples
-    # Format: ('id', 'word', 'pos', 'trans', 'LEVEL_NAME', lvl, freq)
-    matches = re.findall(r"\('(.*?)',\s*'(.*?)',\s*'(.*?)',\s*'(.*?)',\s*'(JUNIOR_HIGH|SENIOR_HIGH)',\s*(\d+),\s*(\d+)\)", content)
+    lines = content.strip().split('\n')
+    matches = []
     
     print(f"Testing file: {sql_file}")
+    print(f"Total lines: {len(lines)}")
+    
+    for i, line in enumerate(lines):
+        if not line.strip() or line.startswith('INSERT') or line.startswith('--') or line.startswith('/*'): continue
+        
+        # Format: ('id', 'word', 'pos', 'trans', 'LEVEL_NAME', lvl, freq),
+        s = line.strip()
+        if not s.startswith("('"):
+            print(f"Error parsing line {i+1}: doesn't start with ('")
+            print(line[:100])
+            continue
+            
+        if s.endswith("),"):
+            s = s[2:-3] # remove (' and ),
+        elif s.endswith(");"):
+            s = s[2:-3] # remove (' and );
+        else:
+            print(f"Error parsing line {i+1}: doesn't end with ), or );")
+            print(line[:100])
+            continue
+        parts = s.split("', '")
+        if len(parts) >= 5: # id, word, pos, trans, level...
+            # The last part is LEVEL_NAME', lvl, freq
+            # So parts[-1] looks like "SENIOR_HIGH', 2, 0"
+            last_parts = parts[-1].split("', ")
+            if len(last_parts) == 2:
+                level_name = last_parts[0]
+                nums = last_parts[1].split(", ")
+                if len(nums) == 2:
+                    lvl, freq = nums
+                    uid = parts[0]
+                    word = parts[1]
+                    pos = parts[2]
+                    # Trans could contain "', '" so we join it back
+                    trans = "', '".join(parts[3:-1])
+                    matches.append((uid, word, pos, trans, level_name, lvl, freq))
+                    continue
+                    
+        print(f"Error parsing line {i+1}: {line[:100]}...")
+        return
+        
     print(f"Total entries found: {len(matches)}")
-    if len(matches) == 0:
-        print("Error: No entries found. Please check the regex or SQL file.")
+    valid_lines = [l for l in lines if l.strip() and not l.startswith('INSERT') and not l.startswith('--') and not l.startswith('/*')]
+    if len(matches) != len(valid_lines):
+        print(f"Error: Parsed {len(matches)} entries but there are {len(valid_lines)} valid lines!")
         return
         
     errors = []

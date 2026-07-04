@@ -247,8 +247,6 @@ def parse_111():
                     break
                     
             word_str = " ".join(parts)
-            word_str = word_str.replace('argue(argument)', 'argue/argument')
-            word_str = word_str.replace('sportswoma', 'sportswoman')
             
             expanded_words = expand_word(word_str)
             for w in expanded_words:
@@ -368,23 +366,6 @@ def main():
             
     print(f"Total merged entries: {len(final_entries)}")
     
-    # Manual resolution for 111-specific words that didn't have data in 91/108
-    manual_111_fixes = {
-        'criteria': ('n.', '(n.)標準(複數)'),
-        'earrings': ('n.', '(n.)耳環(複數)'),
-        'ma’am': ('n.', '(n.)女士;太太'),
-        'measures': ('n.', '(n.)措施(複數)'),
-        'refreshments': ('n.', '(n.)茶點(複數)'),
-        'scales': ('n.', '(n.)磅秤(複數)'),
-        'tactics': ('n.', '(n.)戰術(複數)')
-    }
-    
-    for mw, (mpos, mtrans) in manual_111_fixes.items():
-        if mw in final_entries:
-            if not final_entries[mw]['pos'] or final_entries[mw]['trans'] == '[FIXME]':
-                final_entries[mw]['pos'] = mpos
-                final_entries[mw]['trans'] = mtrans
-
     print("Loading existing SQL state to preserve UUIDs and manual translations...")
     existing_state = load_existing_sql_state(OUTPUT_FILE)
 

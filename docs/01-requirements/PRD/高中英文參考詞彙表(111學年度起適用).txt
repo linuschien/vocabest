@@ -404,7 +404,7 @@ architecture n. 5
 archive n. 6
 area n. 1
 arena n. 5
-argue(argument) v./(n.) 2
+argue/argument v./(n.) 2
 arise v. 4
 arithmetic n./adj. 6
 arm n./v. 1
@@ -6498,8 +6498,7 @@ sponsorship n. 5
 spontaneous adj. 6
 spoon n. 2
 sport n./v. 2
-sportsman/sportswoma
-n n. 6
+sportsman/sportswoman n. 6
 sportsmanship n. 6
 spot n./v. 2
 spotlight n./v. 6
