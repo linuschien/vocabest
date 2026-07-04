@@ -112,9 +112,6 @@ def extract_official_words(lines):
         # Remove prefix "A-  "
         l = re.sub(r'^[A-Z]-\s*', '', l)
         
-        # Strip ---others: first since it's more specific
-        l = re.sub(r'^---others:\s*', ', ', l)
-        
         # Replace thematic prefix "---" with a comma to separate it from the previous line's end
         l = re.sub(r'^---\s*', ', ', l)
         
