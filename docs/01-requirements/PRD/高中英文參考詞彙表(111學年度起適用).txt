@@ -7684,8 +7684,7 @@ spring, summer, autumn/fall, winter
 Countries and Areas
 Argentina, Australia, Brazil, Canada, China, France, Germany, India, Indonesia, Italy,
 Japan, Malaysia, Mexico, (the) Philippines, Republic of China, Russia, Saudi Arabia,
-Singapore, South Africa, South Korea, Spain, Taiwan, Thailand, Turkey, (the) United
-Kingdom, (the) United States, Vietnam, etc.
+Singapore, South Africa, South Korea, Spain, Taiwan, Thailand, Turkey, (the) United Kingdom, (the) United States, Vietnam, etc.
 Continents
 Africa, Antarctica, Asia, Australia, Europe, North America, South America
 The Principal Oceans of the World
