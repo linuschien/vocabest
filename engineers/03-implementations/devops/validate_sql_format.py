@@ -73,8 +73,14 @@ def run_tests():
             errors.append(f"[Empty Word] Entry has empty word. ID: {uid}")
             
         # 2. Junk in words
-        if not re.match(r"^[a-zA-Z0-9\-\' .é’]+$", word):
+        if re.search(r'\d', word):
+            errors.append(f"[Digit in Word] '{word}' contains Arabic numerals.")
+            
+        if not re.match(r"^[a-zA-Z\-\' .é’\(\)]+$", word):
             errors.append(f"[Strange Word Char] '{word}' contains unusual characters.")
+            
+        if word.count('(') != word.count(')'):
+            errors.append(f"[Unbalanced Parens] '{word}' has unmatched parentheses.")
                 
         # 3. POS format
         if '/' in pos:

@@ -104,8 +104,16 @@ def extract_official_words(lines):
             continue
         if re.match(r'^\d+\.\s+[a-zA-Z]', l):
             continue
+        # If this line starts a new alphabetical section, ensure previous line has a comma
+        if re.match(r'^[A-Z]-\s*', l):
+            if cleaned_lines and not cleaned_lines[-1].endswith(','):
+                cleaned_lines[-1] += ','
+                
         # Remove prefix "A-  "
         l = re.sub(r'^[A-Z]-\s*', '', l)
+        
+        # Strip ---others: first since it's more specific
+        l = re.sub(r'^---others:\s*', ', ', l)
         
         # Replace thematic prefix "---" with a comma to separate it from the previous line's end
         l = re.sub(r'^---\s*', ', ', l)
