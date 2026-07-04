@@ -5,10 +5,10 @@ import uuid
 
 FILE_111 = '/home/linus/workspace/vocabest/docs/01-requirements/PRD/高中英文參考詞彙表(111學年度起適用).txt'
 FILE_91 = '/home/linus/workspace/vocabest/docs/01-requirements/PRD/高中英文91參考詞彙表.txt'
+FILE_108 = '/home/linus/workspace/vocabest/docs/01-requirements/PRD/高中英文參考詞彙表 — 依字母排序.txt'
 OUTPUT_FILE = '/home/linus/workspace/vocabest/engineers/03-implementations/devops/output/V1__Seed_Vocabulary_Senior_High.sql'
 
 def expand_word(word_str):
-    # 1. Handle "we (us, our, ours, ourselves)"
     m = re.match(r'^([\w\-]+)\s*\((.*?)\)$', word_str)
     if m:
         base = m.group(1).strip()
@@ -16,8 +16,7 @@ def expand_word(word_str):
         res = [base] + [o.strip() for o in others if o.strip()]
         return [w for w in res if w]
         
-    # 2. Handle / and suffixes like (ment), (s), (e)s
-    parts = word_str.split('/')
+    parts = re.split(r'\s*/\s*', word_str)
     res = []
     for p in parts:
         p = p.strip()
@@ -34,25 +33,154 @@ def expand_word(word_str):
 
 def format_pos(pos):
     if not pos: return ""
-    # Strip parentheses if they are the only thing surrounding it
     if pos.startswith('(') and pos.endswith(')'):
         pos = pos[1:-1]
-        
-    # Sometimes there's no slash but just vt.vi.n.
     pos = pos.replace('/', ', ')
     if '.' in pos and ', ' not in pos:
         parts = [p.strip() + '.' for p in pos.split('.') if p.strip()]
         pos = ', '.join(parts)
-        
-    # Standardize comma
     pos = pos.replace('.,', ',')
     return pos.strip()
 
 def clean_translation(trans):
-    # Replace embedded POS with brackets
-    # e.g., ' 抽象的 n. 摘要' -> ' 抽象的 (n.) 摘要'
     trans = re.sub(r'(?:\s+|^)(n\.|v\.|adj\.|adv\.|prep\.|conj\.|pron\.|art\.|vi\.|vt\.|a\.)\s*', r' (\1) ', trans)
     return trans.strip()
+
+POS_MAP = {
+    '名詞': 'n.',
+    '動詞': 'v.',
+    '形容詞': 'adj.',
+    '副詞': 'adv.',
+    '介系詞': 'prep.',
+    '連接詞': 'conj.',
+    '代名詞': 'pron.',
+    '冠詞': 'art.',
+    '助動詞': 'aux.',
+    '感嘆詞': 'int.'
+}
+
+def parse_108_trans(raw_trans):
+    if '[' not in raw_trans:
+        return '', raw_trans.strip()
+        
+    parts = re.split(r'\[(.*?)\]', raw_trans)
+    parsed = []
+    for i in range(1, len(parts), 2):
+        zh_pos = parts[i].strip()
+        meaning = parts[i+1].strip()
+        meaning = re.sub(r'^[;；\s]+|[;；\s]+$', '', meaning)
+        en_pos = POS_MAP.get(zh_pos, zh_pos)
+        parsed.append((en_pos, meaning))
+        
+    if not parsed:
+        return '', raw_trans.strip()
+        
+    if len(parsed) == 1:
+        return parsed[0][0], parsed[0][1].replace('((', '(').replace('))', ')')
+    else:
+        pos_list = []
+        trans_list = []
+        for en_pos, meaning in parsed:
+            pos_list.append(en_pos)
+            trans_list.append(f"({en_pos}){meaning}")
+        return ", ".join(pos_list), " ".join(trans_list).replace('((', '(').replace('))', ')')
+
+def parse_108():
+    dict_108 = {}
+    with open(FILE_108, 'r', encoding='utf-8') as f:
+        text = f.read()
+        
+    pattern = re.compile(r'^(第一級|第二級|第三級|第四級|第五級|第六級|附錄)\s+([a-zA-Z\-\/\.\' ]+)\s+(.*?)(?=\n^(?:第一級|第二級|第三級|第四級|第五級|第六級|附錄)|\Z)', re.MULTILINE | re.DOTALL)
+    matches = pattern.finditer(text)
+    
+    for m in matches:
+        lvl_str = m.group(1).strip()
+        word = m.group(2).strip()
+        rest = m.group(3).strip()
+        
+        m_freq = re.search(r'\s+(\d+)$', rest)
+        if m_freq:
+            freq_str = m_freq.group(1)
+            raw_trans = rest[:m_freq.start()].strip()
+        else:
+            freq_str = "0"
+            raw_trans = rest
+            
+        raw_trans = re.sub(r'\s+', ' ', raw_trans)
+        
+        if lvl_str == '第一級': lvl = 1
+        elif lvl_str == '第二級': lvl = 2
+        elif lvl_str == '第三級': lvl = 3
+        elif lvl_str == '第四級': lvl = 4
+        elif lvl_str == '第五級': lvl = 5
+        elif lvl_str == '第六級': lvl = 6
+        elif lvl_str == '附錄': lvl = 0
+        else: lvl = 0
+        
+        freq = int(freq_str)
+        pos, trans = parse_108_trans(raw_trans)
+        
+        sub_words = [w.strip() for w in re.split(r'\s*/\s*', word) if w.strip()]
+        for sw in sub_words:
+            dict_108[sw.lower()] = {
+                'word': sw,
+                'pos': pos,
+                'trans': trans,
+                'level': lvl,
+                'exam_frequency': freq
+            }
+    return dict_108
+
+def parse_91():
+    dict_91 = {}
+    with open(FILE_91, 'r', encoding='utf-8') as f:
+        lines = f.readlines()
+
+    current_level = 1
+    for line in lines:
+        line = line.strip()
+        if not line: continue
+        if line.startswith('大考中心字彙表 LEVEL'):
+            m = re.search(r'LEVEL (\d+)', line)
+            if m:
+                current_level = int(m.group(1))
+            continue
+            
+        match = re.match(r'^([a-zA-Z\-/\.\'\(\)\s]+?)\s+(?:\[[^\]]+\]\s+)?(n\.|v\.|adj\.|adv\.|prep\.|conj\.|pron\.|art\.|vi\.|vt\.|a\.|int\.|aux\.|phr\.|abbr\.)(.*)', line)
+        
+        if match:
+            raw_word = match.group(1).strip()
+            pos = match.group(2).strip()
+            trans = match.group(3).strip()
+        else:
+            parts = line.split(maxsplit=1)
+            raw_word = parts[0]
+            pos = ''
+            trans = parts[1] if len(parts) > 1 else ''
+            
+        clean_pos = format_pos(pos.replace('a.', 'adj.'))
+        clean_trans = clean_translation(trans)
+        clean_trans = clean_trans.replace('`midɪə', 'midɪə')
+        
+        tokens = expand_word(raw_word)
+        for t in tokens:
+            clean_t = t.lower()
+            if not clean_t: continue
+            
+            # Since some words have multiple senses in 91 (e.g. seal1, seal2)
+            # they are on separate lines now but the digits were removed
+            # We want to keep all meanings.
+            if clean_t not in dict_91:
+                dict_91[clean_t] = []
+                
+            dict_91[clean_t].append({
+                'word': t,
+                'pos': clean_pos,
+                'trans': clean_trans,
+                'level': current_level
+            })
+            
+    return dict_91
 
 def parse_111():
     dict_111 = {}
@@ -83,184 +211,122 @@ def parse_111():
             level = int(last_token)
             parts = parts[:-1]
             if len(parts) > 1 and ('.' in parts[-1] or parts[-1] in ['art.', 'pron.'] or parts[-1].endswith(')')):
-                pos = parts[-1]
                 word_str = " ".join(parts[:-1])
             else:
                 word_str = " ".join(parts)
-                pos = ""
                 
             expanded_words = expand_word(word_str)
             for w in expanded_words:
                 if not w: continue
                 dict_111[w.lower()] = {
                     'word': w,
-                    'pos': format_pos(pos),
                     'level': level,
                 }
             buffer = []
             
     return dict_111
 
-def parse_91():
-    dict_91 = {}
-    with open(FILE_91, 'r', encoding='utf-8') as f:
-        text = f.read()
-
-    level_blocks = re.split(r'大考中心字彙表 LEVEL (\d+) \([^\)]+\)', text)
-    
-    # We use a multiline regex to extract words.
-    # The lookahead `|\Z` ensures we don't accidentally stop at a newline inside a translation.
-    pattern = re.compile(
-        r'^([^\n\[【\u4e00-\u9fa5]+?)\s*'  
-        r'(?:[/\s]*\[[^\]]+\]\s*)*'            
-        r'(n\.|v\.|adj\.|adv\.|prep\.|conj\.|pron\.|art\.|vi\.|vt\.|a\.|int\.|aux\.|phr\.|abbr\.)\s*' 
-        r'(.+?)'                      
-        r'(?=\n[^\n\[【\u4e00-\u9fa5]+?(?:[/\s]*\[[^\]]+\]\s*)*\s*(?:n\.|v\.|adj\.|adv\.|prep\.|conj\.|pron\.|art\.|vi\.|vt\.|a\.|int\.|aux\.|phr\.|abbr\.)|\Z)', 
-        re.MULTILINE | re.DOTALL
-    )
-
-    for lvl_idx in range(1, len(level_blocks), 2):
-        current_level = int(level_blocks[lvl_idx])
-        block_text = level_blocks[lvl_idx+1]
-        
-        for m in pattern.finditer(block_text):
-            raw_word = m.group(1).strip()
-            # Words can be split across lines like daddy/...\n[...]
-            raw_word = raw_word.replace('\n', ' ')
-            
-            pos = m.group(2).strip()
-            
-            # Translation could be split across lines; replace newline to join them
-            trans = m.group(3).strip()
-            trans = trans.replace('\n', '')
-            trans = re.sub(r'\s+', ' ', trans)
-            
-            tokens = re.split(r'\s*/\s*', raw_word)
-            for t in tokens:
-                clean_t = t.strip('()1234567890').lower()
-                if not clean_t: continue
-                
-                if clean_t not in dict_91:
-                    dict_91[clean_t] = []
-                    
-                display_word = raw_word.split('/')[0].split('(')[0].strip()
-                if not display_word: display_word = clean_t
-                
-                clean_pos = format_pos(pos.replace('a.', 'adj.'))
-                clean_trans = clean_translation(trans)
-                clean_trans = clean_trans.replace(' 同：tap1', '')
-                clean_trans = clean_trans.replace('`midɪə', 'midɪə')
-                
-                display_word = display_word.replace('’', "'")
-                
-                dict_91[clean_t].append({
-                    'word': display_word,
-                    'pos': clean_pos,
-                    'trans': clean_trans,
-                    'level': current_level,
-                    'token': clean_t
-                })
-                        
-    return dict_91
+def load_existing_sql_state(filepath):
+    if not os.path.exists(filepath):
+        return {}
+    state = {}
+    with open(filepath, 'r', encoding='utf-8') as f:
+        for line in f:
+            match = re.search(r"^\('([a-f0-9\-]{36})',\s*'((?:[^']|'')*)',\s*'((?:[^']|'')*)',\s*'((?:[^']|'')*)',", line)
+            if match:
+                uuid_str = match.group(1)
+                word = match.group(2).replace("''", "'")
+                pos = match.group(3).replace("''", "'")
+                trans = match.group(4).replace("''", "'")
+                state[word] = {
+                    'uuid': uuid_str,
+                    'parts_of_speech': pos,
+                    'chinese_translation': trans
+                }
+    return state
 
 def main():
-    print("Parsing 111 list...")
-    dict_111 = parse_111()
+    print("Parsing 108 list...")
+    dict_108 = parse_108()
     
     print("Parsing 91 list...")
     dict_91 = parse_91()
     
+    print("Parsing 111 list...")
+    dict_111 = parse_111()
+    
+    print(f"108 list items: {len(dict_108)}")
+    print(f"91 list items: {len(dict_91)}")
     print(f"111 list items: {len(dict_111)}")
-    print(f"91 list dictionary keys: {len(dict_91)}")
 
-    used_91_words = set()
     final_entries = {}
     
-    for key_111, data_111 in dict_111.items():
-        w = data_111['word']
-        pos = data_111['pos']
-        lvl = data_111['level']
+    # Base list is 91
+    for token_91, entries_91 in dict_91.items():
+        w = entries_91[0]['word']
+        lookup_key = token_91
         
-        lookup_keys = [
-            w.lower(),
-            w.split('/')[0].split('(')[0].strip().lower(),
-            w.replace('-', '').lower()
-        ]
-        
-        trans = "[FIXME]"
-        for k in lookup_keys:
-            if k in dict_91:
-                entries = dict_91[k]
-                trans_parts = []
-                for entry in entries:
-                    entry_pos = entry['pos']
-                    if entry_pos and (len(entries) > 1 or ',' in entry_pos):
-                        trans_parts.append(f"({entry_pos}) {entry['trans']}")
-                    else:
-                        trans_parts.append(entry['trans'])
-                    entry['used'] = True
-                    used_91_words.add(entry['token'])
-                trans = " ".join(trans_parts)
+        if lookup_key in dict_108:
+            data_108 = dict_108[lookup_key]
+            pos = data_108['pos']
+            trans = data_108['trans']
+            lvl = data_108['level']
+            freq = data_108['exam_frequency']
+        else:
+            # Fallback to 91
+            # Combine if multiple entries
+            pos_set = []
+            trans_parts = []
+            for entry in entries_91:
+                entry_pos = entry['pos']
+                if entry_pos and entry_pos not in pos_set:
+                    pos_set.append(entry_pos)
                 
-                if not pos and entries:
-                    pos = ", ".join([e['pos'] for e in entries if e['pos']])
-                break
-                
+                # if multiple entries, prefix with pos
+                if entry_pos and (len(entries_91) > 1 or ',' in entry_pos):
+                    # But in 91, format is already clean_trans
+                    trans_parts.append(f"({entry_pos}){entry['trans']}")
+                else:
+                    trans_parts.append(entry['trans'])
+                    
+            pos = ", ".join(pos_set)
+            trans = " ".join(trans_parts)
+            lvl = entries_91[0]['level']
+            freq = 0
+            
         final_entries[w.lower()] = {
             'word': w,
             'pos': pos,
+            'trans': trans,
             'level': lvl,
-            'trans': trans
+            'exam_frequency': freq
         }
         
-    for key_91, entries in dict_91.items():
-        for data_91 in entries:
-            t = data_91['token']
-            if t in used_91_words: continue
-            
-            w = t
-            if w.lower() in final_entries: continue
-            
-            trans_parts = []
-            for entry in entries:
-                entry_pos = entry['pos']
-                if entry_pos and (len(entries) > 1 or ',' in entry_pos):
-                    trans_parts.append(f"({entry_pos}) {entry['trans']}")
-                else:
-                    trans_parts.append(entry['trans'])
-                entry['used'] = True
+    # Add missing words from 111
+    for token_111, data_111 in dict_111.items():
+        w = data_111['word']
+        if w.lower() not in final_entries:
+            if w.lower() in dict_108:
+                data_108 = dict_108[w.lower()]
+                pos = data_108['pos']
+                trans = data_108['trans']
+                lvl = data_108['level']
+                freq = data_108['exam_frequency']
+            else:
+                pos = "[FIXME]"
+                trans = "[FIXME]"
+                lvl = data_111['level']
+                freq = 0
                 
-            trans = " ".join(trans_parts)
-            
             final_entries[w.lower()] = {
                 'word': w,
-                'pos': data_91['pos'],
+                'pos': pos,
                 'trans': trans,
-                'level': data_91['level']
+                'level': lvl,
+                'exam_frequency': freq
             }
-            used_91_words.add(w)
-
+            
     print(f"Total merged entries: {len(final_entries)}")
-
-    import os
-    def load_existing_sql_state(filepath):
-        if not os.path.exists(filepath):
-            return {}
-        state = {}
-        with open(filepath, 'r', encoding='utf-8') as f:
-            for line in f:
-                match = re.search(r"^\('([a-f0-9\-]{36})',\s*'((?:[^']|'')*)',\s*'((?:[^']|'')*)',\s*'((?:[^']|'')*)',", line)
-                if match:
-                    uuid_str = match.group(1)
-                    word = match.group(2).replace("''", "'")
-                    pos = match.group(3).replace("''", "'")
-                    trans = match.group(4).replace("''", "'")
-                    state[word] = {
-                        'uuid': uuid_str,
-                        'parts_of_speech': pos,
-                        'chinese_translation': trans
-                    }
-        return state
 
     print("Loading existing SQL state to preserve UUIDs and manual translations...")
     existing_state = load_existing_sql_state(OUTPUT_FILE)
@@ -277,10 +343,10 @@ def main():
         pos = item['pos']
         lvl = item['level']
         trans = item['trans']
+        freq = item['exam_frequency']
         
         w_id = existing_state.get(w, {}).get('uuid', str(uuid.uuid4()))
         
-        # Preserve manual translations for FIXMEs
         if w in existing_state:
             if pos == '[FIXME]' and existing_state[w]['parts_of_speech'] != '[FIXME]':
                 pos = existing_state[w]['parts_of_speech']
@@ -290,7 +356,6 @@ def main():
         w_escaped = w.replace("'", "''")
         pos_escaped = pos.replace("'", "''")
         trans_escaped = trans.replace("'", "''")
-        freq = 0
         
         values.append(f"('{w_id}', '{w_escaped}', '{pos_escaped}', '{trans_escaped}', 'SENIOR_HIGH', {lvl}, {freq})")
         
@@ -298,10 +363,6 @@ def main():
     
     with open(OUTPUT_FILE, 'w', encoding='utf-8') as f:
         f.write("\n".join(sql_statements))
-        
-    print(f"SQL file generated at {OUTPUT_FILE}")
-    fixmes = [v for v in values if "[FIXME]" in v]
-    print(f"Total FIXMEs: {len(fixmes)}")
 
 if __name__ == '__main__':
     main()
