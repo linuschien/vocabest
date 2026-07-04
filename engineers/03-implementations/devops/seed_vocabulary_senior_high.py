@@ -9,7 +9,7 @@ FILE_108 = '/home/linus/workspace/vocabest/docs/01-requirements/PRD/高中英文
 OUTPUT_FILE = '/home/linus/workspace/vocabest/engineers/03-implementations/devops/output/V1__Seed_Vocabulary_Senior_High.sql'
 
 def expand_word(word_str):
-    m = re.match(r'^([\w\-]+)\s*\((.*?)\)$', word_str)
+    m = re.match(r'^([\w\-]+)\s+\((.*?)\)$', word_str)
     if m:
         base = m.group(1).strip()
         others = m.group(2).split(',')
@@ -56,15 +56,21 @@ POS_MAP = {
     '代名詞': 'pron.',
     '冠詞': 'art.',
     '助動詞': 'aux.',
-    '感嘆詞': 'int.'
+    '感嘆詞': 'int.',
+    '片語': 'phr.',
+    '縮寫': 'abbr.',
+    '縮短形': 'abbr.'
 }
 
 def parse_108_trans(raw_trans):
     if '[' not in raw_trans:
         return '', raw_trans.strip()
         
-    parts = re.split(r'\[(.*?)\]', raw_trans)
+    pos_keys_pattern = '|'.join([re.escape(k) for k in POS_MAP.keys()])
+    parts = re.split(fr'\[\s*({pos_keys_pattern})\s*\]', raw_trans)
+    
     parsed = []
+    # parts[0] is text before the first POS (usually empty)
     for i in range(1, len(parts), 2):
         zh_pos = parts[i].strip()
         meaning = parts[i+1].strip()
@@ -90,11 +96,15 @@ def parse_108():
     with open(FILE_108, 'r', encoding='utf-8') as f:
         text = f.read()
         
-    pattern = re.compile(r'^(第一級|第二級|第三級|第四級|第五級|第六級|附錄)\s+([a-zA-Z\-\/\.\' ]+)\s+(.*?)(?=\n^(?:第一級|第二級|第三級|第四級|第五級|第六級|附錄)|\Z)', re.MULTILINE | re.DOTALL)
+    text = re.sub(r'(?:\d+\s+)?Back to Top', '', text)
+    text = re.sub(r'高中英文參考詞彙表.*?考題', '', text, flags=re.DOTALL)
+    text = re.sub(r'\n[A-Z]\s*\n', '\n', text)
+        
+    pattern = re.compile(r'^(第一級|第二級|第三級|第四級|第五級|第六級|附\s*錄)\s+([a-zA-Z\-\/\.\' ]+)\s+(.*?)(?=\n^(?:第一級|第二級|第三級|第四級|第五級|第六級|附\s*錄)|\Z)', re.MULTILINE | re.DOTALL)
     matches = pattern.finditer(text)
     
     for m in matches:
-        lvl_str = m.group(1).strip()
+        lvl_str = m.group(1).strip().replace('　', '').replace(' ', '')
         word = m.group(2).strip()
         rest = m.group(3).strip()
         
@@ -146,17 +156,33 @@ def parse_91():
                 current_level = int(m.group(1))
             continue
             
-        match = re.match(r'^([a-zA-Z\-/\.\'\(\)\s]+?)\s+(?:\[[^\]]+\]\s+)?(n\.|v\.|adj\.|adv\.|prep\.|conj\.|pron\.|art\.|vi\.|vt\.|a\.|int\.|aux\.|phr\.|abbr\.)(.*)', line)
-        
-        if match:
-            raw_word = match.group(1).strip()
-            pos = match.group(2).strip()
-            trans = match.group(3).strip()
+        m_en = re.match(r'^([a-zA-Z\-/\.\'\(\)\sé’]+?)(?=\s+\[|\s+(?:n\.|v\.|adj\.|adv\.|prep\.|conj\.|pron\.|art\.|vi\.|vt\.|a\.|int\.|aux\.|phr\.|abbr\.|n\b)|\s+[\u4e00-\u9fa5])', line)
+        if m_en:
+            raw_word = m_en.group(1).strip()
+            rest = line[m_en.end():].strip()
         else:
-            parts = line.split(maxsplit=1)
-            raw_word = parts[0]
+            m_en2 = re.match(r'^([a-zA-Z\-/\.\'\(\)\sé’]+)', line)
+            if m_en2:
+                raw_word = m_en2.group(1).strip()
+                rest = line[m_en2.end():].strip()
+            else:
+                raw_word = line
+                rest = ''
+                
+        rest = re.sub(r'^\[[^\]]+\]\s*/*\s*', '', rest)
+        rest = re.sub(r'\[[^A-Z\]]*\]\s*/*\s*', '', rest)
+        rest = rest.strip()
+        rest = re.sub(r'^\(\d+\)\s*', '', rest)
+        
+        m_pos = re.match(r'^(n\.|v\.|adj\.|adv\.|prep\.|conj\.|pron\.|art\.|vi\.|vt\.|a\.|int\.|aux\.|phr\.|abbr\.|n\b)(.*)', rest)
+        if m_pos:
+            pos = m_pos.group(1).strip()
+            trans = m_pos.group(2).strip()
+        else:
             pos = ''
-            trans = parts[1] if len(parts) > 1 else ''
+            trans = rest
+            
+        trans = re.sub(r'^\s*/\s*', '', trans)
             
         clean_pos = format_pos(pos.replace('a.', 'adj.'))
         clean_trans = clean_translation(trans)
@@ -210,11 +236,20 @@ def parse_111():
         if last_token.isdigit() and 1 <= int(last_token) <= 6:
             level = int(last_token)
             parts = parts[:-1]
-            if len(parts) > 1 and ('.' in parts[-1] or parts[-1] in ['art.', 'pron.'] or parts[-1].endswith(')')):
-                word_str = " ".join(parts[:-1])
-            else:
-                word_str = " ".join(parts)
-                
+            
+            valid_pos = {'n.', 'v.', 'adj.', 'adv.', 'prep.', 'conj.', 'pron.', 'art.', 'vi.', 'vt.', 'phr.', 'abbr.', 'aux.', 'n', 'v', 'adj', 'adv', 'prep', 'conj', 'pron', 'art', 'vi', 'vt', 'phr', 'abbr', 'aux'}
+            while len(parts) > 1:
+                chunks = re.split(r'[/()\s]+', parts[-1].lower())
+                chunks = [c for c in chunks if c]
+                if all(c in valid_pos for c in chunks) and chunks:
+                    parts = parts[:-1]
+                else:
+                    break
+                    
+            word_str = " ".join(parts)
+            word_str = word_str.replace('argue(argument)', 'argue/argument')
+            word_str = word_str.replace('sportswoma', 'sportswoman')
+            
             expanded_words = expand_word(word_str)
             for w in expanded_words:
                 if not w: continue
@@ -284,7 +319,6 @@ def main():
                 
                 # if multiple entries, prefix with pos
                 if entry_pos and (len(entries_91) > 1 or ',' in entry_pos):
-                    # But in 91, format is already clean_trans
                     trans_parts.append(f"({entry_pos}){entry['trans']}")
                 else:
                     trans_parts.append(entry['trans'])
@@ -293,6 +327,12 @@ def main():
             trans = " ".join(trans_parts)
             lvl = entries_91[0]['level']
             freq = 0
+            
+            if not pos.strip():
+                wl = w.lower()
+                if wl == 'according to': pos = 'phr.'
+                elif wl in ('good-bye', 'bye-bye', 'cell-phone', 'cellular phone', 'hairstyle', 'hi-fi', 'motion picture', 'wed.', 'wednesday'): pos = 'n.'
+                elif wl == 'pm': pos = 'adv.'
             
         final_entries[w.lower()] = {
             'word': w,
@@ -327,6 +367,23 @@ def main():
             }
             
     print(f"Total merged entries: {len(final_entries)}")
+    
+    # Manual resolution for 111-specific words that didn't have data in 91/108
+    manual_111_fixes = {
+        'criteria': ('n.', '(n.)標準(複數)'),
+        'earrings': ('n.', '(n.)耳環(複數)'),
+        'ma’am': ('n.', '(n.)女士;太太'),
+        'measures': ('n.', '(n.)措施(複數)'),
+        'refreshments': ('n.', '(n.)茶點(複數)'),
+        'scales': ('n.', '(n.)磅秤(複數)'),
+        'tactics': ('n.', '(n.)戰術(複數)')
+    }
+    
+    for mw, (mpos, mtrans) in manual_111_fixes.items():
+        if mw in final_entries:
+            if not final_entries[mw]['pos'] or final_entries[mw]['trans'] == '[FIXME]':
+                final_entries[mw]['pos'] = mpos
+                final_entries[mw]['trans'] = mtrans
 
     print("Loading existing SQL state to preserve UUIDs and manual translations...")
     existing_state = load_existing_sql_state(OUTPUT_FILE)

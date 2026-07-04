@@ -5740,7 +5740,7 @@ enrichment [ɪn`rɪtʃmənt] n.豐富
 epidemic [͵ɛpɪ`dɛmɪk] adj.n.傳染病(的)
 episode [`ɛpə͵sod] n.(整個事情中的)一個 事件；插曲；一集
 EQ/emotional quotient phr.情感商數 [ɪ`moʃən!] [`kwoʃənt]
-emotional intelligence (phr.) 情緒智商 [ɪ`moʃən!] [ɪn`tɛlədʒəns]
+emotional intelligence phr. 情緒智商 [ɪ`moʃən!] [ɪn`tɛlədʒəns]
 equation [ɪ`kweʃən] n.方程式；平衡
 equivalent [ɪ`kwɪvələnt] adj.n.相等的；相等物
 erode [ɪ`rod] vt.侵蝕；磨損

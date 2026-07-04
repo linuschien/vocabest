@@ -60,6 +60,18 @@ def run_tests():
         if re.search(r'\([^)]*\([^)]*\)[^)]*\)', trans):
             errors.append(f"[Trans Nested Parens] '{word}' Translation: '{trans}'")
             
+        # Check for phonetics in translation
+        if re.search(r'[ˋ͵əɪɛæɑɔʊʌɝθʃʒŋ]', trans):
+            errors.append(f"[Phonetics in Trans] '{word}' Translation contains phonetics: '{trans}'")
+            
+        # Check for header/footer junk
+        if 'Back to Top' in trans or '高中英文參考' in trans or len(trans) > 150:
+            errors.append(f"[Trans Junk Text] '{word}' Translation looks like junk: '{trans[:50]}...'")
+            
+        # 5. Missing POS
+        if not pos.strip() and trans != '[FIXME]':
+            errors.append(f"[Empty POS] '{word}' has no POS.")
+            
     if errors:
         print(f"\n[FAILED] Found {len(errors)} format errors:")
         for e in errors[:50]:
