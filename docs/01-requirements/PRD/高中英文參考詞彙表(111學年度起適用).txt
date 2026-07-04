@@ -7661,3 +7661,40 @@ zoo n.
 1
 zoom v./n.
 6
+附錄
+104
+附錄
+Cardinal Numbers
+one, two, three, four, five, six, seven, eight, nine, ten, eleven, twelve, thirteen, fourteen,
+fifteen, sixteen, seventeen, eighteen, nineteen, twenty, twenty-one, twenty-two, twentythree, twenty-four, twenty-five, thirty, thirty-one, thirty-two, thirty-three, thirty-four, forty,
+fifty, sixty, seventy, eighty, ninety, one hundred, one thousand, one million, one billion
+Ordinal Numbers
+first, second, third, fourth, fifth, sixth, seventh, eighth, ninth, tenth, eleventh, twelfth,
+thirteenth, fourteenth, fifteenth, sixteenth, seventeenth, eighteenth, nineteenth,
+twentieth, twenty-first, twenty-second, twenty-third, twenty-fourth, twenty-fifth, thirtieth,
+fortieth, fiftieth, sixtieth, seventieth, eightieth, ninetieth, hundredth, thousandth, millionth,
+billionth
+Days of the Week
+Monday/Mon., Tuesday/Tue., Wednesday/Wed., Thursday/Thu., Friday/Fri.,
+Saturday/Sat., Sunday/Sun.
+Months
+January/Jan., February/Feb., March/Mar., April/Apr., May, June/Jun., July/Jul.,
+August/Aug., September/Sep., October/Oct., November/Nov., December/Dec.
+Seasons
+spring, summer, autumn/fall, winter
+Countries and Areas
+Argentina, Australia, Brazil, Canada, China, France, Germany, India, Indonesia, Italy,
+Japan, Malaysia, Mexico, (the) Philippines, Republic of China, Russia, Saudi Arabia,
+Singapore, South Africa, South Korea, Spain, Taiwan, Thailand, Turkey, (the) United
+Kingdom, (the) United States, Vietnam, etc.
+Continents
+Africa, Antarctica, Asia, Australia, Europe, North America, South America
+The Principal Oceans of the World
+(the) Arctic Ocean, (the) Atlantic Ocean, (the) Indian Ocean, (the) Pacific Ocean
+Religions
+Buddhism/Buddhist, Catholicism/Catholic, Christianity/Christian, Eastern
+Orthodoxy/Eastern Orthodox, Hinduism/Hindu, Islam/Muslim, Judaism/Jewish,
+Taoism/Taoist, etc.
+Parts of Speech
+adjective/adj., adverb/adv., article/art., auxiliary/aux., conjunction/conj., noun/n.,
+preposition/prep., pronoun/pron., verb/v., etc.
