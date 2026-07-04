@@ -26,9 +26,10 @@ def parse_tsv(filepath):
         if not parts:
             continue
             
-        word = parts[0].lower()
+        word_raw = parts[0]
         # Some words might have multiple spaces like 'contact  lens', normalize spaces
-        word = re.sub(r'\s+', ' ', word)
+        word_cased = re.sub(r'\s+', ' ', word_raw)
+        word_key = word_cased.lower()
         
         definition = parts[1] if len(parts) > 1 else ""
         freq_str = parts[2] if len(parts) > 2 else ""
@@ -86,8 +87,8 @@ def parse_tsv(filepath):
         if len(set(pos_list)) <= 1 and pos_list:
             chinese_str = " ".join([re.sub(r'^\(.*?\)','', c).strip() for c in chinese_list])
             
-        words_data[word] = {
-            'word': word,
+        words_data[word_key] = {
+            'word': word_cased,
             'parts_of_speech': pos_str,
             'chinese_translation': chinese_str,
             'exam_frequency': freq
@@ -103,18 +104,37 @@ def extract_official_words(lines):
             continue
         # Remove prefix "A-  "
         l = re.sub(r'^[A-Z]-\s*', '', l)
+        
+        # Replace thematic prefix "---" with a comma to separate it from the previous line's end
+        l = re.sub(r'^---\s*', ', ', l)
+        
         cleaned_lines.append(l)
         
-    # Join with comma to prevent missing commas across lines or pages
-    text = ",".join(cleaned_lines)
+    # Join with space to re-attach words broken by newlines like "cook\n(cooking)"
+    text = " ".join(cleaned_lines)
     
-    # Remove plural suffix (s) before splitting by parentheses
-    text = text.replace('(s)', '')
-    # Replace slashes and parentheses with commas so they get split
-    text = text.replace('/', ',').replace('(', ',').replace(')', ',')
+    # Replace slashes with commas so they get split
+    text = text.replace('/', ',')
     
+    parts = []
+    current = []
+    in_paren = False
+    for char in text:
+        if char == '(':
+            in_paren = True
+            current.append(char)
+        elif char == ')':
+            in_paren = False
+            current.append(char)
+        elif char == ',' and not in_paren:
+            parts.append("".join(current).strip())
+            current = []
+        else:
+            current.append(char)
+    if current:
+        parts.append("".join(current).strip())
+        
     words = set()
-    parts = [p.strip() for p in text.split(',')]
     for p in parts:
         p = re.sub(r'\s+', ' ', p)
         # Verify it has alphabet letters
@@ -135,10 +155,12 @@ def load_existing_sql_state(filepath):
                 word = match.group(2).replace("''", "'")
                 pos = match.group(3).replace("''", "'")
                 trans = match.group(4).replace("''", "'")
-                state[word] = {
+                word_key = word.lower()
+                state[word_key] = {
                     'uuid': uuid_str,
                     'parts_of_speech': pos,
-                    'chinese_translation': trans
+                    'chinese_translation': trans,
+                    'original_casing': word
                 }
     return state
 
@@ -165,6 +187,7 @@ def main():
         
     official_basic = extract_official_words(all_lines[5154:5323])
     official_advanced = extract_official_words(all_lines[5325:5452])
+    official_thematic = extract_official_words(all_lines[5454:5894])
     
     # Combine datasets
     final_words = {}
@@ -173,21 +196,32 @@ def main():
     print("Loading existing SQL state to preserve UUIDs and manual translations...")
     existing_state = load_existing_sql_state(output_path)
     
+    def get_base_word(word):
+        return re.sub(r'\s*\(.*\)', '', word).strip().lower()
+
+    official_basic_lower = {w.lower() for w in official_basic}
+    official_advanced_lower = {w.lower() for w in official_advanced}
+    official_basic_bases = {get_base_word(w) for w in official_basic}
+    official_advanced_bases = {get_base_word(w) for w in official_advanced}
+
     # 1. First load all TSV words, assigning difficulty based on Official MD presence
     print("Merging TSV datasets and assigning official difficulties...")
     for origin_dict, default_diff in [(basic_tsv, 1), (advanced_tsv, 2)]:
-        for w, data in origin_dict.items():
+        for w_key, data in origin_dict.items():
             diff = default_diff
-            if w in official_basic:
+            w_lower = w_key.lower()
+            
+            if w_lower in official_basic_lower or w_lower in official_basic_bases:
                 diff = 1
-            elif w in official_advanced:
+            elif w_lower in official_advanced_lower or w_lower in official_advanced_bases:
                 diff = 2
             
-            # If word is completely new or has a lower difficulty from official check, apply it
-            if w not in final_words or final_words[w]['difficulty_level'] > diff:
-                final_words[w] = {
-                    'id': existing_state.get(w, {}).get('uuid', str(uuid.uuid4())),
-                    'word': data['word'],
+            # Use original casing for insertion key
+            w_cased = data['word']
+            if w_cased not in final_words or final_words[w_cased]['difficulty_level'] > diff:
+                final_words[w_cased] = {
+                    'id': existing_state.get(w_lower, {}).get('uuid', str(uuid.uuid4())),
+                    'word': w_cased,
                     'parts_of_speech': data['parts_of_speech'],
                     'chinese_translation': data['chinese_translation'],
                     'target_level': 'JUNIOR_HIGH',
@@ -197,21 +231,27 @@ def main():
 
     # 2. Add missing official words as FIXMEs
     print("Injecting missing official words as FIXMEs...")
-    for official_set, diff in [(official_basic, 1), (official_advanced, 2)]:
+    # Map lowercase to original case for final_words lookup
+    final_words_lower_map = {k.lower(): k for k in final_words.keys()}
+    
+    for official_set, diff in [(official_basic, 1), (official_advanced, 2), (official_thematic, 1)]:
         for w in official_set:
-            if w not in final_words:
+            w_lower = w.lower()
+            base_w_lower = get_base_word(w)
+            
+            if w_lower not in final_words_lower_map and base_w_lower not in final_words_lower_map:
                 pos = '[FIXME]'
                 trans = '[FIXME]'
                 
                 # Preserve existing manual translations if present
-                if w in existing_state:
-                    if existing_state[w]['parts_of_speech'] != '[FIXME]':
-                        pos = existing_state[w]['parts_of_speech']
-                    if existing_state[w]['chinese_translation'] != '[FIXME]':
-                        trans = existing_state[w]['chinese_translation']
+                if w_lower in existing_state:
+                    if existing_state[w_lower]['parts_of_speech'] != '[FIXME]':
+                        pos = existing_state[w_lower]['parts_of_speech']
+                    if existing_state[w_lower]['chinese_translation'] != '[FIXME]':
+                        trans = existing_state[w_lower]['chinese_translation']
 
                 final_words[w] = {
-                    'id': existing_state.get(w, {}).get('uuid', str(uuid.uuid4())),
+                    'id': existing_state.get(w_lower, {}).get('uuid', str(uuid.uuid4())),
                     'word': w,
                     'parts_of_speech': pos,
                     'chinese_translation': trans,
@@ -219,6 +259,8 @@ def main():
                     'difficulty_level': diff,
                     'exam_frequency': 0
                 }
+                # Update map to prevent duplicates across sets
+                final_words_lower_map[w_lower] = w
 
     print(f"Total unique words prepared: {len(final_words)}")
     
