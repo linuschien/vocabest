@@ -102,6 +102,8 @@ def extract_official_words(lines):
         l = l.strip()
         if not l or l.isdigit() or l.startswith('表'):
             continue
+        if re.match(r'^\d+\.\s+[a-zA-Z]', l):
+            continue
         # Remove prefix "A-  "
         l = re.sub(r'^[A-Z]-\s*', '', l)
         
@@ -185,9 +187,34 @@ def main():
     with open(md_file, 'r', encoding='utf-8') as f:
         all_lines = f.readlines()
         
-    official_basic = extract_official_words(all_lines[5154:5323])
-    official_advanced = extract_official_words(all_lines[5325:5452])
-    official_thematic = extract_official_words(all_lines[5454:5894])
+    official_basic_lines = []
+    official_advanced_lines = []
+    official_thematic_lines = []
+    
+    current_section = None
+    for line in all_lines:
+        if "表一、基本 1, 200 字（依字母排列）" in line:
+            current_section = 'basic'
+            continue
+        elif "表二、其他常用 800 字（依字母排列）" in line:
+            current_section = 'advanced'
+            continue
+        elif "表三、參考字彙表" in line:
+            current_section = 'thematic'
+            continue
+        elif "附錄六：國民中學英語文基礎文法句構參考表" in line and current_section == 'thematic':
+            break
+            
+        if current_section == 'basic':
+            official_basic_lines.append(line)
+        elif current_section == 'advanced':
+            official_advanced_lines.append(line)
+        elif current_section == 'thematic':
+            official_thematic_lines.append(line)
+            
+    official_basic = extract_official_words(official_basic_lines)
+    official_advanced = extract_official_words(official_advanced_lines)
+    official_thematic = extract_official_words(official_thematic_lines)
     
     # Combine datasets
     final_words = {}
