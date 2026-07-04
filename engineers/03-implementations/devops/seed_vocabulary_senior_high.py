@@ -303,7 +303,7 @@ def main():
             data_108 = dict_108[lookup_key]
             pos = data_108['pos']
             trans = data_108['trans']
-            lvl = data_108['level']
+            lvl = dict_111[lookup_key]['level'] if lookup_key in dict_111 else data_108['level']
             freq = data_108['exam_frequency']
         else:
             # Fallback to 91
@@ -323,7 +323,7 @@ def main():
                     
             pos = ", ".join(pos_set)
             trans = " ".join(trans_parts)
-            lvl = entries_91[0]['level']
+            lvl = dict_111[lookup_key]['level'] if lookup_key in dict_111 else entries_91[0]['level']
             freq = 0
             
             if not pos.strip():
@@ -348,7 +348,7 @@ def main():
                 data_108 = dict_108[w.lower()]
                 pos = data_108['pos']
                 trans = data_108['trans']
-                lvl = data_108['level']
+                lvl = data_111['level']
                 freq = data_108['exam_frequency']
             else:
                 pos = "[FIXME]"
