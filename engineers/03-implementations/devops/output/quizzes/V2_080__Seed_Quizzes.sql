@@ -1,0 +1,5 @@
+/* Seed Data for Quizzes - Bucket 080 */
+INSERT INTO quiz_question (id, word_bank_id, contextual_cloze, chinese_translation, correct_answer, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic) VALUES
+('59df71ec-ba4b-591e-9dd6-30aa28f18754', '0b84cf73-39ca-4b1e-baf6-2b14823487ff', 'I fell asleep ___ the movie.', '我在看電影的時候睡著了。', 'during', 'since', 'until', 'with', 'dur 表示持續', 'dur 代表持續 → 在...期間'),
+('0f80fdee-af59-5929-a726-9f2c468e195c', '30bf8c6c-a968-401c-a7c3-b2c1f53ae95d', 'We are raising money ___ the local animal shelter.', '我們正在為當地的動物收容所募集資金。', 'for', 'with', 'by', 'at', '無字根 (表示目的或對象)', '看到對象或目的時，聯想 for'),
+('1f2be578-51e7-5eab-a532-5ba3dd29ccdc', '8fecc1f7-8571-4e65-874e-7bec724d9609', 'I have read ___ book you lent me last week.', '我讀過你上週借我的那本書。', 'the', 'a', 'some', 'any', '定冠詞 (Definite Article)', '指特定的對象用 the');

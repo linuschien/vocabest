@@ -1,0 +1,4 @@
+/* Seed Data for Quizzes - Bucket 094 */
+INSERT INTO quiz_question (id, word_bank_id, contextual_cloze, chinese_translation, correct_answer, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic) VALUES
+('70c2dfa0-c172-5a48-925d-836c2e7d5746', '2a4a9f9a-e0c0-4447-94ef-14929b0090b4', 'I ___ a student in this school.', '我是這間學校的學生。', 'am', 'do', 'go', 'have', 'am 是 be 動詞的第一人稱單數現在式。', '看到主詞 I 就要選 am。'),
+('3f087ba6-dffa-532d-aeae-8f033eaf3fea', 'a6a15ed6-6715-4012-aca0-d203810bc834', 'I didn''t think it would be ___ expensive.', '我沒想到會這麼貴。', 'this', 'always', 'often', 'ever', '副詞，用來修飾形容詞，表示程度（這麼地）。', 'this much = 這麼多');

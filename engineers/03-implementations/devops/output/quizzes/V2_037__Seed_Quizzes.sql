@@ -1,0 +1,6 @@
+/* Seed Data for Quizzes - Bucket 037 */
+INSERT INTO quiz_question (id, word_bank_id, contextual_cloze, chinese_translation, correct_answer, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic) VALUES
+('320961d0-36c9-568a-b2e8-4b557acb58dd', 'c0215e23-91f1-4ae9-b39b-b68eff80cb98', 'The documentary about deep-sea creatures was so ___ that I watched it twice.', '這部關於深海生物的紀錄片非常有趣，以至於我看了兩次。', 'interesting', 'boring', 'tiring', 'confusing', '字首 inter- (在...之間), 字根 est (存在), 字尾 -ing (令人...的)', 'interest (興趣) + ing (令人...的) → interesting (有趣的)'),
+('5f1ccb8e-2d92-5d28-aed5-201543d98189', 'a710d4f9-524e-40a3-995c-3321f6ccf13d', 'Do you ___ any questions regarding the new project?', '關於這個新計畫，你有任何問題嗎？', 'have', 'want', 'make', 'take', 'have (動詞) 表示擁有、具有。', 'have a question = 有問題。'),
+('efef8b78-8f18-54ad-b12b-cbfb7ddde269', '82f91108-38f0-4b1a-b73e-fbaacd6dc557', 'Since ___ am the leader of this group, I must take responsibility for the project.', '既然我是這個小組的組長，我必須對這個專案負責。', 'I', 'He', 'She', 'They', 'I 是第一人稱單數主格代名詞。', '英文中 I 代表我自己。'),
+('8b2eba4e-ee29-5284-a4dd-d5a7c0b269b9', '1d86e27e-0866-4c5e-8277-4bc91cc8ab5e', 'The movie was so boring ___ I fell asleep in the middle.', '這部電影太無聊了，以致於我在中間睡著了。', 'that', 'as', 'since', 'because', '連接詞 (conj.)，常與 so 連用，構成 so...that... (如此...以致於...) 結構。', 'So...that... (如此...以致...)。');

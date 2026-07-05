@@ -1,0 +1,5 @@
+/* Seed Data for Quizzes - Bucket 056 */
+INSERT INTO quiz_question (id, word_bank_id, contextual_cloze, chinese_translation, correct_answer, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic) VALUES
+('d24c67ae-9bc0-5d1f-a4fb-198ad5e239f8', 'c4f5942a-678d-48f2-bbd4-e4002e5be424', 'The story he told us was very ___.', '他告訴我們的故事非常有趣。', 'interesting', 'delicious', 'difficult', 'heavy', 'interest (興趣) + ing (形容詞字尾)', 'interest (興趣) + ing (令人...) → interesting (有趣的)'),
+('8b5c110d-5451-5fa3-88e3-b2292cbded50', '5d20b73d-7d29-498d-92b3-52636f5571d1', 'She ___ play the piano very well.', '她會彈鋼琴彈得很好。', 'can', 'will', 'must', 'should', '表示能力或可能。', '記住 can 是『可以』的意思，也是『罐頭』。'),
+('8db2e822-fd5f-5f6c-92e5-d909718c2194', '6de21873-0b3a-4a85-96c8-30ec0e0d91ea', '___ am a student.', '我是一個學生。', 'I', 'He', 'She', 'You', 'I 是第一人稱單數主格代名詞。', '看到大寫 I 就想到「我」。');

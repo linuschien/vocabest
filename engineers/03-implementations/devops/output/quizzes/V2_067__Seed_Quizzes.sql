@@ -1,0 +1,6 @@
+/* Seed Data for Quizzes - Bucket 067 */
+INSERT INTO quiz_question (id, word_bank_id, contextual_cloze, chinese_translation, correct_answer, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic) VALUES
+('b114ef1c-3159-5fca-a66b-75cd2091916f', '0d503313-f24a-4195-8140-6fd95a400606', 'I have a new book. ___ is very interesting.', '我有一本新書。___很有趣。', 'it', 'he', 'she', 'they', '代名詞：用來指代非人類的單數事物。', '看到書本等物品，用 it 替代。'),
+('24804af0-da02-58d5-aa4a-df6fa89e7ecb', 'a710d4f9-524e-40a3-995c-3321f6ccf13d', 'They ___ a delicious meal at the new restaurant last night.', '他們昨晚在新的餐廳吃了一頓美味的餐點。', 'had', 'made', 'took', 'did', 'have (動詞) 表示吃、喝或經歷。', 'have a meal = 用餐。'),
+('c784081e-79d7-5848-954d-918e423a4957', '23003a84-e1ef-406a-9685-a968690b269f', '___ is widely believed that climate change is a global crisis that requires immediate action.', '廣泛認為氣候變遷是一個需要立即採取行動的全球危機。', 'It', 'They', 'We', 'She', '虛主詞 (Dummy Subject)，用於引導後面的真主詞。', 'It is... → 事實是...'),
+('30d9e317-72b1-598b-8696-c7dd93ec31a7', 'bdf62229-5b97-4ca6-b357-8e0d6aac7c03', 'The doctor asked ___ if you felt any pain in your chest.', '醫生問你胸口有沒有感到任何疼痛。', 'you', 'him', 'her', 'them', 'you 為代名詞，在此作為受格。', 'you 就像是一面鏡子，反映出對方的狀態。');

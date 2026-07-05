@@ -1,0 +1,4 @@
+/* Seed Data for Quizzes - Bucket 008 */
+INSERT INTO quiz_question (id, word_bank_id, contextual_cloze, chinese_translation, correct_answer, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic) VALUES
+('3474cdf6-958c-57bb-ab66-738b01d90880', 'aa399e16-a6c4-493c-b107-b99c7a6b4391', 'A ring made ___ gold.', '一個金做的戒指。', 'of', 'in', 'at', 'on', 'of 用於表示材質或組成成分。', 'Made of + 材質 = 由...製成'),
+('72aa263f-70e5-5f72-9a85-8455b3429730', 'a710d4f9-524e-40a3-995c-3321f6ccf13d', 'She ___ already finished her work, so she can go home now.', '她已經完成她的工作了，所以她現在可以回家了。', 'has', 'is', 'was', 'does', 'have (助動詞) 與過去分詞搭配構成完成式。', 'have + V-p.p. 表示動作已完成。');

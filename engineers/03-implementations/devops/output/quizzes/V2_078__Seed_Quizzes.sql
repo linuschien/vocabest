@@ -1,0 +1,7 @@
+/* Seed Data for Quizzes - Bucket 078 */
+INSERT INTO quiz_question (id, word_bank_id, contextual_cloze, chinese_translation, correct_answer, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic) VALUES
+('6cc7f2d5-7def-5de0-bd11-7b8265c0df32', '2148b226-a44f-453e-ac23-6e310525b3c4', 'The rain stopped ___ the sun began to shine.', '雨停了，隨即陽光開始灑落。', 'and', 'but', 'yet', 'or', '連接詞，用於連接兩個連續發生的事件。', '事件 A → 事件 B'),
+('2cf0cf16-261b-5ca0-b2aa-2ebce83cce8a', 'a3111bfd-ea64-4091-821d-6c37f0f00a34', 'We will meet ___ the end of the street.', '我們會在街道的盡頭見面。', 'at', 'in', 'on', 'to', '介系詞', 'at 用於表示位置的盡頭。'),
+('8198aeb7-5358-5fe1-a864-3b816aba3f12', '5d20b73d-7d29-498d-92b3-52636f5571d1', 'We ___ the fruit to keep it for a long time.', '我們將水果裝罐以保存很久。', 'can', 'buy', 'cook', 'sell', '表示『將...裝罐保存』的動作。', '把食物裝進 can (罐頭) 裡。'),
+('435cf38e-5ccd-5eaa-a933-4bb210c4f256', '3618111e-eb30-4e3b-b1bb-d7eb327585a6', 'I am a student. ___ name is Tom.', '我是一個學生。我的名字是 Tom。', 'my', 'your', 'his', 'her', 'my 為第一人稱單數的所有格，表示「我的」。', 'my (我的) → 記住 my 是用來指「我的」東西。'),
+('c1a80a91-8dc1-55bd-9ad2-516945db5f06', 'bbb2fcee-f431-417f-9611-641469dcd9d1', 'I wanted to go to the party, ___ I had to study for the exam.', '我想去參加派對，但我必須為考試讀書。', 'but', 'so', 'and', 'because', 'conj. (連接詞) 用於連接兩個對比或相反的子句。', '用於表示「但是」，前後語意通常會發生轉折 → but');

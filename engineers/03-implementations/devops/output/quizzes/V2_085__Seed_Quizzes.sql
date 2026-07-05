@@ -1,0 +1,6 @@
+/* Seed Data for Quizzes - Bucket 085 */
+INSERT INTO quiz_question (id, word_bank_id, contextual_cloze, chinese_translation, correct_answer, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic) VALUES
+('2c9ba8e2-a5a0-50aa-867c-b327a076d9a1', 'e5cf7677-1873-4e7a-ae65-3de4832151b1', 'It will ___ twenty minutes to walk to the school.', '走路去學校大約需要二十分鐘。', 'take', 'want', 'feel', 'call', 'take 表示「花費」時間。', 'It takes time → 花費時間。'),
+('139812e0-153c-54c7-a098-31417d755951', '274ca5ba-aa7f-4abf-ac77-854aac1e695e', 'We ___ some juice.', '我們有一些果汁。', 'have', 'make', 'do', 'go', 'have 除了「有」，也可以用來表示「吃」或「喝」。', 'have + 飲品/食物 = 享用該食物或飲料。'),
+('6ecbde58-e195-5c14-9568-1ef231b94265', '30bf8c6c-a968-401c-a7c3-b2c1f53ae95d', 'They decided to stay inside, ___ it was raining heavily.', '他們決定待在室內，因為雨下得很大。', 'for', 'so', 'but', 'yet', '無字根 (表示原因的連接詞)', '在子句間時，for 相當於 because'),
+('0d9be03e-c03c-5d57-8c48-b9bf1e41b591', 'a6a15ed6-6715-4012-aca0-d203810bc834', '___ is the most important lesson I have ever learned.', '這是我學過最重要的教訓。', 'This', 'Everything', 'Someone', 'Nothing', '代名詞，用來指代近處的人或事。', '看到 this 想到「這個」。');
