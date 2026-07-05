@@ -159,6 +159,10 @@ def generate_command(args):
             
             raw_content = response.choices[0].message.content.strip()
             
+            # Post-process to fix LaTeX escaping issue where \rightarrow becomes a carriage return in JSON
+            raw_content = raw_content.replace(r'\rightarrow', '→')
+            raw_content = raw_content.replace(r'\Rightarrow', '⇒')
+            
             # Extract JSON block carefully, ignoring reasoning blocks
             json_blocks = re.findall(r'```(?:json)?\s*(\{.*?\})\s*```', raw_content, re.DOTALL)
             if json_blocks:
