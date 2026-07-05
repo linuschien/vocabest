@@ -159,25 +159,33 @@ def generate_command(args):
             
             raw_content = response.choices[0].message.content.strip()
             
-            # Extract JSON block carefully, ignoring reasoning blocks
+            # Extract potential JSON strings
+            potential_jsons = []
+            
+            # 1. Best guess: Find the last occurrence of the "questions" key
+            last_q_idx = raw_content.rfind('"questions"')
+            if last_q_idx != -1:
+                start_idx = raw_content.rfind('{', 0, last_q_idx)
+                end_idx = raw_content.rfind('}')
+                if start_idx != -1 and end_idx != -1:
+                    potential_jsons.append(raw_content[start_idx:end_idx+1])
+                    
+            # 2. Markdown blocks (reverse order, latest first)
             json_blocks = re.findall(r'```(?:json)?\s*(\{.*?\})\s*```', raw_content, re.DOTALL)
-            if json_blocks:
-                # If there are markdown blocks, take the last one
-                json_str = json_blocks[-1]
-            else:
-                # Find the last occurrence of the "questions" key
-                last_q_idx = raw_content.rfind('"questions"')
-                if last_q_idx != -1:
-                    start_idx = raw_content.rfind('{', 0, last_q_idx)
-                    end_idx = raw_content.rfind('}')
-                    if start_idx != -1 and end_idx != -1:
-                        json_str = raw_content[start_idx:end_idx+1]
-                    else:
-                        json_str = raw_content
-                else:
-                    json_str = raw_content
-                
-            data = json.loads(json_str)
+            potential_jsons.extend(reversed(json_blocks))
+            
+            data = None
+            for j_str in potential_jsons:
+                try:
+                    data = json.loads(j_str)
+                    break
+                except json.JSONDecodeError:
+                    continue
+                    
+            if data is None:
+                # Let it crash normally so we can see the error
+                data = json.loads(potential_jsons[0] if potential_jsons else raw_content)
+            
             
             for idx, q in enumerate(data.get('questions', [])):
                 # Use deterministic UUID5 based on word ID and index offset
