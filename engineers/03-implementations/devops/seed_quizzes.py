@@ -246,7 +246,7 @@ def export_md_command(args):
     conn = init_db()
     cursor = conn.cursor()
     
-    query = "SELECT word, contextual_cloze, chinese_translation, correct_answer, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic FROM quiz_question WHERE 1=1"
+    query = "SELECT word, target_level, contextual_cloze, chinese_translation, correct_answer, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic FROM quiz_question WHERE 1=1"
     params = []
     
     if args.level:
@@ -270,15 +270,15 @@ def export_md_command(args):
     
     md_content = "# AI Quizzes Review\n\n"
     for r in rows:
-        md_content += f"## Word: {r[0]}\n"
-        md_content += f"**Cloze**: {r[1]}\n\n"
-        md_content += f"**Translation**: {r[2]}\n\n"
-        md_content += f"- [x] {r[3]} (Correct)\n"
-        md_content += f"- [ ] {r[4]}\n"
+        md_content += f"## Word: {r[0]} ({r[1]})\n"
+        md_content += f"**Cloze**: {r[2]}\n\n"
+        md_content += f"**Translation**: {r[3]}\n\n"
+        md_content += f"- [x] {r[4]} (Correct)\n"
         md_content += f"- [ ] {r[5]}\n"
-        md_content += f"- [ ] {r[6]}\n\n"
-        md_content += f"**Root/Affix**: {r[7]}\n\n"
-        md_content += f"**Mnemonic**: {r[8]}\n\n"
+        md_content += f"- [ ] {r[6]}\n"
+        md_content += f"- [ ] {r[7]}\n\n"
+        md_content += f"**Root/Affix**: {r[8]}\n\n"
+        md_content += f"**Mnemonic**: {r[9]}\n\n"
         md_content += "---\n\n"
         
     output_file = 'review_quizzes.md'
