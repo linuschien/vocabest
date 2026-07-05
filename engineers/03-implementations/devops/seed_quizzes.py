@@ -93,9 +93,13 @@ def generate_command(args):
         word_text = word_data['word']
         target_count = get_target_question_count(word_data['exam_frequency'])
         
-        # Check how many we already have
-        cursor.execute("SELECT COUNT(*) FROM quiz_question WHERE word_bank_id = ?", (word_id,))
-        existing_count = cursor.fetchone()[0]
+        if getattr(args, 'override', False):
+            cursor.execute("DELETE FROM quiz_question WHERE word_bank_id = ?", (word_id,))
+            existing_count = 0
+        else:
+            # Check how many we already have
+            cursor.execute("SELECT COUNT(*) FROM quiz_question WHERE word_bank_id = ?", (word_id,))
+            existing_count = cursor.fetchone()[0]
         
         if existing_count >= target_count:
             continue # Already generated
@@ -331,6 +335,7 @@ if __name__ == '__main__':
     gen_parser.add_argument("--model", type=str, default="google/gemma-4-26b-a4b-qat", help="Model name to use")
     gen_parser.add_argument("--base-url", type=str, default="http://localhost:1234/v1", help="LLM Base URL")
     gen_parser.add_argument("--prefix", type=str, help="Filter words starting with prefix")
+    gen_parser.add_argument("--override", action="store_true", help="Delete existing questions and force regeneration")
     
     # status command
     status_parser = subparsers.add_parser("status", help="Check generation status grouped by letter")
