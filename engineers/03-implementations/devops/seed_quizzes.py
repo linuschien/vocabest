@@ -86,7 +86,12 @@ def generate_command(args):
     if args.prefix:
         words = [w for w in words if w['word'].lower().startswith(args.prefix.lower())]
         
-    print(f"Found {len(words)} words to process" + (f" (Prefix filter: {args.prefix})" if args.prefix else ""))
+    if getattr(args, 'words', None):
+        word_list = [w.strip() for w in args.words.split(',')]
+        words = [w for w in words if w['word'] in word_list]
+        
+
+    print(f"Found {len(words)} words to process")
     
     total_words = len(words)
     for idx, word_data in enumerate(words, 1):
@@ -352,6 +357,8 @@ if __name__ == '__main__':
     gen_parser.add_argument("--model", type=str, default="google/gemma-4-26b-a4b-qat", help="Model name to use")
     gen_parser.add_argument("--base-url", type=str, default="http://localhost:1234/v1", help="LLM Base URL")
     gen_parser.add_argument("--prefix", type=str, help="Filter words starting with prefix")
+    gen_parser.add_argument("--words", type=str, help="Comma-separated list of words to process")
+
     gen_parser.add_argument("--override", action="store_true", help="Delete existing questions and force regeneration")
     
     # status command
