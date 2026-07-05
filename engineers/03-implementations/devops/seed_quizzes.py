@@ -143,6 +143,7 @@ def generate_command(args):
             "2. DO NOT use morphological variations of the target word (e.g., if the word is 'interesting', DO NOT use 'interested', 'interest', or 'interestingly').\n"
             "3. Distractors should be semantically plausible in the sentence structure but logically incorrect in meaning.\n"
             "4. Distractors must match the target level.\n"
+            "5. DO NOT use LaTeX formatting (e.g., use -> or → instead of \\rightarrow).\n"
             f"CRITICAL: The sentence complexity and vocabulary used in the contextual_cloze MUST be appropriate for a {word_data['target_level']} student in Taiwan."
         )
         
