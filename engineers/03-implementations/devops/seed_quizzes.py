@@ -114,7 +114,7 @@ def generate_command(args):
         system_prompt = (
             "You are a professional English teacher for Taiwanese students. "
             "Output ONLY a valid JSON object matching this schema. "
-            "ABSOLUTELY NO backslashes (\\) or LaTeX math symbols (like $) in your output. Use plain text '->' for arrows.\n\n"
+            "ABSOLUTELY NO backslashes (\\) or LaTeX math symbols (like $) in your output. Use the unicode symbol '→' for arrows.\n\n"
             "SCHEMA:\n"
             "{\n"
             "  \"questions\": [\n"
