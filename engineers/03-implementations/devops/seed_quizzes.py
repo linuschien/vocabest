@@ -130,7 +130,9 @@ def generate_command(args):
             f"Part of Speech: {word_data['parts_of_speech']}\n"
             f"Translation: {word_data['chinese_translation']}\n"
             f"Difficulty Level: {word_data['difficulty_level']}\n"
-            "Ensure distractors are similar in difficulty and the correct answer fits the grammatical context."
+            f"Target Level: {word_data['target_level']}\n"
+            "Ensure distractors are similar in difficulty and the correct answer fits the grammatical context.\n"
+            f"CRITICAL: The sentence complexity and vocabulary used in the contextual_cloze MUST be appropriate for a {word_data['target_level']} student in Taiwan."
         )
         
         try:
@@ -145,12 +147,23 @@ def generate_command(args):
             
             raw_content = response.choices[0].message.content.strip()
             
-            # Extract JSON block using regex in case the model adds conversational text
-            json_match = re.search(r'\{.*\}', raw_content, re.DOTALL)
-            if json_match:
-                json_str = json_match.group(0)
+            # Extract JSON block carefully, ignoring reasoning blocks
+            json_blocks = re.findall(r'```(?:json)?\s*(\{.*?\})\s*```', raw_content, re.DOTALL)
+            if json_blocks:
+                # If there are markdown blocks, take the last one
+                json_str = json_blocks[-1]
             else:
-                json_str = raw_content
+                # Find the last occurrence of the "questions" key
+                last_q_idx = raw_content.rfind('"questions"')
+                if last_q_idx != -1:
+                    start_idx = raw_content.rfind('{', 0, last_q_idx)
+                    end_idx = raw_content.rfind('}')
+                    if start_idx != -1 and end_idx != -1:
+                        json_str = raw_content[start_idx:end_idx+1]
+                    else:
+                        json_str = raw_content
+                else:
+                    json_str = raw_content
                 
             data = json.loads(json_str)
             
@@ -185,34 +198,49 @@ def status_command(args):
     
     words = parse_sql_file(JUNIOR_HIGH_SQL) + parse_sql_file(SENIOR_HIGH_SQL)
     
-    # Calculate target per letter
-    target_by_letter = defaultdict(int)
-    current_by_letter = defaultdict(int)
+    # Calculate target per level and letter
+    target_by_level_letter = defaultdict(lambda: defaultdict(int))
+    current_by_level_letter = defaultdict(lambda: defaultdict(int))
     
     for w in words:
+        level = w['target_level']
         letter = w['word'][0].upper() if w['word'][0].isalpha() else '#'
-        target_by_letter[letter] += get_target_question_count(w['exam_frequency'])
+        target_by_level_letter[level][letter] += get_target_question_count(w['exam_frequency'])
         
-    cursor.execute("SELECT word, COUNT(*) FROM quiz_question GROUP BY word")
+    cursor.execute("SELECT target_level, word, COUNT(*) FROM quiz_question GROUP BY target_level, word")
     for row in cursor.fetchall():
-        word, count = row
+        level, word, count = row
         letter = word[0].upper() if word[0].isalpha() else '#'
-        current_by_letter[letter] += count
+        current_by_level_letter[level][letter] += count
         
     print("=== AI Quizzes Generation Status ===")
-    all_letters = sorted(list(set(target_by_letter.keys()) | set(current_by_letter.keys())))
+    all_levels = sorted(list(set(target_by_level_letter.keys()) | set(current_by_level_letter.keys())))
     
-    total_target = 0
-    total_current = 0
-    for letter in all_letters:
-        t = target_by_letter[letter]
-        c = current_by_letter[letter]
-        total_target += t
-        total_current += c
-        print(f"[{letter}] Generated: {c:4d} / {t:4d} ({(c/t*100) if t > 0 else 0:5.1f}%)")
+    total_target_all = 0
+    total_current_all = 0
+    
+    for level in all_levels:
+        print(f"\n--- {level} ---")
+        targets = target_by_level_letter[level]
+        currents = current_by_level_letter[level]
+        all_letters = sorted(list(set(targets.keys()) | set(currents.keys())))
         
-    print("-" * 35)
-    print(f"TOTAL Generated: {total_current} / {total_target} ({(total_current/total_target*100) if total_target > 0 else 0:.1f}%)")
+        level_target = 0
+        level_current = 0
+        for letter in all_letters:
+            t = targets[letter]
+            c = currents[letter]
+            level_target += t
+            level_current += c
+            print(f"[{letter}] Generated: {c:4d} / {t:4d} ({(c/t*100) if t > 0 else 0:5.1f}%)")
+            
+        print("-" * 35)
+        print(f"{level} Subtotal: {level_current} / {level_target} ({(level_current/level_target*100) if level_target > 0 else 0:.1f}%)")
+        total_target_all += level_target
+        total_current_all += level_current
+        
+    print("=" * 35)
+    print(f"OVERALL TOTAL: {total_current_all} / {total_target_all} ({(total_current_all/total_target_all*100) if total_target_all > 0 else 0:.1f}%)")
     conn.close()
 
 def export_md_command(args):
