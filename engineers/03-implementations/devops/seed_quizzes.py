@@ -129,7 +129,6 @@ def generate_command(args):
             f"Word: {word_text}\n"
             f"Part of Speech: {word_data['parts_of_speech']}\n"
             f"Translation: {word_data['chinese_translation']}\n"
-            f"Difficulty Level: {word_data['difficulty_level']}\n"
             f"Target Level: {word_data['target_level']}\n"
             "Ensure distractors are similar in difficulty and the correct answer fits the grammatical context.\n"
             f"CRITICAL: The sentence complexity and vocabulary used in the contextual_cloze MUST be appropriate for a {word_data['target_level']} student in Taiwan."
@@ -329,7 +328,7 @@ if __name__ == '__main__':
 
     # generate command
     gen_parser = subparsers.add_parser("generate", help="Generate questions via LLM and save to SQLite")
-    gen_parser.add_argument("--model", type=str, default="gemma4", help="Model name to use")
+    gen_parser.add_argument("--model", type=str, default="google/gemma-4-26b-a4b-qat", help="Model name to use")
     gen_parser.add_argument("--base-url", type=str, default="http://localhost:1234/v1", help="LLM Base URL")
     gen_parser.add_argument("--prefix", type=str, help="Filter words starting with prefix")
     
