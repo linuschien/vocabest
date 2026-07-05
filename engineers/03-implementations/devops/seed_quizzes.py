@@ -113,8 +113,8 @@ def generate_command(args):
         
         system_prompt = (
             "You are a professional English teacher for Taiwanese students. "
-            "Generate high-quality English quiz questions in JSON format. "
-            "Output ONLY a valid JSON object matching this schema, without any markdown formatting or extra text.\n\n"
+            "Output ONLY a valid JSON object matching this schema. "
+            "ABSOLUTELY NO backslashes (\\) or LaTeX math symbols (like $) in your output. Use plain text '->' for arrows.\n\n"
             "SCHEMA:\n"
             "{\n"
             "  \"questions\": [\n"
@@ -158,10 +158,6 @@ def generate_command(args):
             )
             
             raw_content = response.choices[0].message.content.strip()
-            
-            # Post-process to fix LaTeX escaping issue where \rightarrow becomes a carriage return in JSON
-            raw_content = raw_content.replace(r'\rightarrow', '→')
-            raw_content = raw_content.replace(r'\Rightarrow', '⇒')
             
             # Extract JSON block carefully, ignoring reasoning blocks
             json_blocks = re.findall(r'```(?:json)?\s*(\{.*?\})\s*```', raw_content, re.DOTALL)
