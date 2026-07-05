@@ -21,6 +21,7 @@ SENIOR_HIGH_SQL = 'output/V1__Seed_Vocabulary_Senior_High.sql'
 
 def init_db():
     conn = sqlite3.connect(DB_PATH)
+    conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
     cursor.execute('''
         CREATE TABLE IF NOT EXISTS quiz_question (
@@ -39,33 +40,33 @@ def init_db():
             created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
     ''')
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS word_bank (
+            id TEXT PRIMARY KEY,
+            word TEXT,
+            parts_of_speech TEXT,
+            chinese_translation TEXT,
+            target_level TEXT,
+            difficulty_level INTEGER,
+            exam_frequency INTEGER
+        )
+    ''')
+    
+    cursor.execute("SELECT COUNT(*) FROM word_bank")
+    if cursor.fetchone()[0] == 0:
+        print("Initializing word_bank from SQL files...")
+        for filepath in [JUNIOR_HIGH_SQL, SENIOR_HIGH_SQL]:
+            if os.path.exists(filepath):
+                with open(filepath, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                cursor.executescript(content)
+            else:
+                print(f"Warning: {filepath} not found.")
+                
     conn.commit()
     return conn
 
-def parse_sql_file(filepath):
-    words = []
-    if not os.path.exists(filepath):
-        print(f"Warning: {filepath} not found.")
-        return words
-        
-    with open(filepath, 'r', encoding='utf-8') as f:
-        content = f.read()
-        
-    pattern = r"\('([^']+)',\s*'([^']+)',\s*'([^']+)',\s*'([^']+)',\s*'([^']+)',\s*(\d+),\s*(\d+)\)"
-    for match in re.finditer(pattern, content):
-        word_text = match.group(2)
-        # Handle escaped single quotes in SQL like ''
-        word_text = word_text.replace("''", "'")
-        words.append({
-            'id': match.group(1),
-            'word': match.group(2),
-            'parts_of_speech': match.group(3),
-            'chinese_translation': match.group(4),
-            'target_level': match.group(5),
-            'difficulty_level': int(match.group(6)),
-            'exam_frequency': int(match.group(7))
-        })
-    return words
+
 
 def get_target_question_count(frequency):
     if frequency <= 0:
@@ -82,13 +83,21 @@ def generate_command(args):
     conn = init_db()
     cursor = conn.cursor()
     
-    words = parse_sql_file(JUNIOR_HIGH_SQL) + parse_sql_file(SENIOR_HIGH_SQL)
+    query = "SELECT * FROM word_bank WHERE 1=1"
+    params = []
+    
     if args.prefix:
-        words = [w for w in words if w['word'].lower().startswith(args.prefix.lower())]
+        query += " AND word LIKE ?"
+        params.append(f"{args.prefix}%")
         
     if getattr(args, 'words', None):
         word_list = [w.strip() for w in args.words.split(',')]
-        words = [w for w in words if w['word'] in word_list]
+        placeholders = ','.join(['?'] * len(word_list))
+        query += f" AND word IN ({placeholders})"
+        params.extend(word_list)
+        
+    cursor.execute(query, params)
+    words = cursor.fetchall()
         
 
     print(f"Found {len(words)} words to process")
@@ -221,7 +230,8 @@ def status_command(args):
     conn = init_db()
     cursor = conn.cursor()
     
-    words = parse_sql_file(JUNIOR_HIGH_SQL) + parse_sql_file(SENIOR_HIGH_SQL)
+    cursor.execute("SELECT * FROM word_bank")
+    words = cursor.fetchall()
     
     # Calculate target per level and letter
     target_by_level_letter = defaultdict(lambda: defaultdict(int))
