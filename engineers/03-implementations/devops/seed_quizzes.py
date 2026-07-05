@@ -86,26 +86,30 @@ def generate_command(args):
     if args.prefix:
         words = [w for w in words if w['word'].lower().startswith(args.prefix.lower())]
         
-    print(f"Found {len(words)} words to process (Prefix filter: {args.prefix})")
+    print(f"Found {len(words)} words to process" + (f" (Prefix filter: {args.prefix})" if args.prefix else ""))
     
-    for word_data in words:
+    total_words = len(words)
+    for idx, word_data in enumerate(words, 1):
         word_id = word_data['id']
         word_text = word_data['word']
+        target_level = word_data['target_level']
         target_count = get_target_question_count(word_data['exam_frequency'])
         
         if getattr(args, 'override', False):
             cursor.execute("DELETE FROM quiz_question WHERE word_bank_id = ?", (word_id,))
             existing_count = 0
+            print(f"[{idx}/{total_words}] Cleared existing questions for '{word_text}' ({target_level}) due to --override.")
         else:
             # Check how many we already have
             cursor.execute("SELECT COUNT(*) FROM quiz_question WHERE word_bank_id = ?", (word_id,))
             existing_count = cursor.fetchone()[0]
         
         if existing_count >= target_count:
+            print(f"[{idx}/{total_words}] Skipping '{word_text}' ({target_level}): already has {existing_count}/{target_count} questions.")
             continue # Already generated
             
         needed = target_count - existing_count
-        print(f"Generating {needed} questions for '{word_text}' (Target: {target_count})...")
+        print(f"[{idx}/{total_words}] Generating {needed} question(s) for '{word_text}' ({target_level}) (Target: {target_count})...")
         
         system_prompt = (
             "You are a professional English teacher for Taiwanese students. "
