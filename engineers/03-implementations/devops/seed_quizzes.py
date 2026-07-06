@@ -260,7 +260,7 @@ def generate_command(args):
                     q['explanation_root_affix'], q['explanation_mnemonic']
                 ))
             conn.commit()
-            print(f"  -> Successfully saved {len(data.get('questions', []))} questions.")
+            print(f"  -> Successfully saved {len(questions_list)} questions.")
             
         except Exception as e:
             print(f"  -> Error generating for '{word_text}': {e}")
