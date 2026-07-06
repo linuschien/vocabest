@@ -15,6 +15,13 @@ try:
 except ImportError:
     OpenAI = None
 
+try:
+    from google import genai
+    from google.genai import types
+    from google.genai.errors import APIError
+except ImportError:
+    genai = None
+
 DB_PATH = 'ai_cache.db'
 JUNIOR_HIGH_SQL = 'output/V1__Seed_Vocabulary_Junior_High.sql'
 SENIOR_HIGH_SQL = 'output/V1__Seed_Vocabulary_Senior_High.sql'
@@ -82,10 +89,10 @@ def generate_command(args):
     local_client = OpenAI(base_url=args.base_url, api_key="lm-studio")
     google_client = None
     if args.gemini_api_key:
-        google_client = OpenAI(
-            base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
-            api_key=args.gemini_api_key
-        )
+        if genai is None:
+            print("Error: google-genai package is not installed. Please run `pip install google-genai`")
+            sys.exit(1)
+        google_client = genai.Client(api_key=args.gemini_api_key)
     conn = init_db()
     cursor = conn.cursor()
     
@@ -169,25 +176,33 @@ def generate_command(args):
         
         try:
             response = None
+            raw_content = None
             if google_client:
+                print("  -> Sending request to Google AI Studio...")
                 try:
-                    response = google_client.chat.completions.create(
+                    google_resp = google_client.models.generate_content(
                         model=args.google_model,
-                        messages=[
-                            {"role": "system", "content": system_prompt},
-                            {"role": "user", "content": user_prompt}
-                        ],
-                        temperature=0.7
+                        contents=user_prompt,
+                        config=types.GenerateContentConfig(
+                            system_instruction=system_prompt,
+                            temperature=0.7,
+                            response_mime_type="application/json",
+                        )
                     )
-                except Exception as e:
-                    is_rate_limit = "429" in str(e) or "RateLimitError" in type(e).__name__
-                    if is_rate_limit:
+                    raw_content = google_resp.text.strip()
+                    response = True
+                except APIError as e:
+                    if e.code == 429:
                         print(f"  -> Google AI Studio rate limit hit (429). Falling back to LM Studio...")
                     else:
                         print(f"  -> Google AI Studio error: {e}. Falling back to LM Studio...")
                     response = None
+                except Exception as e:
+                    print(f"  -> Google AI Studio error: {e}. Falling back to LM Studio...")
+                    response = None
             
             if response is None:
+                print("  -> Sending request to LM Studio...")
                 response = local_client.chat.completions.create(
                     model=args.model,
                     messages=[
@@ -196,8 +211,7 @@ def generate_command(args):
                     ],
                     temperature=0.7
                 )
-            
-            raw_content = response.choices[0].message.content.strip()
+                raw_content = response.choices[0].message.content.strip()
             
             # Extract potential JSON strings
             potential_jsons = []
