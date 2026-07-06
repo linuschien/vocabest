@@ -6,6 +6,7 @@ import uuid
 import json
 import os
 import sys
+import time
 from collections import defaultdict
 from pathlib import Path
 
@@ -179,26 +180,31 @@ def generate_command(args):
             raw_content = None
             if google_client:
                 print("  -> Sending request to Google AI Studio...")
-                try:
-                    google_resp = google_client.models.generate_content(
-                        model=args.google_model,
-                        contents=user_prompt,
-                        config=types.GenerateContentConfig(
-                            system_instruction=system_prompt,
-                            temperature=0.7,
+                for attempt in range(5):
+                    try:
+                        google_resp = google_client.models.generate_content(
+                            model=args.google_model,
+                            contents=user_prompt,
+                            config=types.GenerateContentConfig(
+                                system_instruction=system_prompt,
+                                temperature=0.7,
+                            )
                         )
-                    )
-                    raw_content = google_resp.text.strip()
-                    response = True
-                except APIError as e:
-                    if e.code == 429:
-                        print(f"  -> Google AI Studio rate limit hit (429). Falling back to LM Studio...")
-                    else:
-                        print(f"  -> Google AI Studio error: {e}. Falling back to LM Studio...")
-                    response = None
-                except Exception as e:
-                    print(f"  -> Google AI Studio error: {e}. Falling back to LM Studio...")
-                    response = None
+                        raw_content = google_resp.text.strip()
+                        response = True
+                        break  # Success, exit the retry loop
+                    except Exception as e:
+                        # For both APIError and general Exception, we check if it's the last attempt
+                        if attempt < 4:
+                            print(f"  -> Google AI Studio error ({e}). Retrying in 2 seconds... ({attempt+1}/5)")
+                            time.sleep(2)
+                        else:
+                            # Final attempt failed
+                            if hasattr(e, 'code') and e.code == 429:
+                                print(f"  -> Google AI Studio rate limit hit (429). Falling back to LM Studio...")
+                            else:
+                                print(f"  -> Google AI Studio error after 5 retries: {e}. Falling back to LM Studio...")
+                            response = None
             
             if response is None:
                 print("  -> Sending request to LM Studio...")
