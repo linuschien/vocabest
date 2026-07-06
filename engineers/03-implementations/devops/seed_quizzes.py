@@ -243,7 +243,18 @@ def generate_command(args):
             # Robust extraction of the questions list
             questions_list = data if isinstance(data, list) else data.get('questions', [])
             
+            def sanitize(text):
+                if not isinstance(text, str): return text
+                text = text.replace('$\\rightarrow$', '→')
+                text = text.replace('\\rightarrow', '→')
+                text = text.replace('\\\\rightarrow', '→')
+                return text
+            
             for idx, q in enumerate(questions_list):
+                # Sanitize LaTeX out of explanations
+                q['explanation_root_affix'] = sanitize(q.get('explanation_root_affix', ''))
+                q['explanation_mnemonic'] = sanitize(q.get('explanation_mnemonic', ''))
+                
                 # Use deterministic UUID5 based on word ID and index offset
                 q_uuid = str(uuid.uuid5(uuid.NAMESPACE_DNS, f"{word_id}_{existing_count + idx}"))
                 
