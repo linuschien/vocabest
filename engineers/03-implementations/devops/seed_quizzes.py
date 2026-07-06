@@ -381,7 +381,7 @@ def export_sql_command(args):
     conn = init_db()
     cursor = conn.cursor()
     
-    cursor.execute("SELECT id, word_bank_id, contextual_cloze, chinese_translation, correct_answer, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic FROM quiz_question")
+    cursor.execute("SELECT id, word_bank_id, contextual_cloze, chinese_translation, correct_answer, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic FROM quiz_question ORDER BY word ASC, id ASC")
     rows = cursor.fetchall()
     
     buckets = defaultdict(list)
