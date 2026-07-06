@@ -240,8 +240,10 @@ def generate_command(args):
                 # Let it crash normally so we can see the error
                 data = json.loads(potential_jsons[0] if potential_jsons else raw_content)
             
+            # Robust extraction of the questions list
+            questions_list = data if isinstance(data, list) else data.get('questions', [])
             
-            for idx, q in enumerate(data.get('questions', [])):
+            for idx, q in enumerate(questions_list):
                 # Use deterministic UUID5 based on word ID and index offset
                 q_uuid = str(uuid.uuid5(uuid.NAMESPACE_DNS, f"{word_id}_{existing_count + idx}"))
                 
