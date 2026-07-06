@@ -79,7 +79,13 @@ def generate_command(args):
         print("Error: openai package is not installed. Please run `pip install openai`")
         sys.exit(1)
         
-    client = OpenAI(base_url=args.base_url, api_key="lm-studio")
+    local_client = OpenAI(base_url=args.base_url, api_key="lm-studio")
+    google_client = None
+    if args.gemini_api_key:
+        google_client = OpenAI(
+            base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
+            api_key=args.gemini_api_key
+        )
     conn = init_db()
     cursor = conn.cursor()
     
@@ -162,14 +168,34 @@ def generate_command(args):
         )
         
         try:
-            response = client.chat.completions.create(
-                model=args.model,
-                messages=[
-                    {"role": "system", "content": system_prompt},
-                    {"role": "user", "content": user_prompt}
-                ],
-                temperature=0.7
-            )
+            response = None
+            if google_client:
+                try:
+                    response = google_client.chat.completions.create(
+                        model=args.google_model,
+                        messages=[
+                            {"role": "system", "content": system_prompt},
+                            {"role": "user", "content": user_prompt}
+                        ],
+                        temperature=0.7
+                    )
+                except Exception as e:
+                    is_rate_limit = "429" in str(e) or "RateLimitError" in type(e).__name__
+                    if is_rate_limit:
+                        print(f"  -> Google AI Studio rate limit hit (429). Falling back to LM Studio...")
+                    else:
+                        print(f"  -> Google AI Studio error: {e}. Falling back to LM Studio...")
+                    response = None
+            
+            if response is None:
+                response = local_client.chat.completions.create(
+                    model=args.model,
+                    messages=[
+                        {"role": "system", "content": system_prompt},
+                        {"role": "user", "content": user_prompt}
+                    ],
+                    temperature=0.7
+                )
             
             raw_content = response.choices[0].message.content.strip()
             
@@ -366,6 +392,8 @@ if __name__ == '__main__':
     gen_parser = subparsers.add_parser("generate", help="Generate questions via LLM and save to SQLite")
     gen_parser.add_argument("--model", type=str, default="google/gemma-4-26b-a4b-qat", help="Model name to use")
     gen_parser.add_argument("--base-url", type=str, default="http://localhost:1234/v1", help="LLM Base URL")
+    gen_parser.add_argument("--google-model", type=str, default="models/gemma-4-26b-a4b-it", help="Google AI Studio model")
+    gen_parser.add_argument("--gemini-api-key", type=str, default=os.environ.get("GEMINI_API_KEY"), help="Google API Key")
     gen_parser.add_argument("--prefix", type=str, help="Filter words starting with prefix")
     gen_parser.add_argument("--words", type=str, help="Comma-separated list of words to process")
 
