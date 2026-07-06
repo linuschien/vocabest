@@ -87,7 +87,7 @@ class VocabularyWordServiceImplTest {
     @Test
     void testListVocabularyWordsWithFilter() {
         VocabularyWord entity = new VocabularyWord(UUID.randomUUID(), "word", "verb", "trans", VocabularyLevel.JUNIOR_BASIC_1200, 1, LocalDateTime.now(), LocalDateTime.now(), null);
-        when(repository.findAll(any(org.springframework.data.domain.Example.class))).thenReturn(Flux.just(entity));
+        when(repository.findAll(org.mockito.ArgumentMatchers.<org.springframework.data.domain.Example<VocabularyWord>>any())).thenReturn(Flux.just(entity));
 
         StepVerifier.create(service.listVocabularyWords(new VocabularyWordFilterInput("JUNIOR_BASIC_1200")))
                 .expectNextCount(1)

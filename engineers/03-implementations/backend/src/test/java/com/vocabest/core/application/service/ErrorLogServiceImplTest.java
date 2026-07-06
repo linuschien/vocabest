@@ -89,7 +89,7 @@ class ErrorLogServiceImplTest {
     @Test
     void testListErrorLogsWithFilter() {
         ErrorLog entity = new ErrorLog(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID(), null, 1, LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now(), null);
-        when(repository.findAll(any(org.springframework.data.domain.Example.class))).thenReturn(Flux.just(entity));
+        when(repository.findAll(org.mockito.ArgumentMatchers.<org.springframework.data.domain.Example<ErrorLog>>any())).thenReturn(Flux.just(entity));
 
         StepVerifier.create(service.listErrorLogs(new ErrorLogFilterInput(entity.userId())))
                 .expectNextCount(1)

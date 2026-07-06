@@ -96,7 +96,7 @@ class QuizQuestionServiceImplTest {
     @Test
     void testListQuizQuestionsWithFilter() {
         QuizQuestion entity = new QuizQuestion(UUID.randomUUID(), UUID.randomUUID(), "cloze", "trans", "opt", "d1", "d2", "d3", "root", "mnem", TargetLevel.JUNIOR_HIGH, LocalDateTime.now(), LocalDateTime.now(), null);
-        when(repository.findAll(any(org.springframework.data.domain.Example.class))).thenReturn(Flux.just(entity));
+        when(repository.findAll(org.mockito.ArgumentMatchers.<org.springframework.data.domain.Example<QuizQuestion>>any())).thenReturn(Flux.just(entity));
 
         StepVerifier.create(service.listQuizQuestions(new QuizQuestionFilterInput("JUNIOR_HIGH")))
                 .expectNextCount(1)
@@ -106,7 +106,7 @@ class QuizQuestionServiceImplTest {
     @Test
     void testGenerateBatch() {
         VocabularyWord word = new VocabularyWord(UUID.randomUUID(), "test", "noun", "test", VocabularyLevel.JUNIOR_BASIC_1200, 1, null, null, null);
-        when(vocabRepository.findAll(any(org.springframework.data.domain.Example.class))).thenReturn(Flux.just(word));
+        when(vocabRepository.findAll(org.mockito.ArgumentMatchers.<org.springframework.data.domain.Example<VocabularyWord>>any())).thenReturn(Flux.just(word));
         when(repository.save(any())).thenReturn(Mono.just(new QuizQuestion(UUID.randomUUID(), word.id(), "c", "t", "o", "d1", "d2", "d3", "r", "m", TargetLevel.JUNIOR_HIGH, null, null, null)));
 
         StepVerifier.create(service.generateBatch(new QuizQuestionActionRequest(10, "JUNIOR_HIGH")))
