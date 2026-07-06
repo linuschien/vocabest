@@ -186,7 +186,6 @@ def generate_command(args):
                         config=types.GenerateContentConfig(
                             system_instruction=system_prompt,
                             temperature=0.7,
-                            response_mime_type="application/json",
                         )
                     )
                     raw_content = google_resp.text.strip()
