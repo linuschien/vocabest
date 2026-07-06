@@ -381,7 +381,13 @@ def export_sql_command(args):
     conn = init_db()
     cursor = conn.cursor()
     
-    cursor.execute("SELECT id, word_bank_id, contextual_cloze, chinese_translation, correct_answer, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic FROM quiz_question ORDER BY word ASC, id ASC")
+    cursor.execute("""
+        SELECT id, word_bank_id, target_level, contextual_cloze, chinese_translation, 
+               correct_answer, distractor1, distractor2, distractor3, 
+               explanation_root_affix, explanation_mnemonic, created_at 
+        FROM quiz_question 
+        ORDER BY word ASC, id ASC
+    """)
     rows = cursor.fetchall()
     
     buckets = defaultdict(list)
@@ -397,13 +403,13 @@ def export_sql_command(args):
         filename = f"output/quizzes/V2_{bucket_idx:03d}__Seed_Quizzes.sql"
         with open(filename, 'w', encoding='utf-8') as f:
             f.write(f"/* Seed Data for Quizzes - Bucket {bucket_idx:03d} */\n")
-            f.write("INSERT INTO quiz_question (id, word_bank_id, contextual_cloze, chinese_translation, correct_answer, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic) VALUES\n")
+            f.write("INSERT INTO quiz_question (id, vocabulary_word_id, target_level, contextual_cloze, translation, correct_option, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic, created_at, updated_at) VALUES\n")
             
             values = []
             for q in questions:
                 # Escape single quotes for SQL
                 safe_q = [str(x).replace("'", "''") for x in q]
-                val_str = f"('{safe_q[0]}', '{safe_q[1]}', '{safe_q[2]}', '{safe_q[3]}', '{safe_q[4]}', '{safe_q[5]}', '{safe_q[6]}', '{safe_q[7]}', '{safe_q[8]}', '{safe_q[9]}')"
+                val_str = f"('{safe_q[0]}', '{safe_q[1]}', '{safe_q[2]}', '{safe_q[3]}', '{safe_q[4]}', '{safe_q[5]}', '{safe_q[6]}', '{safe_q[7]}', '{safe_q[8]}', '{safe_q[9]}', '{safe_q[10]}', '{safe_q[11]}', '{safe_q[11]}')"
                 values.append(val_str)
                 
             f.write(",\n".join(values) + ";\n")

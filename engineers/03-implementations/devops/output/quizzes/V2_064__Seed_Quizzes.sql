@@ -1,4 +1,5 @@
 /* Seed Data for Quizzes - Bucket 064 */
-INSERT INTO quiz_question (id, word_bank_id, contextual_cloze, chinese_translation, correct_answer, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic) VALUES
-('0240025a-77c7-5fd4-95ae-fc963b49705c', 'ad050278-a913-4be5-b0bb-d3d91b5aa55b', 'If you want to catch the early train, you must ___ to the station immediately.', '如果你想趕上早班火車，你必須立刻前往車站。', 'go', 'stay', 'live', 'wait', 'go (v.) 表示移動或前往某處。', '想像自己正朝著目的地「走」去。'),
-('ac57e26c-fc85-5491-8856-6442434a9950', '5e767169-2c20-400a-b068-5b0d10f7fd45', 'Can you ___ me a favor?', '你能幫我一個忙嗎？', 'do', 'make', 'give', 'take', 'do (做/進行)', 'do a favor → 幫忙');
+INSERT INTO quiz_question (id, vocabulary_word_id, target_level, contextual_cloze, translation, correct_option, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic, created_at, updated_at) VALUES
+('ac57e26c-fc85-5491-8856-6442434a9950', '5e767169-2c20-400a-b068-5b0d10f7fd45', 'JUNIOR_HIGH', 'Can you ___ me a favor?', '你能幫我一個忙嗎？', 'do', 'make', 'give', 'take', 'do (做/進行)', 'do a favor → 幫忙', '2026-07-05 08:35:16', '2026-07-05 08:35:16'),
+('0240025a-77c7-5fd4-95ae-fc963b49705c', 'ad050278-a913-4be5-b0bb-d3d91b5aa55b', 'SENIOR_HIGH', 'If you want to catch the early train, you must ___ to the station immediately.', '如果你想趕上早班火車，你必須立刻前往車站。', 'go', 'stay', 'live', 'wait', 'go (v.) 表示移動或前往某處。', '想像自己正朝著目的地「走」去。', '2026-07-05 08:01:37', '2026-07-05 08:01:37'),
+('cd63153d-77cc-574a-a900-67084b3fa59c', '299d666e-296a-444b-88bd-190b2831679c', 'JUNIOR_HIGH', 'A: I am happy. B: ___ am I.', 'A: 我很高興。 B: 我也是。', 'so', 'too', 'also', 'either', '此字在此作為副詞，用於 So + 助動詞 + 主詞的結構，表示「也如此」。', 'So am I (我也一樣) 是常用的倒裝句型。', '2026-07-06 10:41:00', '2026-07-06 10:41:00');

@@ -1,3 +1,5 @@
 /* Seed Data for Quizzes - Bucket 081 */
-INSERT INTO quiz_question (id, word_bank_id, contextual_cloze, chinese_translation, correct_answer, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic) VALUES
-('7c232e63-4f83-5263-b4d4-e92e13e57c5d', '74449081-948e-4337-b24b-e50b8a25cddf', '___ kind of music do you like?', '你喜歡什麼種類的音樂？', 'what', 'which', 'some', 'many', '這是一個疑問形容詞，用來修飾後面的名詞。', '看到問句想問『什麼』，就找 what！');
+INSERT INTO quiz_question (id, vocabulary_word_id, target_level, contextual_cloze, translation, correct_option, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic, created_at, updated_at) VALUES
+('a3fde7cf-6038-5b8d-b029-af6935c1ec09', '8014755c-2a80-466f-a06a-c53a888c0b81', 'JUNIOR_HIGH', 'My brother is very tall. ___ is a basketball player.', '我的哥哥很高。他是籃球選手。', 'He', 'She', 'It', 'They', '人稱代名詞，用於指代男性單數。', '看到男生 (brother) → 用 He。', '2026-07-06 10:34:37', '2026-07-06 10:34:37'),
+('2e3d39b4-7356-5804-8b00-89553b379631', '595e0908-47b5-4b28-98b7-8887a86c7901', 'JUNIOR_HIGH', 'Some ___ like to play basketball.', '有些人喜歡打籃球。', 'people', 'animals', 'birds', 'cats', '無特定字根', 'people → 人們 (指一群人)', '2026-07-06 10:39:14', '2026-07-06 10:39:14'),
+('7c232e63-4f83-5263-b4d4-e92e13e57c5d', '74449081-948e-4337-b24b-e50b8a25cddf', 'JUNIOR_HIGH', '___ kind of music do you like?', '你喜歡什麼種類的音樂？', 'what', 'which', 'some', 'many', '這是一個疑問形容詞，用來修飾後面的名詞。', '看到問句想問『什麼』，就找 what！', '2026-07-05 11:57:46', '2026-07-05 11:57:46');

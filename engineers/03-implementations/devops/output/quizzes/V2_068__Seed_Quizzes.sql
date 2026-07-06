@@ -1,3 +1,4 @@
 /* Seed Data for Quizzes - Bucket 068 */
-INSERT INTO quiz_question (id, word_bank_id, contextual_cloze, chinese_translation, correct_answer, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic) VALUES
-('115c9f5b-b7d8-5859-9317-f1746b14c9a8', 'c71bd206-4042-406c-8bc2-46572ad87585', 'The athlete ran ___ the finish line to claim his victory.', '那位運動員衝向終點線以贏得勝利。', 'to', 'for', 'at', 'by', '表示方向、目的地或對象的介系詞。', 'to → 到 (目的地)');
+INSERT INTO quiz_question (id, vocabulary_word_id, target_level, contextual_cloze, translation, correct_option, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic, created_at, updated_at) VALUES
+('364b80e9-c424-5365-a315-3c03a45d4374', '1c5e6a66-87ab-4ce8-8bf9-b5240a87fd04', 'SENIOR_HIGH', 'She received a beautiful necklace ___ her boyfriend.', '她從男朋友那裡收到了一條美麗的項鍊。', 'from', 'to', 'with', 'at', 'from 在此表示物品的來源或送禮者。', '想像一個箭頭從起點出發 → from (從...)', '2026-07-06 10:49:37', '2026-07-06 10:49:37'),
+('115c9f5b-b7d8-5859-9317-f1746b14c9a8', 'c71bd206-4042-406c-8bc2-46572ad87585', 'SENIOR_HIGH', 'The athlete ran ___ the finish line to claim his victory.', '那位運動員衝向終點線以贏得勝利。', 'to', 'for', 'at', 'by', '表示方向、目的地或對象的介系詞。', 'to → 到 (目的地)', '2026-07-05 10:27:51', '2026-07-05 10:27:51');

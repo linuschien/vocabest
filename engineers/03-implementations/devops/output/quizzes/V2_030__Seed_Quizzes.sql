@@ -1,4 +1,4 @@
 /* Seed Data for Quizzes - Bucket 030 */
-INSERT INTO quiz_question (id, word_bank_id, contextual_cloze, chinese_translation, correct_answer, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic) VALUES
-('d63019f6-aad6-5a56-a2b9-e798a6a88636', '82f91108-38f0-4b1a-b73e-fbaacd6dc557', '___ hope that my advice will be helpful to you during your study abroad program.', '我希望我的建議對你在海外留學期間會有幫助。', 'I', 'He', 'She', 'They', 'I 是第一人稱單數主格代名詞。', 'I 就像是指著自己的手指。'),
-('ce8344c5-d49b-54d7-a90b-0cc5a0478f72', '863f960c-9dea-4632-a9cb-3487b5c50eab', 'We ___ very happy.', '我們非常開心。', 'are', 'like', 'want', 'need', 'be 動詞，用於複數主詞表示「是」。', 'We → are');
+INSERT INTO quiz_question (id, vocabulary_word_id, target_level, contextual_cloze, translation, correct_option, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic, created_at, updated_at) VALUES
+('d63019f6-aad6-5a56-a2b9-e798a6a88636', '82f91108-38f0-4b1a-b73e-fbaacd6dc557', 'SENIOR_HIGH', '___ hope that my advice will be helpful to you during your study abroad program.', '我希望我的建議對你在海外留學期間會有幫助。', 'I', 'He', 'She', 'They', 'I 是第一人稱單數主格代名詞。', 'I 就像是指著自己的手指。', '2026-07-05 09:58:22', '2026-07-05 09:58:22'),
+('ce8344c5-d49b-54d7-a90b-0cc5a0478f72', '863f960c-9dea-4632-a9cb-3487b5c50eab', 'JUNIOR_HIGH', 'We ___ very happy.', '我們非常開心。', 'are', 'like', 'want', 'need', 'be 動詞，用於複數主詞表示「是」。', 'We → are', '2026-07-05 11:32:46', '2026-07-05 11:32:46');

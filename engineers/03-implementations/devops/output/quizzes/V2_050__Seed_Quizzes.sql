@@ -1,3 +1,4 @@
 /* Seed Data for Quizzes - Bucket 050 */
-INSERT INTO quiz_question (id, word_bank_id, contextual_cloze, chinese_translation, correct_answer, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic) VALUES
-('adfbca99-3387-5ec3-aa54-663eb17ba54e', 'ad050278-a913-4be5-b0bb-d3d91b5aa55b', 'In this board game, players take turns, and it is finally your ___.', '在這個棋盤遊戲中，玩家輪流進行，現在終於輪到你了。', 'go', 'way', 'task', 'life', 'go (n.) 表示輪到的機會或次數。', '在遊戲中，輪到你「走」一步。');
+INSERT INTO quiz_question (id, vocabulary_word_id, target_level, contextual_cloze, translation, correct_option, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic, created_at, updated_at) VALUES
+('adfbca99-3387-5ec3-aa54-663eb17ba54e', 'ad050278-a913-4be5-b0bb-d3d91b5aa55b', 'SENIOR_HIGH', 'In this board game, players take turns, and it is finally your ___.', '在這個棋盤遊戲中，玩家輪流進行，現在終於輪到你了。', 'go', 'way', 'task', 'life', 'go (n.) 表示輪到的機會或次數。', '在遊戲中，輪到你「走」一步。', '2026-07-05 08:01:37', '2026-07-05 08:01:37'),
+('7a05c577-d35e-5101-9c8f-470633d14762', '3b6d71bc-c21a-4e22-b65f-737a9076bf81', 'JUNIOR_HIGH', '___ it is sunny, we go to the park.', '當天氣晴朗時，我們去公園。', 'When', 'Because', 'Although', 'Unless', '此字為連接詞，用來表示時間點。', '想像時間的轉動 → 當...的時候。', '2026-07-06 10:47:32', '2026-07-06 10:47:32');

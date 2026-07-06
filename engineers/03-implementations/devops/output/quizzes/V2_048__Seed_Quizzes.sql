@@ -1,3 +1,4 @@
 /* Seed Data for Quizzes - Bucket 048 */
-INSERT INTO quiz_question (id, word_bank_id, contextual_cloze, chinese_translation, correct_answer, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic) VALUES
-('58dc3244-4f61-58c0-9492-582b5f080e40', '8b3242aa-721e-485b-a282-9f1917c6f65d', 'She bought ___ beautiful dress for the party.', '她為派對買了一件漂亮的洋裝。', 'a', 'some', 'any', 'each', 'a 為不定冠詞，用於單數可數名詞前，表示「一個」。', 'a 代表 one (一個)。');
+INSERT INTO quiz_question (id, vocabulary_word_id, target_level, contextual_cloze, translation, correct_option, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic, created_at, updated_at) VALUES
+('58dc3244-4f61-58c0-9492-582b5f080e40', '8b3242aa-721e-485b-a282-9f1917c6f65d', 'SENIOR_HIGH', 'She bought ___ beautiful dress for the party.', '她為派對買了一件漂亮的洋裝。', 'a', 'some', 'any', 'each', 'a 為不定冠詞，用於單數可數名詞前，表示「一個」。', 'a 代表 one (一個)。', '2026-07-05 09:30:25', '2026-07-05 09:30:25'),
+('1f2fe757-32ea-55d0-a5b4-615e8ae6f150', 'a2d89bc0-aa6e-42b6-bf38-ebfa28cb35d1', 'JUNIOR_HIGH', '___ are many students in the classroom.', '教室裡有很多學生。', 'There', 'This', 'That', 'It', 'There is/are 句型用來表示「某處有某物」。', '看到 ___ is/are 就要想到 There 表示「有」。', '2026-07-06 10:42:39', '2026-07-06 10:42:39');

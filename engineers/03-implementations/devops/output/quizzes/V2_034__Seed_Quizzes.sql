@@ -1,3 +1,4 @@
 /* Seed Data for Quizzes - Bucket 034 */
-INSERT INTO quiz_question (id, word_bank_id, contextual_cloze, chinese_translation, correct_answer, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic) VALUES
-('f3f31978-f8fe-588d-8aec-905a48099716', '4d1fc80d-30d2-4fef-9ffa-9473c55eef51', 'It will ___ about forty minutes to walk to the station.', '走路到車站大約需要四十分鐘。', 'take', 'make', 'give', 'want', 'take 在此表示 花費(時間)。', '時間被這件事「拿走」了，所以要用 take。');
+INSERT INTO quiz_question (id, vocabulary_word_id, target_level, contextual_cloze, translation, correct_option, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic, created_at, updated_at) VALUES
+('f3f31978-f8fe-588d-8aec-905a48099716', '4d1fc80d-30d2-4fef-9ffa-9473c55eef51', 'SENIOR_HIGH', 'It will ___ about forty minutes to walk to the station.', '走路到車站大約需要四十分鐘。', 'take', 'make', 'give', 'want', 'take 在此表示 花費(時間)。', '時間被這件事「拿走」了，所以要用 take。', '2026-07-05 08:08:19', '2026-07-05 08:08:19'),
+('fc60d5ae-cc2c-543a-9d31-dbc7d29ccd22', '9a8e0f21-a05c-451e-bdbb-33b7687046a9', 'JUNIOR_HIGH', 'My friend and I like music. ___ listen to it every day.', '我的朋友和我喜歡音樂。我們每天都聽。', 'We', 'She', 'They', 'You', '第一人稱複數代名詞', '當出現「某人 + and I」時，可以用 We 代替', '2026-07-06 10:45:59', '2026-07-06 10:45:59');

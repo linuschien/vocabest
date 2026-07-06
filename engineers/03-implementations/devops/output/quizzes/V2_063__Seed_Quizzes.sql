@@ -1,4 +1,5 @@
 /* Seed Data for Quizzes - Bucket 063 */
-INSERT INTO quiz_question (id, word_bank_id, contextual_cloze, chinese_translation, correct_answer, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic) VALUES
-('35dbe85c-9864-56c6-8a5a-83ec2186a9d7', '4c7bf4a2-cdaa-4597-b8ab-ccf11ab3e97a', 'Are you waiting ___ the train?', '你在等火車嗎？', 'for', 'to', 'at', 'with', '介係詞，用於搭配 wait', '等待某物用 wait for'),
-('f0c01f33-fe87-5b44-b9c2-e2026a63f617', 'd8664d6c-d5b0-47af-bddc-42f252d2c12b', 'The students ___ in the library studying for the exam.', '學生們正在圖書館裡為考試讀書。', 'are', 'go', 'make', 'do', 'be 動詞 (表示位置)', 'are 在此表示「在...」的位置。');
+INSERT INTO quiz_question (id, vocabulary_word_id, target_level, contextual_cloze, translation, correct_option, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic, created_at, updated_at) VALUES
+('f0c01f33-fe87-5b44-b9c2-e2026a63f617', 'd8664d6c-d5b0-47af-bddc-42f252d2c12b', 'SENIOR_HIGH', 'The students ___ in the library studying for the exam.', '學生們正在圖書館裡為考試讀書。', 'are', 'go', 'make', 'do', 'be 動詞 (表示位置)', 'are 在此表示「在...」的位置。', '2026-07-05 12:06:55', '2026-07-05 12:06:55'),
+('35dbe85c-9864-56c6-8a5a-83ec2186a9d7', '4c7bf4a2-cdaa-4597-b8ab-ccf11ab3e97a', 'JUNIOR_HIGH', 'Are you waiting ___ the train?', '你在等火車嗎？', 'for', 'to', 'at', 'with', '介係詞，用於搭配 wait', '等待某物用 wait for', '2026-07-05 08:40:54', '2026-07-05 08:40:54'),
+('1a9e9832-cbca-5c1d-aee4-5cd8dd2f6967', '8014755c-2a80-466f-a06a-c53a888c0b81', 'JUNIOR_HIGH', 'Where is Tom? ___ is in the library.', 'Tom 在哪裡？他在圖書館。', 'He', 'She', 'It', 'They', '人稱代名詞，用來代替前面提到的男性名詞 Tom。', 'Tom 是男生的名字 → 用 He。', '2026-07-06 10:34:37', '2026-07-06 10:34:37');

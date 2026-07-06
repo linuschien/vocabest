@@ -1,4 +1,4 @@
 /* Seed Data for Quizzes - Bucket 005 */
-INSERT INTO quiz_question (id, word_bank_id, contextual_cloze, chinese_translation, correct_answer, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic) VALUES
-('28ae8e17-5733-582d-bc51-05cc7fa96249', '20d6333f-d9da-4330-b0cf-8ed640c01ec4', 'Please give this gift ___ my mother.', '請把這份禮物給我的母親。', 'to', 'with', 'for', 'from', '表示動作的「對象」。', 'give...to... → 給某人'),
-('2f2ea599-81cf-59df-a778-ae80cfe96f8d', '69c72296-40c5-4d3c-8b3a-6a62df6576c3', '___ ambition is to become a famous scientist and win a Nobel Prize.', '我的志向是成為一名著名的科學家並獲得諾貝爾獎。', 'My', 'Your', 'Her', 'Their', '所有格形容詞 (possessive adjective)', 'my + 名詞 → 我的...');
+INSERT INTO quiz_question (id, vocabulary_word_id, target_level, contextual_cloze, translation, correct_option, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic, created_at, updated_at) VALUES
+('2f2ea599-81cf-59df-a778-ae80cfe96f8d', '69c72296-40c5-4d3c-8b3a-6a62df6576c3', 'SENIOR_HIGH', '___ ambition is to become a famous scientist and win a Nobel Prize.', '我的志向是成為一名著名的科學家並獲得諾貝爾獎。', 'My', 'Your', 'Her', 'Their', '所有格形容詞 (possessive adjective)', 'my + 名詞 → 我的...', '2026-07-05 14:13:13', '2026-07-05 14:13:13'),
+('28ae8e17-5733-582d-bc51-05cc7fa96249', '20d6333f-d9da-4330-b0cf-8ed640c01ec4', 'JUNIOR_HIGH', 'Please give this gift ___ my mother.', '請把這份禮物給我的母親。', 'to', 'with', 'for', 'from', '表示動作的「對象」。', 'give...to... → 給某人', '2026-07-05 09:19:21', '2026-07-05 09:19:21');

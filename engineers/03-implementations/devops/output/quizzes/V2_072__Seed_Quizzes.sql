@@ -1,3 +1,4 @@
 /* Seed Data for Quizzes - Bucket 072 */
-INSERT INTO quiz_question (id, word_bank_id, contextual_cloze, chinese_translation, correct_answer, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic) VALUES
-('cfaaeb3b-018e-5018-b887-a532650e8e1c', '6ba8bebb-72f7-41c5-ae30-b931d133d6d2', 'We want to ___ to the cinema tonight.', '我們今晚想去電影院。', 'go', 'eat', 'dance', 'sing', 'go 表示「前往」某個地點。', 'Go → 前往');
+INSERT INTO quiz_question (id, vocabulary_word_id, target_level, contextual_cloze, translation, correct_option, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic, created_at, updated_at) VALUES
+('cfaaeb3b-018e-5018-b887-a532650e8e1c', '6ba8bebb-72f7-41c5-ae30-b931d133d6d2', 'JUNIOR_HIGH', 'We want to ___ to the cinema tonight.', '我們今晚想去電影院。', 'go', 'eat', 'dance', 'sing', 'go 表示「前往」某個地點。', 'Go → 前往', '2026-07-05 07:26:11', '2026-07-05 07:26:11'),
+('c6799a98-f2a6-5039-9178-d15df91dc7bc', '595e0908-47b5-4b28-98b7-8887a86c7901', 'JUNIOR_HIGH', 'They want to ___ the empty island with new families.', '他們想要讓新的家庭居住在該空島上。', 'people', 'cook', 'sing', 'jump', '無特定字根', 'people (v.) → 使有人居住', '2026-07-06 10:39:14', '2026-07-06 10:39:14');

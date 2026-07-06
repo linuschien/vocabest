@@ -1,3 +1,4 @@
 /* Seed Data for Quizzes - Bucket 087 */
-INSERT INTO quiz_question (id, word_bank_id, contextual_cloze, chinese_translation, correct_answer, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic) VALUES
-('ab1f24a4-8ef4-58d2-b88e-aa96a08ac1c7', 'fb317c3c-8446-4ee4-9bfc-798b3e8a0110', 'The key was left ___ the drawer all morning.', '那把鑰匙整個早上都留在抽屜裡。', 'in', 'on', 'at', 'by', '表示在某個空間或範圍之內。', '想像進入一個空間的動作。');
+INSERT INTO quiz_question (id, vocabulary_word_id, target_level, contextual_cloze, translation, correct_option, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic, created_at, updated_at) VALUES
+('ab1f24a4-8ef4-58d2-b88e-aa96a08ac1c7', 'fb317c3c-8446-4ee4-9bfc-798b3e8a0110', 'SENIOR_HIGH', 'The key was left ___ the drawer all morning.', '那把鑰匙整個早上都留在抽屜裡。', 'in', 'on', 'at', 'by', '表示在某個空間或範圍之內。', '想像進入一個空間的動作。', '2026-07-05 10:04:42', '2026-07-05 10:04:42'),
+('13e29ef4-8528-5aef-9ad4-9d3077e0fc2f', '1621adb1-9e24-4e8a-829c-9d14e9be90e1', 'SENIOR_HIGH', 'I cannot decide ___ to leave the party.', '我無法決定何時該離開派對。', 'when', 'where', 'how', 'why', 'when 在此作為疑問副詞，用於疑問詞加上 to V 的結構中。', '疑問詞加上 to V 常用於表示何時或如何。', '2026-07-06 11:06:15', '2026-07-06 11:06:15');

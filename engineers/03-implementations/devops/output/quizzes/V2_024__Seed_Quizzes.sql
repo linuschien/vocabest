@@ -1,3 +1,5 @@
 /* Seed Data for Quizzes - Bucket 024 */
-INSERT INTO quiz_question (id, word_bank_id, contextual_cloze, chinese_translation, correct_answer, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic) VALUES
-('c84d3392-e10b-5e6b-9bca-8e4493100864', 'c06ad5b8-1e6c-4f00-8470-7f8a5418e1cc', 'My birthday is ___ June 12th.', '我的生日是六月十二號。', 'on', 'in', 'at', 'with', '介係詞，用於特定的日期或星期。', '日期在日曆上，所以要用 on。');
+INSERT INTO quiz_question (id, vocabulary_word_id, target_level, contextual_cloze, translation, correct_option, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic, created_at, updated_at) VALUES
+('c84d3392-e10b-5e6b-9bca-8e4493100864', 'c06ad5b8-1e6c-4f00-8470-7f8a5418e1cc', 'JUNIOR_HIGH', 'My birthday is ___ June 12th.', '我的生日是六月十二號。', 'on', 'in', 'at', 'with', '介係詞，用於特定的日期或星期。', '日期在日曆上，所以要用 on。', '2026-07-05 11:51:15', '2026-07-05 11:51:15'),
+('9569a0f8-4ed6-5ee8-9b83-db49ed9ac134', '299d666e-296a-444b-88bd-190b2831679c', 'JUNIOR_HIGH', 'I am ___ hungry that I can''t eat anything.', '我如此餓，以至於我什麼都吃不下。', 'so', 'very', 'too', 'quite', '此字在此作為副詞，用來強調程度，表示「這麼、如此」。', 'so 就像是一個放大鏡，用來放大程度。', '2026-07-06 10:41:00', '2026-07-06 10:41:00'),
+('e74a23ce-d86d-5797-8e69-beabbdcdfcb0', '1f05e6cd-08a7-4cd3-8322-6f7534909238', 'JUNIOR_HIGH', 'We need more ___ to solve this math problem.', '我們需要更多時間來解決這個數學問題。', 'time', 'money', 'food', 'water', '此為基礎單字，無特定字根。', 'time 代表時間，money 是錢，別把時間當成錢花。', '2026-07-06 10:44:02', '2026-07-06 10:44:02');
