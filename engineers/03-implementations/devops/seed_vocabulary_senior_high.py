@@ -399,7 +399,7 @@ def main():
     sql_statements = []
     sql_statements.append("-- V1__Seed_Vocabulary_Senior_High.sql")
     sql_statements.append("/* Seed Data for SENIOR_HIGH Vocabulary */")
-    sql_statements.append("INSERT INTO word_bank (id, word, parts_of_speech, chinese_translation, target_level, difficulty_level, exam_frequency) VALUES")
+    sql_statements.append("INSERT INTO word_bank (id, word, parts_of_speech, chinese_translation, target_level, difficulty_level, exam_frequency, created_at, updated_at) VALUES")
     
     values = []
     for key in sorted(final_entries.keys()):
@@ -422,7 +422,7 @@ def main():
         pos_escaped = pos.replace("'", "''")
         trans_escaped = trans.replace("'", "''")
         
-        values.append(f"('{w_id}', '{w_escaped}', '{pos_escaped}', '{trans_escaped}', 'SENIOR_HIGH', {lvl}, {freq})")
+        values.append(f"('{w_id}', '{w_escaped}', '{pos_escaped}', '{trans_escaped}', 'SENIOR_HIGH', {lvl}, {freq}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)")
         
     sql_statements.append(",\n".join(values) + ";")
     

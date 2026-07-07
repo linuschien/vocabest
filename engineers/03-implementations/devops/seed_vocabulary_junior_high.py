@@ -304,7 +304,7 @@ def main():
     
     with open(output_path, 'w', encoding='utf-8') as f:
         f.write("/* Seed Data for JUNIOR_HIGH Vocabulary */\n")
-        f.write("INSERT INTO word_bank (id, word, parts_of_speech, chinese_translation, target_level, difficulty_level, exam_frequency) VALUES\n")
+        f.write("INSERT INTO word_bank (id, word, parts_of_speech, chinese_translation, target_level, difficulty_level, exam_frequency, created_at, updated_at) VALUES\n")
         
         for i, data in enumerate(sorted_words):
             # Escape single quotes for SQL insertion
@@ -313,7 +313,7 @@ def main():
             trans = data['chinese_translation'].replace("'", "''")
             
             is_last = (i == len(sorted_words) - 1)
-            line = f"('{data['id']}', '{w}', '{pos}', '{trans}', '{data['target_level']}', {data['difficulty_level']}, {data['exam_frequency']})"
+            line = f"('{data['id']}', '{w}', '{pos}', '{trans}', '{data['target_level']}', {data['difficulty_level']}, {data['exam_frequency']}, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)"
             if is_last:
                 f.write(line + ";\n")
             else:

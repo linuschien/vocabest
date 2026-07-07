@@ -43,8 +43,8 @@ def run_tests():
             if len(last_parts) == 2:
                 level_name = last_parts[0]
                 nums = last_parts[1].split(", ")
-                if len(nums) == 2:
-                    lvl, freq = nums
+                if len(nums) >= 2:
+                    lvl, freq = nums[0], nums[1]
                     uid = parts[0]
                     word = parts[1]
                     pos = parts[2]
