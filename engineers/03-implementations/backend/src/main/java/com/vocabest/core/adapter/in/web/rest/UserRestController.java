@@ -23,6 +23,7 @@ public class UserRestController {
     }
 
     @PostMapping("/api/v1/users")
+    @com.vocabest.core.adapter.in.web.security.AdminOnly
     public Mono<ResponseEntity<UserResponse>> createUser(@RequestBody UserRequest req) {
         return commandService.createUser(req)
                 .map(this::mapToResponse)
@@ -31,7 +32,7 @@ public class UserRestController {
 
     @GetMapping("/api/v1/users/{id}")
     public Mono<ResponseEntity<UserResponse>> getUserById(@PathVariable UUID id) {
-        return queryService.getUserById(id)
+        return verifyOwnership(id).then(queryService.getUserById(id))
                 .map(this::mapToResponse)
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());
@@ -39,13 +40,14 @@ public class UserRestController {
 
     @PutMapping("/api/v1/users/{id}")
     public Mono<ResponseEntity<UserResponse>> updateUser(@PathVariable UUID id, @RequestBody UserRequest req) {
-        return commandService.updateUser(id, req)
+        return verifyOwnership(id).then(commandService.updateUser(id, req))
                 .map(this::mapToResponse)
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/api/v1/users/{id}")
+    @com.vocabest.core.adapter.in.web.security.AdminOnly
     public Mono<ResponseEntity<Void>> deleteUser(@PathVariable UUID id) {
         return commandService.deleteUser(id)
                 .then(Mono.just(ResponseEntity.noContent().<Void>build()));
@@ -64,21 +66,21 @@ public class UserRestController {
 
     @PostMapping("/api/v1/users/{userId}:nextQuestion")
     public Mono<ResponseEntity<QuizQuestionResponse>> getNextQuestion(@PathVariable UUID userId) {
-        return queryService.getNextQuestion(userId)
+        return verifyOwnership(userId).then(queryService.getNextQuestion(userId))
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/api/v1/users/{userId}:nextErrorQuestion")
     public Mono<ResponseEntity<QuizQuestionResponse>> getNextErrorQuestion(@PathVariable UUID userId) {
-        return queryService.getNextErrorQuestion(userId)
+        return verifyOwnership(userId).then(queryService.getNextErrorQuestion(userId))
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
     @PostMapping("/api/v1/users/{userId}:submitAnswer")
     public Mono<ResponseEntity<SubmitAnswerResponse>> submitAnswer(@PathVariable UUID userId, @RequestBody SubmitAnswerRequest req) {
-        return commandService.submitAnswer(userId, req)
+        return verifyOwnership(userId).then(commandService.submitAnswer(userId, req))
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
@@ -93,12 +95,25 @@ public class UserRestController {
 
     @GetMapping("/api/v1/users/{userId}:errorReviewCount")
     public Mono<ResponseEntity<ErrorReviewCountResponse>> getErrorReviewCount(@PathVariable UUID userId) {
-        return queryService.getErrorReviewCount(userId)
+        return verifyOwnership(userId).then(queryService.getErrorReviewCount(userId))
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().<ErrorReviewCountResponse>build());
     }
 
     private UserResponse mapToResponse(User entity) {
         return new UserResponse(entity.id(), entity.email(), entity.role() != null ? entity.role().name() : null, entity.targetLevel() != null ? entity.targetLevel().name() : null, entity.learningStreak(), entity.dailyTargetQuestions());
+    }
+
+    private Mono<Void> verifyOwnership(UUID targetUserId) {
+        return Mono.deferContextual(ctx -> {
+            User currentUser = ctx.getOrDefault("CURRENT_USER", null);
+            if (currentUser == null) {
+                return Mono.error(new org.springframework.web.server.ResponseStatusException(HttpStatus.UNAUTHORIZED, "Unauthenticated"));
+            }
+            if (currentUser.role() != com.vocabest.core.adapter.out.persistence.model.Role.ADMIN && !currentUser.id().equals(targetUserId)) {
+                return Mono.error(new org.springframework.web.server.ResponseStatusException(HttpStatus.FORBIDDEN, "Access denied"));
+            }
+            return Mono.empty();
+        });
     }
 }

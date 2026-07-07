@@ -41,7 +41,12 @@ class UserRestControllerTest {
 
     @BeforeEach
     void setUp() {
-        client = WebTestClient.bindToController(controller).build();
+        client = WebTestClient.bindToController(controller)
+                .webFilter((exchange, chain) -> {
+                    User dummyUser = new User(UUID.randomUUID(), "test@test.com", Role.ADMIN, TargetLevel.JUNIOR_HIGH, 0, 20, LocalDateTime.now(), LocalDateTime.now(), null);
+                    return chain.filter(exchange).contextWrite(reactor.util.context.Context.of("CURRENT_USER", dummyUser));
+                })
+                .build();
     }
 
     @Test
