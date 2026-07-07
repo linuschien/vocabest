@@ -12,7 +12,6 @@ import reactor.core.publisher.Mono;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/users")
 public class UserRestController {
 
     private final UserCommandService commandService;
@@ -23,14 +22,14 @@ public class UserRestController {
         this.queryService = queryService;
     }
 
-    @PostMapping
+    @PostMapping("/api/v1/users")
     public Mono<ResponseEntity<UserResponse>> createUser(@RequestBody UserRequest req) {
         return commandService.createUser(req)
                 .map(this::mapToResponse)
                 .map(res -> ResponseEntity.status(HttpStatus.CREATED).body(res));
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/api/v1/users/{id}")
     public Mono<ResponseEntity<UserResponse>> getUserById(@PathVariable UUID id) {
         return queryService.getUserById(id)
                 .map(this::mapToResponse)
@@ -38,7 +37,7 @@ public class UserRestController {
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/api/v1/users/{id}")
     public Mono<ResponseEntity<UserResponse>> updateUser(@PathVariable UUID id, @RequestBody UserRequest req) {
         return commandService.updateUser(id, req)
                 .map(this::mapToResponse)
@@ -46,27 +45,27 @@ public class UserRestController {
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/api/v1/users/{id}")
     public Mono<ResponseEntity<Void>> deleteUser(@PathVariable UUID id) {
         return commandService.deleteUser(id)
                 .then(Mono.just(ResponseEntity.noContent().<Void>build()));
     }
 
-    @PostMapping(":onboard")
+    @PostMapping("/api/v1/users:onboard")
     public Mono<ResponseEntity<UserResponse>> onboardUser(@RequestBody UserOnboardRequest req) {
         return commandService.onboardUser(req)
                 .map(this::mapToResponse)
                 .map(res -> ResponseEntity.status(HttpStatus.CREATED).body(res));
     }
 
-    @PostMapping("/{userId}:nextQuestion")
+    @PostMapping("/api/v1/users/{userId}:nextQuestion")
     public Mono<ResponseEntity<QuizQuestionResponse>> getNextQuestion(@PathVariable UUID userId) {
         return queryService.getNextQuestion(userId)
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
-    @PostMapping("/{userId}:submitAnswer")
+    @PostMapping("/api/v1/users/{userId}:submitAnswer")
     public Mono<ResponseEntity<SubmitAnswerResponse>> submitAnswer(@PathVariable UUID userId, @RequestBody SubmitAnswerRequest req) {
         return commandService.submitAnswer(userId, req)
                 .map(ResponseEntity::ok)
