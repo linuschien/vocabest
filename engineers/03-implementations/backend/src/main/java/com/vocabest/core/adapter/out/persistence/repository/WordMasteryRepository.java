@@ -10,4 +10,6 @@ import reactor.core.publisher.Mono;
 public interface WordMasteryRepository extends R2dbcRepository<WordMastery, UUID> {
 
     Mono<WordMastery> findFirstByUserIdAndNextReviewDateLessThanEqualAndErrorWeightGreaterThanOrderByErrorWeightDescNextReviewDateAsc(UUID userId, LocalDateTime nextReviewDate, Integer errorWeight);
+    
+    Mono<Long> countByUserIdAndNextReviewDateLessThanEqualAndErrorWeightGreaterThan(UUID userId, LocalDateTime nextReviewDate, Integer errorWeight);
 }

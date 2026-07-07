@@ -79,6 +79,21 @@ public class UserRestController {
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/api/v1/users:whoami")
+    public Mono<ResponseEntity<UserResponse>> whoami(@RequestHeader(value = "x-goog-authenticated-user-email", required = false) String emailHeader) {
+        return queryService.whoami(emailHeader)
+                .map(this::mapToResponse)
+                .map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/api/v1/users/{userId}:errorReviewCount")
+    public Mono<ResponseEntity<ErrorReviewCountResponse>> getErrorReviewCount(@PathVariable UUID userId) {
+        return queryService.getErrorReviewCount(userId)
+                .map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.notFound().<ErrorReviewCountResponse>build());
+    }
+
     private UserResponse mapToResponse(User entity) {
         return new UserResponse(entity.id(), entity.email(), entity.role() != null ? entity.role().name() : null, entity.targetLevel() != null ? entity.targetLevel().name() : null, entity.learningStreak(), entity.dailyTargetQuestions());
     }

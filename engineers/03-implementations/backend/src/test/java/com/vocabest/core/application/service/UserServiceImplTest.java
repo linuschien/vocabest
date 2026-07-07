@@ -35,6 +35,9 @@ class UserServiceImplTest {
     @Mock
     private WordMasteryRepository wordMasteryRepository;
 
+    @Mock
+    private DailyProgressRepository dailyProgressRepository;
+
     @InjectMocks
     private UserServiceImpl userService;
 
@@ -180,6 +183,11 @@ class UserServiceImplTest {
         WordMastery updatedMastery = new WordMastery(existingMastery.id(), testUserId, testWordBankId, 1, LocalDateTime.now().plusDays(3), LocalDateTime.now(), LocalDateTime.now(), null);
         when(wordMasteryRepository.save(any(WordMastery.class))).thenReturn(Mono.just(updatedMastery));
 
+        when(userRepository.findById(testUserId)).thenReturn(Mono.just(testUser));
+        when(dailyProgressRepository.findByUserIdAndDate(eq(testUserId), any())).thenReturn(Mono.empty());
+        when(userRepository.save(any(User.class))).thenReturn(Mono.just(testUser));
+        when(dailyProgressRepository.save(any(DailyProgress.class))).thenReturn(Mono.just(new DailyProgress(UUID.randomUUID(), testUserId, java.time.LocalDate.now(), 20, 1, 1, 0, LocalDateTime.now(), LocalDateTime.now(), null)));
+
         StepVerifier.create(userService.submitAnswer(testUserId, req))
                 .expectNextMatches(SubmitAnswerResponse::isCorrect)
                 .verifyComplete();
@@ -197,6 +205,11 @@ class UserServiceImplTest {
         
         WordMastery updatedMastery = new WordMastery(existingMastery.id(), testUserId, testWordBankId, 0, null, LocalDateTime.now(), LocalDateTime.now(), null);
         when(wordMasteryRepository.save(any(WordMastery.class))).thenReturn(Mono.just(updatedMastery));
+
+        when(userRepository.findById(testUserId)).thenReturn(Mono.just(testUser));
+        when(dailyProgressRepository.findByUserIdAndDate(eq(testUserId), any())).thenReturn(Mono.empty());
+        when(userRepository.save(any(User.class))).thenReturn(Mono.just(testUser));
+        when(dailyProgressRepository.save(any(DailyProgress.class))).thenReturn(Mono.just(new DailyProgress(UUID.randomUUID(), testUserId, java.time.LocalDate.now(), 20, 1, 1, 0, LocalDateTime.now(), LocalDateTime.now(), null)));
 
         StepVerifier.create(userService.submitAnswer(testUserId, req))
                 .expectNextMatches(SubmitAnswerResponse::isCorrect)
@@ -219,10 +232,37 @@ class UserServiceImplTest {
         WordMastery newMastery = new WordMastery(UUID.randomUUID(), testUserId, testWordBankId, 1, LocalDateTime.now().plusDays(1), LocalDateTime.now(), LocalDateTime.now(), null);
         when(wordMasteryRepository.save(any(WordMastery.class))).thenReturn(Mono.just(newMastery));
 
+        when(userRepository.findById(testUserId)).thenReturn(Mono.just(testUser));
+        when(dailyProgressRepository.findByUserIdAndDate(eq(testUserId), any())).thenReturn(Mono.empty());
+        when(userRepository.save(any(User.class))).thenReturn(Mono.just(testUser));
+        when(dailyProgressRepository.save(any(DailyProgress.class))).thenReturn(Mono.just(new DailyProgress(UUID.randomUUID(), testUserId, java.time.LocalDate.now(), 20, 1, 0, 1, LocalDateTime.now(), LocalDateTime.now(), null)));
+
         StepVerifier.create(userService.submitAnswer(testUserId, req))
                 .expectNextMatches(res -> !res.isCorrect() && res.correctAnswer().equals("apple"))
                 .verifyComplete();
         
         verify(errorEventRepository, times(1)).save(any(ErrorEvent.class));
+    }
+
+    @Test
+    void whoami_shouldResetStreak_ifMissedYesterday() {
+        User user = new User(testUserId, "test@example.com", Role.LEARNER, TargetLevel.JUNIOR_HIGH, 5, 20, LocalDateTime.now(), LocalDateTime.now(), null);
+        when(userRepository.findByEmail("test@example.com")).thenReturn(Mono.just(user));
+        when(dailyProgressRepository.findByUserIdAndDate(eq(testUserId), any(java.time.LocalDate.class))).thenReturn(Mono.empty());
+        when(userRepository.save(any(User.class))).thenReturn(Mono.just(user)); // simplified
+
+        StepVerifier.create(userService.whoami("accounts.google.com:test@example.com"))
+                .expectNextMatches(u -> u.email().equals("test@example.com"))
+                .verifyComplete();
+    }
+
+    @Test
+    void getErrorReviewCount_shouldReturnCount() {
+        when(wordMasteryRepository.countByUserIdAndNextReviewDateLessThanEqualAndErrorWeightGreaterThan(eq(testUserId), any(), eq(0)))
+                .thenReturn(Mono.just(5L));
+
+        StepVerifier.create(userService.getErrorReviewCount(testUserId))
+                .expectNextMatches(res -> res.count() == 5)
+                .verifyComplete();
     }
 }

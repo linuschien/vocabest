@@ -5,5 +5,8 @@ import org.springframework.data.repository.query.ReactiveQueryByExampleExecutor;
 import com.vocabest.core.adapter.out.persistence.model.User;
 import java.util.UUID;
 
+import reactor.core.publisher.Mono;
+
 public interface UserRepository extends R2dbcRepository<User, UUID> {
+    Mono<User> findByEmail(String email);
 }
