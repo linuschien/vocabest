@@ -70,7 +70,7 @@ class UserServiceImplTest {
     void listUsers_shouldReturnFluxOfUsers() {
         when(userRepository.findAll()).thenReturn(Flux.just(testUser));
 
-        StepVerifier.create(userService.listUsers(new UserFilterInput((String) null)))
+        StepVerifier.create(userService.listUsers(new UserFilterInput(null, null, null, null, null, null)))
                 .expectNext(testUser)
                 .verifyComplete();
     }

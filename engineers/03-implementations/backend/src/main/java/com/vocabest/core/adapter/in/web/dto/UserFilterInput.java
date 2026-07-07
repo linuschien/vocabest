@@ -1,5 +1,10 @@
 package com.vocabest.core.adapter.in.web.dto;
 
 public record UserFilterInput(
-    String targetLevel
+    java.util.UUID id,
+    String email,
+    String role,
+    String targetLevel,
+    Integer learningStreak,
+    Integer dailyTargetQuestions
 ) {}

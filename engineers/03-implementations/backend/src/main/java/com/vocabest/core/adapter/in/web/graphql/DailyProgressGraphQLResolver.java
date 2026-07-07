@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import reactor.core.publisher.Flux;
 
 @Controller
-@com.vocabest.core.adapter.in.web.security.AdminOnly
 public class DailyProgressGraphQLResolver {
 
     private final DailyProgressRepository repository;
@@ -25,9 +24,23 @@ public class DailyProgressGraphQLResolver {
         if (filter == null || filter.userId() == null) {
             return Flux.error(new IllegalArgumentException("Filter is required to prevent unauthorized data access"));
         }
-        DailyProgress probe = new DailyProgress(null, filter.userId(), null, null, null, null, null, null, null, null);
-        ExampleMatcher matcher = ExampleMatcher.matching()
-                .withIgnoreNullValues();
-        return repository.findAll(Example.of(probe, matcher));
+        return Flux.deferContextual(ctx -> {
+            com.vocabest.core.adapter.out.persistence.model.User currentUser = ctx.getOrDefault("CURRENT_USER", null);
+            if (currentUser == null) {
+                return Flux.error(new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.UNAUTHORIZED, "Unauthenticated"));
+            }
+            if (currentUser.role() != com.vocabest.core.adapter.out.persistence.model.Role.ADMIN && !currentUser.id().equals(filter.userId())) {
+                return Flux.error(new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.FORBIDDEN, "Access denied"));
+            }
+            
+            java.time.LocalDate filterDate = null;
+            if (filter.date() != null) {
+                filterDate = java.time.LocalDate.parse(filter.date());
+            }
+            DailyProgress probe = new DailyProgress(filter.id(), filter.userId(), filterDate, filter.targetQuestions(), filter.answeredQuestions(), filter.correctQuestions(), filter.wrongQuestions(), null, null, null);
+            ExampleMatcher matcher = ExampleMatcher.matching()
+                    .withIgnoreNullValues();
+            return repository.findAll(Example.of(probe, matcher));
+        });
     }
 }

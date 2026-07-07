@@ -22,8 +22,16 @@ public class UserGraphQLResolver {
     @QueryMapping
     @com.vocabest.core.adapter.in.web.security.AdminOnly
     public Flux<User> listUsers(@Argument UserFilterInput filter) {
-        if (filter != null && filter.targetLevel() != null) {
-            User probe = new User(null, null, null, com.vocabest.core.adapter.out.persistence.model.TargetLevel.valueOf(filter.targetLevel()), null, null, null, null, null);
+        if (filter != null) {
+            com.vocabest.core.adapter.out.persistence.model.TargetLevel tl = null;
+            if (filter.targetLevel() != null) {
+                tl = com.vocabest.core.adapter.out.persistence.model.TargetLevel.valueOf(filter.targetLevel());
+            }
+            com.vocabest.core.adapter.out.persistence.model.Role role = null;
+            if (filter.role() != null) {
+                role = com.vocabest.core.adapter.out.persistence.model.Role.valueOf(filter.role());
+            }
+            User probe = new User(filter.id(), filter.email(), role, tl, filter.learningStreak(), filter.dailyTargetQuestions(), null, null, null);
             ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreNullValues();
             return repository.findAll(Example.of(probe, matcher));
         }

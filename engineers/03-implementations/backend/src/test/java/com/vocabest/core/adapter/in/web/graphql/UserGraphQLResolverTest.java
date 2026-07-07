@@ -41,7 +41,7 @@ class UserGraphQLResolverTest {
         
         when(repository.findAll(org.mockito.ArgumentMatchers.<org.springframework.data.domain.Example<User>>any())).thenReturn(Flux.just(user));
 
-        StepVerifier.create(resolver.listUsers(new UserFilterInput("JUNIOR_HIGH")))
+        StepVerifier.create(resolver.listUsers(new UserFilterInput(null, null, null, "JUNIOR_HIGH", null, null)))
                 .expectNextMatches(e -> e.targetLevel() == TargetLevel.JUNIOR_HIGH)
                 .verifyComplete();
     }

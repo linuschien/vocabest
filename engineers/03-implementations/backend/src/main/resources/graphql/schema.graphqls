@@ -24,7 +24,12 @@ type User {
 }
 
 input UserFilterInput {
+  id: UUID
+  email: String
+  role: Role
   targetLevel: TargetLevel
+  learningStreak: Int
+  dailyTargetQuestions: Int
 }
 
 type DailyProgress {
@@ -41,7 +46,13 @@ type DailyProgress {
 }
 
 input DailyProgressFilterInput {
+  id: UUID
   userId: UUID
+  date: String
+  targetQuestions: Int
+  answeredQuestions: Int
+  correctQuestions: Int
+  wrongQuestions: Int
 }
 
 type ErrorEvent {
@@ -56,7 +67,11 @@ type ErrorEvent {
 }
 
 input ErrorEventFilterInput {
+  id: UUID
   userId: UUID
+  quizQuestionId: UUID
+  timestamp: DateTime
+  selectedDistractor: String
 }
 
 type QuizQuestion {
@@ -118,7 +133,10 @@ type WordMastery {
 }
 
 input WordMasteryFilterInput {
+  id: UUID
   userId: UUID
+  wordBankId: UUID
+  errorWeight: Int
 }
 
 type Query {
