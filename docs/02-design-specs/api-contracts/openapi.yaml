@@ -161,9 +161,16 @@ paths:
         "404":
           $ref: "#/components/responses/NotFound"
 
-  /dailyProgresses:
+  /users/{userId}/daily-progresses:
     post:
       operationId: createDailyProgress
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
       requestBody:
         required: true
         content:
@@ -181,6 +188,13 @@ paths:
           $ref: "#/components/responses/BadRequest"
     get:
       operationId: listDailyProgresses
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
       deprecated: true
       description: "Deprecated: Collection GET is banned. Use GraphQL gateway instead."
       responses:
@@ -192,10 +206,16 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/DailyProgressResponse"
-  /dailyProgresses/{dailyProgressId}:
+  /users/{userId}/daily-progresses/{dailyProgressId}:
     get:
       operationId: getDailyProgressById
       parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
         - name: dailyProgressId
           in: path
           required: true
@@ -214,6 +234,12 @@ paths:
     put:
       operationId: updateDailyProgress
       parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
         - name: dailyProgressId
           in: path
           required: true
@@ -240,6 +266,12 @@ paths:
     delete:
       operationId: deleteDailyProgress
       parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
         - name: dailyProgressId
           in: path
           required: true
