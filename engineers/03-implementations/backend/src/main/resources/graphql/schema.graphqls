@@ -76,6 +76,9 @@ type QuizQuestion {
 }
 
 input QuizQuestionFilterInput {
+  word: String
+  startingLetter: String
+  difficultyLevel: Int
   targetLevel: TargetLevel
   page: Int
   size: Int
@@ -95,6 +98,9 @@ type WordBank {
 }
 
 input WordBankFilterInput {
+  word: String
+  startingLetter: String
+  difficultyLevel: Int
   targetLevel: TargetLevel
   page: Int
   size: Int
