@@ -5,14 +5,13 @@ import org.springframework.data.relational.core.mapping.Table;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Table("error_log")
-public record ErrorLog(
+@Table("error_event")
+public record ErrorEvent(
     @Id UUID id,
     UUID userId,
-    UUID vocabularyWordId,
     UUID quizQuestionId,
-    Integer errorWeight,
-    LocalDateTime nextReviewDate,
+    LocalDateTime timestamp,
+    String selectedDistractor,
     LocalDateTime createdAt,
     LocalDateTime updatedAt,
     LocalDateTime deletedAt

@@ -5,13 +5,14 @@ import org.springframework.data.relational.core.mapping.Table;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Table("vocabulary_word")
-public record VocabularyWord(
+@Table("word_bank")
+public record WordBank(
     @Id UUID id,
     String word,
-    String partOfSpeech,
-    String translation,
-    VocabularyLevel level,
+    String partsOfSpeech,
+    String chineseTranslation,
+    TargetLevel targetLevel,
+    Integer difficultyLevel,
     Integer examFrequency,
     LocalDateTime createdAt,
     LocalDateTime updatedAt,

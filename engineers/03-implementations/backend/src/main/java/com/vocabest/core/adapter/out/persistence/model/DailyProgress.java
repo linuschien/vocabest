@@ -9,8 +9,11 @@ import java.util.UUID;
 public record DailyProgress(
     @Id UUID id,
     UUID userId,
-    LocalDateTime date,
-    Integer completedQuestions,
+    java.time.LocalDate date,
+    Integer targetQuestions,
+    Integer answeredQuestions,
+    Integer correctQuestions,
+    Integer wrongQuestions,
     LocalDateTime createdAt,
     LocalDateTime updatedAt,
     LocalDateTime deletedAt

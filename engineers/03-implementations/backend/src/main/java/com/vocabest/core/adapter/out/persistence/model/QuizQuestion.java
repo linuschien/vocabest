@@ -8,16 +8,15 @@ import java.util.UUID;
 @Table("quiz_question")
 public record QuizQuestion(
     @Id UUID id,
-    UUID vocabularyWordId,
+    UUID wordBankId,
     String contextualCloze,
-    String translation,
-    String correctOption,
+    String chineseTranslation,
+    String correctAnswer,
     String distractor1,
     String distractor2,
     String distractor3,
     String explanationRootAffix,
     String explanationMnemonic,
-    TargetLevel targetLevel,
     LocalDateTime createdAt,
     LocalDateTime updatedAt,
     LocalDateTime deletedAt
