@@ -24,7 +24,7 @@ public class DailyProgressRestController {
 
     @PostMapping
     public Mono<ResponseEntity<DailyProgressResponse>> createDailyProgress(@PathVariable UUID userId, @RequestBody DailyProgressRequest req) {
-        DailyProgress entity = new DailyProgress(null, userId, req.date(), req.completedQuestions(), null, null, null);
+        DailyProgress entity = new DailyProgress(null, userId, req.date(), req.targetQuestions(), req.answeredQuestions(), req.correctQuestions(), req.wrongQuestions(), null, null, null);
         return repository.save(entity)
                 .map(this::mapToResponse)
                 .map(res -> ResponseEntity.status(HttpStatus.CREATED).body(res));
@@ -43,7 +43,7 @@ public class DailyProgressRestController {
     public Mono<ResponseEntity<DailyProgressResponse>> updateDailyProgress(@PathVariable UUID userId, @PathVariable UUID id, @RequestBody DailyProgressRequest req) {
         return repository.findById(id)
                 .filter(dp -> dp.userId().equals(userId))
-                .map(existing -> new DailyProgress(existing.id(), existing.userId(), req.date(), req.completedQuestions(), existing.createdAt(), LocalDateTime.now(), existing.deletedAt()))
+                .map(existing -> new DailyProgress(existing.id(), userId, req.date(), req.targetQuestions(), req.answeredQuestions(), req.correctQuestions(), req.wrongQuestions(), existing.createdAt(), LocalDateTime.now(), existing.deletedAt()))
                 .flatMap(repository::save)
                 .map(this::mapToResponse)
                 .map(ResponseEntity::ok)
@@ -59,6 +59,6 @@ public class DailyProgressRestController {
     }
 
     private DailyProgressResponse mapToResponse(DailyProgress entity) {
-        return new DailyProgressResponse(entity.id(), entity.date(), entity.completedQuestions());
+        return new DailyProgressResponse(entity.id(), entity.date(), entity.targetQuestions(), entity.answeredQuestions(), entity.correctQuestions(), entity.wrongQuestions());
     }
 }

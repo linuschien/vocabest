@@ -1,6 +1,6 @@
 package com.vocabest.core.adapter.in.web.dto;
 
-public record QuizQuestionFilterInput(
+public record WordBankFilterInput(
     String word,
     String startingLetter,
     Integer difficultyLevel,

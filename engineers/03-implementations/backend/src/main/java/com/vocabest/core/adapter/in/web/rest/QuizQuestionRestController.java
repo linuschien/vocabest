@@ -2,58 +2,62 @@ package com.vocabest.core.adapter.in.web.rest;
 
 import com.vocabest.core.adapter.in.web.dto.QuizQuestionRequest;
 import com.vocabest.core.adapter.in.web.dto.QuizQuestionResponse;
-import com.vocabest.core.adapter.in.web.dto.QuizQuestionActionRequest;
-import com.vocabest.core.adapter.in.web.dto.OperationStatus;
-import com.vocabest.core.application.port.in.QuizQuestionCommandService;
-import com.vocabest.core.application.port.in.QuizQuestionQueryService;
+import com.vocabest.core.adapter.out.persistence.model.QuizQuestion;
+import com.vocabest.core.adapter.out.persistence.model.TargetLevel;
+import com.vocabest.core.adapter.out.persistence.repository.QuizQuestionRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/api/v1/quiz-questions")
+@RequestMapping("/api/v1/wordBanks/{wordBankId}/quizQuestions")
 public class QuizQuestionRestController {
 
-    private final QuizQuestionCommandService commandService;
-    private final QuizQuestionQueryService queryService;
+    private final QuizQuestionRepository repository;
 
-    public QuizQuestionRestController(QuizQuestionCommandService commandService, QuizQuestionQueryService queryService) {
-        this.commandService = commandService;
-        this.queryService = queryService;
+    public QuizQuestionRestController(QuizQuestionRepository repository) {
+        this.repository = repository;
     }
 
     @PostMapping
-    public Mono<ResponseEntity<QuizQuestionResponse>> createQuizQuestion(@RequestBody QuizQuestionRequest req) {
-        return commandService.createQuizQuestion(req)
+    public Mono<ResponseEntity<QuizQuestionResponse>> createQuizQuestion(@PathVariable UUID wordBankId, @RequestBody QuizQuestionRequest req) {
+        QuizQuestion entity = new QuizQuestion(null, wordBankId, req.contextualCloze(), req.chineseTranslation(), req.correctAnswer(), req.distractor1(), req.distractor2(), req.distractor3(), req.explanationRootAffix(), req.explanationMnemonic(), null, null, null);
+        return repository.save(entity)
+                .map(this::mapToResponse)
                 .map(res -> ResponseEntity.status(HttpStatus.CREATED).body(res));
     }
 
     @GetMapping("/{id}")
-    public Mono<ResponseEntity<QuizQuestionResponse>> getQuizQuestionById(@PathVariable UUID id) {
-        return queryService.getQuizQuestionById(id)
+    public Mono<ResponseEntity<QuizQuestionResponse>> getQuizQuestionById(@PathVariable UUID wordBankId, @PathVariable UUID id) {
+        return repository.findById(id)
+                .filter(q -> q.wordBankId().equals(wordBankId))
+                .map(this::mapToResponse)
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    public Mono<ResponseEntity<QuizQuestionResponse>> updateQuizQuestion(@PathVariable UUID id, @RequestBody QuizQuestionRequest req) {
-        return commandService.updateQuizQuestion(id, req)
+    public Mono<ResponseEntity<QuizQuestionResponse>> updateQuizQuestion(@PathVariable UUID wordBankId, @PathVariable UUID id, @RequestBody QuizQuestionRequest req) {
+        return repository.findById(id)
+                .filter(q -> q.wordBankId().equals(wordBankId))
+                .map(existing -> new QuizQuestion(existing.id(), wordBankId, req.contextualCloze(), req.chineseTranslation(), req.correctAnswer(), req.distractor1(), req.distractor2(), req.distractor3(), req.explanationRootAffix(), req.explanationMnemonic(), existing.createdAt(), LocalDateTime.now(), existing.deletedAt()))
+                .flatMap(repository::save)
+                .map(this::mapToResponse)
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/{id}")
-    public Mono<ResponseEntity<Void>> deleteQuizQuestion(@PathVariable UUID id) {
-        return commandService.deleteQuizQuestion(id)
+    public Mono<ResponseEntity<Void>> deleteQuizQuestion(@PathVariable UUID wordBankId, @PathVariable UUID id) {
+        return repository.deleteById(id)
                 .then(Mono.just(ResponseEntity.noContent().<Void>build()));
     }
 
-    @PostMapping("/generateBatch")
-    public Mono<ResponseEntity<OperationStatus>> generateBatch(@RequestBody QuizQuestionActionRequest req) {
-        return commandService.generateBatch(req)
-                .map(ResponseEntity::ok);
+    private QuizQuestionResponse mapToResponse(QuizQuestion entity) {
+        return new QuizQuestionResponse(entity.id(), entity.wordBankId().toString(), entity.contextualCloze(), entity.chineseTranslation(), entity.correctAnswer(), entity.distractor1(), entity.distractor2(), entity.distractor3(), entity.explanationRootAffix(), entity.explanationMnemonic());
     }
 }

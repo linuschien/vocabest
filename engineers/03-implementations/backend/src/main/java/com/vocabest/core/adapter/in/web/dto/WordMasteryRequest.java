@@ -1,11 +1,9 @@
 package com.vocabest.core.adapter.in.web.dto;
 
 import java.time.LocalDateTime;
-import java.util.UUID;
 
-public record ErrorLogResponse(
-    UUID id,
-    UUID wordId,
+public record WordMasteryRequest(
+    String wordBankId,
     Integer errorWeight,
     LocalDateTime nextReviewDate
 ) {}

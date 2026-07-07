@@ -91,7 +91,7 @@ public class UserServiceImpl implements UserCommandService, UserQueryService {
                                 return quizQuestionRepository.search(searchFilter).next();
                             });
                 })
-                .map(q -> new QuizQuestionResponse(q.id(), q.wordBankId().toString(), q.contextualCloze(), q.chineseTranslation(), q.correctAnswer(), q.distractor1(), q.distractor2(), q.distractor3(), q.explanationRootAffix(), q.explanationMnemonic(), q.createdAt(), q.updatedAt(), q.deletedAt()));
+                .map(q -> new QuizQuestionResponse(q.id(), q.wordBankId().toString(), q.contextualCloze(), q.chineseTranslation(), q.correctAnswer(), q.distractor1(), q.distractor2(), q.distractor3(), q.explanationRootAffix(), q.explanationMnemonic()));
     }
 
     @Override

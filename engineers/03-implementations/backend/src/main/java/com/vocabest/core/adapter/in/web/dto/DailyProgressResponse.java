@@ -1,10 +1,14 @@
 package com.vocabest.core.adapter.in.web.dto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.UUID;
+import java.time.LocalDateTime;
 
 public record DailyProgressResponse(
     UUID id,
-    LocalDateTime date,
-    Integer completedQuestions
+    LocalDate date,
+    Integer targetQuestions,
+    Integer answeredQuestions,
+    Integer correctQuestions,
+    Integer wrongQuestions
 ) {}

@@ -24,10 +24,9 @@ public class DailyProgressGraphQLResolver {
         if (filter == null || filter.userId() == null) {
             return Flux.error(new IllegalArgumentException("Filter is required to prevent unauthorized data access"));
         }
-        DailyProgress probe = new DailyProgress(null, filter.userId(), null, 0, null, null, null);
+        DailyProgress probe = new DailyProgress(null, filter.userId(), null, null, null, null, null, null, null, null);
         ExampleMatcher matcher = ExampleMatcher.matching()
-                .withIgnoreNullValues()
-                .withIgnorePaths("completedQuestions");
+                .withIgnoreNullValues();
         return repository.findAll(Example.of(probe, matcher));
     }
 }
