@@ -24,6 +24,7 @@ public class WordBankRestController {
     }
 
     @PostMapping
+    @com.vocabest.core.adapter.in.web.security.AdminOnly
     public Mono<ResponseEntity<WordBankResponse>> createWordBank(@RequestBody WordBankRequest req) {
         WordBank entity = new WordBank(null, req.word(), req.partsOfSpeech(), req.chineseTranslation(), TargetLevel.valueOf(req.targetLevel()), req.difficultyLevel(), req.examFrequency(), null, null, null);
         return repository.save(entity)
@@ -40,6 +41,7 @@ public class WordBankRestController {
     }
 
     @PutMapping("/{id}")
+    @com.vocabest.core.adapter.in.web.security.AdminOnly
     public Mono<ResponseEntity<WordBankResponse>> updateWordBank(@PathVariable UUID id, @RequestBody WordBankRequest req) {
         return repository.findById(id)
                 .map(existing -> new WordBank(existing.id(), req.word(), req.partsOfSpeech(), req.chineseTranslation(), TargetLevel.valueOf(req.targetLevel()), req.difficultyLevel(), req.examFrequency(), existing.createdAt(), LocalDateTime.now(), existing.deletedAt()))
@@ -50,6 +52,7 @@ public class WordBankRestController {
     }
 
     @DeleteMapping("/{id}")
+    @com.vocabest.core.adapter.in.web.security.AdminOnly
     public Mono<ResponseEntity<Void>> deleteWordBank(@PathVariable UUID id) {
         return repository.deleteById(id)
                 .then(Mono.just(ResponseEntity.noContent().<Void>build()));

@@ -26,6 +26,9 @@ public class UserServiceImpl implements UserCommandService, UserQueryService {
     private final DailyProgressRepository dailyProgressRepository;
     private final Random random = new Random();
 
+    @org.springframework.beans.factory.annotation.Value("${vocabest.admin.whitelist:}")
+    private java.util.List<String> adminWhitelist;
+
     public UserServiceImpl(
             UserRepository userRepository,
             QuizQuestionRepository quizQuestionRepository,
@@ -76,7 +79,8 @@ public class UserServiceImpl implements UserCommandService, UserQueryService {
         User probe = new User(null, req.email(), null, null, null, null, null, null, null);
         return userRepository.findOne(Example.of(probe))
                 .switchIfEmpty(Mono.defer(() -> {
-                    User newUser = new User(null, req.email(), Role.LEARNER, TargetLevel.valueOf(req.targetLevel()), 0, req.dailyTargetQuestions(), LocalDateTime.now(), LocalDateTime.now(), null);
+                    Role role = adminWhitelist != null && adminWhitelist.contains(req.email()) ? Role.ADMIN : Role.LEARNER;
+                    User newUser = new User(null, req.email(), role, TargetLevel.valueOf(req.targetLevel()), 0, req.dailyTargetQuestions(), LocalDateTime.now(), LocalDateTime.now(), null);
                     return userRepository.save(newUser);
                 }));
     }

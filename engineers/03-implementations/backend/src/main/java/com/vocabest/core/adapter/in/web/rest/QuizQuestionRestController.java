@@ -5,6 +5,7 @@ import com.vocabest.core.adapter.in.web.dto.QuizQuestionResponse;
 import com.vocabest.core.adapter.out.persistence.model.QuizQuestion;
 import com.vocabest.core.adapter.out.persistence.model.TargetLevel;
 import com.vocabest.core.adapter.out.persistence.repository.QuizQuestionRepository;
+import com.vocabest.core.adapter.in.web.security.AdminOnly;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,6 +16,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/wordBanks/{wordBankId}/quizQuestions")
+@AdminOnly
 public class QuizQuestionRestController {
 
     private final QuizQuestionRepository repository;

@@ -20,6 +20,7 @@ public class UserGraphQLResolver {
     }
 
     @QueryMapping
+    @com.vocabest.core.adapter.in.web.security.AdminOnly
     public Flux<User> listUsers(@Argument UserFilterInput filter) {
         if (filter != null && filter.targetLevel() != null) {
             User probe = new User(null, null, null, com.vocabest.core.adapter.out.persistence.model.TargetLevel.valueOf(filter.targetLevel()), null, null, null, null, null);

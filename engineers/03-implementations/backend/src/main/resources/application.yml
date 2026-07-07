@@ -17,3 +17,7 @@ spring:
 logging:
   level:
     org.springframework.data.r2dbc: DEBUG
+
+vocabest:
+  admin:
+    whitelist: linus.chien@gmail.com

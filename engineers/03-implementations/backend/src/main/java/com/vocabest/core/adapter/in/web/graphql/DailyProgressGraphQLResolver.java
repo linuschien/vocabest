@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import reactor.core.publisher.Flux;
 
 @Controller
+@com.vocabest.core.adapter.in.web.security.AdminOnly
 public class DailyProgressGraphQLResolver {
 
     private final DailyProgressRepository repository;

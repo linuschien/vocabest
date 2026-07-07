@@ -11,6 +11,7 @@ import org.springframework.data.domain.ExampleMatcher;
 import reactor.core.publisher.Flux;
 
 @Controller
+@com.vocabest.core.adapter.in.web.security.AdminOnly
 public class WordMasteryGraphQLResolver {
 
     private final WordMasteryRepository repository;
