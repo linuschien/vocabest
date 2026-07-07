@@ -6,19 +6,15 @@ enum TargetLevel {
   SENIOR_HIGH
 }
 
-enum VocabularyLevel {
-  JUNIOR_BASIC_1200
-  JUNIOR_ADVANCED_800
-  SENIOR_LEVEL_1
-  SENIOR_LEVEL_2
-  SENIOR_LEVEL_3
-  SENIOR_LEVEL_4
-  SENIOR_LEVEL_5
-  SENIOR_LEVEL_6
+enum Role {
+  LEARNER
+  ADMIN
 }
 
 type User {
   id: UUID!
+  email: String
+  role: Role
   targetLevel: TargetLevel
   learningStreak: Int
   dailyTargetQuestions: Int
@@ -34,8 +30,11 @@ input UserFilterInput {
 type DailyProgress {
   id: UUID!
   userId: UUID
-  date: DateTime
-  completedQuestions: Int
+  date: String
+  targetQuestions: Int
+  answeredQuestions: Int
+  correctQuestions: Int
+  wrongQuestions: Int
   createdAt: DateTime
   updatedAt: DateTime
   deletedAt: DateTime
@@ -45,34 +44,32 @@ input DailyProgressFilterInput {
   userId: UUID
 }
 
-type ErrorLog {
+type ErrorEvent {
   id: UUID!
   userId: UUID
-  vocabularyWordId: UUID
   quizQuestionId: UUID
-  errorWeight: Int
-  nextReviewDate: DateTime
+  timestamp: DateTime
+  selectedDistractor: String
   createdAt: DateTime
   updatedAt: DateTime
   deletedAt: DateTime
 }
 
-input ErrorLogFilterInput {
+input ErrorEventFilterInput {
   userId: UUID
 }
 
 type QuizQuestion {
   id: UUID!
-  vocabularyWordId: UUID
+  wordBankId: UUID
   contextualCloze: String
-  translation: String
-  correctOption: String
+  chineseTranslation: String
+  correctAnswer: String
   distractor1: String
   distractor2: String
   distractor3: String
   explanationRootAffix: String
   explanationMnemonic: String
-  targetLevel: TargetLevel
   createdAt: DateTime
   updatedAt: DateTime
   deletedAt: DateTime
@@ -80,28 +77,49 @@ type QuizQuestion {
 
 input QuizQuestionFilterInput {
   targetLevel: TargetLevel
+  page: Int
+  size: Int
 }
 
-type VocabularyWord {
+type WordBank {
   id: UUID!
   word: String
-  partOfSpeech: String
-  translation: String
-  level: VocabularyLevel
+  partsOfSpeech: String
+  chineseTranslation: String
+  targetLevel: TargetLevel
+  difficultyLevel: Int
   examFrequency: Int
   createdAt: DateTime
   updatedAt: DateTime
   deletedAt: DateTime
 }
 
-input VocabularyWordFilterInput {
-  level: VocabularyLevel
+input WordBankFilterInput {
+  targetLevel: TargetLevel
+  page: Int
+  size: Int
+}
+
+type WordMastery {
+  id: UUID!
+  userId: UUID
+  wordBankId: UUID
+  errorWeight: Int
+  nextReviewDate: DateTime
+  createdAt: DateTime
+  updatedAt: DateTime
+  deletedAt: DateTime
+}
+
+input WordMasteryFilterInput {
+  userId: UUID
 }
 
 type Query {
   listUsers(filter: UserFilterInput): [User]
   listDailyProgresses(filter: DailyProgressFilterInput): [DailyProgress]
-  listErrorLogs(filter: ErrorLogFilterInput): [ErrorLog]
+  listErrorEvents(filter: ErrorEventFilterInput): [ErrorEvent]
   listQuizQuestions(filter: QuizQuestionFilterInput): [QuizQuestion]
-  listVocabularyWords(filter: VocabularyWordFilterInput): [VocabularyWord]
+  listWordBanks(filter: WordBankFilterInput): [WordBank]
+  listWordMasteries(filter: WordMasteryFilterInput): [WordMastery]
 }
