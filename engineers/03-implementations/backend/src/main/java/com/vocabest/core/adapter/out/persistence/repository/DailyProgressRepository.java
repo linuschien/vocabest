@@ -5,5 +5,5 @@ import org.springframework.data.repository.query.ReactiveQueryByExampleExecutor;
 import com.vocabest.core.adapter.out.persistence.model.DailyProgress;
 import java.util.UUID;
 
-public interface DailyProgressRepository extends R2dbcRepository<DailyProgress, UUID>, ReactiveQueryByExampleExecutor<DailyProgress> {
+public interface DailyProgressRepository extends R2dbcRepository<DailyProgress, UUID> {
 }

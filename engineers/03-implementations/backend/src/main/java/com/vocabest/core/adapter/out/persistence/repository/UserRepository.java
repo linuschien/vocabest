@@ -5,5 +5,5 @@ import org.springframework.data.repository.query.ReactiveQueryByExampleExecutor;
 import com.vocabest.core.adapter.out.persistence.model.User;
 import java.util.UUID;
 
-public interface UserRepository extends R2dbcRepository<User, UUID>, ReactiveQueryByExampleExecutor<User> {
+public interface UserRepository extends R2dbcRepository<User, UUID> {
 }

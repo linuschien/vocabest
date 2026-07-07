@@ -15,7 +15,7 @@ public class DatabaseConfig {
         return (entity, sqlIdentifier) -> {
             if (entity.id() == null) {
                 return reactor.core.publisher.Mono.just(new User(
-                    UUID.randomUUID(), entity.targetLevel(), entity.learningStreak(), entity.dailyTargetQuestions(),
+                    UUID.randomUUID(), entity.email(), entity.role(), entity.targetLevel(), entity.learningStreak(), entity.dailyTargetQuestions(),
                     LocalDateTime.now(), LocalDateTime.now(), null
                 ));
             }
@@ -28,7 +28,7 @@ public class DatabaseConfig {
         return (entity, sqlIdentifier) -> {
             if (entity.id() == null) {
                 return reactor.core.publisher.Mono.just(new DailyProgress(
-                    UUID.randomUUID(), entity.userId(), entity.date(), entity.completedQuestions(),
+                    UUID.randomUUID(), entity.userId(), entity.date(), entity.targetQuestions(), entity.answeredQuestions(), entity.correctQuestions(), entity.wrongQuestions(),
                     LocalDateTime.now(), LocalDateTime.now(), null
                 ));
             }
@@ -37,11 +37,11 @@ public class DatabaseConfig {
     }
 
     @Bean
-    public BeforeConvertCallback<VocabularyWord> vocabularyWordBeforeConvertCallback() {
+    public BeforeConvertCallback<WordBank> wordBankBeforeConvertCallback() {
         return (entity, sqlIdentifier) -> {
             if (entity.id() == null) {
-                return reactor.core.publisher.Mono.just(new VocabularyWord(
-                    UUID.randomUUID(), entity.word(), entity.partOfSpeech(), entity.translation(), entity.level(), entity.examFrequency(),
+                return reactor.core.publisher.Mono.just(new WordBank(
+                    UUID.randomUUID(), entity.word(), entity.partsOfSpeech(), entity.chineseTranslation(), entity.targetLevel(), entity.difficultyLevel(), entity.examFrequency(),
                     LocalDateTime.now(), LocalDateTime.now(), null
                 ));
             }
@@ -54,9 +54,9 @@ public class DatabaseConfig {
         return (entity, sqlIdentifier) -> {
             if (entity.id() == null) {
                 return reactor.core.publisher.Mono.just(new QuizQuestion(
-                    UUID.randomUUID(), entity.vocabularyWordId(), entity.contextualCloze(), entity.translation(), entity.correctOption(),
+                    UUID.randomUUID(), entity.wordBankId(), entity.contextualCloze(), entity.chineseTranslation(), entity.correctAnswer(),
                     entity.distractor1(), entity.distractor2(), entity.distractor3(), entity.explanationRootAffix(), entity.explanationMnemonic(),
-                    entity.targetLevel(), LocalDateTime.now(), LocalDateTime.now(), null
+                    LocalDateTime.now(), LocalDateTime.now(), null
                 ));
             }
             return reactor.core.publisher.Mono.just(entity);
@@ -64,11 +64,24 @@ public class DatabaseConfig {
     }
 
     @Bean
-    public BeforeConvertCallback<ErrorLog> errorLogBeforeConvertCallback() {
+    public BeforeConvertCallback<ErrorEvent> errorEventBeforeConvertCallback() {
         return (entity, sqlIdentifier) -> {
             if (entity.id() == null) {
-                return reactor.core.publisher.Mono.just(new ErrorLog(
-                    UUID.randomUUID(), entity.userId(), entity.vocabularyWordId(), entity.quizQuestionId(), entity.errorWeight(), entity.nextReviewDate(),
+                return reactor.core.publisher.Mono.just(new ErrorEvent(
+                    UUID.randomUUID(), entity.userId(), entity.quizQuestionId(), entity.timestamp(), entity.selectedDistractor(),
+                    LocalDateTime.now(), LocalDateTime.now(), null
+                ));
+            }
+            return reactor.core.publisher.Mono.just(entity);
+        };
+    }
+
+    @Bean
+    public BeforeConvertCallback<WordMastery> wordMasteryBeforeConvertCallback() {
+        return (entity, sqlIdentifier) -> {
+            if (entity.id() == null) {
+                return reactor.core.publisher.Mono.just(new WordMastery(
+                    UUID.randomUUID(), entity.userId(), entity.wordBankId(), entity.errorWeight(), entity.nextReviewDate(),
                     LocalDateTime.now(), LocalDateTime.now(), null
                 ));
             }
