@@ -20,29 +20,16 @@ public class ErrorEventGraphQLResolver {
     }
 
     @QueryMapping
+    @com.vocabest.core.adapter.in.web.security.RequireOwnership("#filter?.userId()")
     public Flux<ErrorEvent> listErrorEvents(@Argument ErrorEventFilterInput filter) {
-        return Flux.deferContextual(ctx -> {
-            com.vocabest.core.adapter.out.persistence.model.User currentUser = ctx.getOrDefault("CURRENT_USER", null);
-            if (currentUser == null) {
-                return Flux.error(new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.UNAUTHORIZED, "Unauthenticated"));
-            }
-            if (currentUser.role() != com.vocabest.core.adapter.out.persistence.model.Role.ADMIN) {
-                if (filter != null && filter.userId() != null && !currentUser.id().equals(filter.userId())) {
-                    return Flux.error(new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.FORBIDDEN, "Access denied"));
-                }
-            }
-            
-            java.util.UUID effectiveUserId = (filter != null && filter.userId() != null) ? filter.userId() : (currentUser.role() == com.vocabest.core.adapter.out.persistence.model.Role.ADMIN ? null : currentUser.id());
-            
-            ErrorEvent probe = new ErrorEvent(
-                filter != null ? filter.id() : null, 
-                effectiveUserId, 
-                filter != null ? filter.quizQuestionId() : null, 
-                filter != null ? filter.timestamp() : null, 
-                filter != null ? filter.selectedDistractor() : null, 
-                null, null, null);
-            ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreNullValues();
-            return repository.findAll(Example.of(probe, matcher));
-        });
+        ErrorEvent probe = new ErrorEvent(
+            filter != null ? filter.id() : null, 
+            filter != null ? filter.userId() : null, 
+            filter != null ? filter.quizQuestionId() : null, 
+            filter != null ? filter.timestamp() : null, 
+            filter != null ? filter.selectedDistractor() : null, 
+            null, null, null);
+        ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreNullValues();
+        return repository.findAll(Example.of(probe, matcher));
     }
 }

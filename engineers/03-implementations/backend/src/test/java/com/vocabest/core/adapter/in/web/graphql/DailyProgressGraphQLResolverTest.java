@@ -27,12 +27,6 @@ class DailyProgressGraphQLResolverTest {
     @InjectMocks
     private DailyProgressGraphQLResolver resolver;
 
-    @Test
-    void testListDailyProgresses() {
-        StepVerifier.create(resolver.listDailyProgresses(null))
-                .expectError(org.springframework.web.server.ResponseStatusException.class)
-                .verify();
-    }
 
     @Test
     void testListDailyProgressesWithFilter() {

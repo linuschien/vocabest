@@ -20,28 +20,15 @@ public class WordMasteryGraphQLResolver {
     }
 
     @QueryMapping
+    @com.vocabest.core.adapter.in.web.security.RequireOwnership("#filter?.userId()")
     public Flux<WordMastery> listWordMasteries(@Argument WordMasteryFilterInput filter) {
-        return Flux.deferContextual(ctx -> {
-            com.vocabest.core.adapter.out.persistence.model.User currentUser = ctx.getOrDefault("CURRENT_USER", null);
-            if (currentUser == null) {
-                return Flux.error(new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.UNAUTHORIZED, "Unauthenticated"));
-            }
-            if (currentUser.role() != com.vocabest.core.adapter.out.persistence.model.Role.ADMIN) {
-                if (filter != null && filter.userId() != null && !currentUser.id().equals(filter.userId())) {
-                    return Flux.error(new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.FORBIDDEN, "Access denied"));
-                }
-            }
-            
-            java.util.UUID effectiveUserId = (filter != null && filter.userId() != null) ? filter.userId() : (currentUser.role() == com.vocabest.core.adapter.out.persistence.model.Role.ADMIN ? null : currentUser.id());
-            
-            WordMastery probe = new WordMastery(
-                filter != null ? filter.id() : null, 
-                effectiveUserId, 
-                filter != null ? filter.wordBankId() : null, 
-                filter != null ? filter.errorWeight() : null, 
-                null, null, null, null);
-            ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreNullValues();
-            return repository.findAll(Example.of(probe, matcher));
-        });
+        WordMastery probe = new WordMastery(
+            filter != null ? filter.id() : null, 
+            filter != null ? filter.userId() : null, 
+            filter != null ? filter.wordBankId() : null, 
+            filter != null ? filter.errorWeight() : null, 
+            null, null, null, null);
+        ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreNullValues();
+        return repository.findAll(Example.of(probe, matcher));
     }
 }

@@ -14,6 +14,7 @@ import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/v1/users/{userId}/wordMasteries")
+@com.vocabest.core.adapter.in.web.security.RequireOwnership("#userId")
 public class WordMasteryRestController {
 
     private final WordMasteryRepository repository;
