@@ -1,6 +1,7 @@
 package com.vocabest.core.adapter.in.web.graphql;
 
 import com.vocabest.core.adapter.in.web.dto.UserFilterInput;
+import com.vocabest.core.adapter.out.persistence.model.Role;
 import com.vocabest.core.adapter.out.persistence.model.TargetLevel;
 import com.vocabest.core.adapter.out.persistence.model.User;
 import com.vocabest.core.adapter.out.persistence.repository.UserRepository;
@@ -29,14 +30,14 @@ class UserGraphQLResolverTest {
 
     @Test
     void testListUsers() {
+        when(repository.findAll()).thenReturn(Flux.empty());
         StepVerifier.create(resolver.listUsers(null))
-                .expectError(IllegalArgumentException.class)
-                .verify();
+                .verifyComplete();
     }
 
     @Test
     void testListUsersWithFilter() {
-        User user = new User(UUID.randomUUID(), TargetLevel.JUNIOR_HIGH, 0, 20, LocalDateTime.now(), LocalDateTime.now(), null);
+        User user = new User(UUID.randomUUID(), "test@test.com", Role.LEARNER, TargetLevel.JUNIOR_HIGH, 0, 20, LocalDateTime.now(), LocalDateTime.now(), null);
         
         when(repository.findAll(org.mockito.ArgumentMatchers.<org.springframework.data.domain.Example<User>>any())).thenReturn(Flux.just(user));
 

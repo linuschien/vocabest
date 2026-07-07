@@ -2,10 +2,8 @@ package com.vocabest.core.adapter.in.web.rest;
 
 import com.vocabest.core.adapter.in.web.dto.QuizQuestionRequest;
 import com.vocabest.core.adapter.in.web.dto.QuizQuestionResponse;
-import com.vocabest.core.adapter.in.web.dto.QuizQuestionActionRequest;
-import com.vocabest.core.adapter.in.web.dto.OperationStatus;
-import com.vocabest.core.application.port.in.QuizQuestionCommandService;
-import com.vocabest.core.application.port.in.QuizQuestionQueryService;
+import com.vocabest.core.adapter.out.persistence.model.QuizQuestion;
+import com.vocabest.core.adapter.out.persistence.repository.QuizQuestionRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -15,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -24,71 +23,74 @@ import static org.mockito.Mockito.when;
 class QuizQuestionRestControllerTest {
 
     @Mock
-    private QuizQuestionCommandService commandService;
-    @Mock
-    private QuizQuestionQueryService queryService;
+    private QuizQuestionRepository repository;
 
     @InjectMocks
     private QuizQuestionRestController controller;
 
-    private WebTestClient client;
+    private WebTestClient webTestClient;
+
+    private QuizQuestion testQuizQuestion;
+    private UUID testId;
+    private UUID testWordBankId;
 
     @BeforeEach
     void setUp() {
-        client = WebTestClient.bindToController(controller).build();
+        webTestClient = WebTestClient.bindToController(controller).build();
+        testId = UUID.randomUUID();
+        testWordBankId = UUID.randomUUID();
+        testQuizQuestion = new QuizQuestion(testId, testWordBankId, "context", "chinese", "correct", "d1", "d2", "d3", "root", "mnem", LocalDateTime.now(), LocalDateTime.now(), null);
     }
 
     @Test
-    void testCreateQuizQuestion() {
-        QuizQuestionResponse res = new QuizQuestionResponse(UUID.randomUUID(), UUID.randomUUID().toString(), "cloze", "trans", "opt", "d1", "d2", "d3", "root", "mnem", "JUNIOR_HIGH");
-        when(commandService.createQuizQuestion(any())).thenReturn(Mono.just(res));
+    void createQuizQuestion_shouldReturnCreated() {
+        QuizQuestionRequest request = new QuizQuestionRequest("context", "chinese", "correct", "d1", "d2", "d3", "root", "mnem");
+        when(repository.save(any(QuizQuestion.class))).thenReturn(Mono.just(testQuizQuestion));
 
-        client.post().uri("/api/v1/quiz-questions")
-                .bodyValue(new QuizQuestionRequest(UUID.randomUUID().toString(), "cloze", "trans", "opt", "d1", "d2", "d3", "root", "mnem", "JUNIOR_HIGH"))
+        webTestClient.post()
+                .uri("/api/v1/wordBanks/{wordBankId}/quizQuestions", testWordBankId)
+                .bodyValue(request)
                 .exchange()
-                .expectStatus().isCreated();
+                .expectStatus().isCreated()
+                .expectBody(QuizQuestionResponse.class)
+                .value(response -> org.junit.jupiter.api.Assertions.assertEquals(testId, response.id()));
     }
 
     @Test
-    void testGetQuizQuestionById() {
-        UUID id = UUID.randomUUID();
-        QuizQuestionResponse res = new QuizQuestionResponse(id, UUID.randomUUID().toString(), "cloze", "trans", "opt", "d1", "d2", "d3", "root", "mnem", "JUNIOR_HIGH");
-        when(queryService.getQuizQuestionById(id)).thenReturn(Mono.just(res));
+    void getQuizQuestionById_shouldReturnOk() {
+        when(repository.findById(testId)).thenReturn(Mono.just(testQuizQuestion));
 
-        client.get().uri("/api/v1/quiz-questions/{id}", id)
+        webTestClient.get()
+                .uri("/api/v1/wordBanks/{wordBankId}/quizQuestions/{id}", testWordBankId, testId)
                 .exchange()
-                .expectStatus().isOk();
+                .expectStatus().isOk()
+                .expectBody(QuizQuestionResponse.class)
+                .value(response -> org.junit.jupiter.api.Assertions.assertEquals(testId, response.id()));
     }
 
     @Test
-    void testUpdateQuizQuestion() {
-        UUID id = UUID.randomUUID();
-        QuizQuestionResponse res = new QuizQuestionResponse(id, UUID.randomUUID().toString(), "cloze", "trans", "opt", "d1", "d2", "d3", "root", "mnem", "JUNIOR_HIGH");
-        when(commandService.updateQuizQuestion(any(), any())).thenReturn(Mono.just(res));
+    void updateQuizQuestion_shouldReturnOk() {
+        QuizQuestionRequest request = new QuizQuestionRequest("context2", "chinese", "correct", "d1", "d2", "d3", "root", "mnem");
+        QuizQuestion updated = new QuizQuestion(testId, testWordBankId, "context2", "chinese", "correct", "d1", "d2", "d3", "root", "mnem", LocalDateTime.now(), LocalDateTime.now(), null);
+        when(repository.findById(testId)).thenReturn(Mono.just(testQuizQuestion));
+        when(repository.save(any(QuizQuestion.class))).thenReturn(Mono.just(updated));
 
-        client.put().uri("/api/v1/quiz-questions/{id}", id)
-                .bodyValue(new QuizQuestionRequest(UUID.randomUUID().toString(), "cloze", "trans", "opt", "d1", "d2", "d3", "root", "mnem", "JUNIOR_HIGH"))
+        webTestClient.put()
+                .uri("/api/v1/wordBanks/{wordBankId}/quizQuestions/{id}", testWordBankId, testId)
+                .bodyValue(request)
                 .exchange()
-                .expectStatus().isOk();
+                .expectStatus().isOk()
+                .expectBody(QuizQuestionResponse.class)
+                .value(response -> org.junit.jupiter.api.Assertions.assertEquals("context2", response.contextualCloze()));
     }
 
     @Test
-    void testDeleteQuizQuestion() {
-        UUID id = UUID.randomUUID();
-        when(commandService.deleteQuizQuestion(id)).thenReturn(Mono.empty());
+    void deleteQuizQuestion_shouldReturnNoContent() {
+        when(repository.deleteById(testId)).thenReturn(Mono.empty());
 
-        client.delete().uri("/api/v1/quiz-questions/{id}", id)
+        webTestClient.delete()
+                .uri("/api/v1/wordBanks/{wordBankId}/quizQuestions/{id}", testWordBankId, testId)
                 .exchange()
                 .expectStatus().isNoContent();
-    }
-
-    @Test
-    void testGenerateBatch() {
-        when(commandService.generateBatch(any())).thenReturn(Mono.just(new OperationStatus(true, "ok")));
-
-        client.post().uri("/api/v1/quiz-questions/generateBatch")
-                .bodyValue(new QuizQuestionActionRequest(10, "JUNIOR_HIGH"))
-                .exchange()
-                .expectStatus().isOk();
     }
 }

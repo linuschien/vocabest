@@ -1,16 +1,18 @@
 package com.vocabest.core.adapter.in.web.graphql;
 
 import com.vocabest.core.adapter.in.web.dto.QuizQuestionFilterInput;
-import com.vocabest.core.adapter.in.web.dto.QuizQuestionResponse;
-import com.vocabest.core.application.port.in.QuizQuestionQueryService;
+import com.vocabest.core.adapter.out.persistence.model.QuizQuestion;
+import com.vocabest.core.adapter.out.persistence.repository.QuizQuestionRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Pageable;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
+import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -20,17 +22,17 @@ import static org.mockito.Mockito.when;
 class QuizQuestionGraphQLResolverTest {
 
     @Mock
-    private QuizQuestionQueryService queryService;
+    private QuizQuestionRepository repository;
 
     @InjectMocks
     private QuizQuestionGraphQLResolver resolver;
 
     @Test
     void testListQuizQuestions() {
-        QuizQuestionResponse res = new QuizQuestionResponse(UUID.randomUUID(), UUID.randomUUID().toString(), "cloze", "trans", "opt", "d1", "d2", "d3", "root", "mnem", "JUNIOR_HIGH");
-        when(queryService.listQuizQuestions(any())).thenReturn(Flux.just(res));
+        QuizQuestion entity = new QuizQuestion(UUID.randomUUID(), UUID.randomUUID(), "cloze", "trans", "opt", "d1", "d2", "d3", "root", "mnem", LocalDateTime.now(), LocalDateTime.now(), null);
+        when(repository.search(any())).thenReturn(Flux.just(entity));
 
-        StepVerifier.create(resolver.listQuizQuestions(new QuizQuestionFilterInput("JUNIOR_HIGH")))
+        StepVerifier.create(resolver.listQuizQuestions(new QuizQuestionFilterInput("word", "w", 1, "JUNIOR_HIGH", 0, 20)))
                 .expectNextMatches(e -> e.contextualCloze().equals("cloze"))
                 .verifyComplete();
     }

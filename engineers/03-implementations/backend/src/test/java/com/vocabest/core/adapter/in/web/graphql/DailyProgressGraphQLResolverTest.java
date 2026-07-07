@@ -11,6 +11,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import reactor.core.publisher.Flux;
 import reactor.test.StepVerifier;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -36,7 +37,7 @@ class DailyProgressGraphQLResolverTest {
     @Test
     void testListDailyProgressesWithFilter() {
         UUID userId = UUID.randomUUID();
-        DailyProgress dp = new DailyProgress(UUID.randomUUID(), userId, LocalDateTime.now(), 10, LocalDateTime.now(), LocalDateTime.now(), null);
+        DailyProgress dp = new DailyProgress(UUID.randomUUID(), userId, LocalDate.now(), 20, 10, 8, 2, LocalDateTime.now(), LocalDateTime.now(), null);
         
         when(repository.findAll(org.mockito.ArgumentMatchers.<org.springframework.data.domain.Example<DailyProgress>>any())).thenReturn(Flux.just(dp));
 

@@ -1,9 +1,15 @@
 package com.vocabest.core.adapter.in.web.rest;
 
+import com.vocabest.core.adapter.in.web.dto.QuizQuestionResponse;
+import com.vocabest.core.adapter.in.web.dto.SubmitAnswerRequest;
+import com.vocabest.core.adapter.in.web.dto.SubmitAnswerResponse;
+import com.vocabest.core.adapter.in.web.dto.UserOnboardRequest;
 import com.vocabest.core.adapter.in.web.dto.UserRequest;
+import com.vocabest.core.adapter.out.persistence.model.Role;
 import com.vocabest.core.adapter.out.persistence.model.TargetLevel;
 import com.vocabest.core.adapter.out.persistence.model.User;
-import com.vocabest.core.adapter.out.persistence.repository.UserRepository;
+import com.vocabest.core.application.port.in.UserCommandService;
+import com.vocabest.core.application.port.in.UserQueryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,7 +29,10 @@ import static org.mockito.Mockito.when;
 class UserRestControllerTest {
 
     @Mock
-    private UserRepository repository;
+    private UserCommandService commandService;
+    
+    @Mock
+    private UserQueryService queryService;
 
     @InjectMocks
     private UserRestController controller;
@@ -37,11 +46,11 @@ class UserRestControllerTest {
 
     @Test
     void testCreateUser() {
-        User user = new User(UUID.randomUUID(), TargetLevel.JUNIOR_HIGH, 0, 20, LocalDateTime.now(), LocalDateTime.now(), null);
-        when(repository.save(any())).thenReturn(Mono.just(user));
+        User user = new User(UUID.randomUUID(), "test@test.com", Role.LEARNER, TargetLevel.JUNIOR_HIGH, 0, 20, LocalDateTime.now(), LocalDateTime.now(), null);
+        when(commandService.createUser(any())).thenReturn(Mono.just(user));
 
         client.post().uri("/api/v1/users")
-                .bodyValue(new UserRequest("JUNIOR_HIGH", 0, 20))
+                .bodyValue(new UserRequest("test@test.com", "LEARNER", "JUNIOR_HIGH", 0, 20))
                 .exchange()
                 .expectStatus().isCreated()
                 .expectBody().jsonPath("$.id").isNotEmpty();
@@ -50,8 +59,8 @@ class UserRestControllerTest {
     @Test
     void testGetUserById() {
         UUID id = UUID.randomUUID();
-        User user = new User(id, TargetLevel.JUNIOR_HIGH, 0, 20, LocalDateTime.now(), LocalDateTime.now(), null);
-        when(repository.findById(id)).thenReturn(Mono.just(user));
+        User user = new User(id, "test@test.com", Role.LEARNER, TargetLevel.JUNIOR_HIGH, 0, 20, LocalDateTime.now(), LocalDateTime.now(), null);
+        when(queryService.getUserById(id)).thenReturn(Mono.just(user));
 
         client.get().uri("/api/v1/users/{id}", id)
                 .exchange()
@@ -60,25 +69,115 @@ class UserRestControllerTest {
     }
 
     @Test
+    void testGetUserById_notFound() {
+        UUID id = UUID.randomUUID();
+        when(queryService.getUserById(id)).thenReturn(Mono.empty());
+
+        client.get().uri("/api/v1/users/{id}", id)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
     void testUpdateUser() {
         UUID id = UUID.randomUUID();
-        User user = new User(id, TargetLevel.JUNIOR_HIGH, 0, 20, LocalDateTime.now(), LocalDateTime.now(), null);
-        when(repository.findById(id)).thenReturn(Mono.just(user));
-        when(repository.save(any())).thenReturn(Mono.just(user));
+        User user = new User(id, "test@test.com", Role.LEARNER, TargetLevel.JUNIOR_HIGH, 0, 20, LocalDateTime.now(), LocalDateTime.now(), null);
+        when(commandService.updateUser(any(), any())).thenReturn(Mono.just(user));
 
         client.put().uri("/api/v1/users/{id}", id)
-                .bodyValue(new UserRequest("JUNIOR_HIGH", 0, 20))
+                .bodyValue(new UserRequest("test@test.com", "LEARNER", "JUNIOR_HIGH", 0, 20))
                 .exchange()
                 .expectStatus().isOk();
     }
 
     @Test
+    void testUpdateUser_notFound() {
+        UUID id = UUID.randomUUID();
+        when(commandService.updateUser(any(), any())).thenReturn(Mono.empty());
+
+        client.put().uri("/api/v1/users/{id}", id)
+                .bodyValue(new UserRequest("test@test.com", "LEARNER", "JUNIOR_HIGH", 0, 20))
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
     void testDeleteUser() {
         UUID id = UUID.randomUUID();
-        when(repository.deleteById(id)).thenReturn(Mono.empty());
+        when(commandService.deleteUser(id)).thenReturn(Mono.empty());
 
         client.delete().uri("/api/v1/users/{id}", id)
                 .exchange()
                 .expectStatus().isNoContent();
+    }
+
+    @Test
+    void testOnboardUser() {
+        User user = new User(UUID.randomUUID(), "test@test.com", Role.LEARNER, TargetLevel.JUNIOR_HIGH, 0, 20, LocalDateTime.now(), LocalDateTime.now(), null);
+        when(commandService.onboardUser(any())).thenReturn(Mono.just(user));
+
+        client.post().uri("/api/v1/users:onboard")
+                .bodyValue(new UserOnboardRequest("test@test.com", "JUNIOR_HIGH", 20))
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody().jsonPath("$.id").isNotEmpty();
+    }
+
+    @Test
+    void testOnboardUser_withNullRoleAndTargetLevel() {
+        User user = new User(UUID.randomUUID(), "test@test.com", null, null, 0, 20, LocalDateTime.now(), LocalDateTime.now(), null);
+        when(commandService.onboardUser(any())).thenReturn(Mono.just(user));
+
+        client.post().uri("/api/v1/users:onboard")
+                .bodyValue(new UserOnboardRequest("test@test.com", "JUNIOR_HIGH", 20))
+                .exchange()
+                .expectStatus().isCreated()
+                .expectBody().jsonPath("$.role").isEmpty()
+                .jsonPath("$.targetLevel").isEmpty();
+    }
+
+    @Test
+    void testGetNextQuestion() {
+        UUID id = UUID.randomUUID();
+        QuizQuestionResponse response = new QuizQuestionResponse(UUID.randomUUID(), UUID.randomUUID().toString(), "cloze", "chinese", "correct", "d1", "d2", "d3", "root", "mnem");
+        when(queryService.getNextQuestion(id)).thenReturn(Mono.just(response));
+
+        client.post().uri("/api/v1/users/{id}:nextQuestion", id)
+                .exchange()
+                .expectStatus().isOk();
+    }
+
+    @Test
+    void testGetNextQuestion_notFound() {
+        UUID id = UUID.randomUUID();
+        when(queryService.getNextQuestion(id)).thenReturn(Mono.empty());
+
+        client.post().uri("/api/v1/users/{id}:nextQuestion", id)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    void testSubmitAnswer() {
+        UUID id = UUID.randomUUID();
+        SubmitAnswerResponse response = new SubmitAnswerResponse(true, "correct", "root", "mnem");
+        when(commandService.submitAnswer(any(), any())).thenReturn(Mono.just(response));
+
+        client.post().uri("/api/v1/users/{id}:submitAnswer", id)
+                .bodyValue(new SubmitAnswerRequest(UUID.randomUUID(), "correct"))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody().jsonPath("$.isCorrect").isEqualTo(true);
+    }
+
+    @Test
+    void testSubmitAnswer_notFound() {
+        UUID id = UUID.randomUUID();
+        when(commandService.submitAnswer(any(), any())).thenReturn(Mono.empty());
+
+        client.post().uri("/api/v1/users/{id}:submitAnswer", id)
+                .bodyValue(new SubmitAnswerRequest(UUID.randomUUID(), "correct"))
+                .exchange()
+                .expectStatus().isNotFound();
     }
 }
