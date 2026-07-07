@@ -30,7 +30,7 @@ class DailyProgressGraphQLResolverTest {
     @Test
     void testListDailyProgresses() {
         StepVerifier.create(resolver.listDailyProgresses(null))
-                .expectError(IllegalArgumentException.class)
+                .expectError(org.springframework.web.server.ResponseStatusException.class)
                 .verify();
     }
 

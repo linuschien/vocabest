@@ -21,23 +21,32 @@ public class DailyProgressGraphQLResolver {
 
     @QueryMapping
     public Flux<DailyProgress> listDailyProgresses(@Argument DailyProgressFilterInput filter) {
-        if (filter == null || filter.userId() == null) {
-            return Flux.error(new IllegalArgumentException("Filter is required to prevent unauthorized data access"));
-        }
         return Flux.deferContextual(ctx -> {
             com.vocabest.core.adapter.out.persistence.model.User currentUser = ctx.getOrDefault("CURRENT_USER", null);
             if (currentUser == null) {
                 return Flux.error(new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.UNAUTHORIZED, "Unauthenticated"));
             }
-            if (currentUser.role() != com.vocabest.core.adapter.out.persistence.model.Role.ADMIN && !currentUser.id().equals(filter.userId())) {
-                return Flux.error(new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.FORBIDDEN, "Access denied"));
+            if (currentUser.role() != com.vocabest.core.adapter.out.persistence.model.Role.ADMIN) {
+                if (filter != null && filter.userId() != null && !currentUser.id().equals(filter.userId())) {
+                    return Flux.error(new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.FORBIDDEN, "Access denied"));
+                }
             }
             
+            java.util.UUID effectiveUserId = (filter != null && filter.userId() != null) ? filter.userId() : (currentUser.role() == com.vocabest.core.adapter.out.persistence.model.Role.ADMIN ? null : currentUser.id());
+            
             java.time.LocalDate filterDate = null;
-            if (filter.date() != null) {
+            if (filter != null && filter.date() != null) {
                 filterDate = java.time.LocalDate.parse(filter.date());
             }
-            DailyProgress probe = new DailyProgress(filter.id(), filter.userId(), filterDate, filter.targetQuestions(), filter.answeredQuestions(), filter.correctQuestions(), filter.wrongQuestions(), null, null, null);
+            DailyProgress probe = new DailyProgress(
+                filter != null ? filter.id() : null, 
+                effectiveUserId, 
+                filterDate, 
+                filter != null ? filter.targetQuestions() : null, 
+                filter != null ? filter.answeredQuestions() : null, 
+                filter != null ? filter.correctQuestions() : null, 
+                filter != null ? filter.wrongQuestions() : null, 
+                null, null, null);
             ExampleMatcher matcher = ExampleMatcher.matching()
                     .withIgnoreNullValues();
             return repository.findAll(Example.of(probe, matcher));

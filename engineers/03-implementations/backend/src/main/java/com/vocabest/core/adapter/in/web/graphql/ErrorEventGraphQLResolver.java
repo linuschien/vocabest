@@ -21,19 +21,26 @@ public class ErrorEventGraphQLResolver {
 
     @QueryMapping
     public Flux<ErrorEvent> listErrorEvents(@Argument ErrorEventFilterInput filter) {
-        if (filter == null || filter.userId() == null) {
-            return Flux.error(new IllegalArgumentException("Filter is required to prevent unauthorized data access"));
-        }
         return Flux.deferContextual(ctx -> {
             com.vocabest.core.adapter.out.persistence.model.User currentUser = ctx.getOrDefault("CURRENT_USER", null);
             if (currentUser == null) {
                 return Flux.error(new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.UNAUTHORIZED, "Unauthenticated"));
             }
-            if (currentUser.role() != com.vocabest.core.adapter.out.persistence.model.Role.ADMIN && !currentUser.id().equals(filter.userId())) {
-                return Flux.error(new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.FORBIDDEN, "Access denied"));
+            if (currentUser.role() != com.vocabest.core.adapter.out.persistence.model.Role.ADMIN) {
+                if (filter != null && filter.userId() != null && !currentUser.id().equals(filter.userId())) {
+                    return Flux.error(new org.springframework.web.server.ResponseStatusException(org.springframework.http.HttpStatus.FORBIDDEN, "Access denied"));
+                }
             }
             
-            ErrorEvent probe = new ErrorEvent(filter.id(), filter.userId(), filter.quizQuestionId(), filter.timestamp(), filter.selectedDistractor(), null, null, null);
+            java.util.UUID effectiveUserId = (filter != null && filter.userId() != null) ? filter.userId() : (currentUser.role() == com.vocabest.core.adapter.out.persistence.model.Role.ADMIN ? null : currentUser.id());
+            
+            ErrorEvent probe = new ErrorEvent(
+                filter != null ? filter.id() : null, 
+                effectiveUserId, 
+                filter != null ? filter.quizQuestionId() : null, 
+                filter != null ? filter.timestamp() : null, 
+                filter != null ? filter.selectedDistractor() : null, 
+                null, null, null);
             ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreNullValues();
             return repository.findAll(Example.of(probe, matcher));
         });
