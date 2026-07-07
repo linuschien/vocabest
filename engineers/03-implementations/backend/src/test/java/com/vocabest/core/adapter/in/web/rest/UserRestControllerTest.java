@@ -117,6 +117,7 @@ class UserRestControllerTest {
         when(commandService.onboardUser(any())).thenReturn(Mono.just(user));
 
         client.post().uri("/api/v1/users:onboard")
+                .header("x-goog-authenticated-user-email", "accounts.google.com:test@test.com")
                 .bodyValue(new UserOnboardRequest("test@test.com", "JUNIOR_HIGH", 20))
                 .exchange()
                 .expectStatus().isCreated()
@@ -129,6 +130,7 @@ class UserRestControllerTest {
         when(commandService.onboardUser(any())).thenReturn(Mono.just(user));
 
         client.post().uri("/api/v1/users:onboard")
+                .header("x-goog-authenticated-user-email", "accounts.google.com:test@test.com")
                 .bodyValue(new UserOnboardRequest("test@test.com", "JUNIOR_HIGH", 20))
                 .exchange()
                 .expectStatus().isCreated()

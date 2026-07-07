@@ -52,8 +52,12 @@ public class UserRestController {
     }
 
     @PostMapping("/api/v1/users:onboard")
-    public Mono<ResponseEntity<UserResponse>> onboardUser(@RequestBody UserOnboardRequest req) {
-        return commandService.onboardUser(req)
+    public Mono<ResponseEntity<UserResponse>> onboardUser(
+            @RequestHeader(value = "x-goog-authenticated-user-email", required = true) String emailHeader,
+            @RequestBody UserOnboardRequest req) {
+        String parsedEmail = emailHeader.replace("accounts.google.com:", "");
+        UserOnboardRequest updatedReq = new UserOnboardRequest(parsedEmail, req.targetLevel(), req.dailyTargetQuestions());
+        return commandService.onboardUser(updatedReq)
                 .map(this::mapToResponse)
                 .map(res -> ResponseEntity.status(HttpStatus.CREATED).body(res));
     }

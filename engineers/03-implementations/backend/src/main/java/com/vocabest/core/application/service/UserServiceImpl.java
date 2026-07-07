@@ -76,7 +76,7 @@ public class UserServiceImpl implements UserCommandService, UserQueryService {
         User probe = new User(null, req.email(), null, null, null, null, null, null, null);
         return userRepository.findOne(Example.of(probe))
                 .switchIfEmpty(Mono.defer(() -> {
-                    User newUser = new User(null, req.email(), Role.LEARNER, TargetLevel.valueOf(req.targetLevel()), 0, req.dailyTargetQuestions(), null, null, null);
+                    User newUser = new User(null, req.email(), Role.LEARNER, TargetLevel.valueOf(req.targetLevel()), 0, req.dailyTargetQuestions(), LocalDateTime.now(), LocalDateTime.now(), null);
                     return userRepository.save(newUser);
                 }));
     }
@@ -134,7 +134,8 @@ public class UserServiceImpl implements UserCommandService, UserQueryService {
                                             return Mono.just(user);
                                         });
                             });
-                });
+                })
+                .switchIfEmpty(Mono.just(new User(null, parsedEmail, null, null, null, null, null, null, null)));
     }
 
     @Override
