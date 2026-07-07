@@ -343,7 +343,7 @@ paths:
         "404":
           $ref: "#/components/responses/NotFound"
 
-  /quizQuestions:
+  /wordBanks/{wordBankId}/quizQuestions:
     post:
       operationId: createQuizQuestion
       requestBody:
@@ -352,6 +352,13 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/QuizQuestionRequest"
+      parameters:
+        - name: wordBankId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
       responses:
         "201":
           description: Created
@@ -365,6 +372,13 @@ paths:
       operationId: listQuizQuestions
       deprecated: true
       description: "Deprecated: Collection GET is banned. Use GraphQL gateway instead."
+      parameters:
+        - name: wordBankId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
       responses:
         "200":
           description: OK
@@ -374,10 +388,16 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/QuizQuestionResponse"
-  /quizQuestions/{quizQuestionId}:
+  /wordBanks/{wordBankId}/quizQuestions/{quizQuestionId}:
     get:
       operationId: getQuizQuestionById
       parameters:
+        - name: wordBankId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
         - name: quizQuestionId
           in: path
           required: true
@@ -396,6 +416,12 @@ paths:
     put:
       operationId: updateQuizQuestion
       parameters:
+        - name: wordBankId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
         - name: quizQuestionId
           in: path
           required: true
@@ -422,6 +448,12 @@ paths:
     delete:
       operationId: deleteQuizQuestion
       parameters:
+        - name: wordBankId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
         - name: quizQuestionId
           in: path
           required: true
@@ -434,7 +466,7 @@ paths:
         "404":
           $ref: "#/components/responses/NotFound"
 
-  /wordMasteries:
+  /users/{userId}/wordMasteries:
     post:
       operationId: createWordMastery
       requestBody:
@@ -443,6 +475,13 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/WordMasteryRequest"
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
       responses:
         "201":
           description: Created
@@ -456,6 +495,13 @@ paths:
       operationId: listWordMasteries
       deprecated: true
       description: "Deprecated: Collection GET is banned. Use GraphQL gateway instead."
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
       responses:
         "200":
           description: OK
@@ -465,10 +511,16 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/WordMasteryResponse"
-  /wordMasteries/{wordMasteryId}:
+  /users/{userId}/wordMasteries/{wordMasteryId}:
     get:
       operationId: getWordMasteryById
       parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
         - name: wordMasteryId
           in: path
           required: true
@@ -487,6 +539,12 @@ paths:
     put:
       operationId: updateWordMastery
       parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
         - name: wordMasteryId
           in: path
           required: true
@@ -513,6 +571,12 @@ paths:
     delete:
       operationId: deleteWordMastery
       parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
         - name: wordMasteryId
           in: path
           required: true
@@ -525,7 +589,7 @@ paths:
         "404":
           $ref: "#/components/responses/NotFound"
 
-  /errorEvents:
+  /users/{userId}/errorEvents:
     post:
       operationId: createErrorEvent
       requestBody:
@@ -534,6 +598,13 @@ paths:
           application/json:
             schema:
               $ref: "#/components/schemas/ErrorEventRequest"
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
       responses:
         "201":
           description: Created
@@ -547,6 +618,13 @@ paths:
       operationId: listErrorEvents
       deprecated: true
       description: "Deprecated: Collection GET is banned. Use GraphQL gateway instead."
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
       responses:
         "200":
           description: OK
@@ -556,10 +634,16 @@ paths:
                 type: array
                 items:
                   $ref: "#/components/schemas/ErrorEventResponse"
-  /errorEvents/{errorEventId}:
+  /users/{userId}/errorEvents/{errorEventId}:
     get:
       operationId: getErrorEventById
       parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
         - name: errorEventId
           in: path
           required: true
@@ -578,6 +662,12 @@ paths:
     put:
       operationId: updateErrorEvent
       parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
         - name: errorEventId
           in: path
           required: true
@@ -604,6 +694,12 @@ paths:
     delete:
       operationId: deleteErrorEvent
       parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
         - name: errorEventId
           in: path
           required: true
@@ -826,6 +922,10 @@ components:
           type: string
           format: uuid
           example: "123e4567-e89b-12d3-a456-426614174003"
+        wordBankId:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174002"
         contextualCloze:
           type: string
           example: "I eat an ___ every day."
@@ -853,6 +953,10 @@ components:
     WordMasteryRequest:
       type: object
       properties:
+        wordBankId:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174002"
         errorWeight:
           type: integer
           example: 2
@@ -867,6 +971,14 @@ components:
           type: string
           format: uuid
           example: "123e4567-e89b-12d3-a456-426614174004"
+        userId:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        wordBankId:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174002"
         errorWeight:
           type: integer
           example: 2
@@ -877,6 +989,10 @@ components:
     ErrorEventRequest:
       type: object
       properties:
+        quizQuestionId:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174003"
         timestamp:
           type: string
           format: date-time
@@ -891,6 +1007,14 @@ components:
           type: string
           format: uuid
           example: "123e4567-e89b-12d3-a456-426614174005"
+        userId:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        quizQuestionId:
+          type: string
+          format: uuid
+          example: "123e4567-e89b-12d3-a456-426614174003"
         timestamp:
           type: string
           format: date-time
