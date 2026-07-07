@@ -9,4 +9,5 @@ import reactor.core.publisher.Flux;
 
 public interface QuizQuestionRepository extends R2dbcRepository<QuizQuestion, UUID>, QuizQuestionRepositoryCustom {
     Flux<QuizQuestion> findAllBy(Pageable pageable);
+    Flux<QuizQuestion> findByWordBankId(UUID wordBankId);
 }

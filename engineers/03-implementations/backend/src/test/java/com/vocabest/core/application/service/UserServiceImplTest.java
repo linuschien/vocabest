@@ -149,6 +149,27 @@ class UserServiceImplTest {
     }
 
     @Test
+    void getNextErrorQuestion_shouldReturnQuestion_whenAvailable() {
+        WordMastery mastery = new WordMastery(UUID.randomUUID(), testUserId, testWordBankId, 2, LocalDateTime.now().minusDays(1), LocalDateTime.now(), LocalDateTime.now(), null);
+        when(wordMasteryRepository.findFirstByUserIdAndNextReviewDateLessThanEqualAndErrorWeightGreaterThanOrderByErrorWeightDescNextReviewDateAsc(eq(testUserId), any(), eq(0)))
+                .thenReturn(Mono.just(mastery));
+        when(quizQuestionRepository.findByWordBankId(testWordBankId)).thenReturn(Flux.just(testQuestion));
+
+        StepVerifier.create(userService.getNextErrorQuestion(testUserId))
+                .expectNextMatches(res -> res.correctAnswer().equals("apple") && res.contextualCloze().equals("I ate an __"))
+                .verifyComplete();
+    }
+
+    @Test
+    void getNextErrorQuestion_shouldReturnEmpty_whenNoQuestionsAvailable() {
+        when(wordMasteryRepository.findFirstByUserIdAndNextReviewDateLessThanEqualAndErrorWeightGreaterThanOrderByErrorWeightDescNextReviewDateAsc(eq(testUserId), any(), eq(0)))
+                .thenReturn(Mono.empty());
+
+        StepVerifier.create(userService.getNextErrorQuestion(testUserId))
+                .verifyComplete();
+    }
+
+    @Test
     void submitAnswer_whenCorrect_shouldUpdateMasteryPositive() {
         SubmitAnswerRequest req = new SubmitAnswerRequest(testQuestionId, "apple");
         WordMastery existingMastery = new WordMastery(UUID.randomUUID(), testUserId, testWordBankId, 2, LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now(), null);
@@ -157,6 +178,24 @@ class UserServiceImplTest {
         when(wordMasteryRepository.findOne(any(Example.class))).thenReturn(Mono.just(existingMastery));
         
         WordMastery updatedMastery = new WordMastery(existingMastery.id(), testUserId, testWordBankId, 1, LocalDateTime.now().plusDays(3), LocalDateTime.now(), LocalDateTime.now(), null);
+        when(wordMasteryRepository.save(any(WordMastery.class))).thenReturn(Mono.just(updatedMastery));
+
+        StepVerifier.create(userService.submitAnswer(testUserId, req))
+                .expectNextMatches(SubmitAnswerResponse::isCorrect)
+                .verifyComplete();
+        
+        verify(errorEventRepository, never()).save(any(ErrorEvent.class));
+    }
+
+    @Test
+    void submitAnswer_whenCorrect_shouldSetNextReviewDateToNull_whenWeightDropsToZero() {
+        SubmitAnswerRequest req = new SubmitAnswerRequest(testQuestionId, "apple");
+        WordMastery existingMastery = new WordMastery(UUID.randomUUID(), testUserId, testWordBankId, 1, LocalDateTime.now(), LocalDateTime.now(), LocalDateTime.now(), null);
+        
+        when(quizQuestionRepository.findById(testQuestionId)).thenReturn(Mono.just(testQuestion));
+        when(wordMasteryRepository.findOne(any(Example.class))).thenReturn(Mono.just(existingMastery));
+        
+        WordMastery updatedMastery = new WordMastery(existingMastery.id(), testUserId, testWordBankId, 0, null, LocalDateTime.now(), LocalDateTime.now(), null);
         when(wordMasteryRepository.save(any(WordMastery.class))).thenReturn(Mono.just(updatedMastery));
 
         StepVerifier.create(userService.submitAnswer(testUserId, req))

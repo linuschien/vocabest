@@ -65,6 +65,13 @@ public class UserRestController {
                 .defaultIfEmpty(ResponseEntity.notFound().build());
     }
 
+    @PostMapping("/api/v1/users/{userId}:nextErrorQuestion")
+    public Mono<ResponseEntity<QuizQuestionResponse>> getNextErrorQuestion(@PathVariable UUID userId) {
+        return queryService.getNextErrorQuestion(userId)
+                .map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.notFound().build());
+    }
+
     @PostMapping("/api/v1/users/{userId}:submitAnswer")
     public Mono<ResponseEntity<SubmitAnswerResponse>> submitAnswer(@PathVariable UUID userId, @RequestBody SubmitAnswerRequest req) {
         return commandService.submitAnswer(userId, req)

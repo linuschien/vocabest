@@ -158,6 +158,27 @@ class UserRestControllerTest {
     }
 
     @Test
+    void testGetNextErrorQuestion() {
+        UUID id = UUID.randomUUID();
+        QuizQuestionResponse response = new QuizQuestionResponse(UUID.randomUUID(), UUID.randomUUID().toString(), "cloze", "chinese", "correct", "d1", "d2", "d3", "root", "mnem");
+        when(queryService.getNextErrorQuestion(id)).thenReturn(Mono.just(response));
+
+        client.post().uri("/api/v1/users/{id}:nextErrorQuestion", id)
+                .exchange()
+                .expectStatus().isOk();
+    }
+
+    @Test
+    void testGetNextErrorQuestion_notFound() {
+        UUID id = UUID.randomUUID();
+        when(queryService.getNextErrorQuestion(id)).thenReturn(Mono.empty());
+
+        client.post().uri("/api/v1/users/{id}:nextErrorQuestion", id)
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
     void testSubmitAnswer() {
         UUID id = UUID.randomUUID();
         SubmitAnswerResponse response = new SubmitAnswerResponse(true, "correct", "root", "mnem");

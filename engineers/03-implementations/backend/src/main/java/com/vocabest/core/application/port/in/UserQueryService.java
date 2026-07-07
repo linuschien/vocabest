@@ -12,4 +12,6 @@ public interface UserQueryService {
     Mono<User> getUserById(UUID id);
     Flux<User> listUsers(UserFilterInput filter);
     Mono<QuizQuestionResponse> getNextQuestion(UUID userId);
+    
+    Mono<QuizQuestionResponse> getNextErrorQuestion(UUID userId);
 }

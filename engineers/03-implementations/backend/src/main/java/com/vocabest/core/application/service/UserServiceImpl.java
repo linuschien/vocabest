@@ -95,6 +95,20 @@ public class UserServiceImpl implements UserCommandService, UserQueryService {
     }
 
     @Override
+    public Mono<QuizQuestionResponse> getNextErrorQuestion(UUID userId) {
+        return wordMasteryRepository.findFirstByUserIdAndNextReviewDateLessThanEqualAndErrorWeightGreaterThanOrderByErrorWeightDescNextReviewDateAsc(userId, LocalDateTime.now(), 0)
+                .flatMap(mastery -> quizQuestionRepository.findByWordBankId(mastery.wordBankId())
+                        .collectList()
+                        .flatMap(questions -> {
+                            if (questions.isEmpty()) return Mono.empty();
+                            QuizQuestion q = questions.get(random.nextInt(questions.size()));
+                            return Mono.just(q);
+                        })
+                )
+                .map(q -> new QuizQuestionResponse(q.id(), q.wordBankId().toString(), q.contextualCloze(), q.chineseTranslation(), q.correctAnswer(), q.distractor1(), q.distractor2(), q.distractor3(), q.explanationRootAffix(), q.explanationMnemonic()));
+    }
+
+    @Override
     @Transactional
     public Mono<SubmitAnswerResponse> submitAnswer(UUID userId, SubmitAnswerRequest req) {
         return quizQuestionRepository.findById(req.questionId())
@@ -109,7 +123,11 @@ public class UserServiceImpl implements UserCommandService, UserQueryService {
                             .switchIfEmpty(Mono.defer(() -> Mono.just(new WordMastery(null, userId, question.wordBankId(), 0, LocalDateTime.now(), null, null, null))))
                             .flatMap(mastery -> {
                                 int newWeight = Math.max(0, mastery.errorWeight() + (isCorrect ? -1 : 1));
-                                WordMastery updated = new WordMastery(mastery.id(), mastery.userId(), mastery.wordBankId(), newWeight, LocalDateTime.now().plusDays(isCorrect ? 3 : 1), mastery.createdAt(), LocalDateTime.now(), mastery.deletedAt());
+                                LocalDateTime nextReview = null;
+                                if (newWeight > 0) {
+                                    nextReview = LocalDateTime.now().plusDays(isCorrect ? 3 : 1);
+                                }
+                                WordMastery updated = new WordMastery(mastery.id(), mastery.userId(), mastery.wordBankId(), newWeight, nextReview, mastery.createdAt(), LocalDateTime.now(), mastery.deletedAt());
                                 return wordMasteryRepository.save(updated);
                             }).then();
 
