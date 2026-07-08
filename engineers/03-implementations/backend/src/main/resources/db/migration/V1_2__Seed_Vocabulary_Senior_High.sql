@@ -1,4 +1,4 @@
--- V1__Seed_Vocabulary_Senior_High.sql
+-- V1_2__Seed_Vocabulary_Senior_High.sql
 /* Seed Data for SENIOR_HIGH Vocabulary */
 INSERT INTO word_bank (id, word, parts_of_speech, chinese_translation, target_level, difficulty_level, exam_frequency, created_at, updated_at) VALUES
 ('1edff391-2539-4f62-a859-502cc0d1935e', '(the) Arctic Ocean', 'n.', '北冰洋', 'SENIOR_HIGH', 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
