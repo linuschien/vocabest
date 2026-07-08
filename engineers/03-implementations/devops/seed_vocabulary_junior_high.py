@@ -175,7 +175,7 @@ def main():
     print("Starting Junior High vocabulary data pipeline (TSV + Official MD)...")
     
     script_dir = os.path.dirname(os.path.abspath(__file__))
-    output_dir = os.path.join(script_dir, "output")
+    output_dir = os.path.join(script_dir, "../backend/src/main/resources/db/migration")
     os.makedirs(output_dir, exist_ok=True)
     
     project_root = os.path.abspath(os.path.join(script_dir, "../../.."))
@@ -224,7 +224,7 @@ def main():
     # Combine datasets
     final_words = {}
     
-    output_path = os.path.join(output_dir, "V1__Seed_Vocabulary_Junior_High.sql")
+    output_path = os.path.join(output_dir, "V1_1__Seed_Vocabulary_Junior_High.sql")
     print("Loading existing SQL state to preserve UUIDs and manual translations...")
     existing_state = load_existing_sql_state(output_path)
     

@@ -24,8 +24,9 @@ except ImportError:
     genai = None
 
 DB_PATH = 'ai_cache.db'
-JUNIOR_HIGH_SQL = 'output/V1__Seed_Vocabulary_Junior_High.sql'
-SENIOR_HIGH_SQL = 'output/V1__Seed_Vocabulary_Senior_High.sql'
+MIGRATION_DIR = '../backend/src/main/resources/db/migration'
+JUNIOR_HIGH_SQL = f'{MIGRATION_DIR}/V1_1__Seed_Vocabulary_Junior_High.sql'
+SENIOR_HIGH_SQL = f'{MIGRATION_DIR}/V1_2__Seed_Vocabulary_Senior_High.sql'
 
 def init_db():
     conn = sqlite3.connect(DB_PATH)
@@ -402,10 +403,10 @@ def export_sql_command(args):
         bucket_idx = int(q_id.replace('-', ''), 16) % 100
         buckets[bucket_idx].append(r)
         
-    os.makedirs('output/quizzes', exist_ok=True)
+    os.makedirs(MIGRATION_DIR, exist_ok=True)
     
     for bucket_idx, questions in buckets.items():
-        filename = f"output/quizzes/V2_{bucket_idx:03d}__Seed_Quizzes.sql"
+        filename = f"{MIGRATION_DIR}/V2_{bucket_idx:03d}__Seed_Quizzes.sql"
         with open(filename, 'w', encoding='utf-8') as f:
             f.write(f"/* Seed Data for Quizzes - Bucket {bucket_idx:03d} */\n")
             f.write("INSERT INTO quiz_question (id, word_bank_id, contextual_cloze, chinese_translation, correct_answer, distractor1, distractor2, distractor3, explanation_root_affix, explanation_mnemonic, created_at, updated_at) VALUES\n")
@@ -419,7 +420,7 @@ def export_sql_command(args):
                 
             f.write(",\n".join(values) + ";\n")
             
-    print(f"Exported {len(rows)} questions across {len(buckets)} SQL files in 'output/quizzes/'.")
+    print(f"Exported {len(rows)} questions across {len(buckets)} SQL files in '{MIGRATION_DIR}/'.")
     conn.close()
 
 if __name__ == '__main__':

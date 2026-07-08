@@ -6,7 +6,7 @@ import uuid
 FILE_111 = '/home/linus/workspace/vocabest/docs/01-requirements/PRD/高中英文參考詞彙表(111學年度起適用).txt'
 FILE_91 = '/home/linus/workspace/vocabest/docs/01-requirements/PRD/高中英文91參考詞彙表.txt'
 FILE_108 = '/home/linus/workspace/vocabest/docs/01-requirements/PRD/高中英文參考詞彙表 — 依字母排序.txt'
-OUTPUT_FILE = '/home/linus/workspace/vocabest/engineers/03-implementations/devops/output/V1__Seed_Vocabulary_Senior_High.sql'
+OUTPUT_FILE = '/home/linus/workspace/vocabest/engineers/03-implementations/backend/src/main/resources/db/migration/V1_2__Seed_Vocabulary_Senior_High.sql'
 
 def expand_word(word_str):
     m = re.match(r'^([\w\-]+)\s+\((.*?)\)$', word_str)
@@ -397,7 +397,7 @@ def main():
     existing_state = load_existing_sql_state(OUTPUT_FILE)
 
     sql_statements = []
-    sql_statements.append("-- V1__Seed_Vocabulary_Senior_High.sql")
+    sql_statements.append("-- V1_2__Seed_Vocabulary_Senior_High.sql")
     sql_statements.append("/* Seed Data for SENIOR_HIGH Vocabulary */")
     sql_statements.append("INSERT INTO word_bank (id, word, parts_of_speech, chinese_translation, target_level, difficulty_level, exam_frequency, created_at, updated_at) VALUES")
     

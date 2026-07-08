@@ -3,7 +3,7 @@ import sys
 
 def run_tests():
     if len(sys.argv) < 2:
-        print("Usage: python3 test_sql_format.py <sql_file>")
+        print("Usage: python3 validate_vocab_sql_format.py <sql_file>")
         return
         
     sql_file = sys.argv[1]
