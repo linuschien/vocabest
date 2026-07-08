@@ -247,11 +247,10 @@ class UserServiceImplTest {
     @Test
     void whoami_shouldResetStreak_ifMissedYesterday() {
         User user = new User(testUserId, "test@example.com", Role.LEARNER, TargetLevel.JUNIOR_HIGH, 5, 20, LocalDateTime.now(), LocalDateTime.now(), null);
-        when(userRepository.findByEmail("test@example.com")).thenReturn(Mono.just(user));
         when(dailyProgressRepository.findByUserIdAndDate(eq(testUserId), any(java.time.LocalDate.class))).thenReturn(Mono.empty());
         when(userRepository.save(any(User.class))).thenReturn(Mono.just(user)); // simplified
 
-        StepVerifier.create(userService.whoami("accounts.google.com:test@example.com"))
+        StepVerifier.create(userService.whoami().contextWrite(reactor.util.context.Context.of("CURRENT_USER", user, "CURRENT_EMAIL", "test@example.com")))
                 .expectNextMatches(u -> u.email().equals("test@example.com"))
                 .verifyComplete();
     }

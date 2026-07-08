@@ -91,8 +91,8 @@ public class UserRestController {
     }
 
     @GetMapping("/api/v1/users:whoami")
-    public Mono<ResponseEntity<UserResponse>> whoami(@RequestHeader(value = "x-goog-authenticated-user-email", required = false) String emailHeader) {
-        return queryService.whoami(emailHeader)
+    public Mono<ResponseEntity<UserResponse>> whoami() {
+        return queryService.whoami()
                 .map(this::mapToResponse)
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());

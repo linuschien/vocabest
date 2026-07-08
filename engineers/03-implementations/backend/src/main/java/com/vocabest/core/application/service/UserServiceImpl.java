@@ -116,30 +116,33 @@ public class UserServiceImpl implements UserCommandService, UserQueryService {
     }
 
     @Override
-    public Mono<User> whoami(String email) {
-        if (email == null) return Mono.empty();
-        String parsedEmail = email.replace("accounts.google.com:", "");
-        return userRepository.findByEmail(parsedEmail)
-                .flatMap(user -> {
-                    java.time.LocalDate today = java.time.LocalDate.now();
-                    return dailyProgressRepository.findByUserIdAndDate(user.id(), today)
-                            .switchIfEmpty(Mono.just(new DailyProgress(null, user.id(), today, user.dailyTargetQuestions(), 0, 0, 0, null, null, null)))
-                            .flatMap(todayProgress -> {
-                                if (todayProgress.answeredQuestions() > 0) {
-                                    return Mono.just(user);
-                                }
-                                return dailyProgressRepository.findByUserIdAndDate(user.id(), today.minusDays(1))
-                                        .switchIfEmpty(Mono.just(new DailyProgress(null, user.id(), today.minusDays(1), user.dailyTargetQuestions(), 0, 0, 0, null, null, null)))
-                                        .flatMap(yesterdayProgress -> {
-                                            if (yesterdayProgress.answeredQuestions() == 0 && user.learningStreak() > 0) {
-                                                User resetUser = new User(user.id(), user.email(), user.role(), user.targetLevel(), 0, user.dailyTargetQuestions(), user.createdAt(), LocalDateTime.now(), user.deletedAt());
-                                                return userRepository.save(resetUser);
-                                            }
-                                            return Mono.just(user);
-                                        });
-                            });
-                })
-                .switchIfEmpty(Mono.just(new User(null, parsedEmail, null, null, null, null, null, null, null)));
+    public Mono<User> whoami() {
+        return Mono.deferContextual(ctx -> {
+            String parsedEmail = ctx.getOrDefault("CURRENT_EMAIL", null);
+            if (parsedEmail == null) return Mono.empty();
+            
+            User user = ctx.getOrDefault("CURRENT_USER", null);
+            if (user != null) {
+                java.time.LocalDate today = java.time.LocalDate.now();
+                return dailyProgressRepository.findByUserIdAndDate(user.id(), today)
+                        .switchIfEmpty(Mono.just(new DailyProgress(null, user.id(), today, user.dailyTargetQuestions(), 0, 0, 0, null, null, null)))
+                        .flatMap(todayProgress -> {
+                            if (todayProgress.answeredQuestions() > 0) {
+                                return Mono.just(user);
+                            }
+                            return dailyProgressRepository.findByUserIdAndDate(user.id(), today.minusDays(1))
+                                    .switchIfEmpty(Mono.just(new DailyProgress(null, user.id(), today.minusDays(1), user.dailyTargetQuestions(), 0, 0, 0, null, null, null)))
+                                    .flatMap(yesterdayProgress -> {
+                                        if (yesterdayProgress.answeredQuestions() == 0 && user.learningStreak() > 0) {
+                                            User resetUser = new User(user.id(), user.email(), user.role(), user.targetLevel(), 0, user.dailyTargetQuestions(), user.createdAt(), LocalDateTime.now(), user.deletedAt());
+                                            return userRepository.save(resetUser);
+                                        }
+                                        return Mono.just(user);
+                                    });
+                        });
+            }
+            return Mono.just(new User(null, parsedEmail, null, null, null, null, null, null, null));
+        });
     }
 
     @Override

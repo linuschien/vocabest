@@ -16,7 +16,7 @@ public interface UserQueryService {
     
     Mono<QuizQuestionResponse> getNextErrorQuestion(UUID userId);
     
-    Mono<User> whoami(String email);
+    Mono<User> whoami();
     
     Mono<ErrorReviewCountResponse> getErrorReviewCount(UUID userId);
 }

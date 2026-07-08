@@ -21,3 +21,5 @@ logging:
 vocabest:
   admin:
     whitelist: linus.chien@gmail.com
+  security:
+    mock-user-email: "dev@vocabest.engineer"
