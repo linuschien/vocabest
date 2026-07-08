@@ -7,7 +7,7 @@ import java.util.UUID;
 
 @Table("error_event")
 public record ErrorEvent(
-    @Id UUID id,
+    @Id @org.springframework.data.relational.core.mapping.Column("id") UUID id,
     UUID userId,
     UUID quizQuestionId,
     LocalDateTime timestamp,

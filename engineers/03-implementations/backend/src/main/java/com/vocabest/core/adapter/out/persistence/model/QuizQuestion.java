@@ -7,7 +7,7 @@ import java.util.UUID;
 
 @Table("quiz_question")
 public record QuizQuestion(
-    @Id UUID id,
+    @Id @org.springframework.data.relational.core.mapping.Column("id") UUID id,
     UUID wordBankId,
     String contextualCloze,
     String chineseTranslation,

@@ -7,7 +7,7 @@ import java.util.UUID;
 
 @Table("word_bank")
 public record WordBank(
-    @Id UUID id,
+    @Id @org.springframework.data.relational.core.mapping.Column("id") UUID id,
     String word,
     String partsOfSpeech,
     String chineseTranslation,

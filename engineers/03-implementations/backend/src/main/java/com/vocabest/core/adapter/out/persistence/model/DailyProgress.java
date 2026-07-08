@@ -7,7 +7,7 @@ import java.util.UUID;
 
 @Table("daily_progress")
 public record DailyProgress(
-    @Id UUID id,
+    @Id @org.springframework.data.relational.core.mapping.Column("id") UUID id,
     UUID userId,
     java.time.LocalDate date,
     Integer targetQuestions,

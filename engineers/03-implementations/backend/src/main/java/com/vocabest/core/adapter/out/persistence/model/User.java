@@ -7,7 +7,7 @@ import java.util.UUID;
 
 @Table("\"user\"")
 public record User(
-    @Id UUID id,
+    @Id @org.springframework.data.relational.core.mapping.Column("id") UUID id,
     String email,
     Role role,
     TargetLevel targetLevel,
