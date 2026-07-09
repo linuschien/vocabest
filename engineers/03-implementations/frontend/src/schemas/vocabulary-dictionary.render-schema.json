@@ -58,18 +58,32 @@
         "label": "Starts With",
         "placeholder": "Select Starts With",
         "options": [
-          {
-            "label": "A",
-            "value": "A"
-          },
-          {
-            "label": "B",
-            "value": "B"
-          },
-          {
-            "label": "C",
-            "value": "C"
-          }
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "G",
+          "H",
+          "I",
+          "J",
+          "K",
+          "L",
+          "M",
+          "N",
+          "O",
+          "P",
+          "Q",
+          "R",
+          "S",
+          "T",
+          "U",
+          "V",
+          "W",
+          "X",
+          "Y",
+          "Z"
         ],
         "checks": null,
         "validateOn": null,
@@ -302,30 +316,12 @@
         "name": "difficultyLevel",
         "label": "Difficulty",
         "options": [
-          {
-            "label": "A1",
-            "value": "A1"
-          },
-          {
-            "label": "A2",
-            "value": "A2"
-          },
-          {
-            "label": "B1",
-            "value": "B1"
-          },
-          {
-            "label": "B2",
-            "value": "B2"
-          },
-          {
-            "label": "C1",
-            "value": "C1"
-          },
-          {
-            "label": "C2",
-            "value": "C2"
-          }
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6"
         ],
         "value": {
           "$bindState": "/form/word-difficulty-select"

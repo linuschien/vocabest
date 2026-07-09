@@ -32,7 +32,11 @@ export default function BehaviorProvider({ children }: { children: React.ReactNo
         const { ref, payload } = params ?? {};
         try {
           if (ref === 'onboardUser') {
-            await onboardUser.mutateAsync({ data: payload });
+            const mappedPayload = { ...payload };
+            if (mappedPayload.targetLevel === '國中2000單字') mappedPayload.targetLevel = 'JUNIOR_HIGH';
+            if (mappedPayload.targetLevel === '高中7000單字') mappedPayload.targetLevel = 'SENIOR_HIGH';
+            
+            await onboardUser.mutateAsync({ data: mappedPayload });
             toast.success('Onboarding successful!');
             navigate('/learning-dashboard');
           } else if (ref === 'createWordBank') {

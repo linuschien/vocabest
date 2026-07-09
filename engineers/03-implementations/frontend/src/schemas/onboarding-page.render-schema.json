@@ -32,30 +32,8 @@
         "required": true,
         "placeholder": "Select Target Level",
         "options": [
-          {
-            "label": "A1",
-            "value": "A1"
-          },
-          {
-            "label": "A2",
-            "value": "A2"
-          },
-          {
-            "label": "B1",
-            "value": "B1"
-          },
-          {
-            "label": "B2",
-            "value": "B2"
-          },
-          {
-            "label": "C1",
-            "value": "C1"
-          },
-          {
-            "label": "C2",
-            "value": "C2"
-          }
+          "國中2000單字",
+          "高中7000單字"
         ],
         "checks": null,
         "validateOn": null,
@@ -74,22 +52,10 @@
         "required": true,
         "placeholder": "Select Daily Target Questions",
         "options": [
-          {
-            "label": "10 Questions",
-            "value": "10"
-          },
-          {
-            "label": "20 Questions",
-            "value": "20"
-          },
-          {
-            "label": "50 Questions",
-            "value": "50"
-          },
-          {
-            "label": "100 Questions",
-            "value": "100"
-          }
+          "10",
+          "20",
+          "50",
+          "100"
         ],
         "checks": null,
         "validateOn": null,
