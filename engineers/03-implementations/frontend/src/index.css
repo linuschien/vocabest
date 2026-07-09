@@ -1,0 +1,14 @@
+@import "tailwindcss";
+@source "../node_modules/@json-render/shadcn/dist/**/*.js";
+
+@theme {
+  --color-primary: #3b82f6; /* Example premium blue */
+  --color-secondary: #64748b;
+  --color-accent: #f59e0b;
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f8fafc;
+  color: #0f172a;
+}

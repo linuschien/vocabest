@@ -1,0 +1,224 @@
+{
+  "root": "dashboard-container",
+  "elements": {
+    "dashboard-container": {
+      "type": "Container:page",
+      "props": {
+        "id": "dashboard-container",
+        "label": "Learning Dashboard"
+      },
+      "children": [
+        "global-header-section",
+        "progress-section",
+        "quick-start-section",
+        "avatar-dropdown-modal"
+      ]
+    },
+    "global-header-section": {
+      "type": "div",
+      "props": {
+        "id": "global-header-section",
+        "label": "Header"
+      },
+      "children": [
+        "avatar-dropdown-btn"
+      ]
+    },
+    "avatar-dropdown-btn": {
+      "type": "Button",
+      "props": {
+        "id": "avatar-dropdown-btn",
+        "label": "User Menu",
+        "variant": "secondary",
+        "disabled": null
+      },
+      "children": [],
+      "on": {
+        "press": [
+          {
+            "action": "openModal",
+            "params": {
+              "id": "avatar-dropdown-modal"
+            }
+          }
+        ]
+      }
+    },
+    "progress-section": {
+      "type": "div",
+      "props": {
+        "id": "progress-section",
+        "label": "Today's Progress"
+      },
+      "children": [
+        "progress-grid"
+      ]
+    },
+    "progress-grid": {
+      "type": "Grid",
+      "props": {
+        "id": "progress-grid",
+        "label": "Key Metrics"
+      },
+      "children": [
+        "questions-answered-metric",
+        "learning-streak-metric"
+      ]
+    },
+    "questions-answered-metric": {
+      "type": "MetricCard",
+      "props": {
+        "id": "questions-answered-metric",
+        "label": "Questions Answered"
+      },
+      "children": []
+    },
+    "learning-streak-metric": {
+      "type": "MetricCard",
+      "props": {
+        "id": "learning-streak-metric",
+        "label": "Learning Streak"
+      },
+      "children": []
+    },
+    "quick-start-section": {
+      "type": "div",
+      "props": {
+        "id": "quick-start-section",
+        "label": "Quick Start"
+      },
+      "children": [
+        "quick-start-stack"
+      ]
+    },
+    "quick-start-stack": {
+      "type": "Stack",
+      "props": {
+        "id": "quick-start-stack",
+        "label": "Actions"
+      },
+      "children": [
+        "start-daily-task-btn",
+        "error-review-btn",
+        "nav-dictionary-btn"
+      ]
+    },
+    "start-daily-task-btn": {
+      "type": "Button",
+      "props": {
+        "id": "start-daily-task-btn",
+        "label": "Start Today's Task",
+        "variant": "primary",
+        "disabled": null
+      },
+      "children": [],
+      "on": {
+        "press": [
+          {
+            "action": "executeBehavior",
+            "params": {
+              "ref": "US-01-01: 一鍵啟動測驗"
+            }
+          }
+        ]
+      }
+    },
+    "error-review-btn": {
+      "type": "Button",
+      "props": {
+        "id": "error-review-btn",
+        "label": "Review Errors",
+        "variant": "secondary",
+        "disabled": null
+      },
+      "children": [],
+      "on": {
+        "press": [
+          {
+            "action": "executeBehavior",
+            "params": {
+              "ref": "US-01-03: 錯題複習專區入口"
+            }
+          }
+        ]
+      }
+    },
+    "nav-dictionary-btn": {
+      "type": "Button",
+      "props": {
+        "id": "nav-dictionary-btn",
+        "label": "Vocabulary Dictionary",
+        "variant": "secondary",
+        "disabled": null
+      },
+      "children": [],
+      "on": {
+        "press": [
+          {
+            "action": "executeBehavior",
+            "params": {
+              "ref": "US-01-04: 單字總覽與檢索"
+            }
+          }
+        ]
+      }
+    },
+    "avatar-dropdown-modal": {
+      "type": "Dialog",
+      "props": {
+        "id": "avatar-dropdown-modal",
+        "label": "User Menu",
+        "title": "User Menu",
+        "description": null,
+        "openPath": "/modals/avatar-dropdown-modal"
+      },
+      "children": [
+        "nav-settings-btn",
+        "nav-admin-btn"
+      ],
+      "visible": {
+        "$state": "/modals/avatar-dropdown-modal"
+      }
+    },
+    "nav-settings-btn": {
+      "type": "Button",
+      "props": {
+        "id": "nav-settings-btn",
+        "label": "Personal Settings",
+        "variant": "secondary",
+        "disabled": null
+      },
+      "children": [],
+      "on": {
+        "press": [
+          {
+            "action": "executeBehavior",
+            "params": {
+              "ref": "US-05-01: 一般使用者個人資料存取限制"
+            }
+          }
+        ]
+      }
+    },
+    "nav-admin-btn": {
+      "type": "Button",
+      "props": {
+        "id": "nav-admin-btn",
+        "label": "Admin Dashboard",
+        "variant": "secondary",
+        "disabled": null
+      },
+      "children": [],
+      "on": {
+        "press": [
+          {
+            "action": "executeBehavior",
+            "params": {
+              "ref": "US-05-02: 系統管理員全站資料存取權限"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,119 @@
+{
+  "root": "error-review-container",
+  "elements": {
+    "error-review-container": {
+      "type": "Container:page",
+      "props": {
+        "id": "error-review-container",
+        "label": "Error Review"
+      },
+      "children": [
+        "question-section",
+        "options-grid",
+        "explanation-modal"
+      ]
+    },
+    "question-section": {
+      "type": "div",
+      "props": {
+        "id": "question-section",
+        "label": "Question"
+      },
+      "children": [
+        "chinese-translation",
+        "contextual-cloze"
+      ]
+    },
+    "chinese-translation": {
+      "type": "Text",
+      "props": {
+        "id": "chinese-translation",
+        "label": "Chinese Translation"
+      },
+      "children": []
+    },
+    "contextual-cloze": {
+      "type": "Text",
+      "props": {
+        "id": "contextual-cloze",
+        "label": "Contextual Cloze"
+      },
+      "children": []
+    },
+    "options-grid": {
+      "type": "Grid",
+      "props": {
+        "id": "options-grid",
+        "label": "Options"
+      },
+      "children": [
+        "option-trigger"
+      ]
+    },
+    "option-trigger": {
+      "type": "Button",
+      "props": {
+        "id": "option-trigger",
+        "label": "Option",
+        "variant": "secondary",
+        "disabled": null
+      },
+      "children": [],
+      "on": {
+        "press": [
+          {
+            "action": "openModal",
+            "params": {
+              "id": "explanation-modal"
+            }
+          }
+        ]
+      }
+    },
+    "explanation-modal": {
+      "type": "Dialog",
+      "props": {
+        "id": "explanation-modal",
+        "label": "Explanation",
+        "title": "Explanation",
+        "description": null,
+        "openPath": "/modals/explanation-modal"
+      },
+      "children": [
+        "explanation-content",
+        "next-question-btn"
+      ],
+      "visible": {
+        "$state": "/modals/explanation-modal"
+      }
+    },
+    "explanation-content": {
+      "type": "Text",
+      "props": {
+        "id": "explanation-content",
+        "label": "Explanation Root/Mnemonic"
+      },
+      "children": []
+    },
+    "next-question-btn": {
+      "type": "Button",
+      "props": {
+        "id": "next-question-btn",
+        "label": "Next Question",
+        "variant": "primary",
+        "disabled": null
+      },
+      "children": [],
+      "on": {
+        "press": [
+          {
+            "action": "openModal",
+            "params": {
+              "id": "error-review-container"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

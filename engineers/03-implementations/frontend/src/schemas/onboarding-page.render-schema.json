@@ -1,0 +1,71 @@
+{
+  "root": "onboarding-container",
+  "elements": {
+    "onboarding-container": {
+      "type": "Container:page",
+      "props": {
+        "id": "onboarding-container",
+        "label": "Welcome to Vocabest"
+      },
+      "children": [
+        "onboarding-form-section"
+      ]
+    },
+    "onboarding-form-section": {
+      "type": "Card",
+      "props": {
+        "id": "onboarding-form-section",
+        "label": "Initial Setup"
+      },
+      "children": [
+        "target-level-select",
+        "daily-target-select",
+        "start-onboarding-btn"
+      ]
+    },
+    "target-level-select": {
+      "type": "Select",
+      "props": {
+        "id": "target-level-select",
+        "label": "Target Level",
+        "required": true,
+        "placeholder": "Select Target Level",
+        "checks": null,
+        "validateOn": null
+      },
+      "children": []
+    },
+    "daily-target-select": {
+      "type": "Select",
+      "props": {
+        "id": "daily-target-select",
+        "label": "Daily Target Questions",
+        "required": true,
+        "placeholder": "Select Daily Target Questions",
+        "checks": null,
+        "validateOn": null
+      },
+      "children": []
+    },
+    "start-onboarding-btn": {
+      "type": "Button",
+      "props": {
+        "id": "start-onboarding-btn",
+        "label": "Start Learning",
+        "variant": "primary",
+        "disabled": null
+      },
+      "children": [],
+      "on": {
+        "press": [
+          {
+            "action": "openModal",
+            "params": {
+              "id": "onboarding-form-section"
+            }
+          }
+        ]
+      }
+    }
+  }
+}

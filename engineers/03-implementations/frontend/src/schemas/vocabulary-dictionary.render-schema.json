@@ -1,0 +1,263 @@
+{
+  "root": "dictionary-container",
+  "elements": {
+    "dictionary-container": {
+      "type": "Container:page",
+      "props": {
+        "id": "dictionary-container",
+        "label": "Vocabulary Dictionary"
+      },
+      "children": [
+        "filter-section",
+        "word-list-section",
+        "create-wordbank-modal",
+        "confirm-delete-modal"
+      ]
+    },
+    "filter-section": {
+      "type": "div",
+      "props": {
+        "id": "filter-section",
+        "label": "Search & Filters"
+      },
+      "children": [
+        "filter-stack"
+      ]
+    },
+    "filter-stack": {
+      "type": "Stack",
+      "props": {
+        "id": "filter-stack",
+        "label": "Filters"
+      },
+      "children": [
+        "search-field",
+        "letter-select",
+        "difficulty-select"
+      ]
+    },
+    "search-field": {
+      "type": "Input",
+      "props": {
+        "id": "search-field",
+        "label": "Search Word",
+        "placeholder": "Select Search Word",
+        "checks": null,
+        "validateOn": null,
+        "type": "text"
+      },
+      "children": []
+    },
+    "letter-select": {
+      "type": "Select",
+      "props": {
+        "id": "letter-select",
+        "label": "Starts With",
+        "placeholder": "Select Starts With",
+        "checks": null,
+        "validateOn": null
+      },
+      "children": []
+    },
+    "difficulty-select": {
+      "type": "Select",
+      "props": {
+        "id": "difficulty-select",
+        "label": "Difficulty Level",
+        "placeholder": "Select Difficulty Level",
+        "checks": null,
+        "validateOn": null
+      },
+      "children": []
+    },
+    "word-list-section": {
+      "type": "div",
+      "props": {
+        "id": "word-list-section",
+        "label": "Word List"
+      },
+      "children": [
+        "admin-actions-stack",
+        "word-table"
+      ]
+    },
+    "admin-actions-stack": {
+      "type": "Stack",
+      "props": {
+        "id": "admin-actions-stack",
+        "label": "Admin Actions"
+      },
+      "children": [
+        "create-wordbank-btn",
+        "drilldown-questions-btn",
+        "delete-wordbank-btn"
+      ]
+    },
+    "create-wordbank-btn": {
+      "type": "Button",
+      "props": {
+        "id": "create-wordbank-btn",
+        "label": "Add Word",
+        "variant": "primary",
+        "disabled": null
+      },
+      "children": [],
+      "on": {
+        "press": [
+          {
+            "action": "openModal",
+            "params": {
+              "id": "create-wordbank-modal"
+            }
+          }
+        ]
+      }
+    },
+    "drilldown-questions-btn": {
+      "type": "Button",
+      "props": {
+        "id": "drilldown-questions-btn",
+        "label": "Manage Questions (Drill-down)",
+        "variant": "secondary",
+        "disabled": null
+      },
+      "children": [],
+      "on": {
+        "press": [
+          {
+            "action": "executeBehavior",
+            "params": {
+              "ref": "US-05-02: 系統管理員全站資料存取權限"
+            }
+          }
+        ]
+      }
+    },
+    "delete-wordbank-btn": {
+      "type": "Button",
+      "props": {
+        "id": "delete-wordbank-btn",
+        "label": "Delete Word",
+        "variant": "danger",
+        "disabled": null
+      },
+      "children": [],
+      "on": {
+        "press": [
+          {
+            "action": "openModal",
+            "params": {
+              "id": "confirm-delete-modal"
+            }
+          }
+        ]
+      }
+    },
+    "word-table": {
+      "type": "DataTable",
+      "props": {
+        "id": "word-table",
+        "label": "Words",
+        "columns": [
+          {
+            "field": "word",
+            "label": "Word",
+            "sortable": true,
+            "default_sort": "asc"
+          },
+          {
+            "field": "partsOfSpeech",
+            "label": "Parts of Speech",
+            "sortable": false
+          },
+          {
+            "field": "chineseTranslation",
+            "label": "Chinese Translation",
+            "sortable": false
+          },
+          {
+            "field": "difficultyLevel",
+            "label": "Difficulty Level",
+            "sortable": true
+          }
+        ],
+        "data": {
+          "$bindState": "/data/listWordBanks"
+        }
+      },
+      "children": []
+    },
+    "create-wordbank-modal": {
+      "type": "Dialog",
+      "props": {
+        "id": "create-wordbank-modal",
+        "label": "Create Word",
+        "title": "Create Word",
+        "description": null,
+        "openPath": "/modals/create-wordbank-modal"
+      },
+      "children": [
+        "submit-wordbank-btn"
+      ],
+      "visible": {
+        "$state": "/modals/create-wordbank-modal"
+      }
+    },
+    "submit-wordbank-btn": {
+      "type": "Button",
+      "props": {
+        "id": "submit-wordbank-btn",
+        "label": "Save",
+        "variant": "primary",
+        "disabled": null
+      },
+      "children": [],
+      "on": {
+        "press": [
+          {
+            "action": "executeBehavior",
+            "params": {
+              "ref": "US-05-02: 系統管理員全站資料存取權限"
+            }
+          }
+        ]
+      }
+    },
+    "confirm-delete-modal": {
+      "type": "AlertDialog",
+      "props": {
+        "id": "confirm-delete-modal",
+        "label": "Confirm Deletion",
+        "title": "Confirm Deletion",
+        "description": null,
+        "openPath": "/modals/confirm-delete-modal"
+      },
+      "children": [
+        "confirm-delete-btn"
+      ],
+      "visible": {
+        "$state": "/modals/confirm-delete-modal"
+      }
+    },
+    "confirm-delete-btn": {
+      "type": "Button",
+      "props": {
+        "id": "confirm-delete-btn",
+        "label": "Confirm",
+        "variant": "danger",
+        "disabled": null
+      },
+      "children": [],
+      "on": {
+        "press": [
+          {
+            "action": "executeBehavior",
+            "params": {
+              "ref": "US-05-02: 系統管理員全站資料存取權限"
+            }
+          }
+        ]
+      }
+    }
+  }
+}
