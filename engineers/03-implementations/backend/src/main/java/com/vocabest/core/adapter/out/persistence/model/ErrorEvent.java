@@ -5,14 +5,16 @@ import org.springframework.data.relational.core.mapping.Table;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import org.springframework.data.relational.core.mapping.Column;
+
 @Table("error_event")
 public record ErrorEvent(
-    @Id @org.springframework.data.relational.core.mapping.Column("id") UUID id,
-    UUID userId,
-    UUID quizQuestionId,
-    LocalDateTime timestamp,
-    String selectedDistractor,
-    LocalDateTime createdAt,
-    LocalDateTime updatedAt,
-    LocalDateTime deletedAt
+    @Id @Column("id") UUID id,
+    @Column("user_id") UUID userId,
+    @Column("quiz_question_id") UUID quizQuestionId,
+    @Column("timestamp") LocalDateTime timestamp,
+    @Column("selected_distractor") String selectedDistractor,
+    @Column("created_at") LocalDateTime createdAt,
+    @Column("updated_at") LocalDateTime updatedAt,
+    @Column("deleted_at") LocalDateTime deletedAt
 ) {}

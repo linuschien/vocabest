@@ -6,14 +6,16 @@ import org.springframework.data.relational.core.mapping.Table;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import org.springframework.data.relational.core.mapping.Column;
+
 @Table("word_mastery")
 public record WordMastery(
-    @Id @org.springframework.data.relational.core.mapping.Column("id") UUID id,
-    UUID userId,
-    UUID wordBankId,
-    Integer errorWeight,
-    LocalDateTime nextReviewDate,
-    LocalDateTime createdAt,
-    LocalDateTime updatedAt,
-    LocalDateTime deletedAt
+    @Id @Column("id") UUID id,
+    @Column("user_id") UUID userId,
+    @Column("word_bank_id") UUID wordBankId,
+    @Column("error_weight") Integer errorWeight,
+    @Column("next_review_date") LocalDateTime nextReviewDate,
+    @Column("created_at") LocalDateTime createdAt,
+    @Column("updated_at") LocalDateTime updatedAt,
+    @Column("deleted_at") LocalDateTime deletedAt
 ) {}

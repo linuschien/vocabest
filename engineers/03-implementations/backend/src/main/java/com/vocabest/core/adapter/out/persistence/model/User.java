@@ -5,15 +5,17 @@ import org.springframework.data.relational.core.mapping.Table;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-@Table("\"user\"")
+import org.springframework.data.relational.core.mapping.Column;
+
+@Table("user")
 public record User(
-    @Id @org.springframework.data.relational.core.mapping.Column("id") UUID id,
-    String email,
-    Role role,
-    TargetLevel targetLevel,
-    Integer learningStreak,
-    Integer dailyTargetQuestions,
-    LocalDateTime createdAt,
-    LocalDateTime updatedAt,
-    LocalDateTime deletedAt
+    @Id @Column("id") UUID id,
+    @Column("email") String email,
+    @Column("role") Role role,
+    @Column("target_level") TargetLevel targetLevel,
+    @Column("learning_streak") Integer learningStreak,
+    @Column("daily_target_questions") Integer dailyTargetQuestions,
+    @Column("created_at") LocalDateTime createdAt,
+    @Column("updated_at") LocalDateTime updatedAt,
+    @Column("deleted_at") LocalDateTime deletedAt
 ) {}
