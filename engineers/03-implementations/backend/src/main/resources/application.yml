@@ -18,8 +18,8 @@ spring:
     path: /graphql
 logging:
   level:
+    org.springframework.r2dbc: DEBUG
     org.springframework.data.r2dbc: DEBUG
-
 vocabest:
   admin:
     whitelist: linus.chien@gmail.com

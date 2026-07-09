@@ -16,8 +16,14 @@ import java.time.LocalDateTime;
 import java.util.Random;
 import java.util.UUID;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Service
 public class UserServiceImpl implements UserCommandService, UserQueryService {
+
+    private static final Logger log = LoggerFactory.getLogger(UserServiceImpl.class);
+
 
     private final UserRepository userRepository;
     private final QuizQuestionRepository quizQuestionRepository;
@@ -76,6 +82,7 @@ public class UserServiceImpl implements UserCommandService, UserQueryService {
     @Override
     @Transactional
     public Mono<User> onboardUser(UserOnboardRequest req) {
+        log.info("Onboarding user with email: {}", req.email());
         User probe = new User(null, req.email(), null, null, null, null, null, null, null);
         return userRepository.findOne(Example.of(probe))
                 .switchIfEmpty(Mono.defer(() -> {
@@ -87,6 +94,7 @@ public class UserServiceImpl implements UserCommandService, UserQueryService {
 
     @Override
     public Mono<QuizQuestionResponse> getNextQuestion(UUID userId) {
+        log.info("Fetching next question for user: {}", userId);
         return userRepository.findById(userId)
                 .flatMap(user -> {
                     QuizQuestionFilterInput filter = new QuizQuestionFilterInput(null, null, null, user.targetLevel().name(), null, null);
@@ -103,6 +111,7 @@ public class UserServiceImpl implements UserCommandService, UserQueryService {
 
     @Override
     public Mono<QuizQuestionResponse> getNextErrorQuestion(UUID userId) {
+        log.info("Fetching next error review question for user: {}", userId);
         return wordMasteryRepository.findFirstByUserIdAndNextReviewDateLessThanEqualAndErrorWeightGreaterThanOrderByErrorWeightDescNextReviewDateAsc(userId, LocalDateTime.now(), 0)
                 .flatMap(mastery -> quizQuestionRepository.findByWordBankId(mastery.wordBankId())
                         .collectList()
@@ -123,6 +132,7 @@ public class UserServiceImpl implements UserCommandService, UserQueryService {
             
             User user = ctx.getOrDefault("CURRENT_USER", null);
             if (user != null) {
+                log.info("Handling whoami for authenticated user: {}", user.email());
                 java.time.LocalDate today = java.time.LocalDate.now();
                 return dailyProgressRepository.findByUserIdAndDate(user.id(), today)
                         .switchIfEmpty(Mono.just(new DailyProgress(null, user.id(), today, user.dailyTargetQuestions(), 0, 0, 0, null, null, null)))
@@ -154,6 +164,7 @@ public class UserServiceImpl implements UserCommandService, UserQueryService {
     @Override
     @Transactional
     public Mono<SubmitAnswerResponse> submitAnswer(UUID userId, SubmitAnswerRequest req) {
+        log.info("Processing submitAnswer for user: {}, questionId: {}, selected: {}", userId, req.questionId(), req.selectedDistractor());
         return quizQuestionRepository.findById(req.questionId())
                 .flatMap(question -> {
                     boolean isCorrect = question.correctAnswer().equals(req.selectedDistractor());

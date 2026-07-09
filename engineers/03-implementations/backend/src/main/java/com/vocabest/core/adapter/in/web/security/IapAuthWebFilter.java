@@ -23,6 +23,12 @@ public class IapAuthWebFilter implements WebFilter {
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+        String path = exchange.getRequest().getURI().getPath();
+        if (exchange.getRequest().getMethod() == org.springframework.http.HttpMethod.OPTIONS ||
+            !(path.startsWith("/api/") || path.startsWith("/graphql") || path.startsWith("/graphiql"))) {
+            return chain.filter(exchange);
+        }
+
         String emailHeader = exchange.getRequest().getHeaders().getFirst("x-goog-authenticated-user-email");
         
         if ((emailHeader == null || emailHeader.isEmpty()) && mockUserEmail != null && !mockUserEmail.isEmpty()) {
@@ -35,9 +41,8 @@ public class IapAuthWebFilter implements WebFilter {
 
         String parsedEmail = emailHeader.replace("accounts.google.com:", "");
         return userRepository.findByEmail(parsedEmail)
-                .flatMap(user -> chain.filter(exchange)
-                        .contextWrite(Context.of("CURRENT_USER", user, "CURRENT_EMAIL", parsedEmail)))
-                .switchIfEmpty(chain.filter(exchange)
-                        .contextWrite(Context.of("CURRENT_EMAIL", parsedEmail)));
+                .map(user -> Context.of("CURRENT_USER", (Object) user, "CURRENT_EMAIL", (Object) parsedEmail))
+                .defaultIfEmpty(Context.of("CURRENT_EMAIL", (Object) parsedEmail))
+                .flatMap(context -> chain.filter(exchange).contextWrite(context));
     }
 }
