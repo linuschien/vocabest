@@ -6,9 +6,9 @@ export default function DataTable({ element, children }: any) {
   const { id, label, columns, data } = element?.props ?? {};
   
   // Resolve data via store binding
-  let rows = [];
+  let rows: any[] = [];
   if (data && data.$bindState) {
-    rows = store.get(data.$bindState) || [];
+    rows = (store.get(data.$bindState) as any[]) || [];
   } else if (Array.isArray(data)) {
     rows = data;
   }
