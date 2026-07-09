@@ -1,11 +1,9 @@
-// AUTO-GENERATED test harness
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { JSONUIProvider, createStateStore } from '@json-render/react';
 import { componentRegistry } from '@/json-render/component-registry';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { server } from '@/mocks/server';
 import VocabularyDictionaryPage from './vocabulary-dictionary.page';
 
 const store = createStateStore({ modals: {}, form: {}, data: {} });
@@ -33,45 +31,65 @@ beforeEach(() => {
 });
 
 describe('VocabularyDictionaryPage', () => {
-  // Pattern 1: Render
-  it('renders page without crashing', () => {
-    const { container } = renderPage();
-    expect(container).toBeInTheDocument();
-  });
-
-  // Pattern 2: Query (store-based table data)
-  it('renders rows when store data is populated', async () => {
-    // Assuming there is some list data binding. For generic pages, we set multiple common ones.
-    const MOCK_ROWS = [{ id: '1', field: 'VALUE', word: 'MOCK_DATA', name: 'MOCK_DATA' }];
-    store.set('/data/listWordBanks', MOCK_ROWS);
-    store.set('/data/listUsers', MOCK_ROWS);
-    store.set('/data/listQuizQuestions', MOCK_ROWS);
+  it('renders page correctly', async () => {
     renderPage();
-    
-    // We just check if it doesn't crash here. Since the specific text might not render if columns don't match, we avoid strict text assertions in stubs.
-    await waitFor(() => expect(true).toBe(true));
+    expect(await screen.findByPlaceholderText(/Select Search Word/i)).toBeInTheDocument();
   });
 
-  // Pattern 3: Modal Open + executeBehavior
-  it('calls executeBehavior on confirm action', async () => {
-    store.set('/modals/confirm-modal', true);
-    const user = userEvent.setup();
-    const { container } = renderPage();
-    
-    // Trigger any button if it exists
-    const buttons = await screen.findAllByRole('button').catch(() => []);
-    if (buttons.length > 0) {
-      await user.click(buttons[0]);
-      // Just assert it ran without crashing
-    }
-    expect(true).toBe(true);
+  it('renders table rows from store', async () => {
+    store.set('/data/listWordBanks', [{ id: '1', word: 'apple', chineseTranslation: '蘋果', difficultyLevel: 'A1', partsOfSpeech: 'noun' }]);
+    renderPage();
+    expect(await screen.findByText('apple')).toBeInTheDocument();
+    expect(await screen.findByText('蘋果')).toBeInTheDocument();
   });
 
-  // Pattern 4: Row Actions
-  it('handles row actions properly', async () => {
-    store.set('/data/listWordBanks', [{ id: '1', word: 'MOCK_DATA' }]);
+  it('navigates to drill-down', async () => {
     const user = userEvent.setup();
     renderPage();
-    expect(true).toBe(true);
+
+    await user.click(await screen.findByRole('button', { name: /Manage Questions/i }));
+    expect(navigate).toHaveBeenCalledWith(expect.objectContaining({ path: '/admin-dashboard' }));
+  });
+
+  it('submits create word bank form', async () => {
+    store.set('/modals/create-wordbank-modal', true);
+    const user = userEvent.setup();
+    renderPage();
+
+    await screen.findByRole('button', { name: /Save/i });
+    const textboxes = await screen.findAllByRole('textbox');
+    // The last three textboxes will be in the modal
+    await user.type(textboxes[textboxes.length - 3], 'banana');
+    await user.type(textboxes[textboxes.length - 2], 'noun');
+    await user.type(textboxes[textboxes.length - 1], '香蕉');
+
+    await user.click(await screen.findByRole('button', { name: /Save/i }));
+
+    expect(executeBehavior).toHaveBeenCalledWith(
+      expect.objectContaining({
+        ref: 'createWordBank',
+        payload: expect.objectContaining({
+          word: 'banana',
+          partsOfSpeech: 'noun',
+          chineseTranslation: '香蕉'
+        })
+      })
+    );
+  });
+
+  it('submits delete confirm', async () => {
+    store.set('/modals/confirm-delete-modal', true);
+    store.set('/data/activeWordBankId', 'wb-123');
+    const user = userEvent.setup();
+    renderPage();
+
+    await user.click(await screen.findByRole('button', { name: /Confirm/i }));
+
+    expect(executeBehavior).toHaveBeenCalledWith(
+      expect.objectContaining({
+        ref: 'deleteWordBank',
+        payload: { id: 'wb-123' }
+      })
+    );
   });
 });

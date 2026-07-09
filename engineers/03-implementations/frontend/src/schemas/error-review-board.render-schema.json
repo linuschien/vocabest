@@ -9,7 +9,8 @@
       },
       "children": [
         "question-section",
-        "options-grid",
+        "answer-input",
+        "submit-answer-btn",
         "explanation-modal"
       ]
     },
@@ -40,31 +41,41 @@
       },
       "children": []
     },
-    "options-grid": {
-      "type": "Grid",
+    "answer-input": {
+      "type": "Input",
       "props": {
-        "id": "options-grid",
-        "label": "Options"
+        "id": "answer-input",
+        "name": "answerWord",
+        "label": "Your Answer",
+        "placeholder": "Type your answer here...",
+        "value": {
+          "$bindState": "/form/answer-input"
+        }
       },
-      "children": [
-        "option-trigger"
-      ]
+      "children": []
     },
-    "option-trigger": {
+    "submit-answer-btn": {
       "type": "Button",
       "props": {
-        "id": "option-trigger",
-        "label": "Option",
-        "variant": "secondary",
-        "disabled": null
+        "id": "submit-answer-btn",
+        "label": "Submit Answer",
+        "variant": "primary"
       },
       "children": [],
       "on": {
         "press": [
           {
-            "action": "openModal",
+            "action": "executeBehavior",
             "params": {
-              "id": "explanation-modal"
+              "ref": "submitAnswer",
+              "payload": {
+                "questionId": {
+                  "$state": "/data/activeQuestionId"
+                },
+                "answerWord": {
+                  "$state": "/form/answer-input"
+                }
+              }
             }
           }
         ]

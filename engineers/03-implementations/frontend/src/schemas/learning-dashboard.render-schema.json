@@ -115,9 +115,9 @@
       "on": {
         "press": [
           {
-            "action": "executeBehavior",
+            "action": "navigate",
             "params": {
-              "ref": "US-01-01: 一鍵啟動測驗"
+              "path": "/quiz-board"
             }
           }
         ]
@@ -135,9 +135,9 @@
       "on": {
         "press": [
           {
-            "action": "executeBehavior",
+            "action": "navigate",
             "params": {
-              "ref": "US-01-03: 錯題複習專區入口"
+              "path": "/error-review-board"
             }
           }
         ]
@@ -155,9 +155,9 @@
       "on": {
         "press": [
           {
-            "action": "executeBehavior",
+            "action": "navigate",
             "params": {
-              "ref": "US-01-04: 單字總覽與檢索"
+              "path": "/vocabulary-dictionary"
             }
           }
         ]
@@ -192,9 +192,9 @@
       "on": {
         "press": [
           {
-            "action": "executeBehavior",
+            "action": "navigate",
             "params": {
-              "ref": "US-05-01: 一般使用者個人資料存取限制"
+              "path": "/onboarding"
             }
           }
         ]
@@ -212,9 +212,9 @@
       "on": {
         "press": [
           {
-            "action": "executeBehavior",
+            "action": "navigate",
             "params": {
-              "ref": "US-05-02: 系統管理員全站資料存取權限"
+              "path": "/admin-dashboard"
             }
           }
         ]

@@ -44,7 +44,10 @@
         "placeholder": "Select Search Question",
         "checks": null,
         "validateOn": null,
-        "type": "text"
+        "type": "text",
+        "value": {
+          "$bindState": "/form/question-search-field"
+        }
       },
       "children": []
     },
@@ -54,8 +57,37 @@
         "id": "question-difficulty-select",
         "label": "Difficulty Level",
         "placeholder": "Select Difficulty Level",
+        "options": [
+          {
+            "label": "A1",
+            "value": "A1"
+          },
+          {
+            "label": "A2",
+            "value": "A2"
+          },
+          {
+            "label": "B1",
+            "value": "B1"
+          },
+          {
+            "label": "B2",
+            "value": "B2"
+          },
+          {
+            "label": "C1",
+            "value": "C1"
+          },
+          {
+            "label": "C2",
+            "value": "C2"
+          }
+        ],
         "checks": null,
-        "validateOn": null
+        "validateOn": null,
+        "value": {
+          "$bindState": "/form/question-difficulty-select"
+        }
       },
       "children": []
     },
@@ -194,19 +226,85 @@
         "openPath": "/modals/create-question-modal"
       },
       "children": [
+        "wordbank-id-input",
+        "contextual-sentence-input",
+        "word-difficulty-select",
         "submit-question-btn"
       ],
       "visible": {
         "$state": "/modals/create-question-modal"
       }
     },
+    "wordbank-id-input": {
+      "type": "Input",
+      "props": {
+        "id": "wordbank-id-input",
+        "name": "wordBankId",
+        "label": "WordBank ID",
+        "required": true,
+        "value": {
+          "$bindState": "/form/wordbank-id-input"
+        }
+      },
+      "children": []
+    },
+    "contextual-sentence-input": {
+      "type": "Input",
+      "props": {
+        "id": "contextual-sentence-input",
+        "name": "contextualCloze",
+        "label": "Contextual Sentence",
+        "required": true,
+        "value": {
+          "$bindState": "/form/contextual-sentence-input"
+        }
+      },
+      "children": []
+    },
+    "word-difficulty-select": {
+      "type": "Select",
+      "props": {
+        "id": "word-difficulty-select",
+        "name": "difficultyLevel",
+        "label": "Difficulty",
+        "options": [
+          {
+            "label": "A1",
+            "value": "A1"
+          },
+          {
+            "label": "A2",
+            "value": "A2"
+          },
+          {
+            "label": "B1",
+            "value": "B1"
+          },
+          {
+            "label": "B2",
+            "value": "B2"
+          },
+          {
+            "label": "C1",
+            "value": "C1"
+          },
+          {
+            "label": "C2",
+            "value": "C2"
+          }
+        ],
+        "value": {
+          "$bindState": "/form/word-difficulty-select"
+        }
+      },
+      "children": []
+    },
     "submit-question-btn": {
       "type": "Button",
       "props": {
         "id": "submit-question-btn",
         "label": "Save",
-        "variant": "primary",
-        "disabled": null
+        "variant": "primary"
       },
       "children": [],
       "on": {
@@ -214,7 +312,18 @@
           {
             "action": "executeBehavior",
             "params": {
-              "ref": "US-05-02: 系統管理員全站資料存取權限"
+              "ref": "createQuizQuestion",
+              "payload": {
+                "wordBankId": {
+                  "$state": "/form/wordbank-id-input"
+                },
+                "contextualCloze": {
+                  "$state": "/form/contextual-sentence-input"
+                },
+                "difficultyLevel": {
+                  "$state": "/form/word-difficulty-select"
+                }
+              }
             }
           }
         ]
@@ -250,7 +359,12 @@
           {
             "action": "executeBehavior",
             "params": {
-              "ref": "US-05-02: 系統管理員全站資料存取權限"
+              "ref": "deleteQuizQuestion",
+              "payload": {
+                "id": {
+                  "$state": "/data/activeQuizQuestionId"
+                }
+              }
             }
           }
         ]

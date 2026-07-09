@@ -1,6 +1,7 @@
 import React from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import AuthGuard from '@/components/auth/AuthGuard';
+import BehaviorProvider from '@/json-render/BehaviorProvider';
 
 import LearningDashboardPage from '@/pages/learning-dashboard.page';
 import AdminDashboardPage from '@/pages/admin-dashboard.page';
@@ -13,15 +14,17 @@ function App() {
   return (
     <BrowserRouter>
       <AuthGuard>
-        <Routes>
-          <Route path="/" element={<Navigate to="/learning-dashboard" replace />} />
-          <Route path="/onboarding" element={<OnboardingPagePage />} />
-          <Route path="/learning-dashboard" element={<LearningDashboardPage />} />
-          <Route path="/admin-dashboard" element={<AdminDashboardPage />} />
-          <Route path="/quiz-board" element={<QuizBoardPage />} />
-          <Route path="/error-review-board" element={<ErrorReviewBoardPage />} />
-          <Route path="/vocabulary-dictionary" element={<VocabularyDictionaryPage />} />
-        </Routes>
+        <BehaviorProvider>
+          <Routes>
+            <Route path="/" element={<Navigate to="/learning-dashboard" replace />} />
+            <Route path="/onboarding" element={<OnboardingPagePage />} />
+            <Route path="/learning-dashboard" element={<LearningDashboardPage />} />
+            <Route path="/admin-dashboard" element={<AdminDashboardPage />} />
+            <Route path="/quiz-board" element={<QuizBoardPage />} />
+            <Route path="/error-review-board" element={<ErrorReviewBoardPage />} />
+            <Route path="/vocabulary-dictionary" element={<VocabularyDictionaryPage />} />
+          </Routes>
+        </BehaviorProvider>
       </AuthGuard>
     </BrowserRouter>
   );

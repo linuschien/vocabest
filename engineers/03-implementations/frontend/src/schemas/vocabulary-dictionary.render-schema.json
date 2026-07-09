@@ -44,7 +44,10 @@
         "placeholder": "Select Search Word",
         "checks": null,
         "validateOn": null,
-        "type": "text"
+        "type": "text",
+        "value": {
+          "$bindState": "/form/search-field"
+        }
       },
       "children": []
     },
@@ -54,8 +57,25 @@
         "id": "letter-select",
         "label": "Starts With",
         "placeholder": "Select Starts With",
+        "options": [
+          {
+            "label": "A",
+            "value": "A"
+          },
+          {
+            "label": "B",
+            "value": "B"
+          },
+          {
+            "label": "C",
+            "value": "C"
+          }
+        ],
         "checks": null,
-        "validateOn": null
+        "validateOn": null,
+        "value": {
+          "$bindState": "/form/letter-select"
+        }
       },
       "children": []
     },
@@ -65,8 +85,37 @@
         "id": "difficulty-select",
         "label": "Difficulty Level",
         "placeholder": "Select Difficulty Level",
+        "options": [
+          {
+            "label": "A1",
+            "value": "A1"
+          },
+          {
+            "label": "A2",
+            "value": "A2"
+          },
+          {
+            "label": "B1",
+            "value": "B1"
+          },
+          {
+            "label": "B2",
+            "value": "B2"
+          },
+          {
+            "label": "C1",
+            "value": "C1"
+          },
+          {
+            "label": "C2",
+            "value": "C2"
+          }
+        ],
         "checks": null,
-        "validateOn": null
+        "validateOn": null,
+        "value": {
+          "$bindState": "/form/difficulty-select"
+        }
       },
       "children": []
     },
@@ -125,9 +174,9 @@
       "on": {
         "press": [
           {
-            "action": "executeBehavior",
+            "action": "navigate",
             "params": {
-              "ref": "US-05-02: 系統管理員全站資料存取權限"
+              "path": "/admin-dashboard"
             }
           }
         ]
@@ -197,19 +246,99 @@
         "openPath": "/modals/create-wordbank-modal"
       },
       "children": [
+        "word-input",
+        "pos-input",
+        "chinese-input",
+        "word-difficulty-select",
         "submit-wordbank-btn"
       ],
       "visible": {
         "$state": "/modals/create-wordbank-modal"
       }
     },
+    "word-input": {
+      "type": "Input",
+      "props": {
+        "id": "word-input",
+        "name": "word",
+        "label": "Word",
+        "required": true,
+        "value": {
+          "$bindState": "/form/word-input"
+        }
+      },
+      "children": []
+    },
+    "pos-input": {
+      "type": "Input",
+      "props": {
+        "id": "pos-input",
+        "name": "partsOfSpeech",
+        "label": "Parts of Speech",
+        "required": true,
+        "value": {
+          "$bindState": "/form/pos-input"
+        }
+      },
+      "children": []
+    },
+    "chinese-input": {
+      "type": "Input",
+      "props": {
+        "id": "chinese-input",
+        "name": "chineseTranslation",
+        "label": "Chinese Translation",
+        "required": true,
+        "value": {
+          "$bindState": "/form/chinese-input"
+        }
+      },
+      "children": []
+    },
+    "word-difficulty-select": {
+      "type": "Select",
+      "props": {
+        "id": "word-difficulty-select",
+        "name": "difficultyLevel",
+        "label": "Difficulty",
+        "options": [
+          {
+            "label": "A1",
+            "value": "A1"
+          },
+          {
+            "label": "A2",
+            "value": "A2"
+          },
+          {
+            "label": "B1",
+            "value": "B1"
+          },
+          {
+            "label": "B2",
+            "value": "B2"
+          },
+          {
+            "label": "C1",
+            "value": "C1"
+          },
+          {
+            "label": "C2",
+            "value": "C2"
+          }
+        ],
+        "value": {
+          "$bindState": "/form/word-difficulty-select"
+        }
+      },
+      "children": []
+    },
     "submit-wordbank-btn": {
       "type": "Button",
       "props": {
         "id": "submit-wordbank-btn",
         "label": "Save",
-        "variant": "primary",
-        "disabled": null
+        "variant": "primary"
       },
       "children": [],
       "on": {
@@ -217,7 +346,21 @@
           {
             "action": "executeBehavior",
             "params": {
-              "ref": "US-05-02: 系統管理員全站資料存取權限"
+              "ref": "createWordBank",
+              "payload": {
+                "word": {
+                  "$state": "/form/word-input"
+                },
+                "partsOfSpeech": {
+                  "$state": "/form/pos-input"
+                },
+                "chineseTranslation": {
+                  "$state": "/form/chinese-input"
+                },
+                "difficultyLevel": {
+                  "$state": "/form/word-difficulty-select"
+                }
+              }
             }
           }
         ]
@@ -253,7 +396,12 @@
           {
             "action": "executeBehavior",
             "params": {
-              "ref": "US-05-02: 系統管理員全站資料存取權限"
+              "ref": "deleteWordBank",
+              "payload": {
+                "id": {
+                  "$state": "/data/activeWordBankId"
+                }
+              }
             }
           }
         ]

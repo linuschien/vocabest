@@ -19,7 +19,7 @@
       },
       "children": [
         "target-level-select",
-        "daily-target-select",
+        "daily-target-questions-select",
         "start-onboarding-btn"
       ]
     },
@@ -27,23 +27,75 @@
       "type": "Select",
       "props": {
         "id": "target-level-select",
+        "name": "targetLevel",
         "label": "Target Level",
         "required": true,
         "placeholder": "Select Target Level",
+        "options": [
+          {
+            "label": "A1",
+            "value": "A1"
+          },
+          {
+            "label": "A2",
+            "value": "A2"
+          },
+          {
+            "label": "B1",
+            "value": "B1"
+          },
+          {
+            "label": "B2",
+            "value": "B2"
+          },
+          {
+            "label": "C1",
+            "value": "C1"
+          },
+          {
+            "label": "C2",
+            "value": "C2"
+          }
+        ],
         "checks": null,
-        "validateOn": null
+        "validateOn": null,
+        "value": {
+          "$bindState": "/form/target-level-select"
+        }
       },
       "children": []
     },
-    "daily-target-select": {
+    "daily-target-questions-select": {
       "type": "Select",
       "props": {
-        "id": "daily-target-select",
+        "id": "daily-target-questions-select",
+        "name": "dailyTargetQuestions",
         "label": "Daily Target Questions",
         "required": true,
         "placeholder": "Select Daily Target Questions",
+        "options": [
+          {
+            "label": "10 Questions",
+            "value": "10"
+          },
+          {
+            "label": "20 Questions",
+            "value": "20"
+          },
+          {
+            "label": "50 Questions",
+            "value": "50"
+          },
+          {
+            "label": "100 Questions",
+            "value": "100"
+          }
+        ],
         "checks": null,
-        "validateOn": null
+        "validateOn": null,
+        "value": {
+          "$bindState": "/form/daily-target-questions-select"
+        }
       },
       "children": []
     },
@@ -59,9 +111,17 @@
       "on": {
         "press": [
           {
-            "action": "openModal",
+            "action": "executeBehavior",
             "params": {
-              "id": "onboarding-form-section"
+              "ref": "onboardUser",
+              "payload": {
+                "targetLevel": {
+                  "$state": "/form/target-level-select"
+                },
+                "dailyTargetQuestions": {
+                  "$state": "/form/daily-target-questions-select"
+                }
+              }
             }
           }
         ]

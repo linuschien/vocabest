@@ -1,11 +1,9 @@
-// AUTO-GENERATED test harness
 import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { JSONUIProvider, createStateStore } from '@json-render/react';
 import { componentRegistry } from '@/json-render/component-registry';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
-import { server } from '@/mocks/server';
 import AdminDashboardPage from './admin-dashboard.page';
 
 const store = createStateStore({ modals: {}, form: {}, data: {} });
@@ -33,45 +31,63 @@ beforeEach(() => {
 });
 
 describe('AdminDashboardPage', () => {
-  // Pattern 1: Render
-  it('renders page without crashing', () => {
-    const { container } = renderPage();
-    expect(container).toBeInTheDocument();
-  });
-
-  // Pattern 2: Query (store-based table data)
-  it('renders rows when store data is populated', async () => {
-    // Assuming there is some list data binding. For generic pages, we set multiple common ones.
-    const MOCK_ROWS = [{ id: '1', field: 'VALUE', word: 'MOCK_DATA', name: 'MOCK_DATA' }];
-    store.set('/data/listWordBanks', MOCK_ROWS);
-    store.set('/data/listUsers', MOCK_ROWS);
-    store.set('/data/listQuizQuestions', MOCK_ROWS);
+  it('renders page correctly', async () => {
     renderPage();
-    
-    // We just check if it doesn't crash here. Since the specific text might not render if columns don't match, we avoid strict text assertions in stubs.
-    await waitFor(() => expect(true).toBe(true));
+    expect(await screen.findByRole('button', { name: /Add Question/i })).toBeInTheDocument();
   });
 
-  // Pattern 3: Modal Open + executeBehavior
-  it('calls executeBehavior on confirm action', async () => {
-    store.set('/modals/confirm-modal', true);
-    const user = userEvent.setup();
-    const { container } = renderPage();
-    
-    // Trigger any button if it exists
-    const buttons = await screen.findAllByRole('button').catch(() => []);
-    if (buttons.length > 0) {
-      await user.click(buttons[0]);
-      // Just assert it ran without crashing
-    }
-    expect(true).toBe(true);
+  it('renders empty table when no data', async () => {
+    renderPage();
+    const noDataCells = await screen.findAllByText('(沒有資料)');
+    expect(noDataCells.length).toBeGreaterThan(0);
   });
 
-  // Pattern 4: Row Actions
-  it('handles row actions properly', async () => {
-    store.set('/data/listWordBanks', [{ id: '1', word: 'MOCK_DATA' }]);
+  it('renders rows when data exists', async () => {
+    store.set('/data/listQuizQuestions', [{ id: '1', contextualCloze: 'The apple is ___.', difficultyLevel: 'A1' }]);
+    renderPage();
+    expect(await screen.findByText('The apple is ___.')).toBeInTheDocument();
+  });
+
+  it('opens create question modal and calls executeBehavior on save', async () => {
+    store.set('/modals/create-question-modal', true);
     const user = userEvent.setup();
     renderPage();
-    expect(true).toBe(true);
+
+    await screen.findByRole('button', { name: /Save/i });
+    const textboxes = await screen.findAllByRole('textbox');
+    // The last two textboxes in the DOM will be the ones in the modal
+    await user.type(textboxes[textboxes.length - 2], 'uuid-1234');
+    await user.type(textboxes[textboxes.length - 1], 'Testing ___');
+    
+    // submit
+    await user.click(await screen.findByRole('button', { name: /Save/i }));
+
+    expect(executeBehavior).toHaveBeenCalledWith(
+      expect.objectContaining({
+        ref: 'createQuizQuestion',
+        payload: expect.objectContaining({
+          wordBankId: 'uuid-1234',
+          contextualCloze: 'Testing ___'
+        })
+      })
+    );
+  });
+
+  it('calls deleteQuizQuestion', async () => {
+    store.set('/modals/confirm-delete-question-modal', true);
+    store.set('/data/activeQuizQuestionId', 'test-q-id');
+    const user = userEvent.setup();
+    renderPage();
+
+    await user.click(await screen.findByRole('button', { name: /Confirm/i }));
+
+    expect(executeBehavior).toHaveBeenCalledWith(
+      expect.objectContaining({
+        ref: 'deleteQuizQuestion',
+        payload: {
+          id: 'test-q-id'
+        }
+      })
+    );
   });
 });
