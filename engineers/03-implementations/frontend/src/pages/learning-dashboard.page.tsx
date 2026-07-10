@@ -14,13 +14,16 @@ export default function LearningDashboardPage() {
 
   useEffect(() => {
     const current = store.get('/data/todayProgress') as any;
+    const userDailyTarget = (store.get('/data/user') as any)?.dailyTargetQuestions ?? 10;
+
     if (progresses && progresses.length > 0) {
-      if (current?.id !== progresses[0].id || current?.answeredQuestions !== progresses[0].answeredQuestions) {
-        store.set('/data/todayProgress', progresses[0]);
+      const p = progresses[0];
+      if (current?.id !== p.id || current?.answeredQuestions !== p.answeredQuestions) {
+        store.set('/data/todayProgress', p);
       }
     } else {
       if (current?.answeredQuestions !== 0) {
-        store.set('/data/todayProgress', { answeredQuestions: 0 });
+        store.set('/data/todayProgress', { answeredQuestions: 0, targetQuestions: userDailyTarget });
       }
     }
   }, [progresses, store]);

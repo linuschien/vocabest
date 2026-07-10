@@ -50,8 +50,10 @@
       "type": "MetricCard",
       "props": {
         "id": "questions-answered-metric",
-        "label": "Questions Answered",
-        "value": { "$state": "/data/todayProgress/answeredQuestions" }
+        "label": "今日進度",
+        "variant": "progress",
+        "current": { "$state": "/data/todayProgress/answeredQuestions" },
+        "goal": { "$state": "/data/todayProgress/targetQuestions" }
       },
       "children": []
     },
@@ -59,7 +61,8 @@
       "type": "MetricCard",
       "props": {
         "id": "learning-streak-metric",
-        "label": "Learning Streak",
+        "label": "連勝天數",
+        "variant": "streak",
         "value": { "$state": "/data/user/learningStreak" }
       },
       "children": []
