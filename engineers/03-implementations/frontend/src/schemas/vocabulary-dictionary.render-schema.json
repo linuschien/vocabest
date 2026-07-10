@@ -22,15 +22,14 @@
         "label": "Search & Filters"
       },
       "children": [
-        "filter-stack"
+        "search-filter-stack"
       ]
     },
-    "filter-stack": {
-      "type": "Stack",
+    "search-filter-stack": {
+      "type": "div",
       "props": {
-        "id": "filter-stack",
-        "label": "Filters",
-        "direction": "row"
+        "id": "search-filter-stack",
+        "className": "flex flex-row flex-wrap items-end gap-4"
       },
       "children": [
         "search-field",
@@ -44,7 +43,7 @@
       "props": {
         "id": "search-field",
         "label": "Search Word",
-        "placeholder": "Select Search Word",
+        "placeholder": "Enter keyword...",
         "checks": null,
         "validateOn": null,
         "type": "text",
@@ -59,8 +58,9 @@
       "props": {
         "id": "letter-select",
         "label": "Starts With",
-        "placeholder": "Select Starts With",
+        "placeholder": "Select Letter",
         "options": [
+          "Any",
           "A",
           "B",
           "C",
@@ -103,6 +103,7 @@
         "label": "Difficulty Level",
         "placeholder": "Select Difficulty Level",
         "options": [
+          "Any",
           "1",
           "2",
           "3",
@@ -123,8 +124,7 @@
       "props": {
         "id": "search-btn",
         "label": "Search",
-        "variant": "primary",
-        "className": "mt-8"
+        "variant": "primary"
       },
       "children": [],
       "on": {

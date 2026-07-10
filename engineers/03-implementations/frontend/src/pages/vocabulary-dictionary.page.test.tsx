@@ -50,7 +50,7 @@ beforeEach(() => {
 describe('VocabularyDictionaryPage', () => {
   it('renders page correctly', async () => {
     renderPage();
-    expect(await screen.findByPlaceholderText(/Select Search Word/i)).toBeInTheDocument();
+    expect(await screen.findByPlaceholderText(/Enter keyword.../i)).toBeInTheDocument();
   });
 
   it('renders table rows from store', async () => {
