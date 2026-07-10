@@ -132,7 +132,7 @@
             "action": "executeBehavior",
             "params": {
               "ref": "triggerSearch",
-              "payload": {}
+              "payload": 1
             }
           }
         ]

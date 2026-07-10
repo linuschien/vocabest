@@ -64,9 +64,15 @@ export default function VocabularyDictionaryPage() {
 
   const targetLevel = store.get('/data/user/targetLevel');
   useEffect(() => {
-    // Whenever the user's targetLevel changes, trigger a refetch
-    // so the backend can apply the new mandatory filter.
-    refetch();
+    // Whenever the user's targetLevel changes, reset page to 1 and trigger a refetch
+    // so the backend can apply the new mandatory filter from the first page.
+    store.set('/form/page', 1);
+    const trigger = store.get('/actions/triggerSearch') as (page: number) => void;
+    if (trigger) {
+      trigger(1);
+    } else {
+      refetch();
+    }
   }, [targetLevel, refetch]);
 
   useEffect(() => {

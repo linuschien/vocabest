@@ -74,7 +74,7 @@ export default function BehaviorProvider({ children }: { children: React.ReactNo
             toast.success('Answer submitted!');
           } else if (ref === 'triggerSearch') {
             const trigger = store.get('/actions/triggerSearch') as any;
-            if (trigger) trigger();
+            if (trigger) trigger(payload);
             store.set('/data/lastSearchTriggered', Date.now());
           } else if (ref === 'clearSearch') {
             const clear = store.get('/actions/clearSearch') as any;

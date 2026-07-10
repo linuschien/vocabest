@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useStateStore, useStateValue } from '@json-render/react';
 import { useNavigate } from 'react-router-dom';
 
@@ -11,6 +11,11 @@ export default function DataTable({ element, children, emit, on }: any) {
   const totalElementsBindValue = useStateValue(totalElementsProp?.$bindState);
   
   const [currentPage, setCurrentPage] = useState(1);
+  const [inputPage, setInputPage] = useState('1');
+  
+  useEffect(() => {
+    setInputPage(currentPage.toString());
+  }, [currentPage]);
   
   // Resolve data via store binding
   let rows: any[] = [];
@@ -88,73 +93,92 @@ export default function DataTable({ element, children, emit, on }: any) {
     }
   };
 
+  const handlePageSubmit = (e: any) => {
+    if (e && e.preventDefault) e.preventDefault();
+    let val = parseInt(inputPage, 10);
+    if (!isNaN(val)) {
+      val = Math.max(1, Math.min(totalPages, val));
+      handlePageChange(val);
+      setInputPage(val.toString());
+    } else {
+      setInputPage(currentPage.toString());
+    }
+  };
+
   return (
     <div className="border border-border rounded-lg shadow-sm bg-card overflow-hidden" id={id}>
       {label && <div className="px-4 py-3 border-b border-border bg-muted/50 font-semibold text-foreground">{label}</div>}
-      <table className="w-full text-sm text-left text-muted-foreground">
-        <thead className="text-xs text-foreground uppercase bg-muted/50">
-          <tr>
-            <th className="px-6 py-3 select-none w-16">#</th>
-            {columns?.map((col: any) => (
-              <th 
-                key={col.field} 
-                className={`px-6 py-3 select-none ${col.sortable ? 'cursor-pointer hover:bg-muted/80' : ''}`}
-                onClick={() => handleSort(col.field, col.sortable)}
-              >
-                <div className="flex items-center gap-1">
-                  {col.label} 
-                  {col.sortable && (
-                    <span className="text-xs">
-                      {sortConfig?.field === col.field 
-                        ? (sortConfig?.direction === 'asc' ? '↑' : '↓') 
-                        : '↕️'}
-                    </span>
+      <div className="overflow-x-auto w-full">
+        <table className="w-full text-sm text-left text-muted-foreground table-fixed">
+          <thead className="text-xs text-foreground uppercase bg-muted/50">
+            <tr>
+              <th className="px-6 py-3 select-none w-16">#</th>
+              {columns?.map((col: any) => (
+                <th 
+                  key={col.field} 
+                  className={`px-6 py-3 select-none truncate ${col.sortable ? 'cursor-pointer hover:bg-muted/80' : ''}`}
+                  onClick={() => handleSort(col.field, col.sortable)}
+                  title={col.label}
+                >
+                  <div className="flex items-center gap-1">
+                    {col.label} 
+                    {col.sortable && (
+                      <span className="text-xs">
+                        {sortConfig?.field === col.field 
+                          ? (sortConfig?.direction === 'asc' ? '↑' : '↓') 
+                          : '↕️'}
+                      </span>
+                    )}
+                  </div>
+                </th>
+              ))}
+              {(children?.length > 0 || visibleActions.length > 0) && <th className="px-6 py-3 text-right w-48">Actions</th>}
+            </tr>
+          </thead>
+          <tbody>
+            {rows.length === 0 ? (
+              <tr><td colSpan={columns?.length + (children?.length || visibleActions.length > 0 ? 2 : 1)} className="px-6 py-4 text-center">(沒有資料)</td></tr>
+            ) : (
+              paginatedRows.map((row: any, i: number) => (
+                <tr key={row.id || i} className="bg-card border-b border-border hover:bg-muted/50">
+                  <td className="px-6 py-4 font-medium text-muted-foreground whitespace-nowrap">
+                    {startIndex + i + 1}
+                  </td>
+                  {columns?.map((col: any) => (
+                    <td 
+                      key={col.field} 
+                      className="px-6 py-4 font-medium text-card-foreground truncate max-w-[150px] lg:max-w-[200px]"
+                      title={row[col.field]}
+                    >
+                      {row[col.field]}
+                    </td>
+                  ))}
+                  {(children?.length > 0 || visibleActions.length > 0) && (
+                    <td className="px-6 py-4 text-right flex justify-end gap-2 items-center">
+                      {children}
+                      {visibleActions.map((action: any) => {
+                        const btnClass = action.variant === 'danger' 
+                          ? 'text-destructive hover:text-destructive/80' 
+                          : 'text-primary hover:text-primary/80';
+                          
+                        return (
+                          <button 
+                            key={action.id} 
+                            onClick={() => handleActionClick(action, row)}
+                            className={`px-3 py-1 text-xs font-medium rounded border border-input ${btnClass} hover:bg-accent transition-colors`}
+                          >
+                            {action.label}
+                          </button>
+                        );
+                      })}
+                    </td>
                   )}
-                </div>
-              </th>
-            ))}
-            {(children?.length > 0 || visibleActions.length > 0) && <th className="px-6 py-3 text-right">Actions</th>}
-          </tr>
-        </thead>
-        <tbody>
-          {rows.length === 0 ? (
-            <tr><td colSpan={columns?.length + (children?.length || visibleActions.length > 0 ? 2 : 1)} className="px-6 py-4 text-center">(沒有資料)</td></tr>
-          ) : (
-            paginatedRows.map((row: any, i: number) => (
-              <tr key={row.id || i} className="bg-card border-b border-border hover:bg-muted/50">
-                <td className="px-6 py-4 font-medium text-muted-foreground whitespace-nowrap">
-                  {startIndex + i + 1}
-                </td>
-                {columns?.map((col: any) => (
-                  <td key={col.field} className="px-6 py-4 font-medium text-card-foreground whitespace-nowrap">
-                    {row[col.field]}
-                  </td>
-                ))}
-                {(children?.length > 0 || visibleActions.length > 0) && (
-                  <td className="px-6 py-4 text-right flex justify-end gap-2 items-center">
-                    {children}
-                    {visibleActions.map((action: any) => {
-                      const btnClass = action.variant === 'danger' 
-                        ? 'text-destructive hover:text-destructive/80' 
-                        : 'text-primary hover:text-primary/80';
-                        
-                      return (
-                        <button 
-                          key={action.id} 
-                          onClick={() => handleActionClick(action, row)}
-                          className={`px-3 py-1 text-xs font-medium rounded border border-input ${btnClass} hover:bg-accent transition-colors`}
-                        >
-                          {action.label}
-                        </button>
-                      );
-                    })}
-                  </td>
-                )}
-              </tr>
-            ))
-          )}
-        </tbody>
-      </table>
+                </tr>
+              ))
+            )}
+          </tbody>
+        </table>
+      </div>
       
       {totalElements >= 0 && (
         <div className="flex items-center justify-between px-4 py-3 bg-card border-t border-border sm:px-6">
@@ -181,7 +205,7 @@ export default function DataTable({ element, children, emit, on }: any) {
               </p>
             </div>
             <div>
-              <nav className="inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
+              <nav className="inline-flex -space-x-px rounded-md shadow-sm items-center" aria-label="Pagination">
                 <button
                   onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
                   disabled={currentPage === 1}
@@ -192,8 +216,20 @@ export default function DataTable({ element, children, emit, on }: any) {
                     <path fillRule="evenodd" d="M12.79 5.23a.75.75 0 01-.02 1.06L8.832 10l3.938 3.71a.75.75 0 11-1.04 1.08l-4.5-4.25a.75.75 0 010-1.08l4.5-4.25a.75.75 0 011.06.02z" clipRule="evenodd" />
                   </svg>
                 </button>
-                <span className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-foreground ring-1 ring-inset ring-input focus:outline-offset-0">
-                  Page {currentPage} of {totalPages}
+                <span className="relative inline-flex items-center px-4 py-2 text-sm font-semibold text-foreground ring-1 ring-inset ring-input focus:outline-offset-0 gap-2">
+                  Page 
+                  <form onSubmit={handlePageSubmit} className="m-0 p-0 inline-block">
+                    <input 
+                      type="number"
+                      min={1}
+                      max={totalPages}
+                      value={inputPage}
+                      onChange={(e) => setInputPage(e.target.value)}
+                      onBlur={handlePageSubmit}
+                      className="w-14 h-7 text-center rounded border border-input focus:ring-1 focus:ring-primary focus:outline-none bg-background text-foreground"
+                    />
+                  </form>
+                  of {totalPages}
                 </span>
                 <button
                   onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
