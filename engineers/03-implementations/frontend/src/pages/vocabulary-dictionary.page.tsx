@@ -22,8 +22,16 @@ export default function VocabularyDictionaryPage() {
       const searchField = store.get('/form/search-field');
       const letterSelect = store.get('/form/letter-select');
       const difficultySelect = store.get('/form/difficulty-select');
-      const page = overridePage || Number(store.get('/form/page') || 1);
-
+      
+      // If overridePage is provided (e.g., from pagination), use it.
+      // Otherwise (e.g., from search button), reset to page 1.
+      const page = overridePage !== undefined ? overridePage : 1;
+      
+      // Ensure the store is synced if we reset to page 1
+      if (overridePage === undefined) {
+        store.set('/form/page', 1);
+      }
+      
       const filter: any = {
         page: page - 1,
         size: 10 // Page size 10 to match UI

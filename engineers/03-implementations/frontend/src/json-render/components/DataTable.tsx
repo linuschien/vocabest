@@ -11,18 +11,15 @@ export default function DataTable({ element, children, emit, on }: any) {
   const totalElementsBindValue = useStateValue(totalElementsProp?.$bindState);
   const boundCurrentPage = useStateValue(currentPageProp?.$bindState);
   
-  const [currentPage, setCurrentPage] = useState(1);
+  const [localCurrentPage, setLocalCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState('1');
   
+  const isControlledPage = boundCurrentPage !== undefined;
+  const actualCurrentPage = isControlledPage ? (Number(boundCurrentPage) || 1) : localCurrentPage;
+  
   useEffect(() => {
-    if (boundCurrentPage !== undefined && Number(boundCurrentPage) !== currentPage) {
-      setCurrentPage(Number(boundCurrentPage) || 1);
-    }
-  }, [boundCurrentPage]);
-
-  useEffect(() => {
-    setInputPage(currentPage.toString());
-  }, [currentPage]);
+    setInputPage(actualCurrentPage.toString());
+  }, [actualCurrentPage]);
   
   // Resolve data via store binding
   let rows: any[] = [];
@@ -71,7 +68,7 @@ export default function DataTable({ element, children, emit, on }: any) {
   const totalElements = isServerSide ? resolvedTotalElements : rows.length;
 
   const totalPages = Math.max(1, Math.ceil(totalElements / pageSize));
-  const startIndex = (currentPage - 1) * pageSize;
+  const startIndex = (actualCurrentPage - 1) * pageSize;
   
   // Create a copy of rows so we don't mutate the original array
   let currentRows = isServerSide ? [...rows] : rows.slice(startIndex, startIndex + pageSize);
@@ -89,7 +86,9 @@ export default function DataTable({ element, children, emit, on }: any) {
   const paginatedRows = currentRows;
 
   const handlePageChange = (newPage: number) => {
-    setCurrentPage(newPage);
+    if (!isControlledPage) {
+      setLocalCurrentPage(newPage);
+    }
     if (emit) {
       emit('pageChange', { page: newPage });
     }
@@ -108,7 +107,7 @@ export default function DataTable({ element, children, emit, on }: any) {
       handlePageChange(val);
       setInputPage(val.toString());
     } else {
-      setInputPage(currentPage.toString());
+      setInputPage(actualCurrentPage.toString());
     }
   };
 
@@ -191,15 +190,15 @@ export default function DataTable({ element, children, emit, on }: any) {
         <div className="flex items-center justify-between px-4 py-3 bg-card border-t border-border sm:px-6">
           <div className="flex justify-between flex-1 sm:hidden">
             <button
-              onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
-              disabled={currentPage === 1}
+              onClick={() => handlePageChange(Math.max(1, actualCurrentPage - 1))}
+              disabled={actualCurrentPage === 1}
               className="relative inline-flex items-center px-4 py-2 text-sm font-medium text-foreground bg-background border border-input rounded-md hover:bg-accent disabled:opacity-50"
             >
               Previous
             </button>
             <button
-              onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
-              disabled={currentPage === totalPages}
+              onClick={() => handlePageChange(Math.min(totalPages, actualCurrentPage + 1))}
+              disabled={actualCurrentPage === totalPages}
               className="relative ml-3 inline-flex items-center px-4 py-2 text-sm font-medium text-foreground bg-background border border-input rounded-md hover:bg-accent disabled:opacity-50"
             >
               Next
@@ -214,8 +213,8 @@ export default function DataTable({ element, children, emit, on }: any) {
             <div>
               <nav className="inline-flex -space-x-px rounded-md shadow-sm items-center" aria-label="Pagination">
                 <button
-                  onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
-                  disabled={currentPage === 1}
+                  onClick={() => handlePageChange(Math.max(1, actualCurrentPage - 1))}
+                  disabled={actualCurrentPage === 1}
                   className="relative inline-flex items-center px-2 py-2 text-muted-foreground rounded-l-md ring-1 ring-inset ring-input hover:bg-accent focus:z-20 focus:outline-offset-0 disabled:opacity-50"
                 >
                   <span className="sr-only">Previous</span>
@@ -239,8 +238,8 @@ export default function DataTable({ element, children, emit, on }: any) {
                   of {totalPages}
                 </span>
                 <button
-                  onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
-                  disabled={currentPage === totalPages}
+                  onClick={() => handlePageChange(Math.min(totalPages, actualCurrentPage + 1))}
+                  disabled={actualCurrentPage === totalPages}
                   className="relative inline-flex items-center px-2 py-2 text-muted-foreground rounded-r-md ring-1 ring-inset ring-input hover:bg-accent focus:z-20 focus:outline-offset-0 disabled:opacity-50"
                 >
                   <span className="sr-only">Next</span>
