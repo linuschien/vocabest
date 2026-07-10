@@ -19,7 +19,7 @@
       "type": "div",
       "props": {
         "id": "global-header-section",
-        "label": "Header"
+        "className": "flex justify-end items-center mb-6"
       },
       "children": [
         "avatar-dropdown-btn"
@@ -29,9 +29,9 @@
       "type": "Button",
       "props": {
         "id": "avatar-dropdown-btn",
-        "label": "User Menu",
-        "variant": "secondary",
-        "disabled": null
+        "label": { "$state": "/data/user/email" },
+        "variant": "outline",
+        "className": "rounded-full px-6 font-medium"
       },
       "children": [],
       "on": {
@@ -46,10 +46,10 @@
       }
     },
     "progress-section": {
-      "type": "div",
+      "type": "Card",
       "props": {
         "id": "progress-section",
-        "label": "Today's Progress"
+        "title": "Today's Progress"
       },
       "children": [
         "progress-grid"
@@ -70,7 +70,8 @@
       "type": "MetricCard",
       "props": {
         "id": "questions-answered-metric",
-        "label": "Questions Answered"
+        "label": "Questions Answered",
+        "value": { "$state": "/data/todayProgress/answeredQuestions" }
       },
       "children": []
     },
@@ -78,15 +79,16 @@
       "type": "MetricCard",
       "props": {
         "id": "learning-streak-metric",
-        "label": "Learning Streak"
+        "label": "Learning Streak",
+        "value": { "$state": "/data/user/learningStreak" }
       },
       "children": []
     },
     "quick-start-section": {
-      "type": "div",
+      "type": "Card",
       "props": {
         "id": "quick-start-section",
-        "label": "Quick Start"
+        "title": "Quick Start"
       },
       "children": [
         "quick-start-stack"
@@ -193,9 +195,9 @@
       "on": {
         "press": [
           {
-            "action": "navigate",
+            "action": "openModal",
             "params": {
-              "path": "/onboarding"
+              "id": "onboarding-modal"
             }
           }
         ]
@@ -219,6 +221,9 @@
             }
           }
         ]
+      },
+      "visible": {
+        "$state": "/data/isAdmin"
       }
     },
     "onboarding-modal": {

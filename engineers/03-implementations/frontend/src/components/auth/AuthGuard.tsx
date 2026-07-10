@@ -9,9 +9,10 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
   const location = useLocation();
 
   useEffect(() => {
-    if (!isLoading && !isError && user) {
+    if (!isLoading && user) {
       store.set('/data/user', user);
-      if (user.id === null) {
+      store.set('/data/isAdmin', user.role === 'ADMIN');
+      if (user.targetLevel === null || user.dailyTargetQuestions === null) {
         store.set('/modals/onboarding-modal', true);
       } else {
         store.set('/modals/onboarding-modal', false);

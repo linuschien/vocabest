@@ -26,7 +26,10 @@ function renderPage() {
 beforeEach(() => {
   store.set('/modals', {});
   store.set('/form', {});
-  store.set('/data', {});
+  store.set('/data', {
+    user: { email: 'dev@test.com' },
+    isAdmin: true
+  });
   vi.clearAllMocks();
 });
 
@@ -64,7 +67,7 @@ describe('LearningDashboardPage', () => {
     const user = userEvent.setup();
     renderPage();
 
-    await user.click(await screen.findByRole('button', { name: /User Menu/i }));
+    await user.click(await screen.findByRole('button', { name: /dev@test.com/i }));
     expect(openModal).toHaveBeenCalledWith(expect.objectContaining({ id: 'avatar-dropdown-modal' }));
 
     await user.click(await screen.findByRole('button', { name: /Admin Dashboard/i }));
