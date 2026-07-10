@@ -43,8 +43,10 @@ class UserRestControllerTest {
     void setUp() {
         client = WebTestClient.bindToController(controller)
                 .webFilter((exchange, chain) -> {
-                    User dummyUser = new User(UUID.randomUUID(), "test@test.com", Role.ADMIN, TargetLevel.JUNIOR_HIGH, 0, 20, LocalDateTime.now(), LocalDateTime.now(), null);
-                    return chain.filter(exchange).contextWrite(reactor.util.context.Context.of("CURRENT_USER", dummyUser));
+                    String emailHeader = exchange.getRequest().getHeaders().getFirst("x-goog-authenticated-user-email");
+                    String email = emailHeader != null ? emailHeader.replace("accounts.google.com:", "") : "test@test.com";
+                    User dummyUser = new User(UUID.randomUUID(), email, Role.ADMIN, TargetLevel.JUNIOR_HIGH, 0, 20, LocalDateTime.now(), LocalDateTime.now(), null);
+                    return chain.filter(exchange).contextWrite(reactor.util.context.Context.of("CURRENT_USER", dummyUser, "CURRENT_EMAIL", email));
                 })
                 .build();
     }
