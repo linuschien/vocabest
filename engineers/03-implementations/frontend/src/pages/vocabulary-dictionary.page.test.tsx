@@ -6,8 +6,9 @@ import { componentRegistry } from '@/json-render/component-registry';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import VocabularyDictionaryPage from './vocabulary-dictionary.page';
 
+const mockRefetch = vi.fn();
 vi.mock('@/hooks/use-list-word-banks', () => ({
-  useListWordBanks: vi.fn(() => ({ data: undefined, refetch: vi.fn() }))
+  useListWordBanks: vi.fn(() => ({ data: undefined, refetch: mockRefetch }))
 }));
 
 const store = createStateStore({ modals: {}, form: {}, data: {} });
