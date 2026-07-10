@@ -9,11 +9,13 @@ import { useDeleteWordBank } from '@/hooks/use-delete-word-bank';
 import { useCreateQuizQuestion } from '@/hooks/use-create-quiz-question';
 import { useDeleteQuizQuestion } from '@/hooks/use-delete-quiz-question';
 import { useSubmitAnswer } from '@/hooks/use-submit-answer';
+import { useUpdateUser } from '@/hooks/use-update-user';
 import { toast } from 'sonner';
 
 export default function BehaviorProvider({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
   const onboardUser = useOnboardUser();
+  const updateUser = useUpdateUser();
   const createWordBank = useCreateWordBank();
   const deleteWordBank = useDeleteWordBank();
   const createQuizQuestion = useCreateQuizQuestion();
@@ -36,8 +38,24 @@ export default function BehaviorProvider({ children }: { children: React.ReactNo
             if (mappedPayload.targetLevel === '國中2000單字') mappedPayload.targetLevel = 'JUNIOR_HIGH';
             if (mappedPayload.targetLevel === '高中7000單字') mappedPayload.targetLevel = 'SENIOR_HIGH';
             
-            await onboardUser.mutateAsync(mappedPayload);
-            toast.success('Onboarding successful!');
+            const isFirstTime = store.get('/data/isFirstTimeOnboarding');
+            if (isFirstTime) {
+              await onboardUser.mutateAsync(mappedPayload);
+              toast.success('Onboarding successful!');
+            } else {
+              const user = store.get('/data/user') as any;
+              await updateUser.mutateAsync({
+                id: user.id,
+                payload: {
+                  email: user.email,
+                  role: user.role,
+                  learningStreak: user.learningStreak,
+                  targetLevel: mappedPayload.targetLevel,
+                  dailyTargetQuestions: parseInt(mappedPayload.dailyTargetQuestions, 10)
+                }
+              });
+              toast.success('Settings updated!');
+            }
             store.set('/modals/onboarding-modal', false);
           } else if (ref === 'createWordBank') {
             await createWordBank.mutateAsync(payload);
