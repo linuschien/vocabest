@@ -4,8 +4,11 @@ import com.vocabest.core.adapter.in.web.dto.*;
 import com.vocabest.core.application.port.in.UserCommandService;
 import com.vocabest.core.application.port.in.UserQueryService;
 import com.vocabest.core.adapter.out.persistence.model.User;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -24,7 +27,7 @@ public class UserRestController {
 
     @PostMapping("/api/v1/users")
     @com.vocabest.core.adapter.in.web.security.AdminOnly
-    public Mono<ResponseEntity<UserResponse>> createUser(@RequestBody UserRequest req) {
+    public Mono<ResponseEntity<UserResponse>> createUser(@Valid @RequestBody UserRequest req) {
         return commandService.createUser(req)
                 .map(this::mapToResponse)
                 .map(res -> ResponseEntity.status(HttpStatus.CREATED).body(res));
@@ -41,7 +44,7 @@ public class UserRestController {
 
     @PutMapping("/api/v1/users/{id}")
     @com.vocabest.core.adapter.in.web.security.RequireOwnership("#id")
-    public Mono<ResponseEntity<UserResponse>> updateUser(@PathVariable UUID id, @RequestBody UserRequest req) {
+    public Mono<ResponseEntity<UserResponse>> updateUser(@PathVariable UUID id, @Valid @RequestBody UserRequest req) {
         return commandService.updateUser(id, req)
                 .map(this::mapToResponse)
                 .map(ResponseEntity::ok)
@@ -56,7 +59,7 @@ public class UserRestController {
     }
 
     @PostMapping("/api/v1/users:onboard")
-    public Mono<ResponseEntity<UserResponse>> onboardUser(@RequestBody UserOnboardRequest req) {
+    public Mono<ResponseEntity<UserResponse>> onboardUser(@Valid @RequestBody UserOnboardRequest req) {
         return Mono.deferContextual(ctx -> {
             String parsedEmail = ctx.getOrDefault("CURRENT_EMAIL", null);
             if (parsedEmail == null) {
@@ -87,7 +90,7 @@ public class UserRestController {
 
     @PostMapping("/api/v1/users/{userId}:submitAnswer")
     @com.vocabest.core.adapter.in.web.security.RequireOwnership("#userId")
-    public Mono<ResponseEntity<SubmitAnswerResponse>> submitAnswer(@PathVariable UUID userId, @RequestBody SubmitAnswerRequest req) {
+    public Mono<ResponseEntity<SubmitAnswerResponse>> submitAnswer(@PathVariable UUID userId, @Valid @RequestBody SubmitAnswerRequest req) {
         return commandService.submitAnswer(userId, req)
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());

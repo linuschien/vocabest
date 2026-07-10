@@ -4,8 +4,11 @@ import com.vocabest.core.adapter.in.web.dto.WordMasteryRequest;
 import com.vocabest.core.adapter.in.web.dto.WordMasteryResponse;
 import com.vocabest.core.adapter.out.persistence.model.WordMastery;
 import com.vocabest.core.adapter.out.persistence.repository.WordMasteryRepository;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -24,7 +27,7 @@ public class WordMasteryRestController {
     }
 
     @PostMapping
-    public Mono<ResponseEntity<WordMasteryResponse>> createWordMastery(@PathVariable UUID userId, @RequestBody WordMasteryRequest req) {
+    public Mono<ResponseEntity<WordMasteryResponse>> createWordMastery(@PathVariable UUID userId, @Valid @RequestBody WordMasteryRequest req) {
         WordMastery entity = new WordMastery(null, userId, UUID.fromString(req.wordBankId()), req.errorWeight(), req.nextReviewDate(), null, null, null);
         return repository.save(entity)
                 .map(this::mapToResponse)
@@ -41,7 +44,7 @@ public class WordMasteryRestController {
     }
 
     @PutMapping("/{id}")
-    public Mono<ResponseEntity<WordMasteryResponse>> updateWordMastery(@PathVariable UUID userId, @PathVariable UUID id, @RequestBody WordMasteryRequest req) {
+    public Mono<ResponseEntity<WordMasteryResponse>> updateWordMastery(@PathVariable UUID userId, @PathVariable UUID id, @Valid @RequestBody WordMasteryRequest req) {
         return repository.findById(id)
                 .filter(w -> w.userId().equals(userId))
                 .map(existing -> new WordMastery(existing.id(), userId, UUID.fromString(req.wordBankId()), req.errorWeight(), req.nextReviewDate(), existing.createdAt(), LocalDateTime.now(), existing.deletedAt()))

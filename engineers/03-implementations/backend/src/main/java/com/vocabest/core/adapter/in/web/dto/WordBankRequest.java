@@ -1,10 +1,15 @@
 package com.vocabest.core.adapter.in.web.dto;
 
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public record WordBankRequest(
-    String word,
-    String partsOfSpeech,
-    String chineseTranslation,
-    String targetLevel,
-    Integer difficultyLevel,
-    Integer examFrequency
+    @NotBlank String word,
+    @NotBlank String partsOfSpeech,
+    @NotBlank String chineseTranslation,
+    @NotBlank String targetLevel,
+    @NotNull @Min(1) Integer difficultyLevel,
+    @NotNull @Min(0) Integer examFrequency
 ) {}
+

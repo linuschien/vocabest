@@ -6,8 +6,11 @@ import com.vocabest.core.adapter.out.persistence.model.QuizQuestion;
 import com.vocabest.core.adapter.out.persistence.model.TargetLevel;
 import com.vocabest.core.adapter.out.persistence.repository.QuizQuestionRepository;
 import com.vocabest.core.adapter.in.web.security.AdminOnly;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -26,7 +29,7 @@ public class QuizQuestionRestController {
     }
 
     @PostMapping
-    public Mono<ResponseEntity<QuizQuestionResponse>> createQuizQuestion(@PathVariable UUID wordBankId, @RequestBody QuizQuestionRequest req) {
+    public Mono<ResponseEntity<QuizQuestionResponse>> createQuizQuestion(@PathVariable UUID wordBankId, @Valid @RequestBody QuizQuestionRequest req) {
         QuizQuestion entity = new QuizQuestion(null, wordBankId, req.contextualCloze(), req.chineseTranslation(), req.correctAnswer(), req.distractor1(), req.distractor2(), req.distractor3(), req.explanationRootAffix(), req.explanationMnemonic(), null, null, null);
         return repository.save(entity)
                 .map(this::mapToResponse)
@@ -43,7 +46,7 @@ public class QuizQuestionRestController {
     }
 
     @PutMapping("/{id}")
-    public Mono<ResponseEntity<QuizQuestionResponse>> updateQuizQuestion(@PathVariable UUID wordBankId, @PathVariable UUID id, @RequestBody QuizQuestionRequest req) {
+    public Mono<ResponseEntity<QuizQuestionResponse>> updateQuizQuestion(@PathVariable UUID wordBankId, @PathVariable UUID id, @Valid @RequestBody QuizQuestionRequest req) {
         return repository.findById(id)
                 .filter(q -> q.wordBankId().equals(wordBankId))
                 .map(existing -> new QuizQuestion(existing.id(), wordBankId, req.contextualCloze(), req.chineseTranslation(), req.correctAnswer(), req.distractor1(), req.distractor2(), req.distractor3(), req.explanationRootAffix(), req.explanationMnemonic(), existing.createdAt(), LocalDateTime.now(), existing.deletedAt()))

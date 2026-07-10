@@ -4,8 +4,11 @@ import com.vocabest.core.adapter.in.web.dto.ErrorEventRequest;
 import com.vocabest.core.adapter.in.web.dto.ErrorEventResponse;
 import com.vocabest.core.adapter.out.persistence.model.ErrorEvent;
 import com.vocabest.core.adapter.out.persistence.repository.ErrorEventRepository;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -24,7 +27,7 @@ public class ErrorEventRestController {
     }
 
     @PostMapping
-    public Mono<ResponseEntity<ErrorEventResponse>> createErrorEvent(@PathVariable UUID userId, @RequestBody ErrorEventRequest req) {
+    public Mono<ResponseEntity<ErrorEventResponse>> createErrorEvent(@PathVariable UUID userId, @Valid @RequestBody ErrorEventRequest req) {
         ErrorEvent entity = new ErrorEvent(null, userId, req.quizQuestionId(), req.timestamp(), req.selectedDistractor(), null, null, null);
         return repository.save(entity)
                 .map(this::mapToResponse)
@@ -41,7 +44,7 @@ public class ErrorEventRestController {
     }
 
     @PutMapping("/{id}")
-    public Mono<ResponseEntity<ErrorEventResponse>> updateErrorEvent(@PathVariable UUID userId, @PathVariable UUID id, @RequestBody ErrorEventRequest req) {
+    public Mono<ResponseEntity<ErrorEventResponse>> updateErrorEvent(@PathVariable UUID userId, @PathVariable UUID id, @Valid @RequestBody ErrorEventRequest req) {
         return repository.findById(id)
                 .filter(e -> e.userId().equals(userId))
                 .map(existing -> new ErrorEvent(existing.id(), userId, req.quizQuestionId(), req.timestamp(), req.selectedDistractor(), existing.createdAt(), LocalDateTime.now(), existing.deletedAt()))

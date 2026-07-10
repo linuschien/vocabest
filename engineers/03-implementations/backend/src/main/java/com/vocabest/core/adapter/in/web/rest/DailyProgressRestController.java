@@ -4,8 +4,11 @@ import com.vocabest.core.adapter.in.web.dto.DailyProgressRequest;
 import com.vocabest.core.adapter.in.web.dto.DailyProgressResponse;
 import com.vocabest.core.adapter.out.persistence.model.DailyProgress;
 import com.vocabest.core.adapter.out.persistence.repository.DailyProgressRepository;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -24,7 +27,7 @@ public class DailyProgressRestController {
     }
 
     @PostMapping
-    public Mono<ResponseEntity<DailyProgressResponse>> createDailyProgress(@PathVariable UUID userId, @RequestBody DailyProgressRequest req) {
+    public Mono<ResponseEntity<DailyProgressResponse>> createDailyProgress(@PathVariable UUID userId, @Valid @RequestBody DailyProgressRequest req) {
         DailyProgress entity = new DailyProgress(null, userId, req.date(), req.targetQuestions(), req.answeredQuestions(), req.correctQuestions(), req.wrongQuestions(), null, null, null);
         return repository.save(entity)
                 .map(this::mapToResponse)
@@ -41,7 +44,7 @@ public class DailyProgressRestController {
     }
 
     @PutMapping("/{id}")
-    public Mono<ResponseEntity<DailyProgressResponse>> updateDailyProgress(@PathVariable UUID userId, @PathVariable UUID id, @RequestBody DailyProgressRequest req) {
+    public Mono<ResponseEntity<DailyProgressResponse>> updateDailyProgress(@PathVariable UUID userId, @PathVariable UUID id, @Valid @RequestBody DailyProgressRequest req) {
         return repository.findById(id)
                 .filter(dp -> dp.userId().equals(userId))
                 .map(existing -> new DailyProgress(existing.id(), userId, req.date(), req.targetQuestions(), req.answeredQuestions(), req.correctQuestions(), req.wrongQuestions(), existing.createdAt(), LocalDateTime.now(), existing.deletedAt()))

@@ -5,8 +5,11 @@ import com.vocabest.core.adapter.in.web.dto.WordBankResponse;
 import com.vocabest.core.adapter.out.persistence.model.TargetLevel;
 import com.vocabest.core.adapter.out.persistence.model.WordBank;
 import com.vocabest.core.adapter.out.persistence.repository.WordBankRepository;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
@@ -25,7 +28,7 @@ public class WordBankRestController {
 
     @PostMapping
     @com.vocabest.core.adapter.in.web.security.AdminOnly
-    public Mono<ResponseEntity<WordBankResponse>> createWordBank(@RequestBody WordBankRequest req) {
+    public Mono<ResponseEntity<WordBankResponse>> createWordBank(@Valid @RequestBody WordBankRequest req) {
         WordBank entity = new WordBank(null, req.word(), req.partsOfSpeech(), req.chineseTranslation(), TargetLevel.valueOf(req.targetLevel()), req.difficultyLevel(), req.examFrequency(), null, null, null);
         return repository.save(entity)
                 .map(this::mapToResponse)
@@ -42,7 +45,7 @@ public class WordBankRestController {
 
     @PutMapping("/{id}")
     @com.vocabest.core.adapter.in.web.security.AdminOnly
-    public Mono<ResponseEntity<WordBankResponse>> updateWordBank(@PathVariable UUID id, @RequestBody WordBankRequest req) {
+    public Mono<ResponseEntity<WordBankResponse>> updateWordBank(@PathVariable UUID id, @Valid @RequestBody WordBankRequest req) {
         return repository.findById(id)
                 .map(existing -> new WordBank(existing.id(), req.word(), req.partsOfSpeech(), req.chineseTranslation(), TargetLevel.valueOf(req.targetLevel()), req.difficultyLevel(), req.examFrequency(), existing.createdAt(), LocalDateTime.now(), existing.deletedAt()))
                 .flatMap(repository::save)
