@@ -14,9 +14,15 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
       store.set('/data/isAdmin', user.role === 'ADMIN');
       if (user.targetLevel === null || user.dailyTargetQuestions === null) {
         store.set('/modals/onboarding-modal', true);
+        store.set('/data/isFirstTimeOnboarding', true);
       } else {
         store.set('/modals/onboarding-modal', false);
-        store.set('/form/target-level-select', user.targetLevel);
+        store.set('/data/isFirstTimeOnboarding', false);
+        const reverseLevelMap: Record<string, string> = {
+          "JUNIOR_HIGH": "國中2000單字",
+          "SENIOR_HIGH": "高中7000單字"
+        };
+        store.set('/form/target-level-select', reverseLevelMap[user.targetLevel] || user.targetLevel);
         store.set('/form/daily-target-questions-select', String(user.dailyTargetQuestions));
       }
     }

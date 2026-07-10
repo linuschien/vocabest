@@ -187,8 +187,8 @@
       "type": "Dialog",
       "props": {
         "id": "onboarding-modal",
-        "label": "Welcome to Vocabest",
-        "title": "Welcome to Vocabest",
+        "label": "Learning Goals",
+        "title": "Learning Goals",
         "description": "Please set your learning goals below.",
         "openPath": "/modals/onboarding-modal"
       },
@@ -206,6 +206,9 @@
       "type": "div",
       "props": {
         "className": "text-lg mb-4 text-center font-medium flex justify-center gap-1"
+      },
+      "visible": {
+        "$state": "/data/isFirstTimeOnboarding"
       },
       "children": [
         "welcome-text1",
@@ -248,8 +251,8 @@
         "required": true,
         "placeholder": "Select Target Level",
         "options": [
-          { "label": "國中2000單字", "value": "JUNIOR_HIGH" },
-          { "label": "高中7000單字", "value": "SENIOR_HIGH" }
+          "國中2000單字",
+          "高中7000單字"
         ],
         "checks": null,
         "validateOn": null,
@@ -285,7 +288,7 @@
       "type": "Button",
       "props": {
         "id": "start-onboarding-btn",
-        "label": "Start Learning",
+        "label": "Save",
         "variant": "primary",
         "disabled": null
       },
