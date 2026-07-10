@@ -12,14 +12,27 @@ const openModal = vi.fn((p: any) => { if (p?.id) store.set(`/modals/${p.id}`, tr
 const navigate = vi.fn();
 const testHandlers = { navigate, openModal, executeBehavior };
 
+import { MemoryRouter } from 'react-router-dom';
+
+const mockUseNavigate = vi.fn();
+vi.mock('react-router-dom', async () => {
+  const actual: any = await vi.importActual('react-router-dom');
+  return {
+    ...actual,
+    useNavigate: () => mockUseNavigate,
+  };
+});
+
 function renderPage() {
   const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   return render(
-    <QueryClientProvider client={qc}>
-      <JSONUIProvider registry={componentRegistry} store={store} handlers={testHandlers as any}>
-        <AdminDashboardPage />
-      </JSONUIProvider>
-    </QueryClientProvider>
+    <MemoryRouter>
+      <QueryClientProvider client={qc}>
+        <JSONUIProvider registry={componentRegistry} store={store} handlers={testHandlers as any}>
+          <AdminDashboardPage />
+        </JSONUIProvider>
+      </QueryClientProvider>
+    </MemoryRouter>
   );
 }
 
@@ -43,7 +56,7 @@ describe('AdminDashboardPage', () => {
   });
 
   it('renders rows when data exists', async () => {
-    store.set('/data/listQuizQuestions', [{ id: '1', contextualCloze: 'The apple is ___.', difficultyLevel: 'A1' }]);
+    store.set('/data/listQuizQuestions', [{ id: '1', contextualCloze: 'The apple is ___.', difficultyLevel: '1' }]);
     renderPage();
     expect(await screen.findByText('The apple is ___.')).toBeInTheDocument();
   });

@@ -10,18 +10,22 @@ import ErrorReviewBoardPage from '@/pages/error-review-board.page';
 import VocabularyDictionaryPage from '@/pages/vocabulary-dictionary.page';
 
 
+import GlobalLayout from '@/components/layout/GlobalLayout';
+
 function App() {
   return (
     <HashRouter>
       <AuthGuard>
         <BehaviorProvider>
           <Routes>
-            <Route path="/" element={<LearningDashboardPage />} />
-            <Route path="/learning-dashboard" element={<LearningDashboardPage />} />
-            <Route path="/admin-dashboard" element={<AdminDashboardPage />} />
-            <Route path="/quiz-board" element={<QuizBoardPage />} />
-            <Route path="/error-review-board" element={<ErrorReviewBoardPage />} />
-            <Route path="/vocabulary-dictionary" element={<VocabularyDictionaryPage />} />
+            <Route element={<GlobalLayout />}>
+              <Route path="/" element={<LearningDashboardPage />} />
+              <Route path="/learning-dashboard" element={<LearningDashboardPage />} />
+              <Route path="/admin-dashboard" element={<AdminDashboardPage />} />
+              <Route path="/quiz-board" element={<QuizBoardPage />} />
+              <Route path="/error-review-board" element={<ErrorReviewBoardPage />} />
+              <Route path="/vocabulary-dictionary" element={<VocabularyDictionaryPage />} />
+            </Route>
           </Routes>
         </BehaviorProvider>
       </AuthGuard>

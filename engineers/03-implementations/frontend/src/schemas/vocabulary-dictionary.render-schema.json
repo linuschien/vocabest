@@ -14,6 +14,7 @@
         "confirm-delete-modal"
       ]
     },
+
     "filter-section": {
       "type": "div",
       "props": {
@@ -28,12 +29,14 @@
       "type": "Stack",
       "props": {
         "id": "filter-stack",
-        "label": "Filters"
+        "label": "Filters",
+        "direction": "row"
       },
       "children": [
         "search-field",
         "letter-select",
-        "difficulty-select"
+        "difficulty-select",
+        "search-btn"
       ]
     },
     "search-field": {
@@ -100,30 +103,12 @@
         "label": "Difficulty Level",
         "placeholder": "Select Difficulty Level",
         "options": [
-          {
-            "label": "A1",
-            "value": "A1"
-          },
-          {
-            "label": "A2",
-            "value": "A2"
-          },
-          {
-            "label": "B1",
-            "value": "B1"
-          },
-          {
-            "label": "B2",
-            "value": "B2"
-          },
-          {
-            "label": "C1",
-            "value": "C1"
-          },
-          {
-            "label": "C2",
-            "value": "C2"
-          }
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6"
         ],
         "checks": null,
         "validateOn": null,
@@ -132,6 +117,27 @@
         }
       },
       "children": []
+    },
+    "search-btn": {
+      "type": "Button",
+      "props": {
+        "id": "search-btn",
+        "label": "Search",
+        "variant": "primary",
+        "className": "mt-8"
+      },
+      "children": [],
+      "on": {
+        "press": [
+          {
+            "action": "executeBehavior",
+            "params": {
+              "ref": "triggerSearch",
+              "payload": {}
+            }
+          }
+        ]
+      }
     },
     "word-list-section": {
       "type": "div",
@@ -151,9 +157,7 @@
         "label": "Admin Actions"
       },
       "children": [
-        "create-wordbank-btn",
-        "drilldown-questions-btn",
-        "delete-wordbank-btn"
+        "create-wordbank-btn"
       ]
     },
     "create-wordbank-btn": {
@@ -165,6 +169,10 @@
         "disabled": null
       },
       "children": [],
+      "visible": {
+        "$state": "/data/user/role",
+        "$eq": "ADMIN"
+      },
       "on": {
         "press": [
           {
@@ -242,6 +250,32 @@
             "field": "difficultyLevel",
             "label": "Difficulty Level",
             "sortable": true
+          }
+        ],
+        "rowActions": [
+          {
+            "id": "edit-wordbank",
+            "label": "Edit",
+            "type": "modal",
+            "modalId": "create-wordbank-modal",
+            "variant": "outline",
+            "adminOnly": true
+          },
+          {
+            "id": "drilldown-wordbank",
+            "label": "Manage Questions",
+            "type": "navigate",
+            "path": "/admin-dashboard",
+            "variant": "outline",
+            "adminOnly": true
+          },
+          {
+            "id": "delete-wordbank",
+            "label": "Delete",
+            "type": "modal",
+            "modalId": "confirm-delete-modal",
+            "variant": "danger",
+            "adminOnly": true
           }
         ],
         "data": {
