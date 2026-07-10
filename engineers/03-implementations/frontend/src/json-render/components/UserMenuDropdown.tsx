@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { useStateStore } from '@json-render/react';
+import { useStateStore, useStateValue } from '@json-render/react';
 import { useNavigate } from 'react-router-dom';
 
 export default function UserMenuDropdown({ element, emit }: any) {
@@ -7,9 +7,9 @@ export default function UserMenuDropdown({ element, emit }: any) {
   const store = useStateStore();
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  const user = store.get('/data/user') as any;
+  const user = useStateValue('/data/user') as any;
   const email = user?.email;
-  const isAdmin = store.get('/data/isAdmin') as boolean;
+  const isAdmin = useStateValue('/data/isAdmin') as boolean;
 
   // Handle click outside to close dropdown
   useEffect(() => {

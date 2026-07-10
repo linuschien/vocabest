@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useStateStore } from '@json-render/react';
+import { useStateStore, useStateValue } from '@json-render/react';
 import { useNavigate } from 'react-router-dom';
 
 export default function DataTable({ element, children }: any) {
@@ -7,12 +7,14 @@ export default function DataTable({ element, children }: any) {
   const navigate = useNavigate();
   const { id, label, columns, data, rowActions, pageSize = 10 } = element?.props ?? {};
   
+  const bindStateValue = useStateValue(data?.$bindState);
+  
   const [currentPage, setCurrentPage] = useState(1);
   
   // Resolve data via store binding
   let rows: any[] = [];
   if (data && data.$bindState) {
-    rows = (store.get(data.$bindState) as any[]) || [];
+    rows = (bindStateValue as any[]) || [];
   } else if (Array.isArray(data)) {
     rows = data;
   }
