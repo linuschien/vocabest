@@ -76,6 +76,13 @@ export default function BehaviorProvider({ children }: { children: React.ReactNo
             const trigger = store.get('/actions/triggerSearch') as any;
             if (trigger) trigger();
             store.set('/data/lastSearchTriggered', Date.now());
+          } else if (ref === 'clearSearch') {
+            const clear = store.get('/actions/clearSearch') as any;
+            if (clear) clear();
+            store.set('/data/lastSearchTriggered', Date.now());
+          } else if (ref === 'pageChange') {
+            const onPageChange = store.get('/actions/pageChange') as any;
+            if (onPageChange) onPageChange(payload);
           } else {
             console.warn(`Unmapped behavior ref: ${ref}`, payload);
           }

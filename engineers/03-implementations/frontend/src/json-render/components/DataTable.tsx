@@ -34,6 +34,17 @@ export default function DataTable({ element, children, emit, on }: any) {
     }
   };
 
+  const [sortConfig, setSortConfig] = useState<{ field: string; direction: 'asc' | 'desc' } | null>(null);
+
+  const handleSort = (field: string, sortable: boolean) => {
+    if (!sortable) return;
+    let direction: 'asc' | 'desc' = 'asc';
+    if (sortConfig && sortConfig.field === field && sortConfig.direction === 'asc') {
+      direction = 'desc';
+    }
+    setSortConfig({ field, direction });
+  };
+
   const isServerSide = totalElementsProp !== undefined;
   
   let resolvedTotalElements = 0;
@@ -49,7 +60,21 @@ export default function DataTable({ element, children, emit, on }: any) {
 
   const totalPages = Math.max(1, Math.ceil(totalElements / pageSize));
   const startIndex = (currentPage - 1) * pageSize;
-  const paginatedRows = isServerSide ? rows : rows.slice(startIndex, startIndex + pageSize);
+  
+  // Create a copy of rows so we don't mutate the original array
+  let currentRows = isServerSide ? [...rows] : rows.slice(startIndex, startIndex + pageSize);
+
+  if (sortConfig) {
+    currentRows.sort((a, b) => {
+      const aValue = a[sortConfig.field];
+      const bValue = b[sortConfig.field];
+      if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
+      if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
+      return 0;
+    });
+  }
+
+  const paginatedRows = currentRows;
 
   const handlePageChange = (newPage: number) => {
     setCurrentPage(newPage);
@@ -66,8 +91,21 @@ export default function DataTable({ element, children, emit, on }: any) {
           <tr>
             <th className="px-6 py-3 select-none w-16">#</th>
             {columns?.map((col: any) => (
-              <th key={col.field} className="px-6 py-3 cursor-pointer select-none">
-                {col.label} {col.sortable ? '↕️' : ''}
+              <th 
+                key={col.field} 
+                className={`px-6 py-3 select-none ${col.sortable ? 'cursor-pointer hover:bg-muted/80' : ''}`}
+                onClick={() => handleSort(col.field, col.sortable)}
+              >
+                <div className="flex items-center gap-1">
+                  {col.label} 
+                  {col.sortable && (
+                    <span className="text-xs">
+                      {sortConfig?.field === col.field 
+                        ? (sortConfig?.direction === 'asc' ? '↑' : '↓') 
+                        : '↕️'}
+                    </span>
+                  )}
+                </div>
               </th>
             ))}
             {(children?.length > 0 || visibleActions.length > 0) && <th className="px-6 py-3 text-right">Actions</th>}
