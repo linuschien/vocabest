@@ -8,9 +8,14 @@ export interface ResponseType {
 }
 
 const QUERY = gql`
-  query listWordBanks($filter: String) {
+  query listWordBanks($filter: WordBankFilterInput) {
     listWordBanks(filter: $filter) {
       id
+      word
+      chineseTranslation
+      difficultyLevel
+      partsOfSpeech
+      examFrequency
     }
   }
 `;

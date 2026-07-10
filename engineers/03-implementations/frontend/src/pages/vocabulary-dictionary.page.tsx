@@ -10,14 +10,17 @@ export default function VocabularyDictionaryPage() {
   const letterSelect = store.get('/form/letter-select');
   const difficultySelect = store.get('/form/difficulty-select');
 
-  // Build filter object based on form values
+  const lastSearchTriggered = store.get('/data/lastSearchTriggered');
+
+  // Build filter object based on form values when search is triggered
   const filterInput = React.useMemo(() => {
     const filter: any = {};
     if (searchField) filter.word = searchField;
-    if (letterSelect) filter.startsWith = letterSelect;
-    if (difficultySelect) filter.difficultyLevel = difficultySelect;
+    if (letterSelect) filter.startingLetter = letterSelect;
+    if (difficultySelect) filter.difficultyLevel = parseInt(difficultySelect as string, 10);
     return Object.keys(filter).length > 0 ? filter : undefined;
-  }, [searchField, letterSelect, difficultySelect]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [lastSearchTriggered]);
 
   const { data: wordBanks } = useListWordBanks(filterInput);
 

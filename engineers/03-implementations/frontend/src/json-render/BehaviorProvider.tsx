@@ -72,6 +72,8 @@ export default function BehaviorProvider({ children }: { children: React.ReactNo
           } else if (ref === 'submitAnswer') {
             await submitAnswer.mutateAsync(payload);
             toast.success('Answer submitted!');
+          } else if (ref === 'triggerSearch') {
+            store.set('/data/lastSearchTriggered', Date.now());
           } else {
             console.warn(`Unmapped behavior ref: ${ref}`, payload);
           }
