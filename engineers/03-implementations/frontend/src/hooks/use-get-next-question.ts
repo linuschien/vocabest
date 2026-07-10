@@ -9,6 +9,6 @@ export const getNextQuestionKeys = {
 export function useGetNextQuestion(params?: any) {
   return useQuery({
     queryKey: getNextQuestionKeys.all,
-    queryFn: () => api.get<any>('/getNextQuestion', { params }),
+    queryFn: () => api.post<any>('/users/' + params?.userId + ':nextQuestion'),
   });
 }

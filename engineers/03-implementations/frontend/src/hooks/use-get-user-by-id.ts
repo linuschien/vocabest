@@ -9,6 +9,6 @@ export const getUserByIdKeys = {
 export function useGetUserById(params?: any) {
   return useQuery({
     queryKey: getUserByIdKeys.all,
-    queryFn: () => api.get<any>('/getUserById', { params }),
+    queryFn: () => api.get<any>('/users/' + params?.id),
   });
 }

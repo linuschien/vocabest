@@ -5,7 +5,7 @@ import { api } from '@/lib/api-client';
 export function useOnboardUser() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (payload: any) => api.post<void>('/onboardUser', payload),
+    mutationFn: (payload: any) => api.post<void>('/users:onboard', payload),
     onSuccess: () => {
       queryClient.invalidateQueries();
     },

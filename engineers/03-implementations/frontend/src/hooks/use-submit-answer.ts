@@ -5,7 +5,7 @@ import { api } from '@/lib/api-client';
 export function useSubmitAnswer() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (payload: any) => api.post<void>('/submitAnswer', payload),
+    mutationFn: (payload: any) => api.post<void>('/users/' + payload?.userId + ':submitAnswer', payload),
     onSuccess: () => {
       queryClient.invalidateQueries();
     },

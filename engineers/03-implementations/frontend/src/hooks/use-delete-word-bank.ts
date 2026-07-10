@@ -5,7 +5,7 @@ import { api } from '@/lib/api-client';
 export function useDeleteWordBank() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (payload: any) => api.post<void>('/deleteWordBank', payload),
+    mutationFn: (payload: any) => api.delete<void>('/word-banks/' + payload?.id),
     onSuccess: () => {
       queryClient.invalidateQueries();
     },

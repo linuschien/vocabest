@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useWhoami } from '@/hooks/use-whoami';
+import { store } from '@/store';
 
 export default function AuthGuard({ children }: { children: React.ReactNode }) {
   const { data: user, isLoading, isError } = useWhoami();
@@ -9,6 +10,7 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
 
   useEffect(() => {
     if (!isLoading && !isError && user) {
+      store.set('/data/user', user);
       // If user is valid but id is null, they haven't been onboarded yet
       if (user.id === null && location.pathname !== '/onboarding') {
         navigate('/onboarding');

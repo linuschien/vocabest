@@ -5,7 +5,7 @@ import { api } from '@/lib/api-client';
 export function useCreateQuizQuestion() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (payload: any) => api.post<void>('/createQuizQuestion', payload),
+    mutationFn: (payload: any) => api.post<void>('/wordBanks/' + payload?.wordBankId + '/quizQuestions', payload),
     onSuccess: () => {
       queryClient.invalidateQueries();
     },

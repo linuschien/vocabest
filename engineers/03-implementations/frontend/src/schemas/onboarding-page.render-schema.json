@@ -8,14 +8,32 @@
         "label": "Welcome to Vocabest"
       },
       "children": [
+        "welcome-message",
         "onboarding-form-section"
       ]
+    },
+    "welcome-message": {
+      "type": "div",
+      "props": {
+        "className": "text-lg mb-4 text-center font-medium",
+        "children": [
+          "Welcome, ",
+          { "$state": "/data/user/email" },
+          "!"
+        ]
+      },
+      "children": []
     },
     "onboarding-form-section": {
       "type": "Card",
       "props": {
         "id": "onboarding-form-section",
-        "label": "Initial Setup"
+        "label": "Initial Setup",
+        "title": "Welcome to Vocabest",
+        "description": "Please set your learning goals below.",
+        "maxWidth": "md",
+        "centered": true,
+        "className": "mt-4"
       },
       "children": [
         "target-level-select",

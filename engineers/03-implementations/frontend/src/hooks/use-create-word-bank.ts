@@ -5,7 +5,7 @@ import { api } from '@/lib/api-client';
 export function useCreateWordBank() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (payload: any) => api.post<void>('/createWordBank', payload),
+    mutationFn: (payload: any) => api.post<void>('/word-banks', payload),
     onSuccess: () => {
       queryClient.invalidateQueries();
     },

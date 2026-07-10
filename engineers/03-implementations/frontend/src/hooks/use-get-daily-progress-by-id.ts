@@ -9,6 +9,6 @@ export const getDailyProgressByIdKeys = {
 export function useGetDailyProgressById(params?: any) {
   return useQuery({
     queryKey: getDailyProgressByIdKeys.all,
-    queryFn: () => api.get<any>('/getDailyProgressById', { params }),
+    queryFn: () => api.get<any>('/users/' + params?.userId + '/daily-progresses/' + params?.id),
   });
 }
