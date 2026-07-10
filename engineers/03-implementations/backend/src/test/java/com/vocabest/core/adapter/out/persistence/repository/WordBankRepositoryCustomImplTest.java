@@ -39,6 +39,9 @@ class WordBankRepositoryCustomImplTest {
 
     private WordBank testWordBank;
 
+    @Mock
+    private RowsFetchSpec<Long> countFetchSpec;
+
     @BeforeEach
     @SuppressWarnings("unchecked")
     void setUp() {
@@ -53,22 +56,30 @@ class WordBankRepositoryCustomImplTest {
     void search_shouldReturnFluxOfWordBanks() {
         WordBankFilterInput filter = new WordBankFilterInput("test", "t", 1, "JUNIOR_HIGH", 0, 10);
         
-        when(executeSpec.map(any(BiFunction.class))).thenReturn(wordBankRowsFetchSpec);
+        when(databaseClient.sql(anyString())).thenReturn(executeSpec);
+        when(executeSpec.bind(anyInt(), any())).thenReturn(executeSpec);
+        
+        org.mockito.Mockito.doReturn(countFetchSpec, wordBankRowsFetchSpec).when(executeSpec).map(any(BiFunction.class));
+        when(countFetchSpec.one()).thenReturn(reactor.core.publisher.Mono.just(1L));
         when(wordBankRowsFetchSpec.all()).thenReturn(Flux.just(testWordBank));
 
         StepVerifier.create(repository.search(filter))
-                .expectNext(testWordBank)
+                .expectNextMatches(page -> page.totalElements() == 1L && page.content().get(0).word().equals("test"))
                 .verifyComplete();
     }
 
     @Test
     @SuppressWarnings("unchecked")
     void search_withNullFilter_shouldReturnFluxOfWordBanks() {
-        when(executeSpec.map(any(BiFunction.class))).thenReturn(wordBankRowsFetchSpec);
+        when(databaseClient.sql(anyString())).thenReturn(executeSpec);
+        when(executeSpec.bind(anyInt(), any())).thenReturn(executeSpec);
+        
+        org.mockito.Mockito.doReturn(countFetchSpec, wordBankRowsFetchSpec).when(executeSpec).map(any(BiFunction.class));
+        when(countFetchSpec.one()).thenReturn(reactor.core.publisher.Mono.just(1L));
         when(wordBankRowsFetchSpec.all()).thenReturn(Flux.just(testWordBank));
 
         StepVerifier.create(repository.search(null))
-                .expectNext(testWordBank)
+                .expectNextMatches(page -> page.totalElements() == 1L && page.content().get(0).word().equals("test"))
                 .verifyComplete();
     }
 }

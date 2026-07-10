@@ -2,12 +2,13 @@ import React, { useState } from 'react';
 import { useStateStore, useStateValue } from '@json-render/react';
 import { useNavigate } from 'react-router-dom';
 
-export default function DataTable({ element, children }: any) {
+export default function DataTable({ element, children, emit, on }: any) {
   const store = useStateStore();
   const navigate = useNavigate();
-  const { id, label, columns, data, rowActions, pageSize = 10 } = element?.props ?? {};
+  const { id, label, columns, data, rowActions, pageSize = 10, totalElements: totalElementsProp } = element?.props ?? {};
   
   const bindStateValue = useStateValue(data?.$bindState);
+  const totalElementsBindValue = useStateValue(totalElementsProp?.$bindState);
   
   const [currentPage, setCurrentPage] = useState(1);
   
@@ -20,6 +21,7 @@ export default function DataTable({ element, children }: any) {
   }
 
   const userRole = store.get('/data/user/role');
+  const visibleActions = rowActions?.filter((action: any) => !(action.adminOnly && userRole !== 'ADMIN')) || [];
 
   const handleActionClick = (action: any, row: any) => {
     store.set('/data/activeWordBank', row);
@@ -32,9 +34,19 @@ export default function DataTable({ element, children }: any) {
     }
   };
 
-  const totalPages = Math.max(1, Math.ceil(rows.length / pageSize));
+  const isServerSide = totalElementsBindValue !== undefined;
+  const totalElements = isServerSide ? (totalElementsBindValue as number) : rows.length;
+
+  const totalPages = Math.max(1, Math.ceil(totalElements / pageSize));
   const startIndex = (currentPage - 1) * pageSize;
-  const paginatedRows = rows.slice(startIndex, startIndex + pageSize);
+  const paginatedRows = isServerSide ? rows : rows.slice(startIndex, startIndex + pageSize);
+
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage);
+    if (emit) {
+      emit('pageChange', { page: newPage });
+    }
+  };
 
   return (
     <div className="border border-border rounded-lg shadow-sm bg-card overflow-hidden" id={id}>
@@ -42,31 +54,33 @@ export default function DataTable({ element, children }: any) {
       <table className="w-full text-sm text-left text-muted-foreground">
         <thead className="text-xs text-foreground uppercase bg-muted/50">
           <tr>
+            <th className="px-6 py-3 select-none w-16">#</th>
             {columns?.map((col: any) => (
               <th key={col.field} className="px-6 py-3 cursor-pointer select-none">
                 {col.label} {col.sortable ? '↕️' : ''}
               </th>
             ))}
-            {(children?.length > 0 || rowActions?.length > 0) && <th className="px-6 py-3 text-right">Actions</th>}
+            {(children?.length > 0 || visibleActions.length > 0) && <th className="px-6 py-3 text-right">Actions</th>}
           </tr>
         </thead>
         <tbody>
           {rows.length === 0 ? (
-            <tr><td colSpan={columns?.length + (children?.length || rowActions?.length ? 1 : 0)} className="px-6 py-4 text-center">(沒有資料)</td></tr>
+            <tr><td colSpan={columns?.length + (children?.length || visibleActions.length > 0 ? 2 : 1)} className="px-6 py-4 text-center">(沒有資料)</td></tr>
           ) : (
             paginatedRows.map((row: any, i: number) => (
               <tr key={row.id || i} className="bg-card border-b border-border hover:bg-muted/50">
+                <td className="px-6 py-4 font-medium text-muted-foreground whitespace-nowrap">
+                  {startIndex + i + 1}
+                </td>
                 {columns?.map((col: any) => (
                   <td key={col.field} className="px-6 py-4 font-medium text-card-foreground whitespace-nowrap">
                     {row[col.field]}
                   </td>
                 ))}
-                {(children?.length > 0 || rowActions?.length > 0) && (
+                {(children?.length > 0 || visibleActions.length > 0) && (
                   <td className="px-6 py-4 text-right flex justify-end gap-2 items-center">
                     {children}
-                    {rowActions?.map((action: any) => {
-                      if (action.adminOnly && userRole !== 'ADMIN') return null;
-                      
+                    {visibleActions.map((action: any) => {
                       const btnClass = action.variant === 'danger' 
                         ? 'text-destructive hover:text-destructive/80' 
                         : 'text-primary hover:text-primary/80';
@@ -89,18 +103,18 @@ export default function DataTable({ element, children }: any) {
         </tbody>
       </table>
       
-      {rows.length > pageSize && (
+      {totalElements > pageSize && (
         <div className="flex items-center justify-between px-4 py-3 bg-card border-t border-border sm:px-6">
           <div className="flex justify-between flex-1 sm:hidden">
             <button
-              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
               disabled={currentPage === 1}
               className="relative inline-flex items-center px-4 py-2 text-sm font-medium text-foreground bg-background border border-input rounded-md hover:bg-accent disabled:opacity-50"
             >
               Previous
             </button>
             <button
-              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+              onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
               disabled={currentPage === totalPages}
               className="relative ml-3 inline-flex items-center px-4 py-2 text-sm font-medium text-foreground bg-background border border-input rounded-md hover:bg-accent disabled:opacity-50"
             >
@@ -110,13 +124,13 @@ export default function DataTable({ element, children }: any) {
           <div className="hidden sm:flex sm:flex-1 sm:items-center sm:justify-between">
             <div>
               <p className="text-sm text-muted-foreground">
-                Showing <span className="font-medium text-foreground">{startIndex + 1}</span> to <span className="font-medium text-foreground">{Math.min(startIndex + pageSize, rows.length)}</span> of <span className="font-medium text-foreground">{rows.length}</span> results
+                Showing <span className="font-medium text-foreground">{totalElements === 0 ? 0 : startIndex + 1}</span> to <span className="font-medium text-foreground">{Math.min(startIndex + pageSize, totalElements)}</span> of <span className="font-medium text-foreground">{totalElements}</span> results
               </p>
             </div>
             <div>
               <nav className="inline-flex -space-x-px rounded-md shadow-sm" aria-label="Pagination">
                 <button
-                  onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+                  onClick={() => handlePageChange(Math.max(1, currentPage - 1))}
                   disabled={currentPage === 1}
                   className="relative inline-flex items-center px-2 py-2 text-muted-foreground rounded-l-md ring-1 ring-inset ring-input hover:bg-accent focus:z-20 focus:outline-offset-0 disabled:opacity-50"
                 >
@@ -129,7 +143,7 @@ export default function DataTable({ element, children }: any) {
                   Page {currentPage} of {totalPages}
                 </span>
                 <button
-                  onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+                  onClick={() => handlePageChange(Math.min(totalPages, currentPage + 1))}
                   disabled={currentPage === totalPages}
                   className="relative inline-flex items-center px-2 py-2 text-muted-foreground rounded-r-md ring-1 ring-inset ring-input hover:bg-accent focus:z-20 focus:outline-offset-0 disabled:opacity-50"
                 >

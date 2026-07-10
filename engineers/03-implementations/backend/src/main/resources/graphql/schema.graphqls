@@ -121,11 +121,16 @@ input WordMasteryFilterInput {
   errorWeight: Int
 }
 
+type WordBankPage {
+  content: [WordBank]
+  totalElements: Int
+}
+
 type Query {
   listUsers(filter: UserFilterInput): [User]
   listDailyProgresses(filter: DailyProgressFilterInput): [DailyProgress]
   listErrorEvents(filter: ErrorEventFilterInput): [ErrorEvent]
   listQuizQuestions(filter: QuizQuestionFilterInput): [QuizQuestion]
-  listWordBanks(filter: WordBankFilterInput): [WordBank]
+  listWordBanks(filter: WordBankFilterInput): WordBankPage
   listWordMasteries(filter: WordMasteryFilterInput): [WordMastery]
 }

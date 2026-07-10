@@ -10,12 +10,16 @@ export interface ResponseType {
 const QUERY = gql`
   query listWordBanks($filter: WordBankFilterInput) {
     listWordBanks(filter: $filter) {
-      id
-      word
-      chineseTranslation
-      difficultyLevel
-      partsOfSpeech
-      examFrequency
+      content {
+        id
+        word
+        chineseTranslation
+        targetLevel
+        difficultyLevel
+        partsOfSpeech
+        examFrequency
+      }
+      totalElements
     }
   }
 `;
@@ -28,6 +32,6 @@ export const listWordBanksKeys = {
 export function useListWordBanks(filter?: any) {
   return useQuery({
     queryKey: filter ? listWordBanksKeys.filtered(filter) : listWordBanksKeys.all,
-    queryFn: () => request<{ listWordBanks: ResponseType[] }>(GRAPHQL_ENDPOINT, QUERY, filter ? { filter } : {}).then(data => data.listWordBanks),
+    queryFn: () => request<{ listWordBanks: { content: ResponseType[], totalElements: number } }>(GRAPHQL_ENDPOINT, QUERY, filter ? { filter } : {}).then(data => data.listWordBanks),
   });
 }

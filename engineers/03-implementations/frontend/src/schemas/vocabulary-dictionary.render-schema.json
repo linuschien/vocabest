@@ -229,6 +229,9 @@
       "props": {
         "id": "word-table",
         "label": "Words",
+        "totalElements": {
+          "$bindState": "/data/listWordBanksTotal"
+        },
         "columns": [
           {
             "field": "word",
@@ -247,8 +250,18 @@
             "sortable": false
           },
           {
+            "field": "targetLevel",
+            "label": "Target Level",
+            "sortable": true
+          },
+          {
             "field": "difficultyLevel",
             "label": "Difficulty Level",
+            "sortable": true
+          },
+          {
+            "field": "examFrequency",
+            "label": "Exam Frequency",
             "sortable": true
           }
         ],
@@ -282,7 +295,20 @@
           "$bindState": "/data/listWordBanks"
         }
       },
-      "children": []
+      "children": [],
+      "on": {
+        "pageChange": [
+          {
+            "action": "executeBehavior",
+            "params": {
+              "ref": "pageChange",
+              "payload": {
+                "page": { "$event": "page" }
+              }
+            }
+          }
+        ]
+      }
     },
     "create-wordbank-modal": {
       "type": "Dialog",

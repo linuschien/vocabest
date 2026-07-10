@@ -31,10 +31,11 @@ class WordBankGraphQLResolverTest {
     @Test
     void testListWordBanks() {
         WordBank entity = new WordBank(UUID.randomUUID(), "word", "verb", "trans", TargetLevel.JUNIOR_HIGH, 1, 5, LocalDateTime.now(), LocalDateTime.now(), null);
-        when(repository.search(any())).thenReturn(Flux.just(entity));
+        com.vocabest.core.adapter.in.web.dto.WordBankPage page = new com.vocabest.core.adapter.in.web.dto.WordBankPage(java.util.List.of(entity), 1L);
+        when(repository.search(any())).thenReturn(reactor.core.publisher.Mono.just(page));
 
         StepVerifier.create(resolver.listWordBanks(new WordBankFilterInput("word", "w", 1, "JUNIOR_HIGH", 0, 20)))
-                .expectNextMatches(e -> e.word().equals("word"))
+                .expectNextMatches(e -> e.content().get(0).word().equals("word") && e.totalElements() == 1L)
                 .verifyComplete();
     }
 }

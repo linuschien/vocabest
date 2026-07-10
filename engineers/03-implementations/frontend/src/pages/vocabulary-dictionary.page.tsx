@@ -18,17 +18,26 @@ export default function VocabularyDictionaryPage() {
       const searchField = store.get('/form/search-field');
       const letterSelect = store.get('/form/letter-select');
       const difficultySelect = store.get('/form/difficulty-select');
+      const page = Number(store.get('/form/page') || 1);
 
-      const filter: any = {};
+      const filter: any = {
+        page: page - 1,
+        size: 10 // Page size 10 to match UI
+      };
       if (searchField) filter.word = searchField;
       if (letterSelect && letterSelect !== "Any") filter.startingLetter = letterSelect;
       if (difficultySelect && difficultySelect !== "Any") filter.difficultyLevel = parseInt(difficultySelect as string, 10);
       
-      const newFilter = Object.keys(filter).length > 0 ? filter : undefined;
-      setActiveFilter(newFilter);
+      setActiveFilter(filter);
       
       // Force React Query to fetch the new filter immediately
       setTimeout(() => refetch(), 0);
+    });
+
+    store.set('/actions/pageChange', (params: any) => {
+      store.set('/form/page', params?.page || 1);
+      const trigger = store.get('/actions/triggerSearch') as () => void;
+      if (trigger) trigger();
     });
     
     // Explicitly do a first load refetch just in case React Query needs a kick
@@ -38,8 +47,9 @@ export default function VocabularyDictionaryPage() {
   }, []); // IMPORTANT: Empty dependency array prevents infinite loops!
 
   useEffect(() => {
-    if (wordBanks) {
-      store.set('/data/listWordBanks', wordBanks);
+    if (wordBanks && (wordBanks as any).content) {
+      store.set('/data/listWordBanks', (wordBanks as any).content);
+      store.set('/data/listWordBanksTotal', (wordBanks as any).totalElements);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [wordBanks]); // IMPORTANT: Do not include `store` to prevent infinite loops!
