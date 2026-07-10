@@ -1,4 +1,5 @@
 import { render, screen, waitFor } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import userEvent from '@testing-library/user-event';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { JSONUIProvider, createStateStore } from '@json-render/react';
@@ -15,11 +16,13 @@ const testHandlers = { navigate, openModal, executeBehavior };
 function renderPage() {
   const qc = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   return render(
-    <QueryClientProvider client={qc}>
-      <JSONUIProvider registry={componentRegistry} store={store} handlers={testHandlers as any}>
-        <LearningDashboardPage />
-      </JSONUIProvider>
-    </QueryClientProvider>
+    <MemoryRouter>
+      <QueryClientProvider client={qc}>
+        <JSONUIProvider registry={componentRegistry} store={store} handlers={testHandlers as any}>
+          <LearningDashboardPage />
+        </JSONUIProvider>
+      </QueryClientProvider>
+    </MemoryRouter>
   );
 }
 
@@ -68,7 +71,6 @@ describe('LearningDashboardPage', () => {
     renderPage();
 
     await user.click(await screen.findByRole('button', { name: /dev@test.com/i }));
-    expect(openModal).toHaveBeenCalledWith(expect.objectContaining({ id: 'avatar-dropdown-modal' }));
 
     await user.click(await screen.findByRole('button', { name: /Admin Dashboard/i }));
     expect(navigate).toHaveBeenCalledWith(expect.objectContaining({ path: '/admin-dashboard' }));
@@ -76,7 +78,7 @@ describe('LearningDashboardPage', () => {
 
   it('submits onboarding form', async () => {
     store.set('/modals/onboarding-modal', true);
-    store.set('/form/target-level-select', '高中7000單字');
+    store.set('/form/target-level-select', 'SENIOR_HIGH');
     store.set('/form/daily-target-questions-select', '20');
     const user = userEvent.setup();
     renderPage();
@@ -87,7 +89,7 @@ describe('LearningDashboardPage', () => {
       expect.objectContaining({
         ref: 'onboardUser',
         payload: {
-          targetLevel: '高中7000單字',
+          targetLevel: 'SENIOR_HIGH',
           dailyTargetQuestions: '20'
         }
       })

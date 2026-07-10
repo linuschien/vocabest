@@ -9,10 +9,21 @@
       },
       "children": [
         "global-header-section",
-        "progress-section",
-        "quick-start-section",
-        "avatar-dropdown-modal",
+        "top-cards-grid",
         "onboarding-modal"
+      ]
+    },
+    "top-cards-grid": {
+      "type": "Grid",
+      "props": {
+        "id": "top-cards-grid",
+        "columns": 2,
+        "gap": "md",
+        "className": "w-full"
+      },
+      "children": [
+        "progress-section",
+        "quick-start-section"
       ]
     },
     "global-header-section": {
@@ -26,20 +37,25 @@
       ]
     },
     "avatar-dropdown-btn": {
-      "type": "Button",
+      "type": "UserMenuDropdown",
       "props": {
-        "id": "avatar-dropdown-btn",
-        "label": { "$state": "/data/user/email" },
-        "variant": "outline",
-        "className": "rounded-full px-6 font-medium"
+        "id": "avatar-dropdown-btn"
       },
       "children": [],
       "on": {
-        "press": [
+        "settings": [
           {
             "action": "openModal",
             "params": {
-              "id": "avatar-dropdown-modal"
+              "id": "onboarding-modal"
+            }
+          }
+        ],
+        "admin": [
+          {
+            "action": "navigate",
+            "params": {
+              "path": "/admin-dashboard"
             }
           }
         ]
@@ -166,66 +182,7 @@
         ]
       }
     },
-    "avatar-dropdown-modal": {
-      "type": "Dialog",
-      "props": {
-        "id": "avatar-dropdown-modal",
-        "label": "User Menu",
-        "title": "User Menu",
-        "description": null,
-        "openPath": "/modals/avatar-dropdown-modal"
-      },
-      "children": [
-        "nav-settings-btn",
-        "nav-admin-btn"
-      ],
-      "visible": {
-        "$state": "/modals/avatar-dropdown-modal"
-      }
-    },
-    "nav-settings-btn": {
-      "type": "Button",
-      "props": {
-        "id": "nav-settings-btn",
-        "label": "Personal Settings",
-        "variant": "secondary",
-        "disabled": null
-      },
-      "children": [],
-      "on": {
-        "press": [
-          {
-            "action": "openModal",
-            "params": {
-              "id": "onboarding-modal"
-            }
-          }
-        ]
-      }
-    },
-    "nav-admin-btn": {
-      "type": "Button",
-      "props": {
-        "id": "nav-admin-btn",
-        "label": "Admin Dashboard",
-        "variant": "secondary",
-        "disabled": null
-      },
-      "children": [],
-      "on": {
-        "press": [
-          {
-            "action": "navigate",
-            "params": {
-              "path": "/admin-dashboard"
-            }
-          }
-        ]
-      },
-      "visible": {
-        "$state": "/data/isAdmin"
-      }
-    },
+
     "onboarding-modal": {
       "type": "Dialog",
       "props": {
@@ -291,8 +248,8 @@
         "required": true,
         "placeholder": "Select Target Level",
         "options": [
-          "國中2000單字",
-          "高中7000單字"
+          { "label": "國中2000單字", "value": "JUNIOR_HIGH" },
+          { "label": "高中7000單字", "value": "SENIOR_HIGH" }
         ],
         "checks": null,
         "validateOn": null,

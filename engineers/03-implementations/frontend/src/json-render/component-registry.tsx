@@ -9,6 +9,7 @@ import DataTable from './components/DataTable';
 import Breadcrumb from './components/Breadcrumb';
 import AlertDialog from './components/AlertDialog';
 import MetricCard from './components/MetricCard';
+import UserMenuDropdown from './components/UserMenuDropdown';
 
 // ── Adapter: ComponentRenderProps → BaseComponentProps ──────────────────────
 function adapt(Comp: ComponentType<any>): ComponentType<any> {
@@ -62,6 +63,7 @@ export const componentRegistry: Record<string, ComponentType<any>> = {
   'Breadcrumb':  Breadcrumb,   // <nav><ol> wrapper
   'AlertDialog': AlertDialog,  // confirm dialog overlay
   'MetricCard':  MetricCard,   // KPI metric card
+  'UserMenuDropdown': adapt(UserMenuDropdown),
 
   // ── 5. Native HTML passthrough ───────────────────────────────────────────
   'div': ({ element, children }: any) => (

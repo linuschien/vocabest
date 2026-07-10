@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { HashRouter, Routes, Route } from 'react-router-dom';
 import AuthGuard from '@/components/auth/AuthGuard';
 import BehaviorProvider from '@/json-render/BehaviorProvider';
 
@@ -12,7 +12,7 @@ import VocabularyDictionaryPage from '@/pages/vocabulary-dictionary.page';
 
 function App() {
   return (
-    <BrowserRouter>
+    <HashRouter>
       <AuthGuard>
         <BehaviorProvider>
           <Routes>
@@ -25,7 +25,7 @@ function App() {
           </Routes>
         </BehaviorProvider>
       </AuthGuard>
-    </BrowserRouter>
+    </HashRouter>
   );
 }
 

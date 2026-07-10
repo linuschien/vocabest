@@ -16,6 +16,8 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
         store.set('/modals/onboarding-modal', true);
       } else {
         store.set('/modals/onboarding-modal', false);
+        store.set('/form/target-level-select', user.targetLevel);
+        store.set('/form/daily-target-questions-select', String(user.dailyTargetQuestions));
       }
     }
   }, [user, isLoading, isError]);
