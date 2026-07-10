@@ -52,8 +52,9 @@ export default function VocabularyDictionaryPage() {
       if (trigger) trigger(newPage);
     });
     
-    // Explicitly do a first load refetch just in case React Query needs a kick
-    refetch();
+    // Explicitly initialize the active filter with the correct page size
+    const trigger = store.get('/actions/triggerSearch') as (page: number) => void;
+    if (trigger) trigger(1);
     
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // IMPORTANT: Empty dependency array prevents infinite loops!
