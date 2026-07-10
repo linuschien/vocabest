@@ -138,4 +138,18 @@ describe('VocabularyDictionaryPage', () => {
     // Since we use foolproof direct invocation, we verify the store state directly
     expect(store.get('/form/page')).toBe(2);
   });
+
+  it('resets page to 1 when targetLevel changes', async () => {
+    store.set('/form/page', 5);
+    store.set('/data/user/targetLevel', 'JUNIOR_HIGH');
+    renderPage();
+    
+    // Changing targetLevel should reset the page back to 1
+    store.set('/data/user/targetLevel', 'SENIOR_HIGH');
+    
+    // Yield to let React process the effects
+    await new Promise(resolve => setTimeout(resolve, 0));
+    
+    expect(store.get('/form/page')).toBe(1);
+  });
 });
