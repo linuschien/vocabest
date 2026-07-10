@@ -1,37 +1,48 @@
-import React, { useEffect } from 'react';
-import { Renderer, useStateStore, useStateValue } from '@json-render/react';
+import React, { useEffect, useState } from 'react';
+import { Renderer, useStateStore } from '@json-render/react';
 import { componentRegistry } from '@/json-render/component-registry';
 import spec from '@/schemas/vocabulary-dictionary.render-schema.json';
 import { useListWordBanks } from '@/hooks/use-list-word-banks';
 
 export default function VocabularyDictionaryPage() {
   const store = useStateStore();
+  const [activeFilter, setActiveFilter] = useState<any>(undefined);
   
-  // Make the page reactive to the search trigger event
-  const lastSearchTriggered = useStateValue('/data/lastSearchTriggered');
+  // Refetch is extracted so we can force a refetch if needed
+  const { data: wordBanks, refetch } = useListWordBanks(activeFilter);
 
-  // Build filter object based on form values when search is triggered
-  const filterInput = React.useMemo(() => {
-    const searchField = store.get('/form/search-field');
-    const letterSelect = store.get('/form/letter-select');
-    const difficultySelect = store.get('/form/difficulty-select');
+  useEffect(() => {
+    // Register the search trigger action in the global store.
+    // This allows BehaviorProvider to invoke it when the "Search" button is clicked.
+    store.set('/actions/triggerSearch', () => {
+      const searchField = store.get('/form/search-field');
+      const letterSelect = store.get('/form/letter-select');
+      const difficultySelect = store.get('/form/difficulty-select');
 
-    const filter: any = {};
-    if (searchField) filter.word = searchField;
-    if (letterSelect && letterSelect !== "Any") filter.startingLetter = letterSelect;
-    if (difficultySelect && difficultySelect !== "Any") filter.difficultyLevel = parseInt(difficultySelect as string, 10);
+      const filter: any = {};
+      if (searchField) filter.word = searchField;
+      if (letterSelect && letterSelect !== "Any") filter.startingLetter = letterSelect;
+      if (difficultySelect && difficultySelect !== "Any") filter.difficultyLevel = parseInt(difficultySelect as string, 10);
+      
+      const newFilter = Object.keys(filter).length > 0 ? filter : undefined;
+      setActiveFilter(newFilter);
+      
+      // Force React Query to fetch the new filter immediately
+      setTimeout(() => refetch(), 0);
+    });
     
-    return Object.keys(filter).length > 0 ? filter : undefined;
+    // Explicitly do a first load refetch just in case React Query needs a kick
+    refetch();
+    
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [lastSearchTriggered]);
-
-  const { data: wordBanks } = useListWordBanks(filterInput);
+  }, []); // IMPORTANT: Empty dependency array prevents infinite loops!
 
   useEffect(() => {
     if (wordBanks) {
       store.set('/data/listWordBanks', wordBanks);
     }
-  }, [wordBanks, store]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [wordBanks]); // IMPORTANT: Do not include `store` to prevent infinite loops!
 
   return <Renderer spec={spec} registry={componentRegistry} />;
 }

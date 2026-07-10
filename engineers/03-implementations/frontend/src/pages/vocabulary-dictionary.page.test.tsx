@@ -7,7 +7,7 @@ import { vi, describe, it, expect, beforeEach } from 'vitest';
 import VocabularyDictionaryPage from './vocabulary-dictionary.page';
 
 vi.mock('@/hooks/use-list-word-banks', () => ({
-  useListWordBanks: vi.fn(() => ({ data: undefined }))
+  useListWordBanks: vi.fn(() => ({ data: undefined, refetch: vi.fn() }))
 }));
 
 const store = createStateStore({ modals: {}, form: {}, data: {} });
