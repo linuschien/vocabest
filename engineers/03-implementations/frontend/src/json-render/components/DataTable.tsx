@@ -5,14 +5,21 @@ import { useNavigate } from 'react-router-dom';
 export default function DataTable({ element, children, emit, on }: any) {
   const store = useStateStore();
   const navigate = useNavigate();
-  const { id, label, columns, data, rowActions, pageSize = 10, totalElements: totalElementsProp } = element?.props ?? {};
+  const { id, label, columns, data, rowActions, pageSize = 10, totalElements: totalElementsProp, currentPage: currentPageProp } = element?.props ?? {};
   
   const bindStateValue = useStateValue(data?.$bindState);
   const totalElementsBindValue = useStateValue(totalElementsProp?.$bindState);
+  const boundCurrentPage = useStateValue(currentPageProp?.$bindState);
   
   const [currentPage, setCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState('1');
   
+  useEffect(() => {
+    if (boundCurrentPage !== undefined && Number(boundCurrentPage) !== currentPage) {
+      setCurrentPage(Number(boundCurrentPage) || 1);
+    }
+  }, [boundCurrentPage]);
+
   useEffect(() => {
     setInputPage(currentPage.toString());
   }, [currentPage]);

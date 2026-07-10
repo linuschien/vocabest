@@ -248,6 +248,9 @@
         "totalElements": {
           "$bindState": "/data/listWordBanksTotal"
         },
+        "currentPage": {
+          "$bindState": "/form/page"
+        },
         "columns": [
           {
             "field": "word",
