@@ -252,8 +252,7 @@
           {
             "field": "word",
             "label": "Word",
-            "sortable": true,
-            "default_sort": "asc"
+            "sortable": false
           },
           {
             "field": "partsOfSpeech",
@@ -268,17 +267,17 @@
           {
             "field": "targetLevel",
             "label": "Target Level",
-            "sortable": true
+            "sortable": false
           },
           {
             "field": "difficultyLevel",
             "label": "Difficulty Level",
-            "sortable": true
+            "sortable": false
           },
           {
             "field": "examFrequency",
             "label": "Exam Frequency",
-            "sortable": true
+            "sortable": false
           }
         ],
         "rowActions": [
@@ -318,9 +317,7 @@
             "action": "executeBehavior",
             "params": {
               "ref": "pageChange",
-              "payload": {
-                "page": { "$event": "page" }
-              }
+              "payload": { "$event": "" }
             }
           }
         ]

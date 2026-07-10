@@ -11,9 +11,13 @@ import com.vocabest.core.adapter.out.persistence.model.User;
 import org.springframework.stereotype.Controller;
 import reactor.core.publisher.Mono;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @Controller
 public class WordBankGraphQLResolver {
 
+    private static final Logger logger = LoggerFactory.getLogger(WordBankGraphQLResolver.class);
     private final WordBankRepository repository;
 
     public WordBankGraphQLResolver(WordBankRepository repository) {
@@ -24,6 +28,7 @@ public class WordBankGraphQLResolver {
     public Mono<WordBankPage> listWordBanks(@Argument WordBankFilterInput filter) {
         return Mono.deferContextual(ctx -> {
             User user = ctx.getOrDefault("CURRENT_USER", null);
+            logger.debug("listWordBanks requested with filter: {}, user targetLevel: {}", filter, user != null ? user.targetLevel() : "null");
             if (user != null && user.role() != Role.ADMIN && user.targetLevel() != null) {
                 WordBankFilterInput overriddenFilter = new WordBankFilterInput(
                     filter != null ? filter.word() : null,

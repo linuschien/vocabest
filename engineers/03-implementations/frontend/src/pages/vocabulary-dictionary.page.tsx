@@ -41,12 +41,15 @@ export default function VocabularyDictionaryPage() {
       store.set('/form/difficulty-select', 'Any');
       store.set('/form/page', 1);
       
-      const trigger = store.get('/actions/triggerSearch') as (page: number) => void;
-      if (trigger) trigger(1);
+      setTimeout(() => {
+        const trigger = store.get('/actions/triggerSearch') as (page: number) => void;
+        if (trigger) trigger(1);
+      }, 0);
     });
 
     store.set('/actions/pageChange', (params: any) => {
-      const newPage = params?.page || 1;
+      // Handle both { page: 2 } and raw number 2 due to schema parsing limitations
+      const newPage = typeof params === 'number' ? params : (params?.page || 1);
       store.set('/form/page', newPage);
       const trigger = store.get('/actions/triggerSearch') as (page: number) => void;
       if (trigger) trigger(newPage);
