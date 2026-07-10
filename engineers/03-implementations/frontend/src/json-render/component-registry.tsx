@@ -33,6 +33,13 @@ function adapt(Comp: ComponentType<any>): ComponentType<any> {
       if (emit) emit(eventName, ...args);
     };
 
+    // Admin-only visibility filtering
+    if (element?.props?.adminOnly) {
+      if (!store || store.get('/data/user/role') !== 'ADMIN') {
+        return null;
+      }
+    }
+
     return React.createElement(Comp, {
       props: element?.props ?? {},
       children,

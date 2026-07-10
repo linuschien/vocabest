@@ -34,8 +34,18 @@ export default function DataTable({ element, children, emit, on }: any) {
     }
   };
 
-  const isServerSide = totalElementsBindValue !== undefined;
-  const totalElements = isServerSide ? (totalElementsBindValue as number) : rows.length;
+  const isServerSide = totalElementsProp !== undefined;
+  
+  let resolvedTotalElements = 0;
+  if (isServerSide) {
+    if (typeof totalElementsProp === 'number') {
+      resolvedTotalElements = totalElementsProp;
+    } else if (totalElementsBindValue !== undefined) {
+      resolvedTotalElements = totalElementsBindValue as number;
+    }
+  }
+
+  const totalElements = isServerSide ? resolvedTotalElements : rows.length;
 
   const totalPages = Math.max(1, Math.ceil(totalElements / pageSize));
   const startIndex = (currentPage - 1) * pageSize;
@@ -103,7 +113,7 @@ export default function DataTable({ element, children, emit, on }: any) {
         </tbody>
       </table>
       
-      {totalElements > pageSize && (
+      {totalElements >= 0 && (
         <div className="flex items-center justify-between px-4 py-3 bg-card border-t border-border sm:px-6">
           <div className="flex justify-between flex-1 sm:hidden">
             <button

@@ -35,7 +35,8 @@
         "search-field",
         "letter-select",
         "difficulty-select",
-        "search-btn"
+        "search-btn",
+        "clear-btn"
       ]
     },
     "search-field": {
@@ -139,6 +140,26 @@
         ]
       }
     },
+    "clear-btn": {
+      "type": "Button",
+      "props": {
+        "id": "clear-btn",
+        "label": "Clear",
+        "variant": "outline"
+      },
+      "children": [],
+      "on": {
+        "press": [
+          {
+            "action": "executeBehavior",
+            "params": {
+              "ref": "clearSearch",
+              "payload": {}
+            }
+          }
+        ]
+      }
+    },
     "word-list-section": {
       "type": "div",
       "props": {
@@ -166,13 +187,10 @@
         "id": "create-wordbank-btn",
         "label": "Add Word",
         "variant": "primary",
-        "disabled": null
+        "disabled": null,
+        "adminOnly": true
       },
       "children": [],
-      "visible": {
-        "$state": "/data/user/role",
-        "$eq": "ADMIN"
-      },
       "on": {
         "press": [
           {

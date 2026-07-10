@@ -34,6 +34,16 @@ export default function VocabularyDictionaryPage() {
       setTimeout(() => refetch(), 0);
     });
 
+    store.set('/actions/clearSearch', () => {
+      store.set('/form/search-field', '');
+      store.set('/form/letter-select', 'Any');
+      store.set('/form/difficulty-select', 'Any');
+      store.set('/form/page', 1);
+      
+      const trigger = store.get('/actions/triggerSearch') as () => void;
+      if (trigger) trigger();
+    });
+
     store.set('/actions/pageChange', (params: any) => {
       store.set('/form/page', params?.page || 1);
       const trigger = store.get('/actions/triggerSearch') as () => void;
@@ -45,6 +55,13 @@ export default function VocabularyDictionaryPage() {
     
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // IMPORTANT: Empty dependency array prevents infinite loops!
+
+  const targetLevel = store.get('/data/user/targetLevel');
+  useEffect(() => {
+    // Whenever the user's targetLevel changes, trigger a refetch
+    // so the backend can apply the new mandatory filter.
+    refetch();
+  }, [targetLevel, refetch]);
 
   useEffect(() => {
     if (wordBanks && (wordBanks as any).content) {
