@@ -256,7 +256,8 @@
             "field": "word",
             "label": "Word",
             "sortable": false,
-            "widthClass": "w-48"
+            "widthClass": "w-48",
+            "speak": true
           },
           {
             "field": "partsOfSpeech",
@@ -289,15 +290,6 @@
           }
         ],
         "rowActions": [
-          {
-            "id": "speak-wordbank",
-            "label": "🔊",
-            "type": "speak",
-            "field": "word",
-            "lang": "en-US",
-            "rate": 0.9,
-            "variant": "outline"
-          },
           {
             "id": "edit-wordbank",
             "label": "Edit",

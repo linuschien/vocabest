@@ -172,7 +172,28 @@ export default function DataTable({ element, children, emit, on }: any) {
                       className="px-6 py-4 font-medium text-card-foreground whitespace-normal break-words min-w-[120px]"
                       title={row[col.field]}
                     >
-                      {row[col.field]}
+                      {col.speak ? (
+                        <span className="inline-flex items-center gap-1.5">
+                          <button
+                            onClick={() => {
+                              const text = row[col.field];
+                              if (text && 'speechSynthesis' in window) {
+                                window.speechSynthesis.cancel();
+                                const utter = new SpeechSynthesisUtterance(text);
+                                utter.lang = 'en-US';
+                                utter.rate = 0.9;
+                                window.speechSynthesis.speak(utter);
+                              }
+                            }}
+                            title={`Pronounce "${row[col.field]}"`}
+                            className="text-muted-foreground hover:text-primary transition-colors flex-shrink-0"
+                            aria-label={`Pronounce ${row[col.field]}`}
+                          >
+                            🔊
+                          </button>
+                          {row[col.field]}
+                        </span>
+                      ) : row[col.field]}
                     </td>
                   ))}
                   {(children?.length > 0 || visibleActions.length > 0) && (
