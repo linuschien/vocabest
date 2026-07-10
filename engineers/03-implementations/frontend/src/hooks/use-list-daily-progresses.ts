@@ -45,6 +45,6 @@ export const listDailyProgressesKeys = {
 export function useListDailyProgresses(filter?: DailyProgressFilterInput) {
   return useQuery({
     queryKey: filter ? listDailyProgressesKeys.filtered(filter) : listDailyProgressesKeys.all,
-    queryFn: () => request<{ listDailyProgresses: DailyProgressType[] }>(GRAPHQL_ENDPOINT, QUERY, { filter }).then(data => data.listDailyProgresses),
+    queryFn: () => request<{ listDailyProgresses: DailyProgressType[] }>(GRAPHQL_ENDPOINT, QUERY, filter ? { filter } : {}).then(data => data.listDailyProgresses),
   });
 }

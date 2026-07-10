@@ -23,6 +23,6 @@ export const listQuizQuestionsKeys = {
 export function useListQuizQuestions(filter?: any) {
   return useQuery({
     queryKey: filter ? listQuizQuestionsKeys.filtered(filter) : listQuizQuestionsKeys.all,
-    queryFn: () => request<{ listQuizQuestions: ResponseType[] }>(GRAPHQL_ENDPOINT, QUERY, { filter }).then(data => data.listQuizQuestions),
+    queryFn: () => request<{ listQuizQuestions: ResponseType[] }>(GRAPHQL_ENDPOINT, QUERY, filter ? { filter } : {}).then(data => data.listQuizQuestions),
   });
 }

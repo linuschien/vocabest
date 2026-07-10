@@ -23,6 +23,6 @@ export const listUsersKeys = {
 export function useListUsers(filter?: any) {
   return useQuery({
     queryKey: filter ? listUsersKeys.filtered(filter) : listUsersKeys.all,
-    queryFn: () => request<{ listUsers: ResponseType[] }>(GRAPHQL_ENDPOINT, QUERY, { filter }).then(data => data.listUsers),
+    queryFn: () => request<{ listUsers: ResponseType[] }>(GRAPHQL_ENDPOINT, QUERY, filter ? { filter } : {}).then(data => data.listUsers),
   });
 }
