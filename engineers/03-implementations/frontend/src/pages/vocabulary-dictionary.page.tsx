@@ -27,10 +27,8 @@ export default function VocabularyDictionaryPage() {
       // Otherwise (e.g., from search button), reset to page 1.
       const page = overridePage !== undefined ? overridePage : 1;
       
-      // Ensure the store is synced if we reset to page 1
-      if (overridePage === undefined) {
-        store.set('/form/page', 1);
-      }
+      // Always ensure the store is synced with the current page we are fetching
+      store.set('/form/page', page);
       
       const filter: any = {
         page: page - 1,

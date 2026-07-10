@@ -7,15 +7,20 @@ export default function DataTable({ element, children, emit, on }: any) {
   const navigate = useNavigate();
   const { id, label, columns, data, rowActions, pageSize = 10, totalElements: totalElementsProp, currentPage: currentPageProp } = element?.props ?? {};
   
-  const bindStateValue = useStateValue(data?.$bindState);
-  const totalElementsBindValue = useStateValue(totalElementsProp?.$bindState);
-  const boundCurrentPage = useStateValue(currentPageProp?.$bindState);
+  // If the library auto-resolves the binding, the prop itself will be the value instead of the {$bindState} object.
+  const isAutoResolvedCurrentPage = typeof currentPageProp === 'number';
+  const boundCurrentPagePath = currentPageProp?.$bindState;
+  const boundCurrentPageValue = useStateValue(boundCurrentPagePath);
   
+  const resolvedCurrentPage = isAutoResolvedCurrentPage 
+    ? currentPageProp 
+    : (boundCurrentPageValue !== undefined ? boundCurrentPageValue : (boundCurrentPagePath ? store.get(boundCurrentPagePath) : undefined));
+
   const [localCurrentPage, setLocalCurrentPage] = useState(1);
   const [inputPage, setInputPage] = useState('1');
   
-  const isControlledPage = boundCurrentPage !== undefined;
-  const actualCurrentPage = isControlledPage ? (Number(boundCurrentPage) || 1) : localCurrentPage;
+  const isControlledPage = resolvedCurrentPage !== undefined;
+  const actualCurrentPage = isControlledPage ? (Number(resolvedCurrentPage) || 1) : localCurrentPage;
   
   useEffect(() => {
     setInputPage(actualCurrentPage.toString());
@@ -23,11 +28,23 @@ export default function DataTable({ element, children, emit, on }: any) {
   
   // Resolve data via store binding
   let rows: any[] = [];
+  const bindStateValue = useStateValue(data?.$bindState);
   if (data && data.$bindState) {
     rows = (bindStateValue as any[]) || [];
   } else if (Array.isArray(data)) {
     rows = data;
   }
+
+  // Resolve total elements
+  const isAutoResolvedTotalElements = typeof totalElementsProp === 'number';
+  const totalElementsPath = totalElementsProp?.$bindState;
+  const totalElementsBindValue = useStateValue(totalElementsPath);
+  
+  const resolvedTotalElements = isAutoResolvedTotalElements
+    ? totalElementsProp
+    : (totalElementsBindValue !== undefined 
+        ? Number(totalElementsBindValue) 
+        : (totalElementsPath ? Number(store.get(totalElementsPath)) : rows.length));
 
   const userRole = store.get('/data/user/role');
   const visibleActions = rowActions?.filter((action: any) => !(action.adminOnly && userRole !== 'ADMIN')) || [];
@@ -55,16 +72,6 @@ export default function DataTable({ element, children, emit, on }: any) {
   };
 
   const isServerSide = totalElementsProp !== undefined;
-  
-  let resolvedTotalElements = 0;
-  if (isServerSide) {
-    if (typeof totalElementsProp === 'number') {
-      resolvedTotalElements = totalElementsProp;
-    } else if (totalElementsBindValue !== undefined) {
-      resolvedTotalElements = totalElementsBindValue as number;
-    }
-  }
-
   const totalElements = isServerSide ? resolvedTotalElements : rows.length;
 
   const totalPages = Math.max(1, Math.ceil(totalElements / pageSize));
