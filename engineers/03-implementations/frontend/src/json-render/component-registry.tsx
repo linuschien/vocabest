@@ -70,4 +70,10 @@ export const componentRegistry: Record<string, ComponentType<any>> = {
   'span': ({ element, children }: any) => (
     <span className={element?.props?.className} id={element?.props?.id}>{children}</span>
   ),
+  'Text': ({ element, children }: any) => {
+    const text = element?.props?.text;
+    const resolvedText = typeof text === 'object' && text.$state ? undefined : text; // json-render handles $state binding to props natively if we use the right key
+    // Actually, json-render automatically resolves $state inside element.props.
+    return <span className={element?.props?.className} id={element?.props?.id}>{element?.props?.text || children}</span>;
+  },
 };

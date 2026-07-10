@@ -36,23 +36,23 @@ export default function BehaviorProvider({ children }: { children: React.ReactNo
             if (mappedPayload.targetLevel === '國中2000單字') mappedPayload.targetLevel = 'JUNIOR_HIGH';
             if (mappedPayload.targetLevel === '高中7000單字') mappedPayload.targetLevel = 'SENIOR_HIGH';
             
-            await onboardUser.mutateAsync({ data: mappedPayload });
+            await onboardUser.mutateAsync(mappedPayload);
             toast.success('Onboarding successful!');
             store.set('/modals/onboarding-modal', false);
           } else if (ref === 'createWordBank') {
-            await createWordBank.mutateAsync({ data: payload });
+            await createWordBank.mutateAsync(payload);
             toast.success('Word created successfully.');
           } else if (ref === 'deleteWordBank') {
             await deleteWordBank.mutateAsync({ id: payload.id });
             toast.success('Word deleted successfully.');
           } else if (ref === 'createQuizQuestion') {
-            await createQuizQuestion.mutateAsync({ data: payload });
+            await createQuizQuestion.mutateAsync(payload);
             toast.success('Question created successfully.');
           } else if (ref === 'deleteQuizQuestion') {
-            await deleteQuizQuestion.mutateAsync({ id: payload.id });
+            await deleteQuizQuestion.mutateAsync({ id: payload.id, wordBankId: payload.wordBankId });
             toast.success('Question deleted successfully.');
           } else if (ref === 'submitAnswer') {
-            await submitAnswer.mutateAsync({ data: payload });
+            await submitAnswer.mutateAsync(payload);
             toast.success('Answer submitted!');
           } else {
             console.warn(`Unmapped behavior ref: ${ref}`, payload);

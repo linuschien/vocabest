@@ -252,25 +252,30 @@
       ]
     },
     "welcome-text1": {
-      "type": "span",
+      "type": "Text",
       "props": {
-        "children": "Welcome, "
-      }
+        "text": "Hello, ",
+        "className": "inline"
+      },
+      "children": []
     },
     "welcome-text2": {
-      "type": "span",
+      "type": "Text",
       "props": {
-        "children": {
+        "text": {
           "$state": "/data/user/email"
         },
-        "className": "text-primary"
-      }
+        "className": "inline text-primary"
+      },
+      "children": []
     },
     "welcome-text3": {
-      "type": "span",
+      "type": "Text",
       "props": {
-        "children": "!"
-      }
+        "text": "!",
+        "className": "inline"
+      },
+      "children": []
     },
     "target-level-select": {
       "type": "Select",
