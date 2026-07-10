@@ -147,7 +147,7 @@ export default function DataTable({ element, children, emit, on }: any) {
                   {columns?.map((col: any) => (
                     <td 
                       key={col.field} 
-                      className="px-6 py-4 font-medium text-card-foreground truncate max-w-[150px] lg:max-w-[200px]"
+                      className="px-6 py-4 font-medium text-card-foreground whitespace-normal break-words min-w-[120px]"
                       title={row[col.field]}
                     >
                       {row[col.field]}

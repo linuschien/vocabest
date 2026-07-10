@@ -271,7 +271,7 @@
           },
           {
             "field": "difficultyLevel",
-            "label": "Difficulty Level",
+            "label": "Difficulty",
             "sortable": false
           },
           {
