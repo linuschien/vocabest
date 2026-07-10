@@ -325,7 +325,7 @@
             "action": "executeBehavior",
             "params": {
               "ref": "pageChange",
-              "payload": { "$event": "" }
+              "payload": "$event"
             }
           }
         ]

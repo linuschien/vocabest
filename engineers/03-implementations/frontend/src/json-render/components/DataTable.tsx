@@ -93,11 +93,6 @@ export default function DataTable({ element, children, emit, on }: any) {
     if (emit) {
       emit('pageChange', { page: newPage });
     }
-    // Foolproof direct invocation bypassing any schema mapping issues
-    const directAction = store.get('/actions/pageChange') as any;
-    if (directAction) {
-      directAction({ page: newPage });
-    }
   };
 
   const handlePageSubmit = (e: any) => {
