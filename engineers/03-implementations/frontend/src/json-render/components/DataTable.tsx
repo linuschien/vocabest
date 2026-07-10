@@ -57,6 +57,15 @@ export default function DataTable({ element, children, emit, on }: any) {
       navigate(action.path);
     } else if (action.type === 'modal') {
       store.set(`/modals/${action.modalId}`, true);
+    } else if (action.type === 'speak') {
+      const text = action.field ? row[action.field] : row.word;
+      if (text && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+        const utter = new SpeechSynthesisUtterance(text);
+        utter.lang = action.lang || 'en-US';
+        utter.rate = action.rate || 0.9;
+        window.speechSynthesis.speak(utter);
+      }
     }
   };
 
