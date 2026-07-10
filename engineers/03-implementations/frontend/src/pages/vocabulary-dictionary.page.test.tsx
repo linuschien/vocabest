@@ -111,4 +111,17 @@ describe('VocabularyDictionaryPage', () => {
       })
     );
   });
+
+  it('triggers search when search button is clicked', async () => {
+    const user = userEvent.setup();
+    renderPage();
+    
+    await user.click(await screen.findByRole('button', { name: /Search/i }));
+
+    expect(executeBehavior).toHaveBeenCalledWith(
+      expect.objectContaining({
+        ref: 'triggerSearch'
+      })
+    );
+  });
 });
