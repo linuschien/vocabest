@@ -38,7 +38,7 @@ export default function BehaviorProvider({ children }: { children: React.ReactNo
             
             await onboardUser.mutateAsync({ data: mappedPayload });
             toast.success('Onboarding successful!');
-            navigate('/learning-dashboard');
+            store.set('/modals/onboarding-modal', false);
           } else if (ref === 'createWordBank') {
             await createWordBank.mutateAsync({ data: payload });
             toast.success('Word created successfully.');

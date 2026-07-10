@@ -67,4 +67,7 @@ export const componentRegistry: Record<string, ComponentType<any>> = {
   'div': ({ element, children }: any) => (
     <div className={element?.props?.className} id={element?.props?.id}>{children}</div>
   ),
+  'span': ({ element, children }: any) => (
+    <span className={element?.props?.className} id={element?.props?.id}>{children}</span>
+  ),
 };

@@ -11,16 +11,13 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (!isLoading && !isError && user) {
       store.set('/data/user', user);
-      // If user is valid but id is null, they haven't been onboarded yet
-      if (user.id === null && location.pathname !== '/onboarding') {
-        navigate('/onboarding');
-      } 
-      // If user is onboarded but trying to access onboarding, redirect them out
-      else if (user.id !== null && location.pathname === '/onboarding') {
-        navigate('/learning-dashboard');
+      if (user.id === null) {
+        store.set('/modals/onboarding-modal', true);
+      } else {
+        store.set('/modals/onboarding-modal', false);
       }
     }
-  }, [user, isLoading, isError, navigate, location.pathname]);
+  }, [user, isLoading, isError]);
 
   if (isLoading) {
     return (
@@ -37,10 +34,6 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
       </div>
     );
   }
-
-  // Render nothing while redirecting
-  if (user?.id === null && location.pathname !== '/onboarding') return null;
-  if (user?.id !== null && location.pathname === '/onboarding') return null;
 
   return <>{children}</>;
 }

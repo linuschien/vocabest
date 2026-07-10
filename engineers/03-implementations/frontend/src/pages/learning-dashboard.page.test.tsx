@@ -70,4 +70,24 @@ describe('LearningDashboardPage', () => {
     await user.click(await screen.findByRole('button', { name: /Admin Dashboard/i }));
     expect(navigate).toHaveBeenCalledWith(expect.objectContaining({ path: '/admin-dashboard' }));
   });
+
+  it('submits onboarding form', async () => {
+    store.set('/modals/onboarding-modal', true);
+    store.set('/form/target-level-select', '高中7000單字');
+    store.set('/form/daily-target-questions-select', '20');
+    const user = userEvent.setup();
+    renderPage();
+
+    await user.click(await screen.findByRole('button', { name: /Start Learning/i }));
+
+    expect(executeBehavior).toHaveBeenCalledWith(
+      expect.objectContaining({
+        ref: 'onboardUser',
+        payload: {
+          targetLevel: '高中7000單字',
+          dailyTargetQuestions: '20'
+        }
+      })
+    );
+  });
 });

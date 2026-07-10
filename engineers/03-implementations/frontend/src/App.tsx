@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import AuthGuard from '@/components/auth/AuthGuard';
 import BehaviorProvider from '@/json-render/BehaviorProvider';
 
@@ -8,7 +8,7 @@ import AdminDashboardPage from '@/pages/admin-dashboard.page';
 import QuizBoardPage from '@/pages/quiz-board.page';
 import ErrorReviewBoardPage from '@/pages/error-review-board.page';
 import VocabularyDictionaryPage from '@/pages/vocabulary-dictionary.page';
-import OnboardingPagePage from '@/pages/onboarding-page.page';
+
 
 function App() {
   return (
@@ -16,8 +16,7 @@ function App() {
       <AuthGuard>
         <BehaviorProvider>
           <Routes>
-            <Route path="/" element={<Navigate to="/learning-dashboard" replace />} />
-            <Route path="/onboarding" element={<OnboardingPagePage />} />
+            <Route path="/" element={<LearningDashboardPage />} />
             <Route path="/learning-dashboard" element={<LearningDashboardPage />} />
             <Route path="/admin-dashboard" element={<AdminDashboardPage />} />
             <Route path="/quiz-board" element={<QuizBoardPage />} />
