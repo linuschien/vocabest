@@ -6,9 +6,7 @@ import com.vocabest.core.adapter.out.persistence.model.ErrorEvent;
 import com.vocabest.core.adapter.out.persistence.repository.ErrorEventRepository;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 

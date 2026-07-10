@@ -7,9 +7,7 @@ import com.vocabest.core.adapter.out.persistence.model.WordBank;
 import com.vocabest.core.adapter.out.persistence.repository.WordBankRepository;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 

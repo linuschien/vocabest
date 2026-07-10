@@ -9,7 +9,7 @@ public record WordBankRequest(
     @NotBlank String partsOfSpeech,
     @NotBlank String chineseTranslation,
     @NotBlank String targetLevel,
-    @NotNull @Min(1) Integer difficultyLevel,
+    @NotNull @Min(0) Integer difficultyLevel,
     @NotNull @Min(0) Integer examFrequency
 ) {}
 

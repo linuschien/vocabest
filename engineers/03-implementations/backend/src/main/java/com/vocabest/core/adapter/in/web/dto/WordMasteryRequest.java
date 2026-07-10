@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 public record WordMasteryRequest(
     @NotBlank String wordBankId,
-    @NotNull @Min(0) Integer errorWeight,
+    @NotNull Integer errorWeight,
     LocalDateTime nextReviewDate
 ) {}
 
