@@ -12,13 +12,17 @@ export default function VocabularyDictionaryPage() {
   const { data: wordBanks, refetch } = useListWordBanks(activeFilter);
 
   useEffect(() => {
+    // Set initial form defaults if they are undefined
+    if (store.get('/form/letter-select') === undefined) store.set('/form/letter-select', 'Any');
+    if (store.get('/form/difficulty-select') === undefined) store.set('/form/difficulty-select', 'Any');
+
     // Register the search trigger action in the global store.
     // This allows BehaviorProvider to invoke it when the "Search" button is clicked.
-    store.set('/actions/triggerSearch', () => {
+    store.set('/actions/triggerSearch', (overridePage?: number) => {
       const searchField = store.get('/form/search-field');
       const letterSelect = store.get('/form/letter-select');
       const difficultySelect = store.get('/form/difficulty-select');
-      const page = Number(store.get('/form/page') || 1);
+      const page = overridePage || Number(store.get('/form/page') || 1);
 
       const filter: any = {
         page: page - 1,
@@ -29,9 +33,6 @@ export default function VocabularyDictionaryPage() {
       if (difficultySelect && difficultySelect !== "Any") filter.difficultyLevel = parseInt(difficultySelect as string, 10);
       
       setActiveFilter(filter);
-      
-      // Force React Query to fetch the new filter immediately
-      setTimeout(() => refetch(), 0);
     });
 
     store.set('/actions/clearSearch', () => {
@@ -40,14 +41,15 @@ export default function VocabularyDictionaryPage() {
       store.set('/form/difficulty-select', 'Any');
       store.set('/form/page', 1);
       
-      const trigger = store.get('/actions/triggerSearch') as () => void;
-      if (trigger) trigger();
+      const trigger = store.get('/actions/triggerSearch') as (page: number) => void;
+      if (trigger) trigger(1);
     });
 
     store.set('/actions/pageChange', (params: any) => {
-      store.set('/form/page', params?.page || 1);
-      const trigger = store.get('/actions/triggerSearch') as () => void;
-      if (trigger) trigger();
+      const newPage = params?.page || 1;
+      store.set('/form/page', newPage);
+      const trigger = store.get('/actions/triggerSearch') as (page: number) => void;
+      if (trigger) trigger(newPage);
     });
     
     // Explicitly do a first load refetch just in case React Query needs a kick

@@ -60,7 +60,7 @@ public class WordBankRepositoryCustomImpl implements WordBankRepositoryCustom {
         int offset = filter != null && filter.page() != null ? filter.page() * limit : 0;
 
         String dataSql = "SELECT * FROM word_bank" + whereClause.toString() + 
-                         " LIMIT $" + (++index) + " OFFSET $" + (++index);
+                         " ORDER BY word ASC LIMIT $" + (++index) + " OFFSET $" + (++index);
         bindings.add(limit);
         bindings.add(offset);
 
