@@ -4,3 +4,4 @@ __pycache__
 venv
 ai_cache.db
 review_quizzes.md
+generation_log.txt
