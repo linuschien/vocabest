@@ -56,14 +56,17 @@ public class UserRestController {
     }
 
     @PostMapping("/api/v1/users:onboard")
-    public Mono<ResponseEntity<UserResponse>> onboardUser(
-            @RequestHeader(value = "x-goog-authenticated-user-email", required = true) String emailHeader,
-            @RequestBody UserOnboardRequest req) {
-        String parsedEmail = emailHeader.replace("accounts.google.com:", "");
-        UserOnboardRequest updatedReq = new UserOnboardRequest(parsedEmail, req.targetLevel(), req.dailyTargetQuestions());
-        return commandService.onboardUser(updatedReq)
-                .map(this::mapToResponse)
-                .map(res -> ResponseEntity.status(HttpStatus.CREATED).body(res));
+    public Mono<ResponseEntity<UserResponse>> onboardUser(@RequestBody UserOnboardRequest req) {
+        return Mono.deferContextual(ctx -> {
+            String parsedEmail = ctx.getOrDefault("CURRENT_EMAIL", null);
+            if (parsedEmail == null) {
+                return Mono.just(ResponseEntity.status(HttpStatus.UNAUTHORIZED).<UserResponse>build());
+            }
+            UserOnboardRequest updatedReq = new UserOnboardRequest(parsedEmail, req.targetLevel(), req.dailyTargetQuestions());
+            return commandService.onboardUser(updatedReq)
+                    .map(this::mapToResponse)
+                    .map(res -> ResponseEntity.status(HttpStatus.CREATED).body(res));
+        });
     }
 
     @PostMapping("/api/v1/users/{userId}:nextQuestion")
