@@ -25,6 +25,7 @@ logging:
   level:
     org.springframework.r2dbc: DEBUG
     org.springframework.data.r2dbc: DEBUG
+    com.vocabest.core.adapter.in.web.graphql.WordBankGraphQLResolver: DEBUG
 vocabest:
   admin:
     whitelist: linus.chien@gmail.com
