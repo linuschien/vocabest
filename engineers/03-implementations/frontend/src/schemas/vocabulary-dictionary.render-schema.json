@@ -317,18 +317,6 @@
         "data": {
           "$bindState": "/data/listWordBanks"
         }
-      },
-      "children": [],
-      "on": {
-        "pageChange": [
-          {
-            "action": "executeBehavior",
-            "params": {
-              "ref": "pageChange",
-              "payload": "$event"
-            }
-          }
-        ]
       }
     },
     "create-wordbank-modal": {

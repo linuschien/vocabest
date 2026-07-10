@@ -125,4 +125,17 @@ describe('VocabularyDictionaryPage', () => {
       })
     );
   });
+
+  it('triggers pageChange when pagination next is clicked', async () => {
+    const user = userEvent.setup();
+    store.set('/data/listWordBanksTotal', 25);
+    renderPage();
+    
+    // There are 2 "Next" buttons (mobile and desktop variants in pagination), find the first one
+    const nextButtons = await screen.findAllByRole('button', { name: /Next/i });
+    await user.click(nextButtons[0]);
+
+    // Since we use foolproof direct invocation, we verify the store state directly
+    expect(store.get('/form/page')).toBe(2);
+  });
 });
