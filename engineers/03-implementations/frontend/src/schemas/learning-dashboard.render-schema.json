@@ -254,9 +254,8 @@
     "welcome-text1": {
       "type": "span",
       "props": {
-        "children": "Welcome,"
-      },
-      "children": []
+        "children": "Welcome, "
+      }
     },
     "welcome-text2": {
       "type": "span",
@@ -265,15 +264,13 @@
           "$state": "/data/user/email"
         },
         "className": "text-primary"
-      },
-      "children": []
+      }
     },
     "welcome-text3": {
       "type": "span",
       "props": {
         "children": "!"
-      },
-      "children": []
+      }
     },
     "target-level-select": {
       "type": "Select",
