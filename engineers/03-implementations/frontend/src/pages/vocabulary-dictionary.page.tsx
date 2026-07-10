@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { Renderer, useStateStore } from '@json-render/react';
+import React, { useEffect, useState, useRef } from 'react';
+import { Renderer, useStateStore, useStateValue } from '@json-render/react';
 import { componentRegistry } from '@/json-render/component-registry';
 import spec from '@/schemas/vocabulary-dictionary.render-schema.json';
 import { useListWordBanks } from '@/hooks/use-list-word-banks';
@@ -62,18 +62,26 @@ export default function VocabularyDictionaryPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // IMPORTANT: Empty dependency array prevents infinite loops!
 
-  const targetLevel = store.get('/data/user/targetLevel');
+  const targetLevel = useStateValue('/data/user/targetLevel');
+  const prevTargetLevelRef = useRef(targetLevel);
+  
   useEffect(() => {
-    // Whenever the user's targetLevel changes, reset page to 1 and trigger a refetch
-    // so the backend can apply the new mandatory filter from the first page.
-    store.set('/form/page', 1);
-    const trigger = store.get('/actions/triggerSearch') as (page: number) => void;
-    if (trigger) {
-      trigger(1);
-    } else {
-      refetch();
+    // Only run this if the targetLevel actually changes
+    if (targetLevel !== prevTargetLevelRef.current) {
+      prevTargetLevelRef.current = targetLevel;
+      
+      // Whenever the user's targetLevel changes, reset page to 1 and trigger a refetch
+      // so the backend can apply the new mandatory filter from the first page.
+      store.set('/form/page', 1);
+      const trigger = store.get('/actions/triggerSearch') as (page: number) => void;
+      if (trigger) {
+        trigger(1);
+      } else {
+        refetch();
+      }
     }
-  }, [targetLevel, refetch]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [targetLevel]);
 
   useEffect(() => {
     if (wordBanks && (wordBanks as any).content) {
