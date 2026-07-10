@@ -257,7 +257,8 @@
           {
             "field": "partsOfSpeech",
             "label": "Parts of Speech",
-            "sortable": false
+            "sortable": false,
+            "widthClass": "w-40"
           },
           {
             "field": "chineseTranslation",
@@ -267,17 +268,20 @@
           {
             "field": "targetLevel",
             "label": "Target Level",
-            "sortable": false
+            "sortable": false,
+            "widthClass": "w-40"
           },
           {
             "field": "difficultyLevel",
             "label": "Difficulty",
-            "sortable": false
+            "sortable": false,
+            "widthClass": "w-32"
           },
           {
             "field": "examFrequency",
             "label": "Exam Frequency",
-            "sortable": false
+            "sortable": false,
+            "widthClass": "w-40"
           }
         ],
         "rowActions": [

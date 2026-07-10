@@ -116,7 +116,7 @@ export default function DataTable({ element, children, emit, on }: any) {
               {columns?.map((col: any) => (
                 <th 
                   key={col.field} 
-                  className={`px-6 py-3 select-none truncate ${col.sortable ? 'cursor-pointer hover:bg-muted/80' : ''}`}
+                  className={`px-6 py-3 select-none truncate ${col.sortable ? 'cursor-pointer hover:bg-muted/80' : ''} ${col.widthClass || ''}`}
                   onClick={() => handleSort(col.field, col.sortable)}
                   title={col.label}
                 >
