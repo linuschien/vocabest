@@ -17,8 +17,8 @@ export default function GlobalLayout() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col">
-      <header className="w-full bg-white shadow-sm border-b px-8 py-4 flex justify-between items-center z-10 sticky top-0">
+    <div className="min-h-screen bg-background text-foreground flex flex-col">
+      <header className="w-full bg-card shadow-sm border-b border-border px-8 py-4 flex justify-between items-center z-10 sticky top-0">
         <h1 
           className="text-xl font-bold text-primary cursor-pointer"
           onClick={() => navigate('/learning-dashboard')}
