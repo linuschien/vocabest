@@ -27,6 +27,27 @@ export default function BehaviorProvider({ children }: { children: React.ReactNo
   const deleteQuizQuestion = useDeleteQuizQuestion();
   const submitAnswer = useSubmitAnswer();
 
+  // Intercept modal closing to automatically trigger "Next Question"
+  React.useEffect(() => {
+    return store.subscribe(() => {
+      const isOpen = store.get('/modals/explanation-modal');
+      const lastAnswerResult = store.get('/data/lastAnswerResult');
+      // If modal was closed (by clicking X or outside) AND result is still present
+      if (!isOpen && lastAnswerResult) {
+        // Clear result to prevent re-triggering
+        store.set('/data/lastAnswerResult', null);
+        
+        if (window.location.pathname.includes('error-review')) {
+          const loadNextError = store.get('/actions/loadNextErrorQuestion') as any;
+          if (loadNextError) loadNextError();
+        } else {
+          const loadNext = store.get('/actions/loadNextQuestion') as any;
+          if (loadNext) loadNext();
+        }
+      }
+    });
+  }, []);
+
   const handlers = useMemo(() => {
     return {
       navigate: (params: any) => {
@@ -77,12 +98,15 @@ export default function BehaviorProvider({ children }: { children: React.ReactNo
           } else if (ref === 'submitAnswer') {
             const user = store.get('/data/user') as any;
             const result = await submitAnswer.mutateAsync({ ...payload, userId: user?.id }) as any;
+            
+            // Open explanation modal FIRST to prevent the subscriber from firing prematurely
+            store.set('/modals/explanation-modal', true);
+            
             // Save result to store for the explanation modal
             store.set('/data/lastAnswerResult', result);
             store.set('/data/lastAnswerResultLabel', result?.isCorrect ? '✅ 答對了！' : '❌ 答錯了');
             store.set('/data/lastAnswerCorrectLabel', result?.isCorrect ? '' : `正確答案：${result?.correctAnswer}`);
-            // Open explanation modal
-            store.set('/modals/explanation-modal', true);
+            
             // Refresh user data (learningStreak), daily progress, and error review count in background
             // Precise invalidation: do NOT invalidate getNextQuestion to avoid breaking the modal
             queryClient.invalidateQueries({ queryKey: whoamiKeys.all });
@@ -104,11 +128,13 @@ export default function BehaviorProvider({ children }: { children: React.ReactNo
             if (onPageChange) onPageChange(payload);
           } else if (ref === 'loadNextQuestion') {
             // Close explanation modal and load next question (quiz board)
+            store.set('/data/lastAnswerResult', null); // Prevent subscriber trigger
             store.set('/modals/explanation-modal', false);
             const loadNext = store.get('/actions/loadNextQuestion') as any;
             if (loadNext) loadNext();
           } else if (ref === 'loadNextErrorQuestion') {
             // Close explanation modal and load next ERROR REVIEW question (separate path)
+            store.set('/data/lastAnswerResult', null); // Prevent subscriber trigger
             store.set('/modals/explanation-modal', false);
             const loadNextError = store.get('/actions/loadNextErrorQuestion') as any;
             if (loadNextError) loadNextError();

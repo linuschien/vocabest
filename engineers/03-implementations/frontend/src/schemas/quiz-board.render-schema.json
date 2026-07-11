@@ -161,7 +161,6 @@
         "label": "作答結果",
         "title": { "$state": "/data/lastAnswerResult/isCorrect" },
         "description": null,
-        "showCloseButton": false,
         "openPath": "/modals/explanation-modal"
       },
       "children": [
@@ -177,7 +176,7 @@
       "type": "Text",
       "props": {
         "id": "result-badge",
-        "className": "explanation-modal-marker text-center text-2xl font-bold",
+        "className": "text-center text-2xl font-bold",
         "text": { "$state": "/data/lastAnswerResultLabel" }
       },
       "children": []
