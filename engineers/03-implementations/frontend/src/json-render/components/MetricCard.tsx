@@ -11,6 +11,11 @@ export default function MetricCard({ element }: any) {
 
   if (variant === 'progress') {
     const pct = goal > 0 ? Math.min(100, Math.round((current / goal) * 100)) : 0;
+    
+    // 計算 HSL 值：從藍色 (Hue ~220) 經過綠、黃、橙，漸變到紅色 (Hue 0)
+    // 0% = 藍色 (220), 50% = 綠色 (110), 100% = 紅色 (0)
+    const hue = Math.round(220 - (pct / 100) * 220);
+
     return (
       <div className="bg-card text-card-foreground rounded-lg border shadow-sm p-6 flex flex-col gap-3" id={id}>
         <h3 className="text-sm font-medium text-muted-foreground">{label}</h3>
@@ -20,8 +25,11 @@ export default function MetricCard({ element }: any) {
         </div>
         <div className="w-full bg-muted rounded-full h-2.5">
           <div
-            className="bg-primary h-2.5 rounded-full transition-all duration-500"
-            style={{ width: `${pct}%` }}
+            className="h-2.5 rounded-full transition-all duration-500"
+            style={{ 
+              width: `${pct}%`,
+              backgroundColor: `hsl(${hue}, 85%, 55%)`
+            }}
             role="progressbar"
             aria-valuenow={current}
             aria-valuemin={0}
