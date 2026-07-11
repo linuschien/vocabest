@@ -217,7 +217,7 @@
           {
             "action": "executeBehavior",
             "params": {
-              "ref": "loadNextQuestion"
+              "ref": "loadNextErrorQuestion"
             }
           }
         ]

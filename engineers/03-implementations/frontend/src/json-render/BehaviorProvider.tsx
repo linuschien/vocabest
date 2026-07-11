@@ -103,10 +103,15 @@ export default function BehaviorProvider({ children }: { children: React.ReactNo
             const onPageChange = store.get('/actions/pageChange') as any;
             if (onPageChange) onPageChange(payload);
           } else if (ref === 'loadNextQuestion') {
-            // Close explanation modal and load next question
+            // Close explanation modal and load next question (quiz board)
             store.set('/modals/explanation-modal', false);
             const loadNext = store.get('/actions/loadNextQuestion') as any;
             if (loadNext) loadNext();
+          } else if (ref === 'loadNextErrorQuestion') {
+            // Close explanation modal and load next ERROR REVIEW question (separate path)
+            store.set('/modals/explanation-modal', false);
+            const loadNextError = store.get('/actions/loadNextErrorQuestion') as any;
+            if (loadNextError) loadNextError();
           } else {
             console.warn(`Unmapped behavior ref: ${ref}`, payload);
           }

@@ -45,7 +45,7 @@ export default function ErrorReviewBoardPage() {
   const loadNextRef = useRef(loadNext);
   loadNextRef.current = loadNext;
   useEffect(() => {
-    store.set('/actions/loadNextQuestion', () => loadNextRef.current());
+    store.set('/actions/loadNextErrorQuestion', () => loadNextRef.current());
   // Run only once on mount
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
