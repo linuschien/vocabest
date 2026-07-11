@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 import { JSONUIProvider } from '@json-render/react';
 import { componentRegistry } from '@/json-render/component-registry';
 import { store } from '@/store';
@@ -10,10 +11,13 @@ import { useCreateQuizQuestion } from '@/hooks/use-create-quiz-question';
 import { useDeleteQuizQuestion } from '@/hooks/use-delete-quiz-question';
 import { useSubmitAnswer } from '@/hooks/use-submit-answer';
 import { useUpdateUser } from '@/hooks/use-update-user';
+import { whoamiKeys } from '@/hooks/use-whoami';
+import { listDailyProgressesKeys } from '@/hooks/use-list-daily-progresses';
 import { toast } from 'sonner';
 
 export default function BehaviorProvider({ children }: { children: React.ReactNode }) {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const onboardUser = useOnboardUser();
   const updateUser = useUpdateUser();
   const createWordBank = useCreateWordBank();
@@ -78,6 +82,10 @@ export default function BehaviorProvider({ children }: { children: React.ReactNo
             store.set('/data/lastAnswerCorrectLabel', result?.isCorrect ? '' : `正確答案：${result?.correctAnswer}`);
             // Open explanation modal
             store.set('/modals/explanation-modal', true);
+            // Refresh user data (learningStreak) and daily progress in background
+            // Precise invalidation: do NOT invalidate getNextQuestion to avoid breaking the modal
+            queryClient.invalidateQueries({ queryKey: whoamiKeys.all });
+            queryClient.invalidateQueries({ queryKey: listDailyProgressesKeys.all });
           } else if (ref === 'triggerSearch') {
             const trigger = store.get('/actions/triggerSearch') as any;
             if (trigger) trigger(payload);
