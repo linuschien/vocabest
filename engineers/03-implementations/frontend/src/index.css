@@ -100,6 +100,12 @@
   .dark .bg-card {
     border-width: 2px;
   }
+
+  /* 強制隱藏含有特定標籤的 Dialog 裡面的 X 關閉按鈕 */
+  [data-slot="dialog-content"]:has(.explanation-modal-marker) [data-slot="dialog-close"],
+  div[role="dialog"]:has(.explanation-modal-marker) button.absolute.right-4.top-4 {
+    display: none !important;
+  }
 }
 
 /* Kahoot Style Buttons */
@@ -113,7 +119,13 @@
     border: none !important;
     transition: all 0.1s ease-in-out;
   }
-  .kahoot-btn:active {
+  .kahoot-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed !important;
+    transform: none !important;
+    box-shadow: none !important;
+  }
+  .kahoot-btn:not(:disabled):active {
     box-shadow: none !important;
     transform: translateY(4px);
   }

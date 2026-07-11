@@ -107,6 +107,7 @@ export const componentRegistry: Record<string, ComponentType<any>> = {
     <button 
       className={element?.props?.className} 
       id={element?.props?.id}
+      disabled={!!element?.props?.disabled}
       onClick={() => emit && emit('press')}
     >
       {element?.props?.label || children}
