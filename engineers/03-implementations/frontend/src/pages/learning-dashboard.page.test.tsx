@@ -39,14 +39,14 @@ beforeEach(() => {
 describe('LearningDashboardPage', () => {
   it('renders page heading', async () => {
     renderPage();
-    expect(await screen.findByRole('button', { name: /Start Today's Task/i })).toBeInTheDocument();
+    expect(await screen.findByRole('button', { name: /開始今日任務/i })).toBeInTheDocument();
   });
 
   it('navigates to quiz board', async () => {
     const user = userEvent.setup();
     renderPage();
 
-    await user.click(await screen.findByRole('button', { name: /Start Today's Task/i }));
+    await user.click(await screen.findByRole('button', { name: /開始今日任務/i }));
     expect(navigate).toHaveBeenCalledWith(expect.objectContaining({ path: '/quiz-board' }));
   });
 
@@ -54,7 +54,7 @@ describe('LearningDashboardPage', () => {
     const user = userEvent.setup();
     renderPage();
 
-    await user.click(await screen.findByRole('button', { name: /Review Errors/i }));
+    await user.click(await screen.findByRole('button', { name: /弱點特訓/i }));
     expect(navigate).toHaveBeenCalledWith(expect.objectContaining({ path: '/error-review-board' }));
   });
 
@@ -62,7 +62,7 @@ describe('LearningDashboardPage', () => {
     const user = userEvent.setup();
     renderPage();
 
-    await user.click(await screen.findByRole('button', { name: /Vocabulary Dictionary/i }));
+    await user.click(await screen.findByRole('button', { name: /單字卷軸/i }));
     expect(navigate).toHaveBeenCalledWith(expect.objectContaining({ path: '/vocabulary-dictionary' }));
   });
 
