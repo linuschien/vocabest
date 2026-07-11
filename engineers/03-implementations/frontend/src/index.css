@@ -1,6 +1,6 @@
 @import "tailwindcss";
 @source "../node_modules/@json-render/shadcn/dist/**/*.{js,mjs}";
-
+@source "./schemas";
 @theme {
   --color-border: hsl(var(--border));
   --color-input: hsl(var(--input));
@@ -99,5 +99,62 @@
   /* 移除陰影，改為加粗卡片邊框 */
   .dark .bg-card {
     border-width: 2px;
+  }
+}
+
+/* Kahoot Style Buttons */
+@layer components {
+  .kahoot-btn {
+    width: 100%;
+    min-height: 5rem;
+    font-size: 1.25rem;
+    font-weight: bold;
+    color: white !important;
+    border: none !important;
+    transition: all 0.1s ease-in-out;
+  }
+  .kahoot-btn:active {
+    box-shadow: none !important;
+    transform: translateY(4px);
+  }
+
+  .kahoot-btn-0 {
+    background-color: #e21b3c !important;
+    box-shadow: 0 4px 0 0 #b5132d !important;
+  }
+  .kahoot-btn-0:hover {
+    background-color: #c91734 !important;
+    box-shadow: 0 2px 0 0 #b5132d !important;
+    transform: translateY(2px);
+  }
+
+  .kahoot-btn-1 {
+    background-color: #1368ce !important;
+    box-shadow: 0 4px 0 0 #0c4284 !important;
+  }
+  .kahoot-btn-1:hover {
+    background-color: #115ab2 !important;
+    box-shadow: 0 2px 0 0 #0c4284 !important;
+    transform: translateY(2px);
+  }
+
+  .kahoot-btn-2 {
+    background-color: #d89e00 !important;
+    box-shadow: 0 4px 0 0 #997000 !important;
+  }
+  .kahoot-btn-2:hover {
+    background-color: #c28e00 !important;
+    box-shadow: 0 2px 0 0 #997000 !important;
+    transform: translateY(2px);
+  }
+
+  .kahoot-btn-3 {
+    background-color: #26890c !important;
+    box-shadow: 0 4px 0 0 #185c07 !important;
+  }
+  .kahoot-btn-3:hover {
+    background-color: #217a0a !important;
+    box-shadow: 0 2px 0 0 #185c07 !important;
+    transform: translateY(2px);
   }
 }

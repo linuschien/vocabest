@@ -59,11 +59,11 @@
       "children": ["option-0", "option-1", "option-2", "option-3"]
     },
     "option-0": {
-      "type": "Button",
+      "type": "button",
       "props": {
         "id": "option-0",
         "label": { "$state": "/data/shuffledOptions/0" },
-        "variant": "outline"
+        "className": "kahoot-btn kahoot-btn-0"
       },
       "children": [],
       "on": {
@@ -82,11 +82,11 @@
       }
     },
     "option-1": {
-      "type": "Button",
+      "type": "button",
       "props": {
         "id": "option-1",
         "label": { "$state": "/data/shuffledOptions/1" },
-        "variant": "outline"
+        "className": "kahoot-btn kahoot-btn-1"
       },
       "children": [],
       "on": {
@@ -105,11 +105,11 @@
       }
     },
     "option-2": {
-      "type": "Button",
+      "type": "button",
       "props": {
         "id": "option-2",
         "label": { "$state": "/data/shuffledOptions/2" },
-        "variant": "outline"
+        "className": "kahoot-btn kahoot-btn-2"
       },
       "children": [],
       "on": {
@@ -128,11 +128,11 @@
       }
     },
     "option-3": {
-      "type": "Button",
+      "type": "button",
       "props": {
         "id": "option-3",
         "label": { "$state": "/data/shuffledOptions/3" },
-        "variant": "outline"
+        "className": "kahoot-btn kahoot-btn-3"
       },
       "children": [],
       "on": {
