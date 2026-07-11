@@ -10,6 +10,7 @@ import Breadcrumb from './components/Breadcrumb';
 import AlertDialog from './components/AlertDialog';
 import MetricCard from './components/MetricCard';
 import UserMenuDropdown from './components/UserMenuDropdown';
+import ErrorReviewButton from './components/ErrorReviewButton';
 
 // ── Adapter: ComponentRenderProps → BaseComponentProps ──────────────────────
 function adapt(Comp: ComponentType<any>): ComponentType<any> {
@@ -82,12 +83,18 @@ export const componentRegistry: Record<string, ComponentType<any>> = {
     <div className="grid grid-cols-2 gap-3">{children}</div>
   ),
 
+  // Dictionary header: scroll icon + level title
+  'Container:dict-header': ({ children }) => (
+    <div className="flex items-center gap-3 pb-2 border-b border-border">{children}</div>
+  ),
+
   // ── 3. Custom composites (imported from src/json-render/components/) ─────
   'DataTable':   DataTable,    // columns/data/row-actions
   'Breadcrumb':  Breadcrumb,   // <nav><ol> wrapper
   'AlertDialog': AlertDialog,  // confirm dialog overlay
   'MetricCard':  MetricCard,   // KPI metric card
   'UserMenuDropdown': adapt(UserMenuDropdown),
+  'ErrorReviewButton': ErrorReviewButton, // 弱點特訓入口按鈕（含 badge）
 
   // ── 5. Native HTML passthrough ───────────────────────────────────────────
   'div': ({ element, children }: any) => (

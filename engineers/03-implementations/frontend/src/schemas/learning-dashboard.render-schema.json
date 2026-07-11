@@ -113,13 +113,10 @@
       }
     },
     "error-review-btn": {
-      "type": "Button",
+      "type": "ErrorReviewButton",
       "props": {
         "id": "error-review-btn",
-        "label": "🛡️ 弱點特訓",
-        "variant": "outline",
-        "className": "h-20 flex flex-col items-center justify-center shadow-sm",
-        "disabled": null
+        "count": { "$state": "/data/errorReviewCount" }
       },
       "children": [],
       "on": {

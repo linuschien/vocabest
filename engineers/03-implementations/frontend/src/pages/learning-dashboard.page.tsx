@@ -4,6 +4,7 @@ import { Renderer, useStateStore, useStateValue } from '@json-render/react';
 import { componentRegistry } from '@/json-render/component-registry';
 import spec from '@/schemas/learning-dashboard.render-schema.json';
 import { useListDailyProgresses } from '@/hooks/use-list-daily-progresses';
+import { useGetErrorReviewCount } from '@/hooks/use-get-error-review-count';
 
 export default function LearningDashboardPage() {
   const store = useStateStore();
@@ -14,6 +15,13 @@ export default function LearningDashboardPage() {
   const dailyTargetQuestions = useStateValue('/data/user/dailyTargetQuestions') as number | undefined;
 
   const { data: progresses } = useListDailyProgresses(userId ? { userId, date: today } : undefined);
+  const { data: errorReviewData } = useGetErrorReviewCount(userId ? { userId } : undefined);
+
+  // Write error review count to store whenever it changes
+  useEffect(() => {
+    const count = errorReviewData?.count ?? 0;
+    store.set('/data/errorReviewCount', count);
+  }, [errorReviewData, store]);
 
   useEffect(() => {
     const current = store.get('/data/todayProgress') as any;

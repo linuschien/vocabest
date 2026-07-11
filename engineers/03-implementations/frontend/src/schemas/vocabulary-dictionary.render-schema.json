@@ -8,11 +8,36 @@
         "label": "Vocabulary Dictionary"
       },
       "children": [
+        "dict-level-header",
         "filter-section",
         "word-list-section",
         "create-wordbank-modal",
         "confirm-delete-modal"
       ]
+    },
+
+    "dict-level-header": {
+      "type": "Container:dict-header",
+      "props": { "id": "dict-level-header" },
+      "children": ["dict-scroll-icon", "dict-level-title"]
+    },
+    "dict-scroll-icon": {
+      "type": "Text",
+      "props": {
+        "id": "dict-scroll-icon",
+        "className": "text-3xl",
+        "text": "📜"
+      },
+      "children": []
+    },
+    "dict-level-title": {
+      "type": "Text",
+      "props": {
+        "id": "dict-level-title",
+        "className": "text-2xl font-bold tracking-tight",
+        "text": { "$state": "/form/target-level-select" }
+      },
+      "children": []
     },
 
     "filter-section": {
@@ -269,12 +294,6 @@
             "field": "chineseTranslation",
             "label": "Chinese Translation",
             "sortable": false
-          },
-          {
-            "field": "targetLevel",
-            "label": "Target Level",
-            "sortable": false,
-            "widthClass": "w-40"
           },
           {
             "field": "difficultyLevel",

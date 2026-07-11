@@ -31,7 +31,8 @@ beforeEach(() => {
   store.set('/form', {});
   store.set('/data', {
     user: { email: 'dev@test.com' },
-    isAdmin: true
+    isAdmin: true,
+    errorReviewCount: 3, // ErrorReviewButton reads this; must be > 0 for navigation tests
   });
   vi.clearAllMocks();
 });

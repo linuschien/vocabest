@@ -6,6 +6,25 @@ import { componentRegistry } from '@/json-render/component-registry';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
 import ErrorReviewBoardPage from './error-review-board.page';
 
+// Mock hook so tests don't need real API
+vi.mock('@/hooks/use-get-next-error-question', () => ({
+  useGetNextErrorQuestion: () => ({
+    data: {
+      id: 'err-q-id-123',
+      contextualCloze: 'She ___ the book.',
+      chineseTranslation: '她閱讀了那本書。',
+      correctAnswer: 'read',
+      distractor1: 'run',
+      distractor2: 'sing',
+      distractor3: 'jump',
+      explanationRootAffix: 'read (past tense)',
+      explanationMnemonic: 'Irregular verb',
+    },
+    isLoading: false,
+    refetch: vi.fn(),
+  }),
+}));
+
 const store = createStateStore({ modals: {}, form: {}, data: {} });
 const executeBehavior = vi.fn();
 const openModal = vi.fn((p: any) => { if (p?.id) store.set(`/modals/${p.id}`, true); });
@@ -26,32 +45,37 @@ function renderPage() {
 beforeEach(() => {
   store.set('/modals', {});
   store.set('/form', {});
-  store.set('/data', {});
+  store.set('/data', { user: { id: 'user-1' } });
   vi.clearAllMocks();
 });
 
 describe('ErrorReviewBoardPage', () => {
   it('renders page heading', async () => {
     renderPage();
-    expect(await screen.findByRole('button', { name: /Submit Answer/i })).toBeInTheDocument();
+    expect(await screen.findByText('🛡️ 弱點特訓')).toBeInTheDocument();
   });
 
-  it('submits answer', async () => {
+  it('submits answer when option is clicked', async () => {
     const user = userEvent.setup();
     renderPage();
 
-    store.set('/data/activeQuestionId', 'err-q-id-123');
+    // Wait for shuffledOptions to be set in store
+    await waitFor(() => {
+      const val = store.get('/data/shuffledOptions') as any[];
+      expect(val && val.length > 0).toBe(true);
+    });
 
-    await user.type(await screen.findByPlaceholderText(/Type your answer here/i), 'orange');
-    await user.click(await screen.findByRole('button', { name: /Submit Answer/i }));
+    const shuffled = store.get('/data/shuffledOptions') as string[];
+    const btn = await screen.findByRole('button', { name: shuffled[0] });
+    await user.click(btn);
 
     expect(executeBehavior).toHaveBeenCalledWith(
       expect.objectContaining({
         ref: 'submitAnswer',
-        payload: {
+        payload: expect.objectContaining({
           questionId: 'err-q-id-123',
-          answerWord: 'orange'
-        }
+          selectedDistractor: shuffled[0],
+        }),
       })
     );
   });
