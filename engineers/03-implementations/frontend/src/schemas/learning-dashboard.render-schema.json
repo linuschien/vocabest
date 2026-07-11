@@ -29,7 +29,7 @@
       "type": "Card",
       "props": {
         "id": "progress-section",
-        "title": "Today's Progress"
+        "title": "戰績面板"
       },
       "children": [
         "progress-grid"
@@ -61,7 +61,7 @@
       "type": "MetricCard",
       "props": {
         "id": "learning-streak-metric",
-        "label": "連勝天數",
+        "label": "連續挑戰天數",
         "variant": "streak",
         "value": { "$state": "/data/user/learningStreak" }
       },
@@ -71,7 +71,7 @@
       "type": "Card",
       "props": {
         "id": "quick-start-section",
-        "title": "Quick Start"
+        "title": "出發探險"
       },
       "children": [
         "quick-start-grid"
@@ -95,7 +95,7 @@
       "type": "Button",
       "props": {
         "id": "start-daily-task-btn",
-        "label": "Start Today's Task",
+        "label": "⚔️ 開始今日任務",
         "variant": "outline",
         "className": "h-24 flex flex-col items-center justify-center text-base font-semibold shadow-sm col-span-2",
         "disabled": null
@@ -116,7 +116,7 @@
       "type": "Button",
       "props": {
         "id": "error-review-btn",
-        "label": "Review Errors",
+        "label": "🛡️ 弱點特訓",
         "variant": "outline",
         "className": "h-20 flex flex-col items-center justify-center shadow-sm",
         "disabled": null
@@ -137,7 +137,7 @@
       "type": "Button",
       "props": {
         "id": "nav-dictionary-btn",
-        "label": "Vocabulary Dictionary",
+        "label": "📜 單字卷軸",
         "variant": "outline",
         "className": "h-20 flex flex-col items-center justify-center shadow-sm",
         "disabled": null
