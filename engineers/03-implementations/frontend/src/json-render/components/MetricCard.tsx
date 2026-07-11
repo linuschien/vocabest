@@ -43,10 +43,11 @@ export default function MetricCard({ element }: any) {
   }
 
   if (variant === 'streak') {
-    // 依據冪函數 (Power 0.35) 計算火焰，讓區間更平緩適中：
-    // 1~6天=1把, 7~50天=2把, 51~159天=3把, 160~364天=4把, 365天以上=5把
+    // 依據平方根函數 (Power 0.5) 計算火焰，最多 10 把火：
+    // 第 1 把: 1 天, 第 2 把: 5 天, 第 3 把: 18 天, 第 4 把: 41 天, 第 5 把: 72 天...
+    // 第 10 把: 365 天
     const fireCount = value > 0 
-      ? Math.min(5, Math.floor(Math.pow(value / 365, 0.35) * 4) + 1)
+      ? Math.min(10, Math.floor(Math.pow(value / 365, 0.5) * 9) + 1)
       : 0;
 
     const fires = fireCount > 0 
@@ -58,8 +59,8 @@ export default function MetricCard({ element }: any) {
     return (
       <div className="bg-card text-card-foreground rounded-lg border shadow-sm p-6 flex flex-col justify-center" id={id}>
         <h3 className="text-sm font-medium text-muted-foreground mb-1">{label}</h3>
-        <div className="flex items-center gap-2">
-          <div className="flex">{fires}</div>
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap">{fires}</div>
           <span className="text-3xl font-bold ml-1">{value}</span>
           <span className="text-sm text-muted-foreground self-end mb-1">天</span>
         </div>
