@@ -3,12 +3,16 @@ import { useQuery } from '@tanstack/react-query';
 import { api } from '@/lib/api-client';
 
 export const getNextQuestionKeys = {
-  all: ['getNextQuestion'] as const,
+  all: (userId: string) => ['getNextQuestion', userId] as const,
 };
 
-export function useGetNextQuestion(params?: any) {
+export function useGetNextQuestion(params?: { userId: string }) {
   return useQuery({
-    queryKey: getNextQuestionKeys.all,
-    queryFn: () => api.post<any>('/users/' + params?.userId + ':nextQuestion'),
+    queryKey: params ? getNextQuestionKeys.all(params.userId) : ['getNextQuestion'],
+    queryFn: () => api.post<any>('/users/' + params!.userId + ':nextQuestion'),
+    enabled: !!params?.userId,
+    // Do NOT auto-refetch; we manually refetch after each answer
+    refetchOnWindowFocus: false,
+    staleTime: Infinity,
   });
 }

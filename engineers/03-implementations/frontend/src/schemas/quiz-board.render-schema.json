@@ -1,35 +1,46 @@
 {
-  "root": "quiz-container",
+  "root": "quiz-page-wrapper",
   "elements": {
-    "quiz-container": {
-      "type": "Container:page",
-      "props": {
-        "id": "quiz-container",
-        "label": "Quiz"
-      },
+    "quiz-page-wrapper": {
+      "type": "Container:quiz-page",
+      "props": { "id": "quiz-page-wrapper" },
+      "children": ["quiz-card"]
+    },
+    "quiz-card": {
+      "type": "Container:quiz-card",
+      "props": { "id": "quiz-card" },
       "children": [
+        "quiz-header",
         "question-section",
-        "answer-input",
-        "submit-answer-btn",
+        "options-section",
         "explanation-modal"
       ]
     },
-    "question-section": {
-      "type": "div",
+    "quiz-header": {
+      "type": "Container:quiz-header",
+      "props": { "id": "quiz-header" },
+      "children": ["quiz-title"]
+    },
+    "quiz-title": {
+      "type": "Text",
       "props": {
-        "id": "question-section",
-        "label": "Question"
+        "id": "quiz-title",
+        "className": "text-lg font-semibold text-primary",
+        "text": "情境克漏字測驗"
       },
-      "children": [
-        "chinese-translation",
-        "contextual-cloze"
-      ]
+      "children": []
+    },
+    "question-section": {
+      "type": "Container:question-block",
+      "props": { "id": "question-section" },
+      "children": ["chinese-translation", "contextual-cloze"]
     },
     "chinese-translation": {
       "type": "Text",
       "props": {
         "id": "chinese-translation",
-        "label": "Chinese Translation"
+        "className": "text-base text-muted-foreground leading-relaxed",
+        "text": { "$state": "/data/activeQuestion/chineseTranslation" }
       },
       "children": []
     },
@@ -37,29 +48,22 @@
       "type": "Text",
       "props": {
         "id": "contextual-cloze",
-        "label": "Contextual Cloze"
+        "className": "text-xl font-medium leading-relaxed tracking-wide",
+        "text": { "$state": "/data/activeQuestion/contextualCloze" }
       },
       "children": []
     },
-    "answer-input": {
-      "type": "Input",
-      "props": {
-        "id": "answer-input",
-        "name": "answerWord",
-        "label": "Your Answer",
-        "placeholder": "Type your answer here...",
-        "value": {
-          "$bindState": "/form/answer-input"
-        }
-      },
-      "children": []
+    "options-section": {
+      "type": "Container:options-grid",
+      "props": { "id": "options-section" },
+      "children": ["option-0", "option-1", "option-2", "option-3"]
     },
-    "submit-answer-btn": {
+    "option-0": {
       "type": "Button",
       "props": {
-        "id": "submit-answer-btn",
-        "label": "Submit Answer",
-        "variant": "primary"
+        "id": "option-0",
+        "label": { "$state": "/data/shuffledOptions/0" },
+        "variant": "outline"
       },
       "children": [],
       "on": {
@@ -69,12 +73,77 @@
             "params": {
               "ref": "submitAnswer",
               "payload": {
-                "questionId": {
-                  "$state": "/data/activeQuestionId"
-                },
-                "answerWord": {
-                  "$state": "/form/answer-input"
-                }
+                "questionId": { "$state": "/data/activeQuestionId" },
+                "selectedDistractor": { "$state": "/data/shuffledOptions/0" }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "option-1": {
+      "type": "Button",
+      "props": {
+        "id": "option-1",
+        "label": { "$state": "/data/shuffledOptions/1" },
+        "variant": "outline"
+      },
+      "children": [],
+      "on": {
+        "press": [
+          {
+            "action": "executeBehavior",
+            "params": {
+              "ref": "submitAnswer",
+              "payload": {
+                "questionId": { "$state": "/data/activeQuestionId" },
+                "selectedDistractor": { "$state": "/data/shuffledOptions/1" }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "option-2": {
+      "type": "Button",
+      "props": {
+        "id": "option-2",
+        "label": { "$state": "/data/shuffledOptions/2" },
+        "variant": "outline"
+      },
+      "children": [],
+      "on": {
+        "press": [
+          {
+            "action": "executeBehavior",
+            "params": {
+              "ref": "submitAnswer",
+              "payload": {
+                "questionId": { "$state": "/data/activeQuestionId" },
+                "selectedDistractor": { "$state": "/data/shuffledOptions/2" }
+              }
+            }
+          }
+        ]
+      }
+    },
+    "option-3": {
+      "type": "Button",
+      "props": {
+        "id": "option-3",
+        "label": { "$state": "/data/shuffledOptions/3" },
+        "variant": "outline"
+      },
+      "children": [],
+      "on": {
+        "press": [
+          {
+            "action": "executeBehavior",
+            "params": {
+              "ref": "submitAnswer",
+              "payload": {
+                "questionId": { "$state": "/data/activeQuestionId" },
+                "selectedDistractor": { "$state": "/data/shuffledOptions/3" }
               }
             }
           }
@@ -85,24 +154,53 @@
       "type": "Dialog",
       "props": {
         "id": "explanation-modal",
-        "label": "Explanation",
-        "title": "Explanation",
+        "label": "作答結果",
+        "title": { "$state": "/data/lastAnswerResult/isCorrect" },
         "description": null,
         "openPath": "/modals/explanation-modal"
       },
       "children": [
-        "explanation-content",
+        "result-badge",
+        "correct-answer-text",
+        "explanation-root-affix",
+        "explanation-mnemonic",
         "next-question-btn"
       ],
-      "visible": {
-        "$state": "/modals/explanation-modal"
-      }
+      "visible": { "$state": "/modals/explanation-modal" }
     },
-    "explanation-content": {
+    "result-badge": {
       "type": "Text",
       "props": {
-        "id": "explanation-content",
-        "label": "Explanation Root/Mnemonic"
+        "id": "result-badge",
+        "className": "text-center text-2xl font-bold",
+        "text": { "$state": "/data/lastAnswerResultLabel" }
+      },
+      "children": []
+    },
+    "correct-answer-text": {
+      "type": "Text",
+      "props": {
+        "id": "correct-answer-text",
+        "className": "text-center text-base text-muted-foreground",
+        "text": { "$state": "/data/lastAnswerCorrectLabel" }
+      },
+      "children": []
+    },
+    "explanation-root-affix": {
+      "type": "Text",
+      "props": {
+        "id": "explanation-root-affix",
+        "className": "text-sm text-foreground",
+        "text": { "$state": "/data/lastAnswerResult/explanationRootAffix" }
+      },
+      "children": []
+    },
+    "explanation-mnemonic": {
+      "type": "Text",
+      "props": {
+        "id": "explanation-mnemonic",
+        "className": "text-sm text-muted-foreground italic",
+        "text": { "$state": "/data/lastAnswerResult/explanationMnemonic" }
       },
       "children": []
     },
@@ -110,17 +208,16 @@
       "type": "Button",
       "props": {
         "id": "next-question-btn",
-        "label": "Next Question",
-        "variant": "primary",
-        "disabled": null
+        "label": "下一題",
+        "variant": "primary"
       },
       "children": [],
       "on": {
         "press": [
           {
-            "action": "openModal",
+            "action": "executeBehavior",
             "params": {
-              "id": "quiz-container"
+              "ref": "loadNextQuestion"
             }
           }
         ]

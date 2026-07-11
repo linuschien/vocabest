@@ -65,6 +65,23 @@ export const componentRegistry: Record<string, ComponentType<any>> = {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">{children}</div>
   ),
 
+  // Quiz-specific layout containers
+  'Container:quiz-page': ({ children }) => (
+    <div className="flex items-start justify-center min-h-[calc(100vh-80px)] px-4 py-10">{children}</div>
+  ),
+  'Container:quiz-card': ({ children }) => (
+    <div className="w-full max-w-2xl bg-card border border-border rounded-2xl shadow-lg p-8 flex flex-col gap-8">{children}</div>
+  ),
+  'Container:quiz-header': ({ children }) => (
+    <div className="flex items-center justify-between border-b border-border pb-4">{children}</div>
+  ),
+  'Container:question-block': ({ children }) => (
+    <div className="flex flex-col gap-4 bg-muted/40 rounded-xl p-6">{children}</div>
+  ),
+  'Container:options-grid': ({ children }) => (
+    <div className="grid grid-cols-2 gap-3">{children}</div>
+  ),
+
   // ── 3. Custom composites (imported from src/json-render/components/) ─────
   'DataTable':   DataTable,    // columns/data/row-actions
   'Breadcrumb':  Breadcrumb,   // <nav><ol> wrapper

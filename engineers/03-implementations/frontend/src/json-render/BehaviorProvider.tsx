@@ -70,8 +70,14 @@ export default function BehaviorProvider({ children }: { children: React.ReactNo
             await deleteQuizQuestion.mutateAsync({ id: payload.id, wordBankId: payload.wordBankId });
             toast.success('Question deleted successfully.');
           } else if (ref === 'submitAnswer') {
-            await submitAnswer.mutateAsync(payload);
-            toast.success('Answer submitted!');
+            const user = store.get('/data/user') as any;
+            const result = await submitAnswer.mutateAsync({ ...payload, userId: user?.id }) as any;
+            // Save result to store for the explanation modal
+            store.set('/data/lastAnswerResult', result);
+            store.set('/data/lastAnswerResultLabel', result?.isCorrect ? '✅ 答對了！' : '❌ 答錯了');
+            store.set('/data/lastAnswerCorrectLabel', result?.isCorrect ? '' : `正確答案：${result?.correctAnswer}`);
+            // Open explanation modal
+            store.set('/modals/explanation-modal', true);
           } else if (ref === 'triggerSearch') {
             const trigger = store.get('/actions/triggerSearch') as any;
             if (trigger) trigger(payload);
@@ -83,6 +89,11 @@ export default function BehaviorProvider({ children }: { children: React.ReactNo
           } else if (ref === 'pageChange') {
             const onPageChange = store.get('/actions/pageChange') as any;
             if (onPageChange) onPageChange(payload);
+          } else if (ref === 'loadNextQuestion') {
+            // Close explanation modal and load next question
+            store.set('/modals/explanation-modal', false);
+            const loadNext = store.get('/actions/loadNextQuestion') as any;
+            if (loadNext) loadNext();
           } else {
             console.warn(`Unmapped behavior ref: ${ref}`, payload);
           }
