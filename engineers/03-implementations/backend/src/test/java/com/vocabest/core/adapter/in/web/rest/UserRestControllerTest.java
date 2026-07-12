@@ -187,7 +187,7 @@ class UserRestControllerTest {
 
         client.post().uri("/api/v1/users/{id}:nextQuestion", id)
                 .exchange()
-                .expectStatus().isNotFound();
+                .expectStatus().isNoContent();
     }
 
     @Test
@@ -208,7 +208,7 @@ class UserRestControllerTest {
 
         client.post().uri("/api/v1/users/{id}:nextErrorQuestion", id)
                 .exchange()
-                .expectStatus().isNotFound();
+                .expectStatus().isNoContent();
     }
 
     @Test

@@ -9,7 +9,7 @@ export default function ErrorReviewBoardPage() {
   const store = useStateStore();
   const userId = store.get('/data/user/id') as string;
 
-  const { data: question, isLoading, refetch } = useGetNextErrorQuestion(
+  const { data: question, isLoading, refetch, isError, error } = useGetNextErrorQuestion(
     userId ? { userId } : undefined
   );
 
@@ -72,6 +72,15 @@ export default function ErrorReviewBoardPage() {
         <p className="text-5xl">🎉</p>
         <p className="text-xl font-semibold">太棒了！今日無錯題待複習</p>
         <p className="text-muted-foreground text-sm">繼續保持，再接再厲！</p>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="flex h-full items-center justify-center flex-col gap-4 py-20">
+        <p className="text-xl font-semibold text-red-500">載入失敗</p>
+        <p className="text-muted-foreground text-sm">請稍後再試</p>
       </div>
     );
   }

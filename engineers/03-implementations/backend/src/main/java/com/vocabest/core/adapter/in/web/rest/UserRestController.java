@@ -84,7 +84,7 @@ public class UserRestController {
     public Mono<ResponseEntity<QuizQuestionResponse>> getNextQuestion(@PathVariable UUID userId) {
         return queryService.getNextQuestion(userId)
                 .map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.notFound().build());
+                .defaultIfEmpty(ResponseEntity.noContent().build());
     }
 
     @PostMapping("/api/v1/users/{userId}:nextErrorQuestion")
@@ -92,7 +92,7 @@ public class UserRestController {
     public Mono<ResponseEntity<QuizQuestionResponse>> getNextErrorQuestion(@PathVariable UUID userId) {
         return queryService.getNextErrorQuestion(userId)
                 .map(ResponseEntity::ok)
-                .defaultIfEmpty(ResponseEntity.notFound().build());
+                .defaultIfEmpty(ResponseEntity.noContent().build());
     }
 
     @PostMapping("/api/v1/users/{userId}:submitAnswer")

@@ -13,6 +13,6 @@ export function useGetNextQuestion(params?: { userId: string }) {
     enabled: !!params?.userId,
     // Do NOT auto-refetch; we manually refetch after each answer
     refetchOnWindowFocus: false,
-    staleTime: Infinity,
+    gcTime: 0,
   });
 }

@@ -9,7 +9,7 @@ export default function QuizBoardPage() {
   const store = useStateStore();
   const userId = store.get('/data/user/id') as string;
 
-  const { data: question, isLoading, refetch } = useGetNextQuestion(
+  const { data: question, isLoading, refetch, isError, error } = useGetNextQuestion(
     userId ? { userId } : undefined
   );
 
@@ -72,6 +72,15 @@ export default function QuizBoardPage() {
     return (
       <div className="flex h-full items-center justify-center flex-col gap-4">
         <p className="text-xl text-muted-foreground">🎉 沒有題目了，今天已完成所有學習！</p>
+      </div>
+    );
+  }
+
+  if (isError) {
+    return (
+      <div className="flex h-full items-center justify-center flex-col gap-4 py-20">
+        <p className="text-xl font-semibold text-red-500">載入失敗</p>
+        <p className="text-muted-foreground text-sm">請稍後再試</p>
       </div>
     );
   }

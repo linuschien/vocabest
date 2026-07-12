@@ -21,7 +21,7 @@ async function fetchApi<T>(path: string, options: RequestInit = {}): Promise<T> 
 
   // Handle 204 No Content or empty responses
   if (response.status === 204) {
-    return {} as T;
+    return null as unknown as T;
   }
   return response.json();
 }

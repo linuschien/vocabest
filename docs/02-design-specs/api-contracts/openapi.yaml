@@ -176,6 +176,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/QuizQuestionResponse"
+        "204":
+          description: No Content (No more questions available)
         "404":
           $ref: "#/components/responses/NotFound"
   /users/{userId}:nextErrorQuestion:
@@ -195,6 +197,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/QuizQuestionResponse"
+        "204":
+          description: No Content (No more error questions available)
         "404":
           $ref: "#/components/responses/NotFound"
   /users/{userId}:errorReviewCount:

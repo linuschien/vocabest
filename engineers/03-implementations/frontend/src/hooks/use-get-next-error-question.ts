@@ -12,6 +12,6 @@ export function useGetNextErrorQuestion(params?: { userId: string }) {
     queryFn: () => api.post<any>('/users/' + params!.userId + ':nextErrorQuestion'),
     enabled: !!params?.userId,
     refetchOnWindowFocus: false,
-    staleTime: Infinity,
+    gcTime: 0,
   });
 }
