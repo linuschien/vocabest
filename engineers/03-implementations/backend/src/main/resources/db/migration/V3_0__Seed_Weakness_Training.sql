@@ -1,3 +1,4 @@
+-- [TEST DATA] This file contains seed data strictly for testing the Weakness Training flow.
 -- Create User: dev@vocabest.engineer
 INSERT INTO "user" (id, email, role, target_level, daily_target_questions, learning_streak, created_at, updated_at)
 VALUES ('00000000-0000-0000-0000-000000000001', 'dev@vocabest.engineer', 'LEARNER', 'SENIOR_HIGH', 20, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
