@@ -22,7 +22,9 @@ export default function AuthGuard({ children }: { children: React.ReactNode }) {
           "JUNIOR_HIGH": "國中2000單字",
           "SENIOR_HIGH": "高中7000單字"
         };
-        store.set('/form/target-level-select', reverseLevelMap[user.targetLevel] || user.targetLevel);
+        const targetLevelLabel = reverseLevelMap[user.targetLevel] || user.targetLevel;
+        store.set('/data/user/targetLevelLabel', targetLevelLabel);
+        store.set('/form/target-level-select', targetLevelLabel);
         store.set('/form/daily-target-questions-select', String(user.dailyTargetQuestions));
       }
     }

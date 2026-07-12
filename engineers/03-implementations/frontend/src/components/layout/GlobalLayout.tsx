@@ -10,6 +10,16 @@ export default function GlobalLayout() {
 
   const handleMenuEvent = (action: string) => {
     if (action === 'settings') {
+      const user = store.get('/data/user') as any;
+      if (user) {
+        const reverseLevelMap: Record<string, string> = {
+          "JUNIOR_HIGH": "國中2000單字",
+          "SENIOR_HIGH": "高中7000單字"
+        };
+        const targetLevelLabel = reverseLevelMap[user.targetLevel] || user.targetLevel;
+        store.set('/form/target-level-select', targetLevelLabel);
+        store.set('/form/daily-target-questions-select', String(user.dailyTargetQuestions));
+      }
       store.set('/modals/onboarding-modal', true);
     } else if (action === 'admin') {
       navigate('/admin-dashboard');

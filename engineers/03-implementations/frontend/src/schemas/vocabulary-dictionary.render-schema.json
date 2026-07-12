@@ -35,7 +35,7 @@
       "props": {
         "id": "dict-level-title",
         "className": "text-2xl font-bold tracking-tight",
-        "text": { "$state": "/form/target-level-select" }
+        "text": { "$state": "/data/user/targetLevelLabel" }
       },
       "children": []
     },
