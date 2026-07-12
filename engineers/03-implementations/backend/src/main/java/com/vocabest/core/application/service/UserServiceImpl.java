@@ -121,12 +121,18 @@ public class UserServiceImpl implements UserCommandService, UserQueryService {
     public Mono<QuizQuestionResponse> getNextErrorQuestion(UUID userId) {
         log.info("Fetching next error review question for user: {}", userId);
         return wordMasteryRepository.findFirstByUserIdAndNextReviewDateLessThanEqualAndErrorWeightGreaterThanOrderByErrorWeightDescNextReviewDateAsc(userId, LocalDateTime.now(), 0)
-                .flatMap(mastery -> quizQuestionRepository.findByWordBankId(mastery.wordBankId())
+                .flatMap(mastery -> quizQuestionRepository.findErrorQuestionsByUserAndWordBank(userId, mastery.wordBankId())
                         .collectList()
-                        .flatMap(questions -> {
-                            if (questions.isEmpty()) return Mono.empty();
-                            QuizQuestion q = questions.get(random.nextInt(questions.size()));
-                            return Mono.just(q);
+                        .flatMap(errorQuestions -> {
+                            if (!errorQuestions.isEmpty()) {
+                                return Mono.just(errorQuestions.get(random.nextInt(errorQuestions.size())));
+                            }
+                            return quizQuestionRepository.findByWordBankId(mastery.wordBankId())
+                                    .collectList()
+                                    .flatMap(questions -> {
+                                        if (questions.isEmpty()) return Mono.empty();
+                                        return Mono.just(questions.get(random.nextInt(questions.size())));
+                                    });
                         })
                 )
                 .map(q -> new QuizQuestionResponse(q.id(), q.wordBankId().toString(), q.contextualCloze(), q.chineseTranslation(), q.correctAnswer(), q.distractor1(), q.distractor2(), q.distractor3(), q.explanationRootAffix(), q.explanationMnemonic()));

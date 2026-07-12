@@ -169,7 +169,7 @@ class UserServiceImplTest {
         WordMastery mastery = new WordMastery(UUID.randomUUID(), testUserId, testWordBankId, 2, LocalDateTime.now().minusDays(1), LocalDateTime.now(), LocalDateTime.now(), null);
         when(wordMasteryRepository.findFirstByUserIdAndNextReviewDateLessThanEqualAndErrorWeightGreaterThanOrderByErrorWeightDescNextReviewDateAsc(eq(testUserId), any(), eq(0)))
                 .thenReturn(Mono.just(mastery));
-        when(quizQuestionRepository.findByWordBankId(testWordBankId)).thenReturn(Flux.just(testQuestion));
+        when(quizQuestionRepository.findErrorQuestionsByUserAndWordBank(testUserId, testWordBankId)).thenReturn(Flux.just(testQuestion));
 
         StepVerifier.create(userService.getNextErrorQuestion(testUserId))
                 .expectNextMatches(res -> res.correctAnswer().equals("apple") && res.contextualCloze().equals("I ate an __"))
