@@ -10,7 +10,7 @@ import { useDeleteWordBank } from '@/hooks/use-delete-word-bank';
 import { useCreateQuizQuestion } from '@/hooks/use-create-quiz-question';
 import { useDeleteQuizQuestion } from '@/hooks/use-delete-quiz-question';
 import { useSubmitAnswer } from '@/hooks/use-submit-answer';
-import { useUpdateUser } from '@/hooks/use-update-user';
+import { usePatchUser } from '@/hooks/use-patch-user';
 import { whoamiKeys } from '@/hooks/use-whoami';
 import { listDailyProgressesKeys } from '@/hooks/use-list-daily-progresses';
 import { errorReviewCountKeys } from '@/hooks/use-get-error-review-count';
@@ -20,7 +20,7 @@ export default function BehaviorProvider({ children }: { children: React.ReactNo
   const navigate = useNavigate();
   const queryClient = useQueryClient();
   const onboardUser = useOnboardUser();
-  const updateUser = useUpdateUser();
+  const patchUser = usePatchUser();
   const createWordBank = useCreateWordBank();
   const deleteWordBank = useDeleteWordBank();
   const createQuizQuestion = useCreateQuizQuestion();
@@ -70,12 +70,9 @@ export default function BehaviorProvider({ children }: { children: React.ReactNo
               toast.success('Onboarding successful!');
             } else {
               const user = store.get('/data/user') as any;
-              await updateUser.mutateAsync({
+              await patchUser.mutateAsync({
                 id: user.id,
                 payload: {
-                  email: user.email,
-                  role: user.role,
-                  learningStreak: user.learningStreak,
                   targetLevel: mappedPayload.targetLevel,
                   dailyTargetQuestions: parseInt(mappedPayload.dailyTargetQuestions, 10)
                 }

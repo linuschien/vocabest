@@ -41,9 +41,18 @@ public class UserRestController {
     }
 
     @PutMapping("/api/v1/users/{id}")
-    @com.vocabest.core.adapter.in.web.security.RequireOwnership("#id")
+    @com.vocabest.core.adapter.in.web.security.AdminOnly
     public Mono<ResponseEntity<UserResponse>> updateUser(@PathVariable UUID id, @Valid @RequestBody UserRequest req) {
         return commandService.updateUser(id, req)
+                .map(this::mapToResponse)
+                .map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.notFound().build());
+    }
+
+    @PatchMapping("/api/v1/users/{id}")
+    @com.vocabest.core.adapter.in.web.security.RequireOwnership("#id")
+    public Mono<ResponseEntity<UserResponse>> patchUser(@PathVariable UUID id, @Valid @RequestBody UserPatchRequest req) {
+        return commandService.patchUser(id, req)
                 .map(this::mapToResponse)
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());

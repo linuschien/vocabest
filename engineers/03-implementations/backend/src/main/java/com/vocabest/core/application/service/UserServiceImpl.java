@@ -75,6 +75,14 @@ public class UserServiceImpl implements UserCommandService, UserQueryService {
 
     @Override
     @Transactional
+    public Mono<User> patchUser(UUID id, UserPatchRequest req) {
+        return userRepository.findById(id)
+                .map(existing -> new User(existing.id(), existing.email(), existing.role(), TargetLevel.valueOf(req.targetLevel()), existing.learningStreak(), req.dailyTargetQuestions(), existing.createdAt(), LocalDateTime.now(), existing.deletedAt()))
+                .flatMap(userRepository::save);
+    }
+
+    @Override
+    @Transactional
     public Mono<Void> deleteUser(UUID id) {
         return userRepository.deleteById(id);
     }

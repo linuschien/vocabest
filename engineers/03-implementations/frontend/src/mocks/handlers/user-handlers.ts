@@ -7,4 +7,5 @@ export const userHandlers = [
   graphql.query('listUsers', () => HttpResponse.json({ data: { listUsers: mockUsers } })),
   http.get(`${BASE_URL}/getUserById`, () => HttpResponse.json({ id: '1', name: 'User' })),
   http.post(`${BASE_URL}/onboardUser`, () => HttpResponse.json({ success: true })),
+  http.patch(`${BASE_URL}/users/:id`, () => HttpResponse.json({ success: true })),
 ];

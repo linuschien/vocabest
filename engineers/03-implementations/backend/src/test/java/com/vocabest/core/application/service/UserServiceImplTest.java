@@ -101,6 +101,19 @@ class UserServiceImplTest {
     }
 
     @Test
+    void patchUser_shouldReturnUpdatedUser() {
+        UserPatchRequest request = new UserPatchRequest("SENIOR_HIGH", 30);
+        User updated = new User(testUserId, "test@example.com", Role.LEARNER, TargetLevel.SENIOR_HIGH, 0, 30, LocalDateTime.now(), LocalDateTime.now(), null);
+        
+        when(userRepository.findById(testUserId)).thenReturn(Mono.just(testUser));
+        when(userRepository.save(any(User.class))).thenReturn(Mono.just(updated));
+
+        StepVerifier.create(userService.patchUser(testUserId, request))
+                .expectNextMatches(u -> u.targetLevel() == TargetLevel.SENIOR_HIGH && u.dailyTargetQuestions() == 30)
+                .verifyComplete();
+    }
+
+    @Test
     void deleteUser_shouldReturnEmpty() {
         when(userRepository.deleteById(testUserId)).thenReturn(Mono.empty());
 

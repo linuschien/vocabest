@@ -4,6 +4,7 @@ import com.vocabest.core.adapter.in.web.dto.QuizQuestionResponse;
 import com.vocabest.core.adapter.in.web.dto.SubmitAnswerRequest;
 import com.vocabest.core.adapter.in.web.dto.SubmitAnswerResponse;
 import com.vocabest.core.adapter.in.web.dto.UserOnboardRequest;
+import com.vocabest.core.adapter.in.web.dto.UserPatchRequest;
 import com.vocabest.core.adapter.in.web.dto.UserRequest;
 import com.vocabest.core.adapter.out.persistence.model.Role;
 import com.vocabest.core.adapter.out.persistence.model.TargetLevel;
@@ -104,6 +105,29 @@ class UserRestControllerTest {
 
         client.put().uri("/api/v1/users/{id}", id)
                 .bodyValue(new UserRequest("test@test.com", "LEARNER", "JUNIOR_HIGH", 0, 20))
+                .exchange()
+                .expectStatus().isNotFound();
+    }
+
+    @Test
+    void testPatchUser() {
+        UUID id = UUID.randomUUID();
+        User user = new User(id, "test@test.com", Role.LEARNER, TargetLevel.SENIOR_HIGH, 0, 30, LocalDateTime.now(), LocalDateTime.now(), null);
+        when(commandService.patchUser(any(), any())).thenReturn(Mono.just(user));
+
+        client.patch().uri("/api/v1/users/{id}", id)
+                .bodyValue(new UserPatchRequest("SENIOR_HIGH", 30))
+                .exchange()
+                .expectStatus().isOk();
+    }
+
+    @Test
+    void testPatchUser_notFound() {
+        UUID id = UUID.randomUUID();
+        when(commandService.patchUser(any(), any())).thenReturn(Mono.empty());
+
+        client.patch().uri("/api/v1/users/{id}", id)
+                .bodyValue(new UserPatchRequest("SENIOR_HIGH", 30))
                 .exchange()
                 .expectStatus().isNotFound();
     }
