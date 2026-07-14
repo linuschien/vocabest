@@ -2,12 +2,13 @@ import React from 'react';
 import { useStateValue } from '@json-render/react';
 
 export default function MetricCard({ element }: any) {
-  const { id, label, variant, value: valueProp, current: currentProp, goal: goalProp } = element?.props ?? {};
+  const { id, label, variant, value: valueProp, current: currentProp, goal: goalProp, best: bestProp } = element?.props ?? {};
 
   // Resolve bound state values (library auto-resolves $state bindings to actual values)
   const value = typeof valueProp === 'number' ? valueProp : (Number(valueProp) || 0);
   const current = typeof currentProp === 'number' ? currentProp : (Number(currentProp) || 0);
   const goal = typeof goalProp === 'number' ? goalProp : (Number(goalProp) || 1);
+  const best = typeof bestProp === 'number' ? bestProp : (Number(bestProp) || 0);
 
   if (variant === 'progress') {
     const pct = goal > 0 ? Math.min(100, Math.round((current / goal) * 100)) : 0;
@@ -37,7 +38,14 @@ export default function MetricCard({ element }: any) {
             aria-label={`${current} of ${goal} questions completed`}
           />
         </div>
-        <p className="text-xs text-muted-foreground">{pct}% 完成</p>
+        <div className="flex justify-between items-center">
+          <p className="text-xs text-muted-foreground">{pct}% 完成</p>
+          {best > 0 && (
+            <p className="text-xs text-amber-500 font-medium flex items-center gap-1">
+              <span>🏆</span> 單日最多練習題數: {best} 題
+            </p>
+          )}
+        </div>
       </div>
     );
   }
@@ -66,6 +74,13 @@ export default function MetricCard({ element }: any) {
         </div>
         {value === 0 && (
           <p className="text-xs text-muted-foreground mt-1">今日完成一題即可開始連勝！</p>
+        )}
+        {best > 0 && (
+          <div className="mt-1 flex items-center justify-end w-full">
+            <p className="text-xs text-amber-500 font-medium flex items-center gap-1">
+              <span>👑</span> 最長連續挑戰天數: {best} 天
+            </p>
+          </div>
         )}
       </div>
     );

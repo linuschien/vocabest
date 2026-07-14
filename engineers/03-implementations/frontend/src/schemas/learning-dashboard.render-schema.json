@@ -53,7 +53,8 @@
         "label": "今日進度",
         "variant": "progress",
         "current": { "$state": "/data/todayProgress/answeredQuestions" },
-        "goal": { "$state": "/data/todayProgress/targetQuestions" }
+        "goal": { "$state": "/data/todayProgress/targetQuestions" },
+        "best": { "$state": "/data/user/maxDailyQuestions" }
       },
       "children": []
     },
@@ -61,9 +62,10 @@
       "type": "MetricCard",
       "props": {
         "id": "learning-streak-metric",
-        "label": "連續挑戰天數",
+        "label": "目前連續挑戰天數",
         "variant": "streak",
-        "value": { "$state": "/data/user/learningStreak" }
+        "value": { "$state": "/data/user/learningStreak" },
+        "best": { "$state": "/data/user/maxLearningStreak" }
       },
       "children": []
     },
