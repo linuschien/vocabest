@@ -26,7 +26,7 @@ export default function ErrorReviewButton({ element, emit }: any) {
         'h-20 w-full flex flex-col items-center justify-center rounded-lg border px-4 shadow-sm',
         'transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
         hasErrors
-          ? 'border-border bg-card hover:bg-accent hover:text-accent-foreground cursor-pointer'
+          ? 'border-primary bg-primary hover:bg-primary/90 text-primary-foreground shadow-md cursor-pointer'
           : 'border-border bg-muted/40 hover:bg-muted/60 cursor-pointer',
       ].join(' ')}
     >
@@ -34,7 +34,7 @@ export default function ErrorReviewButton({ element, emit }: any) {
         🛡️ 弱點特訓
       </span>
       {hasErrors ? (
-        <span className="mt-1 inline-flex items-center rounded-full bg-destructive/15 px-2.5 py-0.5 text-xs font-medium text-destructive">
+        <span className="mt-1 inline-flex items-center rounded-full bg-destructive text-destructive-foreground px-2.5 py-0.5 text-xs font-medium shadow-sm">
           待複習: {count} 題
         </span>
       ) : (
