@@ -1,7 +1,7 @@
 -- [TEST DATA] This file contains seed data strictly for testing the Weakness Training flow.
 -- Create User: dev@vocabest.engineer
-INSERT INTO "user" (id, email, role, target_level, daily_target_questions, learning_streak, created_at, updated_at)
-VALUES ('00000000-0000-0000-0000-000000000001', 'dev@vocabest.engineer', 'LEARNER', 'SENIOR_HIGH', 20, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
+INSERT INTO "user" (id, email, role, target_level, daily_target_questions, learning_streak, max_learning_streak, max_daily_questions, created_at, updated_at)
+VALUES ('00000000-0000-0000-0000-000000000001', 'dev@vocabest.engineer', 'LEARNER', 'SENIOR_HIGH', 20, 0, 0, 0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);
 
 -- We selected 3 words from V1_2__Seed_Vocabulary_Senior_High.sql that have multiple questions:
 -- 1. 'get' (f64aab4c-6665-4617-a07e-5f6b210dc975)

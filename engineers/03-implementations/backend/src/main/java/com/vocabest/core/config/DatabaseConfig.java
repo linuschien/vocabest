@@ -15,7 +15,7 @@ public class DatabaseConfig {
         return (entity, sqlIdentifier) -> {
             if (entity.id() == null) {
                 return reactor.core.publisher.Mono.just(new User(
-                    UUID.randomUUID(), entity.email(), entity.role(), entity.targetLevel(), entity.learningStreak(), entity.dailyTargetQuestions(),
+                    UUID.randomUUID(), entity.email(), entity.role(), entity.targetLevel(), entity.learningStreak(), entity.maxLearningStreak(), entity.maxDailyQuestions(), entity.dailyTargetQuestions(),
                     LocalDateTime.now(), LocalDateTime.now(), null
                 ));
             }

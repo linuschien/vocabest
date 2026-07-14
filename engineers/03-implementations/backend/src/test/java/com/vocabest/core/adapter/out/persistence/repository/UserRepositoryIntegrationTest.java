@@ -29,15 +29,17 @@ class UserRepositoryIntegrationTest {
     @Test
     void shouldSaveAndFindByEmail() {
         User user = new User(
-                null,
-                "repo_test@example.com",
-                Role.LEARNER,
-                TargetLevel.JUNIOR_HIGH,
-                0,
-                20,
-                LocalDateTime.now(),
-                LocalDateTime.now(),
-                null
+            null,
+            "repo_test@example.com",
+            Role.LEARNER,
+            TargetLevel.JUNIOR_HIGH,
+            0,
+            0,
+            0,
+            20,
+            LocalDateTime.now(),
+            LocalDateTime.now(),
+            null
         );
 
         StepVerifier.create(userRepository.save(user)

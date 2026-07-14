@@ -50,7 +50,7 @@ class UserServiceImplTest {
     @BeforeEach
     void setUp() {
         testUserId = UUID.randomUUID();
-        testUser = new User(testUserId, "test@example.com", Role.LEARNER, TargetLevel.JUNIOR_HIGH, 5, 20, LocalDateTime.now(), LocalDateTime.now(), null);
+        testUser = new User(testUserId, "test@example.com", Role.LEARNER, TargetLevel.JUNIOR_HIGH, 5, 0, 0, 20, LocalDateTime.now(), LocalDateTime.now(), null);
 
         testQuestionId = UUID.randomUUID();
         testWordBankId = UUID.randomUUID();
@@ -78,7 +78,7 @@ class UserServiceImplTest {
     @Test
     void createUser_shouldReturnCreatedUser() {
         UserRequest request = new UserRequest("test2@example.com", "LEARNER", "SENIOR_HIGH", 25, 0);
-        User savedUser = new User(UUID.randomUUID(), "test2@example.com", Role.LEARNER, TargetLevel.SENIOR_HIGH, 0, 25, LocalDateTime.now(), LocalDateTime.now(), null);
+        User savedUser = new User(UUID.randomUUID(), "test2@example.com", Role.LEARNER, TargetLevel.SENIOR_HIGH, 0, 0, 0, 25, LocalDateTime.now(), LocalDateTime.now(), null);
         
         when(userRepository.save(any(User.class))).thenReturn(Mono.just(savedUser));
 
@@ -90,7 +90,7 @@ class UserServiceImplTest {
     @Test
     void updateUser_shouldReturnUpdatedUser() {
         UserRequest request = new UserRequest("test@example.com", "LEARNER", "SENIOR_HIGH", 30, 10);
-        User updated = new User(testUserId, "test@example.com", Role.LEARNER, TargetLevel.SENIOR_HIGH, 10, 30, LocalDateTime.now(), LocalDateTime.now(), null);
+        User updated = new User(testUserId, "test@example.com", Role.LEARNER, TargetLevel.SENIOR_HIGH, 10, 0, 0, 30, LocalDateTime.now(), LocalDateTime.now(), null);
         
         when(userRepository.findById(testUserId)).thenReturn(Mono.just(testUser));
         when(userRepository.save(any(User.class))).thenReturn(Mono.just(updated));
@@ -103,7 +103,7 @@ class UserServiceImplTest {
     @Test
     void patchUser_shouldReturnUpdatedUser() {
         UserPatchRequest request = new UserPatchRequest("SENIOR_HIGH", 30);
-        User updated = new User(testUserId, "test@example.com", Role.LEARNER, TargetLevel.SENIOR_HIGH, 0, 30, LocalDateTime.now(), LocalDateTime.now(), null);
+        User updated = new User(testUserId, "test@example.com", Role.LEARNER, TargetLevel.SENIOR_HIGH, 0, 0, 0, 30, LocalDateTime.now(), LocalDateTime.now(), null);
         
         when(userRepository.findById(testUserId)).thenReturn(Mono.just(testUser));
         when(userRepository.save(any(User.class))).thenReturn(Mono.just(updated));
@@ -134,7 +134,7 @@ class UserServiceImplTest {
     @Test
     void onboardUser_whenUserDoesNotExist_shouldCreateAndReturnUser() {
         UserOnboardRequest req = new UserOnboardRequest("new@example.com", "JUNIOR_HIGH", 20);
-        User savedUser = new User(UUID.randomUUID(), "new@example.com", Role.LEARNER, TargetLevel.JUNIOR_HIGH, 0, 20, LocalDateTime.now(), LocalDateTime.now(), null);
+        User savedUser = new User(UUID.randomUUID(), "new@example.com", Role.LEARNER, TargetLevel.JUNIOR_HIGH, 0, 0, 0, 20, LocalDateTime.now(), LocalDateTime.now(), null);
         
         when(userRepository.findOne(any(Example.class))).thenReturn(Mono.empty());
         when(userRepository.save(any(User.class))).thenReturn(Mono.just(savedUser));
@@ -258,8 +258,37 @@ class UserServiceImplTest {
     }
 
     @Test
+    void submitAnswer_shouldUpdateMaxStats_whenExceedsOldMax() {
+        SubmitAnswerRequest req = new SubmitAnswerRequest(testQuestionId, "apple");
+        
+        when(quizQuestionRepository.findById(testQuestionId)).thenReturn(Mono.just(testQuestion));
+        when(wordMasteryRepository.findOne(any(Example.class))).thenReturn(Mono.empty());
+        when(wordMasteryRepository.save(any(WordMastery.class))).thenReturn(Mono.just(new WordMastery(UUID.randomUUID(), testUserId, testWordBankId, 0, null, LocalDateTime.now(), LocalDateTime.now(), null)));
+
+        User userWithLowMax = new User(testUserId, "test@example.com", Role.LEARNER, TargetLevel.JUNIOR_HIGH, 5, 2, 3, 20, LocalDateTime.now(), LocalDateTime.now(), null);
+        when(userRepository.findById(testUserId)).thenReturn(Mono.just(userWithLowMax));
+        
+        DailyProgress todayProgress = new DailyProgress(UUID.randomUUID(), testUserId, java.time.LocalDate.now(), 20, 4, 4, 0, LocalDateTime.now(), LocalDateTime.now(), null);
+        when(dailyProgressRepository.findByUserIdAndDate(eq(testUserId), any(java.time.LocalDate.class))).thenReturn(Mono.just(todayProgress));
+        
+        when(userRepository.save(any(User.class))).thenAnswer(invocation -> Mono.just(invocation.getArgument(0)));
+        when(dailyProgressRepository.save(any(DailyProgress.class))).thenReturn(Mono.just(todayProgress));
+
+        StepVerifier.create(userService.submitAnswer(testUserId, req))
+                .expectNextMatches(SubmitAnswerResponse::isCorrect)
+                .verifyComplete();
+
+        org.mockito.ArgumentCaptor<User> userCaptor = org.mockito.ArgumentCaptor.forClass(User.class);
+        verify(userRepository).save(userCaptor.capture());
+        
+        User savedUser = userCaptor.getValue();
+        org.junit.jupiter.api.Assertions.assertEquals(5, savedUser.maxDailyQuestions());
+        org.junit.jupiter.api.Assertions.assertEquals(5, savedUser.learningStreak());
+    }
+
+    @Test
     void whoami_shouldResetStreak_ifMissedYesterday() {
-        User user = new User(testUserId, "test@example.com", Role.LEARNER, TargetLevel.JUNIOR_HIGH, 5, 20, LocalDateTime.now(), LocalDateTime.now(), null);
+        User user = new User(testUserId, "test@example.com", Role.LEARNER, TargetLevel.JUNIOR_HIGH, 5, 0, 0, 20, LocalDateTime.now(), LocalDateTime.now(), null);
         when(dailyProgressRepository.findByUserIdAndDate(eq(testUserId), any(java.time.LocalDate.class))).thenReturn(Mono.empty());
         when(userRepository.save(any(User.class))).thenReturn(Mono.just(user)); // simplified
 

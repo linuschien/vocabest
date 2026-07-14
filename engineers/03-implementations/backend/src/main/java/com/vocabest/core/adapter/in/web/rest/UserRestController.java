@@ -120,6 +120,6 @@ public class UserRestController {
     }
 
     private UserResponse mapToResponse(User entity) {
-        return new UserResponse(entity.id(), entity.email(), entity.role() != null ? entity.role().name() : null, entity.targetLevel() != null ? entity.targetLevel().name() : null, entity.learningStreak(), entity.dailyTargetQuestions());
+        return new UserResponse(entity.id(), entity.email(), entity.role() != null ? entity.role().name() : null, entity.targetLevel() != null ? entity.targetLevel().name() : null, entity.learningStreak(), entity.maxLearningStreak(), entity.maxDailyQuestions(), entity.dailyTargetQuestions());
     }
 }

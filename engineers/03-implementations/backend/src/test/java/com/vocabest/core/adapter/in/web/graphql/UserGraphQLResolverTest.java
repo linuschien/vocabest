@@ -37,7 +37,7 @@ class UserGraphQLResolverTest {
 
     @Test
     void testListUsersWithFilter() {
-        User user = new User(UUID.randomUUID(), "test@test.com", Role.LEARNER, TargetLevel.JUNIOR_HIGH, 0, 20, LocalDateTime.now(), LocalDateTime.now(), null);
+        User user = new User(UUID.randomUUID(), "test@test.com", Role.LEARNER, TargetLevel.JUNIOR_HIGH, 0, 0, 0, 20, LocalDateTime.now(), LocalDateTime.now(), null);
         
         when(repository.findAll(org.mockito.ArgumentMatchers.<org.springframework.data.domain.Example<User>>any())).thenReturn(Flux.just(user));
 

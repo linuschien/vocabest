@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserCommandService, UserQueryService {
     @Override
     @Transactional
     public Mono<User> createUser(UserRequest req) {
-        User entity = new User(null, req.email(), Role.valueOf(req.role()), TargetLevel.valueOf(req.targetLevel()), req.learningStreak(), req.dailyTargetQuestions(), null, null, null);
+        User entity = new User(null, req.email(), Role.valueOf(req.role()), TargetLevel.valueOf(req.targetLevel()), req.learningStreak(), req.learningStreak(), 0, req.dailyTargetQuestions(), null, null, null);
         return userRepository.save(entity);
     }
 
@@ -69,7 +69,7 @@ public class UserServiceImpl implements UserCommandService, UserQueryService {
     @Transactional
     public Mono<User> updateUser(UUID id, UserRequest req) {
         return userRepository.findById(id)
-                .map(existing -> new User(existing.id(), req.email(), Role.valueOf(req.role()), TargetLevel.valueOf(req.targetLevel()), req.learningStreak(), req.dailyTargetQuestions(), existing.createdAt(), LocalDateTime.now(), existing.deletedAt()))
+                .map(existing -> new User(existing.id(), req.email(), Role.valueOf(req.role()), TargetLevel.valueOf(req.targetLevel()), req.learningStreak(), Math.max(existing.maxLearningStreak() != null ? existing.maxLearningStreak() : 0, req.learningStreak()), existing.maxDailyQuestions(), req.dailyTargetQuestions(), existing.createdAt(), LocalDateTime.now(), existing.deletedAt()))
                 .flatMap(userRepository::save);
     }
 
@@ -77,7 +77,7 @@ public class UserServiceImpl implements UserCommandService, UserQueryService {
     @Transactional
     public Mono<User> patchUser(UUID id, UserPatchRequest req) {
         return userRepository.findById(id)
-                .map(existing -> new User(existing.id(), existing.email(), existing.role(), TargetLevel.valueOf(req.targetLevel()), existing.learningStreak(), req.dailyTargetQuestions(), existing.createdAt(), LocalDateTime.now(), existing.deletedAt()))
+                .map(existing -> new User(existing.id(), existing.email(), existing.role(), TargetLevel.valueOf(req.targetLevel()), existing.learningStreak(), existing.maxLearningStreak(), existing.maxDailyQuestions(), req.dailyTargetQuestions(), existing.createdAt(), LocalDateTime.now(), existing.deletedAt()))
                 .flatMap(userRepository::save);
     }
 
@@ -91,11 +91,11 @@ public class UserServiceImpl implements UserCommandService, UserQueryService {
     @Transactional
     public Mono<User> onboardUser(UserOnboardRequest req) {
         log.info("Onboarding user with email: {}", req.email());
-        User probe = new User(null, req.email(), null, null, null, null, null, null, null);
+        User probe = new User(null, req.email(), null, null, null, null, null, null, null, null, null);
         return userRepository.findOne(Example.of(probe))
                 .switchIfEmpty(Mono.defer(() -> {
                     Role role = adminWhitelist != null && adminWhitelist.contains(req.email()) ? Role.ADMIN : Role.LEARNER;
-                    User newUser = new User(null, req.email(), role, TargetLevel.valueOf(req.targetLevel()), 0, req.dailyTargetQuestions(), LocalDateTime.now(), LocalDateTime.now(), null);
+                    User newUser = new User(null, req.email(), role, TargetLevel.valueOf(req.targetLevel()), 0, 0, 0, req.dailyTargetQuestions(), LocalDateTime.now(), LocalDateTime.now(), null);
                     return userRepository.save(newUser);
                 }));
     }
@@ -158,14 +158,14 @@ public class UserServiceImpl implements UserCommandService, UserQueryService {
                                     .switchIfEmpty(Mono.just(new DailyProgress(null, user.id(), today.minusDays(1), user.dailyTargetQuestions(), 0, 0, 0, null, null, null)))
                                     .flatMap(yesterdayProgress -> {
                                         if (yesterdayProgress.answeredQuestions() == 0 && user.learningStreak() > 0) {
-                                            User resetUser = new User(user.id(), user.email(), user.role(), user.targetLevel(), 0, user.dailyTargetQuestions(), user.createdAt(), LocalDateTime.now(), user.deletedAt());
+                                            User resetUser = new User(user.id(), user.email(), user.role(), user.targetLevel(), 0, user.maxLearningStreak(), user.maxDailyQuestions(), user.dailyTargetQuestions(), user.createdAt(), LocalDateTime.now(), user.deletedAt());
                                             return userRepository.save(resetUser);
                                         }
                                         return Mono.just(user);
                                     });
                         });
             }
-            return Mono.just(new User(null, parsedEmail, null, null, null, null, null, null, null));
+            return Mono.just(new User(null, parsedEmail, null, null, null, null, null, null, null, null, null));
         });
     }
 
@@ -206,14 +206,24 @@ public class UserServiceImpl implements UserCommandService, UserQueryService {
                                         .switchIfEmpty(Mono.just(new DailyProgress(null, userId, today, user.dailyTargetQuestions(), 0, 0, 0, null, null, null)))
                                         .flatMap(todayProgress -> {
                                             Mono<User> userUpdate = Mono.just(user);
+                                            int currentAnsweredToday = todayProgress.answeredQuestions() + 1;
+                                            
                                             if (todayProgress.answeredQuestions() == 0) {
                                                 userUpdate = dailyProgressRepository.findByUserIdAndDate(userId, today.minusDays(1))
                                                         .switchIfEmpty(Mono.just(new DailyProgress(null, userId, today.minusDays(1), user.dailyTargetQuestions(), 0, 0, 0, null, null, null)))
                                                         .flatMap(yesterdayProgress -> {
                                                             int newStreak = yesterdayProgress.answeredQuestions() > 0 ? user.learningStreak() + 1 : 1;
-                                                            User updatedUser = new User(user.id(), user.email(), user.role(), user.targetLevel(), newStreak, user.dailyTargetQuestions(), user.createdAt(), LocalDateTime.now(), user.deletedAt());
+                                                            int newMaxStreak = Math.max(newStreak, user.maxLearningStreak() != null ? user.maxLearningStreak() : 0);
+                                                            int newMaxDaily = Math.max(currentAnsweredToday, user.maxDailyQuestions() != null ? user.maxDailyQuestions() : 0);
+                                                            User updatedUser = new User(user.id(), user.email(), user.role(), user.targetLevel(), newStreak, newMaxStreak, newMaxDaily, user.dailyTargetQuestions(), user.createdAt(), LocalDateTime.now(), user.deletedAt());
                                                             return userRepository.save(updatedUser);
                                                         });
+                                            } else {
+                                                int oldMaxDaily = user.maxDailyQuestions() != null ? user.maxDailyQuestions() : 0;
+                                                if (currentAnsweredToday > oldMaxDaily) {
+                                                    User updatedUser = new User(user.id(), user.email(), user.role(), user.targetLevel(), user.learningStreak(), user.maxLearningStreak(), currentAnsweredToday, user.dailyTargetQuestions(), user.createdAt(), LocalDateTime.now(), user.deletedAt());
+                                                    userUpdate = userRepository.save(updatedUser);
+                                                }
                                             }
                                             DailyProgress updatedProgress = new DailyProgress(todayProgress.id(), userId, today, todayProgress.targetQuestions(), todayProgress.answeredQuestions() + 1, todayProgress.correctQuestions() + (isCorrect ? 1 : 0), todayProgress.wrongQuestions() + (isCorrect ? 0 : 1), todayProgress.createdAt(), LocalDateTime.now(), todayProgress.deletedAt());
                                             return userUpdate.then(dailyProgressRepository.save(updatedProgress));

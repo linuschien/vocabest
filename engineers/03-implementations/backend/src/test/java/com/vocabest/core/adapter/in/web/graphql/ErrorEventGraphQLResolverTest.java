@@ -35,7 +35,7 @@ class ErrorEventGraphQLResolverTest {
 
         UUID filterUserId = UUID.randomUUID();
         StepVerifier.create(resolver.listErrorEvents(new ErrorEventFilterInput(null, filterUserId, null, null, null))
-                .contextWrite(reactor.util.context.Context.of("CURRENT_USER", new com.vocabest.core.adapter.out.persistence.model.User(filterUserId, "test", com.vocabest.core.adapter.out.persistence.model.Role.LEARNER, null, 0, 0, null, null, null))))
+                .contextWrite(reactor.util.context.Context.of("CURRENT_USER", new com.vocabest.core.adapter.out.persistence.model.User(filterUserId, "test", com.vocabest.core.adapter.out.persistence.model.Role.LEARNER, null, 0, 0, 0, 0, null, null, null))))
                 .expectNextMatches(e -> e.quizQuestionId().equals(wordId))
                 .verifyComplete();
     }

@@ -14,6 +14,8 @@ public record User(
     @Column("role") Role role,
     @Column("target_level") TargetLevel targetLevel,
     @Column("learning_streak") Integer learningStreak,
+    @Column("max_learning_streak") Integer maxLearningStreak,
+    @Column("max_daily_questions") Integer maxDailyQuestions,
     @Column("daily_target_questions") Integer dailyTargetQuestions,
     @Column("created_at") LocalDateTime createdAt,
     @Column("updated_at") LocalDateTime updatedAt,

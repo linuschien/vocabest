@@ -934,6 +934,12 @@ components:
         learningStreak:
           type: integer
           example: 5
+        maxLearningStreak:
+          type: integer
+          example: 5
+        maxDailyQuestions:
+          type: integer
+          example: 20
     DailyProgressRequest:
       type: object
       properties:

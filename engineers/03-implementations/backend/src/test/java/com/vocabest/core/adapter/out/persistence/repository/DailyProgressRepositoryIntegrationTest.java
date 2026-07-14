@@ -31,15 +31,17 @@ class DailyProgressRepositoryIntegrationTest {
     @BeforeEach
     void setUp() {
         User user = new User(
-                null,
-                "daily_progress_repo@example.com",
-                Role.LEARNER,
-                TargetLevel.JUNIOR_HIGH,
-                0,
-                20,
-                LocalDateTime.now(),
-                LocalDateTime.now(),
-                null
+            null,
+            "test@vocabest.com",
+            Role.LEARNER,
+            TargetLevel.JUNIOR_HIGH,
+            0,
+            0,
+            0,
+            10,
+            LocalDateTime.now(),
+            LocalDateTime.now(),
+            null
         );
         testUserId = userRepository.save(user).block().id();
     }

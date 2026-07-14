@@ -31,7 +31,7 @@ public class UserGraphQLResolver {
             if (filter.role() != null) {
                 role = com.vocabest.core.adapter.out.persistence.model.Role.valueOf(filter.role());
             }
-            User probe = new User(filter.id(), filter.email(), role, tl, filter.learningStreak(), filter.dailyTargetQuestions(), null, null, null);
+            User probe = new User(filter.id(), filter.email(), role, tl, filter.learningStreak(), null, null, filter.dailyTargetQuestions(), null, null, null);
             ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreNullValues();
             return repository.findAll(Example.of(probe, matcher));
         }

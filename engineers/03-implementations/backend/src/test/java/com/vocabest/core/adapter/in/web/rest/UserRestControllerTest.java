@@ -46,7 +46,7 @@ class UserRestControllerTest {
                 .webFilter((exchange, chain) -> {
                     String emailHeader = exchange.getRequest().getHeaders().getFirst("x-goog-authenticated-user-email");
                     String email = emailHeader != null ? emailHeader.replace("accounts.google.com:", "") : "test@test.com";
-                    User dummyUser = new User(UUID.randomUUID(), email, Role.ADMIN, TargetLevel.JUNIOR_HIGH, 0, 20, LocalDateTime.now(), LocalDateTime.now(), null);
+                    User dummyUser = new User(UUID.randomUUID(), email, Role.ADMIN, TargetLevel.JUNIOR_HIGH, 0, 0, 0, 20, LocalDateTime.now(), LocalDateTime.now(), null);
                     return chain.filter(exchange).contextWrite(reactor.util.context.Context.of("CURRENT_USER", dummyUser, "CURRENT_EMAIL", email));
                 })
                 .build();
@@ -54,7 +54,7 @@ class UserRestControllerTest {
 
     @Test
     void testCreateUser() {
-        User user = new User(UUID.randomUUID(), "test@test.com", Role.LEARNER, TargetLevel.JUNIOR_HIGH, 0, 20, LocalDateTime.now(), LocalDateTime.now(), null);
+        User user = new User(UUID.randomUUID(), "test@test.com", Role.LEARNER, TargetLevel.JUNIOR_HIGH, 0, 0, 0, 20, LocalDateTime.now(), LocalDateTime.now(), null);
         when(commandService.createUser(any())).thenReturn(Mono.just(user));
 
         client.post().uri("/api/v1/users")
@@ -67,7 +67,7 @@ class UserRestControllerTest {
     @Test
     void testGetUserById() {
         UUID id = UUID.randomUUID();
-        User user = new User(id, "test@test.com", Role.LEARNER, TargetLevel.JUNIOR_HIGH, 0, 20, LocalDateTime.now(), LocalDateTime.now(), null);
+        User user = new User(id, "test@test.com", Role.LEARNER, TargetLevel.JUNIOR_HIGH, 0, 0, 0, 20, LocalDateTime.now(), LocalDateTime.now(), null);
         when(queryService.getUserById(id)).thenReturn(Mono.just(user));
 
         client.get().uri("/api/v1/users/{id}", id)
@@ -89,7 +89,7 @@ class UserRestControllerTest {
     @Test
     void testUpdateUser() {
         UUID id = UUID.randomUUID();
-        User user = new User(id, "test@test.com", Role.LEARNER, TargetLevel.JUNIOR_HIGH, 0, 20, LocalDateTime.now(), LocalDateTime.now(), null);
+        User user = new User(id, "test@test.com", Role.LEARNER, TargetLevel.JUNIOR_HIGH, 0, 0, 0, 20, LocalDateTime.now(), LocalDateTime.now(), null);
         when(commandService.updateUser(any(), any())).thenReturn(Mono.just(user));
 
         client.put().uri("/api/v1/users/{id}", id)
@@ -112,7 +112,7 @@ class UserRestControllerTest {
     @Test
     void testPatchUser() {
         UUID id = UUID.randomUUID();
-        User user = new User(id, "test@test.com", Role.LEARNER, TargetLevel.SENIOR_HIGH, 0, 30, LocalDateTime.now(), LocalDateTime.now(), null);
+        User user = new User(id, "test@test.com", Role.LEARNER, TargetLevel.SENIOR_HIGH, 0, 0, 0, 30, LocalDateTime.now(), LocalDateTime.now(), null);
         when(commandService.patchUser(any(), any())).thenReturn(Mono.just(user));
 
         client.patch().uri("/api/v1/users/{id}", id)
@@ -144,7 +144,7 @@ class UserRestControllerTest {
 
     @Test
     void testOnboardUser() {
-        User user = new User(UUID.randomUUID(), "test@test.com", Role.LEARNER, TargetLevel.JUNIOR_HIGH, 0, 20, LocalDateTime.now(), LocalDateTime.now(), null);
+        User user = new User(UUID.randomUUID(), "test@test.com", Role.LEARNER, TargetLevel.JUNIOR_HIGH, 0, 0, 0, 20, LocalDateTime.now(), LocalDateTime.now(), null);
         when(commandService.onboardUser(any())).thenReturn(Mono.just(user));
 
         client.post().uri("/api/v1/users:onboard")
@@ -157,7 +157,7 @@ class UserRestControllerTest {
 
     @Test
     void testOnboardUser_withNullRoleAndTargetLevel() {
-        User user = new User(UUID.randomUUID(), "test@test.com", null, null, 0, 20, LocalDateTime.now(), LocalDateTime.now(), null);
+        User user = new User(UUID.randomUUID(), "test@test.com", null, null, 0, 0, 0, 20, LocalDateTime.now(), LocalDateTime.now(), null);
         when(commandService.onboardUser(any())).thenReturn(Mono.just(user));
 
         client.post().uri("/api/v1/users:onboard")

@@ -36,7 +36,7 @@ class DailyProgressGraphQLResolverTest {
         when(repository.findAll(org.mockito.ArgumentMatchers.<org.springframework.data.domain.Example<DailyProgress>>any())).thenReturn(Flux.just(dp));
 
         StepVerifier.create(resolver.listDailyProgresses(new DailyProgressFilterInput(null, userId, null, null, null, null, null))
-                .contextWrite(reactor.util.context.Context.of("CURRENT_USER", new com.vocabest.core.adapter.out.persistence.model.User(userId, "test", com.vocabest.core.adapter.out.persistence.model.Role.LEARNER, null, 0, 0, null, null, null))))
+                .contextWrite(reactor.util.context.Context.of("CURRENT_USER", new com.vocabest.core.adapter.out.persistence.model.User(userId, "test", com.vocabest.core.adapter.out.persistence.model.Role.LEARNER, null, 0, 0, 0, 0, null, null, null))))
                 .expectNextMatches(e -> e.userId().equals(userId))
                 .verifyComplete();
     }

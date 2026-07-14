@@ -8,5 +8,7 @@ public record UserResponse(
     String role,
     String targetLevel,
     Integer learningStreak,
+    Integer maxLearningStreak,
+    Integer maxDailyQuestions,
     Integer dailyTargetQuestions
 ) {}

@@ -34,7 +34,7 @@ class WordMasteryGraphQLResolverTest {
         when(repository.findAll(any(Example.class))).thenReturn(Flux.just(entity));
 
         StepVerifier.create(resolver.listWordMasteries(new WordMasteryFilterInput(null, userId, null, null))
-                .contextWrite(reactor.util.context.Context.of("CURRENT_USER", new com.vocabest.core.adapter.out.persistence.model.User(userId, "test", com.vocabest.core.adapter.out.persistence.model.Role.LEARNER, null, 0, 0, null, null, null))))
+                .contextWrite(reactor.util.context.Context.of("CURRENT_USER", new com.vocabest.core.adapter.out.persistence.model.User(userId, "test", com.vocabest.core.adapter.out.persistence.model.Role.LEARNER, null, 0, 0, 0, 0, null, null, null))))
                 .expectNextMatches(e -> e.userId().equals(userId))
                 .verifyComplete();
     }

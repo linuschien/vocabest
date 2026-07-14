@@ -17,6 +17,8 @@ type User {
   role: Role
   targetLevel: TargetLevel
   learningStreak: Int
+  maxLearningStreak: Int
+  maxDailyQuestions: Int
   dailyTargetQuestions: Int
 }
 
