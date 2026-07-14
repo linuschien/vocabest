@@ -52,7 +52,7 @@ beforeEach(() => {
 describe('QuizBoardPage', () => {
   it('renders quiz card with question text', async () => {
     renderPage();
-    expect(await screen.findByText('情境克漏字測驗')).toBeInTheDocument();
+    expect(await screen.findByText('⚔️ 情境克漏字測驗')).toBeInTheDocument();
   });
 
   it('renders 4 option buttons after question loads', async () => {
