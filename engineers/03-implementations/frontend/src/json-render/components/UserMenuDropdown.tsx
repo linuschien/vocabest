@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useStateStore, useStateValue } from '@json-render/react';
 import { useNavigate } from 'react-router-dom';
+import { User, Settings, Shield } from 'lucide-react';
 
 export default function UserMenuDropdown({ element, emit }: any) {
   const [isOpen, setIsOpen] = useState(false);
@@ -44,6 +45,7 @@ export default function UserMenuDropdown({ element, emit }: any) {
         id="avatar-dropdown-btn"
         onClick={() => setIsOpen(!isOpen)}
       >
+        <User className="w-4 h-4 mr-2" />
         {email || 'User Menu'}
       </button>
 
@@ -52,15 +54,17 @@ export default function UserMenuDropdown({ element, emit }: any) {
           <div className="py-1">
             <button
               onClick={handleOpenSettings}
-              className="block w-full px-4 py-2 text-left text-sm hover:bg-accent hover:text-accent-foreground"
+              className="flex items-center w-full px-4 py-2 text-left text-sm hover:bg-accent hover:text-accent-foreground"
             >
+              <Settings className="w-4 h-4 mr-2" />
               Personal Settings
             </button>
             {isAdmin && (
               <button
                 onClick={handleOpenAdmin}
-                className="block w-full px-4 py-2 text-left text-sm hover:bg-accent hover:text-accent-foreground"
+                className="flex items-center w-full px-4 py-2 text-left text-sm hover:bg-accent hover:text-accent-foreground"
               >
+                <Shield className="w-4 h-4 mr-2" />
                 Admin Dashboard
               </button>
             )}
