@@ -339,52 +339,67 @@ export default function CrosswordGame({ element }: any) {
 
   return (
     <ErrorBoundary>
-      <div className="flex flex-col items-center w-full max-w-2xl mx-auto p-4 select-none" id={element?.props?.id}>
+      <div className="flex flex-col xl:flex-row items-start justify-center w-full max-w-7xl mx-auto p-4 gap-8 select-none" id={element?.props?.id}>
         
-        {isWon && (
-          <div className="mb-6 flex flex-col items-center gap-4 animate-in fade-in zoom-in">
-            <div className="px-6 py-3 bg-green-500 text-white text-lg font-bold rounded-lg shadow-xl">
-              🎉 恭喜完成！
-            </div>
-            <button
-              onClick={resetGame}
-              className="px-4 py-2 bg-primary text-primary-foreground font-bold rounded-md hover:opacity-90 shadow-sm"
-            >
-              再玩一次
-            </button>
-          </div>
-        )}
-
-        <div className="bg-card border border-border p-4 rounded-xl shadow-sm mb-6 max-w-full overflow-x-auto">
-          <div className="flex flex-col" style={{ width: 'max-content' }}>
-            {layout.table.map((row, y) => (
-              <div key={y} className="flex">
-                {row.map((cell, x) => (
-                  <div 
-                    key={`${x}-${y}`} 
-                    className={getCellClass(x, y)}
-                    onClick={() => handleCellClick(x, y)}
-                  >
-                    {cell !== '-' && (
-                      <span className="relative">
-                        {userGrid[y]?.[x] || ''}
-                        {layout.result.find(w => w.startx - 1 === x && w.starty - 1 === y) && (
-                          <span className="absolute -top-3 -left-3 text-[10px] font-normal text-muted-foreground">
-                            {layout.result.find(w => w.startx - 1 === x && w.starty - 1 === y)?.position}
-                          </span>
-                        )}
-                      </span>
-                    )}
-                  </div>
-                ))}
+        {/* Left Area: Grid and Keyboard */}
+        <div className="flex flex-col items-center flex-1 min-w-0 w-full">
+          {isWon && (
+            <div className="mb-6 flex flex-col items-center gap-4 animate-in fade-in zoom-in">
+              <div className="px-6 py-3 bg-green-500 text-white text-lg font-bold rounded-lg shadow-xl">
+                🎉 恭喜完成！
               </div>
-            ))}
+              <button
+                onClick={resetGame}
+                className="px-4 py-2 bg-primary text-primary-foreground font-bold rounded-md hover:opacity-90 shadow-sm"
+              >
+                再玩一次
+              </button>
+            </div>
+          )}
+
+          <div className="bg-card border border-border p-4 rounded-xl shadow-sm mb-6 max-w-full overflow-x-auto">
+            <div className="flex flex-col" style={{ width: 'max-content' }}>
+              {layout.table.map((row, y) => (
+                <div key={y} className="flex">
+                  {row.map((cell, x) => (
+                    <div 
+                      key={`${x}-${y}`} 
+                      className={getCellClass(x, y)}
+                      onClick={() => handleCellClick(x, y)}
+                    >
+                      {cell !== '-' && (
+                        <span className="relative">
+                          {userGrid[y]?.[x] || ''}
+                          {layout.result.find(w => w.startx - 1 === x && w.starty - 1 === y) && (
+                            <span className="absolute -top-3 -left-3 text-[10px] font-normal text-muted-foreground">
+                              {layout.result.find(w => w.startx - 1 === x && w.starty - 1 === y)?.position}
+                            </span>
+                          )}
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Floating Clue for smaller screens */}
+          {activeWord && (
+            <div className="xl:hidden sticky top-4 w-full bg-primary text-primary-foreground p-3 rounded-lg shadow-lg font-medium text-center z-10 mb-4 animate-in slide-in-from-top-2">
+              {activeWord.position}. {activeWord.orientation === 'across' ? '橫向' : '直向'}: {activeWord.clue}
+            </div>
+          )}
+
+          <div className="w-full">
+            <Keyboard onKeyPress={handleKeyPress} disabled={isWon} />
           </div>
         </div>
 
-        <div className="w-full grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 text-sm">
-          <div className="flex flex-col gap-2 p-4 bg-muted/30 rounded-lg">
-            <h3 className="font-bold text-lg mb-2">橫向 (Across)</h3>
+        {/* Right Area: Clues */}
+        <div className="w-full xl:w-96 shrink-0 flex flex-col gap-6 text-sm">
+          <div className="flex flex-col gap-2 p-4 bg-muted/30 rounded-lg max-h-[40vh] xl:max-h-[70vh] overflow-y-auto">
+            <h3 className="font-bold text-lg mb-2 sticky top-0 bg-muted/90 backdrop-blur-sm py-1 z-10">橫向 (Across)</h3>
             {layout.result.filter(w => w.orientation === 'across').map(w => {
               const isCorrect = isWordCorrect(w);
               return (
@@ -419,8 +434,9 @@ export default function CrosswordGame({ element }: any) {
               );
             })}
           </div>
-          <div className="flex flex-col gap-2 p-4 bg-muted/30 rounded-lg">
-            <h3 className="font-bold text-lg mb-2">直向 (Down)</h3>
+          
+          <div className="flex flex-col gap-2 p-4 bg-muted/30 rounded-lg max-h-[40vh] xl:max-h-[70vh] overflow-y-auto">
+            <h3 className="font-bold text-lg mb-2 sticky top-0 bg-muted/90 backdrop-blur-sm py-1 z-10">直向 (Down)</h3>
             {layout.result.filter(w => w.orientation === 'down').map(w => {
               const isCorrect = isWordCorrect(w);
               return (
@@ -457,14 +473,6 @@ export default function CrosswordGame({ element }: any) {
           </div>
         </div>
 
-        {/* Floating Clue for mobile */}
-        {activeWord && (
-          <div className="md:hidden sticky top-4 w-full bg-primary text-primary-foreground p-3 rounded-lg shadow-lg font-medium text-center z-10 mb-4 animate-in slide-in-from-top-2">
-            {activeWord.position}. {activeWord.orientation === 'across' ? '橫向' : '直向'}: {activeWord.clue}
-          </div>
-        )}
-
-        <Keyboard onKeyPress={handleKeyPress} disabled={isWon} />
       </div>
     </ErrorBoundary>
   );

@@ -4,51 +4,12 @@
     "crossword-page-container": {
       "type": "Container:page",
       "props": {
-        "id": "crossword-page-container"
-      },
-      "children": [
-        "page-header",
-        "crossword-game"
-      ]
-    },
-    "page-header": {
-      "type": "div",
-      "props": {
-        "id": "page-header",
-        "className": "flex items-center justify-between border-b pb-4 mb-6"
-      },
-      "children": [
-        "header-title",
-        "back-button"
-      ]
-    },
-    "header-title": {
-      "type": "h1",
-      "props": {
-        "id": "header-title",
-        "className": "text-2xl font-bold tracking-tight flex items-center gap-2",
+        "id": "crossword-page-container",
         "label": "📝 填字遊戲 (Crossword)"
       },
-      "children": []
-    },
-    "back-button": {
-      "type": "Button",
-      "props": {
-        "id": "back-btn",
-        "label": "← 返回",
-        "variant": "ghost"
-      },
-      "children": [],
-      "on": {
-        "press": [
-          {
-            "action": "navigate",
-            "params": {
-              "path": "/learning-dashboard"
-            }
-          }
-        ]
-      }
+      "children": [
+        "crossword-game"
+      ]
     },
     "crossword-game": {
       "type": "CrosswordGame",
