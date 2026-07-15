@@ -154,55 +154,67 @@ export default function WordleGame({ element }: any) {
 
   return (
     <ErrorBoundary>
-      <div className="flex flex-col items-center justify-center w-full max-w-lg mx-auto p-4 select-none relative" id={element?.props?.id}>
-        {errorMsg && (
-          <div className="absolute top-10 left-1/2 -translate-x-1/2 z-50 px-6 py-3 bg-foreground text-background text-sm font-bold rounded-lg shadow-xl animate-in fade-in slide-in-from-top-4">
-            {errorMsg}
-          </div>
-        )}
-
-        <div className="flex items-center justify-center gap-4 mb-6 text-xs sm:text-sm font-medium text-muted-foreground w-full flex-wrap">
-          <div className="flex items-center gap-1.5"><div className="w-4 h-4 bg-green-500 rounded shadow-sm"></div>位置正確</div>
-          <div className="flex items-center gap-1.5"><div className="w-4 h-4 bg-yellow-500 rounded shadow-sm"></div>字母存在</div>
-          <div className="flex items-center gap-1.5"><div className="w-4 h-4 bg-slate-500 rounded shadow-sm"></div>完全沒有</div>
-        </div>
-
-        <div className="grid grid-rows-6 gap-2 mb-8">
-          {guesses.map((guess, i) => (
-            <CompletedRow key={i} guess={guess} target={targetWord} />
-          ))}
-          {gameStatus === 'playing' && guesses.length < MAX_GUESSES && (
-            <CurrentRow guess={currentGuess} />
-          )}
-          {emptyRows.map((_, i) => (
-            <EmptyRow key={i} />
-          ))}
-        </div>
-
+      <div className="flex flex-col lg:flex-row items-center lg:items-start justify-center w-full max-w-5xl mx-auto p-4 gap-8 lg:gap-16 select-none isolate" id={element?.props?.id}>
+        
+        {/* Win/Lose Modal Overlay */}
         {(gameStatus === 'won' || gameStatus === 'lost') && (
-          <div className="absolute top-1/3 left-0 w-full flex flex-col items-center p-8 bg-card border border-border shadow-2xl rounded-2xl animate-in fade-in zoom-in-95 z-10">
-            <h2 className="text-3xl font-extrabold mb-3">
-              {gameStatus === 'won' ? '🎉 挑戰成功！' : 'Game Over'}
-            </h2>
-            <div className="text-xl mb-2 text-muted-foreground">答案是: <span className="font-bold text-primary tracking-widest uppercase">{targetWord}</span></div>
-            <div className="text-md mb-6 font-medium text-foreground">
-              {partOfSpeech ? `[${partOfSpeech}] ` : ''}{translation}
+          <div className="fixed inset-0 z-[100] flex items-center justify-center bg-background/80 backdrop-blur-sm animate-in fade-in">
+            <div className="flex flex-col items-center p-10 bg-card border border-border shadow-2xl rounded-2xl animate-in zoom-in-95 max-w-md w-full mx-4">
+              <h2 className="text-4xl font-extrabold mb-4 text-center">
+                {gameStatus === 'won' ? '🎉 挑戰成功！' : 'Game Over'}
+              </h2>
+              <div className="text-2xl mb-2 text-muted-foreground">答案是: <span className="font-bold text-primary tracking-widest uppercase">{targetWord}</span></div>
+              <div className="text-lg mb-8 font-medium text-foreground text-center">
+                {partOfSpeech ? `[${partOfSpeech}] ` : ''}{translation}
+              </div>
+              
+              {gameStatus === 'won' && (
+                <p className="text-md mb-8 text-muted-foreground">你總共猜了 {guesses.length} 次</p>
+              )}
+              <button 
+                onClick={handleRestart}
+                className="px-8 py-3 bg-primary text-primary-foreground font-bold rounded-xl shadow-lg hover:opacity-90 transition-transform active:scale-95 flex items-center gap-2 text-lg"
+              >
+                <RotateCcw className="w-5 h-5" />
+                再玩一次
+              </button>
             </div>
-            
-            {gameStatus === 'won' && (
-              <p className="text-sm mb-6 text-muted-foreground">你總共猜了 {guesses.length} 次</p>
-            )}
-            <button 
-              onClick={handleRestart}
-              className="px-8 py-3 bg-primary text-primary-foreground font-bold rounded-full shadow-lg hover:opacity-90 transition-opacity flex items-center gap-2"
-            >
-              <RotateCcw className="w-5 h-5" />
-              再玩一次
-            </button>
           </div>
         )}
 
-        <Keyboard letterStates={letterStates} onKeyPress={onKeyPress} disabled={gameStatus !== 'playing'} />
+        {/* Left Side: Legend + Grid */}
+        <div className="flex flex-col items-center relative">
+          <div className="flex items-center justify-center gap-4 mb-6 text-sm font-medium text-muted-foreground w-full flex-wrap">
+            <div className="flex items-center gap-1.5"><div className="w-4 h-4 bg-green-500 rounded shadow-sm"></div>位置正確</div>
+            <div className="flex items-center gap-1.5"><div className="w-4 h-4 bg-yellow-500 rounded shadow-sm"></div>字母存在</div>
+            <div className="flex items-center gap-1.5"><div className="w-4 h-4 bg-slate-500 rounded shadow-sm"></div>完全沒有</div>
+          </div>
+
+          <div className="grid grid-rows-6 gap-2 relative">
+            {/* Error Message Toast */}
+            {errorMsg && (
+              <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-50 px-6 py-4 bg-foreground text-background text-lg font-bold rounded-xl shadow-2xl animate-in fade-in zoom-in-90 whitespace-nowrap">
+                {errorMsg}
+              </div>
+            )}
+
+            {guesses.map((guess, i) => (
+              <CompletedRow key={i} guess={guess} target={targetWord} />
+            ))}
+            {gameStatus === 'playing' && guesses.length < MAX_GUESSES && (
+              <CurrentRow guess={currentGuess} />
+            )}
+            {emptyRows.map((_, i) => (
+              <EmptyRow key={i} />
+            ))}
+          </div>
+        </div>
+
+        {/* Right Side: Keyboard */}
+        <div className="flex flex-col w-full max-w-md lg:mt-14">
+          <Keyboard letterStates={letterStates} onKeyPress={onKeyPress} disabled={gameStatus !== 'playing'} />
+        </div>
+
       </div>
     </ErrorBoundary>
   );
