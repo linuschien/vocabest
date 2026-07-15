@@ -13,6 +13,7 @@ import UserMenuDropdown from './components/UserMenuDropdown';
 import ErrorReviewButton from './components/ErrorReviewButton';
 import ProgressTimeControls from './components/ProgressTimeControls';
 import ProgressChart from './components/ProgressChart';
+import WordleGame from './components/WordleGame';
 
 // ── Adapter: ComponentRenderProps → BaseComponentProps ──────────────────────
 function adapt(Comp: ComponentType<any>): ComponentType<any> {
@@ -99,6 +100,7 @@ export const componentRegistry: Record<string, ComponentType<any>> = {
   'ErrorReviewButton': ErrorReviewButton, // 弱點特訓入口按鈕（含 badge）
   'ProgressTimeControls': adapt(ProgressTimeControls),
   'ProgressChart': adapt(ProgressChart),
+  'WordleGame': adapt(WordleGame),
 
   // ── 5. Native HTML passthrough ───────────────────────────────────────────
   'div': ({ element, children }: any) => (

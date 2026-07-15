@@ -90,7 +90,8 @@
       "children": [
         "start-daily-task-btn",
         "error-review-btn",
-        "nav-dictionary-btn"
+        "nav-dictionary-btn",
+        "nav-wordle-btn"
       ]
     },
     "start-daily-task-btn": {
@@ -148,6 +149,27 @@
             "action": "navigate",
             "params": {
               "path": "/vocabulary-dictionary"
+            }
+          }
+        ]
+      }
+    },
+    "nav-wordle-btn": {
+      "type": "Button",
+      "props": {
+        "id": "nav-wordle-btn",
+        "label": "🧩 Wordle 挑戰",
+        "variant": "outline",
+        "className": "h-20 flex flex-col items-center justify-center shadow-sm",
+        "disabled": null
+      },
+      "children": [],
+      "on": {
+        "press": [
+          {
+            "action": "navigate",
+            "params": {
+              "path": "/wordle"
             }
           }
         ]

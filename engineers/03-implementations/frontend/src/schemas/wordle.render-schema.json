@@ -1,0 +1,40 @@
+{
+  "root": "wordle-container",
+  "elements": {
+    "wordle-container": {
+      "type": "Container:page",
+      "props": {
+        "id": "wordle-container"
+      },
+      "children": [
+        "header-section",
+        "game-section"
+      ]
+    },
+    "header-section": {
+      "type": "div",
+      "props": { "className": "mb-4" },
+      "children": ["title", "subtitle"]
+    },
+    "title": {
+      "type": "Heading",
+      "props": {
+        "text": "🧩 Wordle 單字挑戰",
+        "level": "h1"
+      }
+    },
+    "subtitle": {
+      "type": "Text",
+      "props": {
+        "text": "猜測這 5 個字母的目標單字。每次猜測後，方塊的顏色會顯示你的猜測有多接近目標！",
+        "className": "text-muted-foreground mt-1 block"
+      }
+    },
+    "game-section": {
+      "type": "WordleGame",
+      "props": {
+        "id": "wordle-game"
+      }
+    }
+  }
+}
