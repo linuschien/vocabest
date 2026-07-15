@@ -96,7 +96,7 @@ export default function CrosswordGame({ element }: any) {
   const store = useStateStore();
   const userId = store.get('/data/user/id') as string;
   
-  const { data: targets, isLoading, isError, refetch } = useGetCrosswordTargets(userId);
+  const { data: targets, isLoading, isError, refetch, isFetching } = useGetCrosswordTargets(userId);
   
   const [retryCount, setRetryCount] = useState(0);
   const MAX_RETRIES = 5;
@@ -116,6 +116,8 @@ export default function CrosswordGame({ element }: any) {
   const [selectedWordIndex, setSelectedWordIndex] = useState<number | null>(null);
 
   const resetGame = () => {
+    setSelectedCell(null);
+    setSelectedWordIndex(null);
     setLayout(null);
     setUserGrid([]);
     setRetryCount(0);
@@ -124,6 +126,7 @@ export default function CrosswordGame({ element }: any) {
 
   useEffect(() => {
     if (layout) return;
+    if (isFetching) return;
     if (!targets || targets.length === 0) return;
     
     const input = targets.map(t => ({
@@ -144,7 +147,7 @@ export default function CrosswordGame({ element }: any) {
       setUserGrid(initialGrid);
       setRetryCount(0);
     }
-  }, [targets, retryCount, refetch, layout, setLayout, setUserGrid]);
+  }, [targets, retryCount, refetch, layout, isFetching, setLayout, setUserGrid]);
 
   const isWordCorrect = useCallback((word: WordResult) => {
     if (!layout || word.orientation === 'none') return false;
