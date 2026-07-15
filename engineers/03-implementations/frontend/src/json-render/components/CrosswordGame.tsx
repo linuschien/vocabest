@@ -339,23 +339,28 @@ export default function CrosswordGame({ element }: any) {
 
   return (
     <ErrorBoundary>
-      <div className="flex flex-col xl:flex-row items-start justify-center w-full max-w-7xl mx-auto p-4 gap-8 select-none" id={element?.props?.id}>
+      <div className="flex flex-col xl:flex-row items-start justify-center w-full max-w-7xl mx-auto p-4 gap-8 select-none isolate" id={element?.props?.id}>
         
-        {/* Left Area: Grid and Keyboard */}
-        <div className="flex flex-col items-center flex-1 min-w-0 w-full">
-          {isWon && (
-            <div className="mb-6 flex flex-col items-center gap-4 animate-in fade-in zoom-in">
-              <div className="px-6 py-3 bg-green-500 text-white text-lg font-bold rounded-lg shadow-xl">
+        {/* Win Modal Overlay */}
+        {isWon && (
+          <div className="fixed inset-0 z-[100] flex items-center justify-center bg-background/80 backdrop-blur-sm animate-in fade-in">
+            <div className="bg-card border border-border shadow-2xl rounded-2xl p-8 flex flex-col items-center gap-6 animate-in zoom-in-95">
+              <div className="text-4xl font-extrabold text-green-500 mb-2">
                 🎉 恭喜完成！
               </div>
+              <p className="text-muted-foreground text-lg">你已經成功填完所有的單字了！</p>
               <button
                 onClick={resetGame}
-                className="px-4 py-2 bg-primary text-primary-foreground font-bold rounded-md hover:opacity-90 shadow-sm"
+                className="px-8 py-3 bg-primary text-primary-foreground font-bold rounded-xl hover:opacity-90 shadow-sm text-lg transition-transform active:scale-95"
               >
                 再玩一次
               </button>
             </div>
-          )}
+          </div>
+        )}
+
+        {/* Left Area: Grid and Keyboard */}
+        <div className="flex flex-col items-center flex-1 min-w-0 w-full">
 
           <div className="bg-card border border-border p-4 rounded-xl shadow-sm mb-6 max-w-full overflow-x-auto">
             <div className="flex flex-col" style={{ width: 'max-content' }}>

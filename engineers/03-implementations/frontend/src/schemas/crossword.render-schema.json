@@ -8,8 +8,28 @@
         "label": "📝 填字遊戲 (Crossword)"
       },
       "children": [
+        "header-section",
         "crossword-game"
       ]
+    },
+    "header-section": {
+      "type": "div",
+      "props": { "className": "mb-4" },
+      "children": ["title", "subtitle"]
+    },
+    "title": {
+      "type": "Heading",
+      "props": {
+        "text": "📝 填字遊戲 (Crossword)",
+        "level": "h1"
+      }
+    },
+    "subtitle": {
+      "type": "Text",
+      "props": {
+        "text": "根據提示填入正確的單字。當所有單字都拼寫正確時即可通關！",
+        "className": "text-muted-foreground mt-1 block"
+      }
     },
     "crossword-game": {
       "type": "CrosswordGame",
