@@ -396,7 +396,21 @@ export default function CrosswordGame({ element }: any) {
                   `}
                   onClick={() => {
                     setSelectedWordIndex(layout.result.indexOf(w));
-                    setSelectedCell({x: w.startx - 1, y: w.starty - 1});
+                    let firstX = w.startx - 1;
+                    let firstY = w.starty - 1;
+                    let found = false;
+                    for (let i = 0; i < w.answer.length; i++) {
+                      const cx = w.orientation === 'across' ? firstX + i : firstX;
+                      const cy = w.orientation === 'down' ? firstY + i : firstY;
+                      if (!isCellLocked(cx, cy)) {
+                        setSelectedCell({x: cx, y: cy});
+                        found = true;
+                        break;
+                      }
+                    }
+                    if (!found) {
+                      setSelectedCell({x: firstX, y: firstY});
+                    }
                   }}
                 >
                   <span className="font-bold min-w-[20px]">{w.position}.</span>
@@ -418,7 +432,21 @@ export default function CrosswordGame({ element }: any) {
                   `}
                   onClick={() => {
                     setSelectedWordIndex(layout.result.indexOf(w));
-                    setSelectedCell({x: w.startx - 1, y: w.starty - 1});
+                    let firstX = w.startx - 1;
+                    let firstY = w.starty - 1;
+                    let found = false;
+                    for (let i = 0; i < w.answer.length; i++) {
+                      const cx = w.orientation === 'across' ? firstX + i : firstX;
+                      const cy = w.orientation === 'down' ? firstY + i : firstY;
+                      if (!isCellLocked(cx, cy)) {
+                        setSelectedCell({x: cx, y: cy});
+                        found = true;
+                        break;
+                      }
+                    }
+                    if (!found) {
+                      setSelectedCell({x: firstX, y: firstY});
+                    }
                   }}
                 >
                   <span className="font-bold min-w-[20px]">{w.position}.</span>
