@@ -119,7 +119,8 @@
         "className": "w-full"
       },
       "children": [
-        "nav-wordle-btn"
+        "nav-wordle-btn",
+        "nav-crossword-btn"
       ]
     },
     "start-daily-task-btn": {
@@ -195,6 +196,26 @@
             "action": "navigate",
             "params": {
               "path": "/wordle"
+            }
+          }
+        ]
+      }
+    },
+    "nav-crossword-btn": {
+      "type": "Button",
+      "props": {
+        "id": "nav-crossword-btn",
+        "label": "📝 填字遊戲",
+        "variant": "outline",
+        "disabled": null
+      },
+      "children": [],
+      "on": {
+        "press": [
+          {
+            "action": "navigate",
+            "params": {
+              "path": "/crossword"
             }
           }
         ]
