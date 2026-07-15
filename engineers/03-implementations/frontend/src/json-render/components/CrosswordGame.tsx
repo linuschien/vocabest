@@ -354,8 +354,9 @@ export default function CrosswordGame({ element }: any) {
               <p className="text-muted-foreground text-lg">你已經成功填完所有的單字了！</p>
               <button
                 onClick={resetGame}
-                className="px-8 py-3 bg-primary text-primary-foreground font-bold rounded-xl hover:opacity-90 shadow-sm text-lg transition-transform active:scale-95"
+                className="px-8 py-3 flex items-center gap-2 bg-primary text-primary-foreground font-bold rounded-xl hover:opacity-90 shadow-sm text-lg transition-transform active:scale-95"
               >
+                <RotateCcw className="w-5 h-5" />
                 再玩一次
               </button>
             </div>
