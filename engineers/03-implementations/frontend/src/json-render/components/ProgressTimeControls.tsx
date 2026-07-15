@@ -89,6 +89,13 @@ export default function ProgressTimeControls({ element }: any) {
         <button onClick={handleNext} className="p-2 hover:bg-accent rounded-full border border-border bg-background text-foreground">
           <ChevronRight className="w-4 h-4" />
         </button>
+
+        <button 
+          onClick={() => setCurrentDate(new Date())}
+          className="ml-2 px-3 py-1.5 text-sm font-medium border border-border rounded-md bg-background text-foreground hover:bg-accent shadow-sm transition-colors"
+        >
+          今天
+        </button>
       </div>
     </div>
   );

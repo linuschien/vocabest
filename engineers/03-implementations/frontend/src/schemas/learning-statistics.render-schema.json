@@ -8,8 +8,8 @@
       },
       "children": [
         "header-section",
-        "controls-section",
         "summary-grid",
+        "controls-section",
         "chart-section"
       ]
     },
