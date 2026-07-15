@@ -10,7 +10,7 @@ const modalSpec = {
       "props": {
         "id": "onboarding-modal",
         "label": "Personal Settings",
-        "title": "Personal Settings",
+        "title": "⚙️ Personal Settings",
         "description": "Please set your learning goals below.",
         "openPath": "/modals/onboarding-modal"
       },
