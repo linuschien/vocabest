@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { useStateStore } from '@json-render/react';
+import { useStateStore, useStateValue } from '@json-render/react';
 import { useGetWordleTarget } from '@/hooks/use-get-wordle-target';
 import { useValidateWordleGuess } from '@/hooks/use-validate-wordle-guess';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
@@ -14,16 +14,25 @@ export default function WordleGame({ element }: any) {
   const { data: targetData, isLoading: isTargetLoading, isError: isTargetError, refetch: refetchTarget } = useGetWordleTarget(userId);
   const { mutateAsync: validateGuess, isPending: isValidating } = useValidateWordleGuess();
 
-  const [guesses, setGuesses] = useState<string[]>([]);
-  const [currentGuess, setCurrentGuess] = useState('');
-  const [gameStatus, setGameStatus] = useState<'playing' | 'won' | 'lost'>('playing');
+  const guesses = (useStateValue('/state/wordle/guesses') || []) as string[];
+  const currentGuess = (useStateValue('/state/wordle/currentGuess') || '') as string;
+  const gameStatus = (useStateValue('/state/wordle/gameStatus') || 'playing') as 'playing' | 'won' | 'lost';
+  const letterStates = (useStateValue('/state/wordle/letterStates') || {}) as Record<string, LetterState>;
+
+  const setGuesses = (val: string[]) => store.set('/state/wordle/guesses', val);
+  const setCurrentGuess = (val: string | ((prev: string) => string)) => {
+    store.set('/state/wordle/currentGuess', typeof val === 'function' ? val(currentGuess) : val);
+  };
+  const setGameStatus = (val: 'playing' | 'won' | 'lost') => store.set('/state/wordle/gameStatus', val);
+  const setLetterStates = (val: Record<string, LetterState>) => store.set('/state/wordle/letterStates', val);
+
   const [errorMsg, setErrorMsg] = useState('');
-  const [letterStates, setLetterStates] = useState<Record<string, LetterState>>({});
 
   const MAX_GUESSES = 6;
   const WORD_LENGTH = 5;
   const targetWord = targetData?.word.toLowerCase() || '';
-  const translation = targetData?.translation || '';
+  const translation = targetData?.chineseTranslation || '';
+  const partOfSpeech = targetData?.partsOfSpeech || '';
 
   // Input handling
   const onKeyPress = useCallback(async (key: string) => {
@@ -39,7 +48,8 @@ export default function WordleGame({ element }: any) {
       try {
         const response = await validateGuess({ userId, guess: currentGuess });
         if (!response.valid) {
-          setErrorMsg('查無此字');
+          setErrorMsg('單字卷軸中查無此字');
+          setTimeout(() => setErrorMsg(''), 2500);
           return;
         }
 
@@ -89,6 +99,7 @@ export default function WordleGame({ element }: any) {
 
       } catch (e) {
         setErrorMsg('驗證單字時發生錯誤');
+        setTimeout(() => setErrorMsg(''), 2500);
       }
       return;
     }
@@ -144,8 +155,16 @@ export default function WordleGame({ element }: any) {
   return (
     <ErrorBoundary>
       <div className="flex flex-col items-center justify-center w-full max-w-lg mx-auto p-4 select-none relative" id={element?.props?.id}>
-        <div className="h-8 mb-4 flex items-center justify-center w-full">
-          {errorMsg && <div className="px-4 py-1.5 bg-destructive text-destructive-foreground text-sm font-bold rounded-md shadow-sm animate-in fade-in zoom-in-95">{errorMsg}</div>}
+        {errorMsg && (
+          <div className="absolute top-10 left-1/2 -translate-x-1/2 z-50 px-6 py-3 bg-foreground text-background text-sm font-bold rounded-lg shadow-xl animate-in fade-in slide-in-from-top-4">
+            {errorMsg}
+          </div>
+        )}
+
+        <div className="flex items-center justify-center gap-4 mb-6 text-xs sm:text-sm font-medium text-muted-foreground w-full flex-wrap">
+          <div className="flex items-center gap-1.5"><div className="w-4 h-4 bg-green-500 rounded shadow-sm"></div>位置正確</div>
+          <div className="flex items-center gap-1.5"><div className="w-4 h-4 bg-yellow-500 rounded shadow-sm"></div>字母存在</div>
+          <div className="flex items-center gap-1.5"><div className="w-4 h-4 bg-slate-500 rounded shadow-sm"></div>完全沒有</div>
         </div>
 
         <div className="grid grid-rows-6 gap-2 mb-8">
@@ -166,7 +185,9 @@ export default function WordleGame({ element }: any) {
               {gameStatus === 'won' ? '🎉 挑戰成功！' : 'Game Over'}
             </h2>
             <div className="text-xl mb-2 text-muted-foreground">答案是: <span className="font-bold text-primary tracking-widest uppercase">{targetWord}</span></div>
-            <div className="text-md mb-6 font-medium text-foreground">{translation}</div>
+            <div className="text-md mb-6 font-medium text-foreground">
+              {partOfSpeech ? `[${partOfSpeech}] ` : ''}{translation}
+            </div>
             
             {gameStatus === 'won' && (
               <p className="text-sm mb-6 text-muted-foreground">你總共猜了 {guesses.length} 次</p>
@@ -262,7 +283,7 @@ function Keyboard({ letterStates, onKeyPress, disabled }: { letterStates: Record
   const keys = [
     ['q','w','e','r','t','y','u','i','o','p'],
     ['a','s','d','f','g','h','j','k','l'],
-    ['Enter', 'z','x','c','v','b','n','m', 'Backspace']
+    ['z','x','c','v','b','n','m', 'Backspace', 'Enter']
   ];
 
   const getKeyClass = (key: string) => {
@@ -277,6 +298,7 @@ function Keyboard({ letterStates, onKeyPress, disabled }: { letterStates: Record
     <div className={`flex flex-col gap-2 w-full mt-4 ${disabled ? 'opacity-50 pointer-events-none' : ''}`}>
       {keys.map((row, i) => (
         <div key={i} className="flex justify-center gap-1.5 w-full">
+          {i === 1 && <div className="w-[5%]" />}
           {row.map((key) => {
             const isSpecial = key === 'Enter' || key === 'Backspace';
             return (
@@ -284,13 +306,14 @@ function Keyboard({ letterStates, onKeyPress, disabled }: { letterStates: Record
                 key={key}
                 onClick={() => onKeyPress(key)}
                 className={`flex items-center justify-center font-bold rounded-md border-b-4 transition-all active:border-b-0 active:translate-y-1 uppercase ${
-                  isSpecial ? 'px-3 py-4 text-xs' : 'flex-1 py-4 text-sm max-w-[40px]'
+                  isSpecial ? 'px-3 py-4 text-xs min-w-[50px]' : 'flex-1 py-4 text-sm max-w-[40px]'
                 } ${getKeyClass(key)}`}
               >
                 {key === 'Backspace' ? '⌫' : key}
               </button>
             );
           })}
+          {i === 1 && <div className="w-[5%]" />}
         </div>
       ))}
     </div>

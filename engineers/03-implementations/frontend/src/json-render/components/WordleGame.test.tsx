@@ -43,6 +43,7 @@ function renderComponent() {
 describe('WordleGame', () => {
   beforeEach(() => {
     vi.clearAllMocks();
+    store.set('/state/wordle', {});
   });
 
   it('renders the game board and keyboard', async () => {

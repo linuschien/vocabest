@@ -4,8 +4,8 @@ import { useQuery } from '@tanstack/react-query';
 export interface WordBankResponse {
   id: string;
   word: string;
-  partOfSpeech?: string;
-  translation?: string;
+  partsOfSpeech?: string;
+  chineseTranslation?: string;
   targetLevel: string;
 }
 
