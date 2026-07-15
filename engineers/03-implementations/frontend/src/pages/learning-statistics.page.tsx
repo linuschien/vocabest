@@ -9,6 +9,7 @@ import { ErrorBoundary } from '@/components/ErrorBoundary';
 export default function LearningStatisticsPage() {
   const store = useStateStore();
   const userId = store.get('/data/user/id') as string;
+  const userDailyTarget = store.get('/data/user/dailyTargetQuestions') as number | undefined;
 
   // Read viewMode and currentDate from store (default week and today)
   const viewMode = useStateValue('/state/stats/viewMode') || 'week';
@@ -76,7 +77,7 @@ export default function LearningStatisticsPage() {
         const p = progresses.find(x => x.date === dStr);
         const answered = p ? p.answeredQuestions : 0;
         const correct = p ? p.correctQuestions : 0;
-        const target = p ? p.targetQuestions : 0;
+        const target = p ? p.targetQuestions : (userDailyTarget ?? 10);
         
         totalAnswered += answered;
         totalCorrect += correct;
