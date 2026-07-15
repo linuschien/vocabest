@@ -16,7 +16,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
         <p className="text-sm text-primary mt-1">答對: {data.correct}</p>
         <p className="text-sm text-muted-foreground">答錯: {data.wrong}</p>
         <p className="text-sm font-medium mt-1">正確率: {accuracy}%</p>
-        <p className="text-sm text-destructive mt-1">每日目標: {data.target}</p>
+        <p className="text-sm text-destructive mt-1">當日目標: {data.target}</p>
       </div>
     );
   }
@@ -46,7 +46,7 @@ export default function ProgressChart({ element }: any) {
             <XAxis dataKey="displayDate" tick={{ fill: 'hsl(var(--muted-foreground))' }} axisLine={false} tickLine={false} dy={10} />
             <YAxis tick={{ fill: 'hsl(var(--muted-foreground))' }} axisLine={false} tickLine={false} dx={-10} />
             <Tooltip content={<CustomTooltip />} cursor={{ fill: 'hsl(var(--muted))', opacity: 0.2 }} />
-            <Legend verticalAlign="top" height={36} formatter={(value) => value === 'correct' ? '答對' : value === 'wrong' ? '答錯' : '每日目標'} />
+            <Legend verticalAlign="top" height={36} formatter={(value) => value === 'correct' ? '答對' : value === 'wrong' ? '答錯' : '當日目標'} />
             
             <Bar dataKey="correct" stackId="a" fill="hsl(var(--primary))" radius={[0, 0, 4, 4]} />
             <Bar dataKey="wrong" stackId="a" fill="hsl(var(--muted-foreground))" opacity={0.5} radius={[4, 4, 0, 0]} />
