@@ -30,6 +30,7 @@ public class UserServiceImpl implements UserCommandService, UserQueryService {
     private final ErrorEventRepository errorEventRepository;
     private final WordMasteryRepository wordMasteryRepository;
     private final DailyProgressRepository dailyProgressRepository;
+    private final WordBankRepository wordBankRepository;
     private final Random random = new Random();
 
     @org.springframework.beans.factory.annotation.Value("${vocabest.admin.whitelist:}")
@@ -40,12 +41,14 @@ public class UserServiceImpl implements UserCommandService, UserQueryService {
             QuizQuestionRepository quizQuestionRepository,
             ErrorEventRepository errorEventRepository,
             WordMasteryRepository wordMasteryRepository,
-            DailyProgressRepository dailyProgressRepository) {
+            DailyProgressRepository dailyProgressRepository,
+            WordBankRepository wordBankRepository) {
         this.userRepository = userRepository;
         this.quizQuestionRepository = quizQuestionRepository;
         this.errorEventRepository = errorEventRepository;
         this.wordMasteryRepository = wordMasteryRepository;
         this.dailyProgressRepository = dailyProgressRepository;
+        this.wordBankRepository = wordBankRepository;
     }
 
     @Override
@@ -136,6 +139,32 @@ public class UserServiceImpl implements UserCommandService, UserQueryService {
                         })
                 )
                 .map(q -> new QuizQuestionResponse(q.id(), q.wordBankId().toString(), q.contextualCloze(), q.chineseTranslation(), q.correctAnswer(), q.distractor1(), q.distractor2(), q.distractor3(), q.explanationRootAffix(), q.explanationMnemonic()));
+    }
+
+    @Override
+    public Mono<WordBankResponse> getWordleTarget(UUID userId) {
+        return userRepository.findById(userId)
+                .flatMap(user -> wordBankRepository.findRandomWordleTarget(user.targetLevel().name()))
+                .map(wb -> new WordBankResponse(
+                        wb.id(),
+                        wb.word(),
+                        wb.partsOfSpeech(),
+                        wb.chineseTranslation(),
+                        wb.targetLevel() != null ? wb.targetLevel().name() : null,
+                        wb.difficultyLevel(),
+                        wb.examFrequency()
+                ));
+    }
+
+    @Override
+    public Mono<WordleValidationResponse> validateWordleGuess(UUID userId, String guess) {
+        if (guess == null || !guess.matches("^[a-zA-Z]{5}$")) {
+            return Mono.just(new WordleValidationResponse(false));
+        }
+        return userRepository.findById(userId)
+                .flatMap(user -> wordBankRepository.existsByWordAndTargetLevel(guess, user.targetLevel()))
+                .map(WordleValidationResponse::new)
+                .defaultIfEmpty(new WordleValidationResponse(false));
     }
 
     @Override

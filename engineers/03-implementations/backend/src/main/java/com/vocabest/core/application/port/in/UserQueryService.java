@@ -18,5 +18,9 @@ public interface UserQueryService {
     
     Mono<User> whoami();
     
+    Mono<com.vocabest.core.adapter.in.web.dto.WordBankResponse> getWordleTarget(UUID userId);
+    
+    Mono<com.vocabest.core.adapter.in.web.dto.WordleValidationResponse> validateWordleGuess(UUID userId, String guess);
+    
     Mono<ErrorReviewCountResponse> getErrorReviewCount(UUID userId);
 }

@@ -24,6 +24,8 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -233,5 +235,29 @@ class UserRestControllerTest {
                 .bodyValue(new SubmitAnswerRequest(UUID.randomUUID(), "correct"))
                 .exchange()
                 .expectStatus().isNotFound();
+    }
+
+    @Test
+    void testGetWordleTarget() {
+        UUID id = UUID.randomUUID();
+        com.vocabest.core.adapter.in.web.dto.WordBankResponse response = new com.vocabest.core.adapter.in.web.dto.WordBankResponse(UUID.randomUUID(), "apple", "noun", "蘋果", "JUNIOR_HIGH", 1, 10);
+        when(queryService.getWordleTarget(id)).thenReturn(Mono.just(response));
+
+        client.post().uri("/api/v1/users/{id}:wordleTarget", id)
+                .exchange()
+                .expectStatus().isOk();
+    }
+
+    @Test
+    void testValidateWordleGuess() {
+        UUID id = UUID.randomUUID();
+        com.vocabest.core.adapter.in.web.dto.WordleValidationResponse response = new com.vocabest.core.adapter.in.web.dto.WordleValidationResponse(true);
+        when(queryService.validateWordleGuess(eq(id), anyString())).thenReturn(Mono.just(response));
+
+        client.post().uri("/api/v1/users/{id}:validateWordleGuess", id)
+                .bodyValue(new com.vocabest.core.adapter.in.web.dto.WordleValidationRequest("apple"))
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody().jsonPath("$.valid").isEqualTo(true);
     }
 }

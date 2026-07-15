@@ -38,6 +38,9 @@ class UserServiceImplTest {
     @Mock
     private DailyProgressRepository dailyProgressRepository;
 
+    @Mock
+    private WordBankRepository wordBankRepository;
+
     @InjectMocks
     private UserServiceImpl userService;
 
@@ -304,6 +307,34 @@ class UserServiceImplTest {
 
         StepVerifier.create(userService.getErrorReviewCount(testUserId))
                 .expectNextMatches(res -> res.count() == 5)
+                .verifyComplete();
+    }
+
+    @Test
+    void validateWordleGuess_whenInvalidFormat_shouldReturnFalse() {
+        StepVerifier.create(userService.validateWordleGuess(testUserId, "abcd"))
+                .expectNextMatches(res -> !res.valid())
+                .verifyComplete();
+    }
+
+    @Test
+    void validateWordleGuess_whenValidFormatAndExists_shouldReturnTrue() {
+        when(userRepository.findById(testUserId)).thenReturn(Mono.just(testUser));
+        when(wordBankRepository.existsByWordAndTargetLevel("apple", TargetLevel.JUNIOR_HIGH)).thenReturn(Mono.just(true));
+
+        StepVerifier.create(userService.validateWordleGuess(testUserId, "apple"))
+                .expectNextMatches(WordleValidationResponse::valid)
+                .verifyComplete();
+    }
+
+    @Test
+    void getWordleTarget_shouldReturnWordBankResponse() {
+        WordBank wordBank = new WordBank(UUID.randomUUID(), "apple", "noun", "蘋果", TargetLevel.JUNIOR_HIGH, 1, 10, LocalDateTime.now(), LocalDateTime.now(), null);
+        when(userRepository.findById(testUserId)).thenReturn(Mono.just(testUser));
+        when(wordBankRepository.findRandomWordleTarget(TargetLevel.JUNIOR_HIGH.name())).thenReturn(Mono.just(wordBank));
+
+        StepVerifier.create(userService.getWordleTarget(testUserId))
+                .expectNextMatches(res -> res.word().equals("apple"))
                 .verifyComplete();
     }
 }

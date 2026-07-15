@@ -247,7 +247,50 @@ paths:
           $ref: "#/components/responses/BadRequest"
         "404":
           $ref: "#/components/responses/NotFound"
-
+  /users/{userId}:wordleTarget:
+    post:
+      operationId: getWordleTarget
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WordBankResponse"
+        "404":
+          $ref: "#/components/responses/NotFound"
+  /users/{userId}:validateWordleGuess:
+    post:
+      operationId: validateWordleGuess
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/WordleValidationRequest"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/WordleValidationResponse"
+        "404":
+          $ref: "#/components/responses/NotFound"
   /users/{userId}/daily-progresses:
     post:
       operationId: createDailyProgress
@@ -982,6 +1025,22 @@ components:
         wrongQuestions:
           type: integer
           example: 5
+    WordleValidationRequest:
+      type: object
+      properties:
+        guess:
+          type: string
+          example: "apple"
+      required:
+        - guess
+    WordleValidationResponse:
+      type: object
+      properties:
+        valid:
+          type: boolean
+          example: true
+      required:
+        - valid
     WordBankRequest:
       type: object
       properties:

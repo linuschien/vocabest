@@ -95,6 +95,24 @@ public class UserRestController {
                 .defaultIfEmpty(ResponseEntity.noContent().build());
     }
 
+    @PostMapping("/api/v1/users/{userId}:wordleTarget")
+    @com.vocabest.core.adapter.in.web.security.RequireOwnership("#userId")
+    public Mono<ResponseEntity<WordBankResponse>> getWordleTarget(@PathVariable UUID userId) {
+        return queryService.getWordleTarget(userId)
+                .map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/api/v1/users/{userId}:validateWordleGuess")
+    @com.vocabest.core.adapter.in.web.security.RequireOwnership("#userId")
+    public Mono<ResponseEntity<WordleValidationResponse>> validateWordleGuess(
+            @PathVariable UUID userId,
+            @Valid @RequestBody WordleValidationRequest request) {
+        return queryService.validateWordleGuess(userId, request.guess())
+                .map(ResponseEntity::ok)
+                .defaultIfEmpty(ResponseEntity.notFound().build());
+    }
+
     @PostMapping("/api/v1/users/{userId}:submitAnswer")
     @com.vocabest.core.adapter.in.web.security.RequireOwnership("#userId")
     public Mono<ResponseEntity<SubmitAnswerResponse>> submitAnswer(@PathVariable UUID userId, @Valid @RequestBody SubmitAnswerRequest req) {
