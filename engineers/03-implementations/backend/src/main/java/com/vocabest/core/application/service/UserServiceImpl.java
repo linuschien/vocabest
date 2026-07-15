@@ -166,6 +166,22 @@ public class UserServiceImpl implements UserCommandService, UserQueryService {
                 .map(WordleValidationResponse::new)
                 .defaultIfEmpty(new WordleValidationResponse(false));
     }
+    
+    @Override
+    public Flux<WordBankResponse> getCrosswordTargets(UUID userId, int count) {
+        return userRepository.findById(userId)
+                .flatMapMany(user -> wordBankRepository.findRandomCrosswordTargets(
+                        user.targetLevel() != null ? user.targetLevel().name() : null, count))
+                .map(wb -> new WordBankResponse(
+                        wb.id(),
+                        wb.word(),
+                        wb.partsOfSpeech(),
+                        wb.chineseTranslation(),
+                        wb.targetLevel() != null ? wb.targetLevel().name() : null,
+                        wb.difficultyLevel(),
+                        wb.examFrequency()
+                ));
+    }
 
     @Override
     public Mono<User> whoami() {

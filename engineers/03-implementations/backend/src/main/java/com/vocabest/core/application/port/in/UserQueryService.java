@@ -22,5 +22,7 @@ public interface UserQueryService {
     
     Mono<com.vocabest.core.adapter.in.web.dto.WordleValidationResponse> validateWordleGuess(UUID userId, String guess);
     
+    Flux<com.vocabest.core.adapter.in.web.dto.WordBankResponse> getCrosswordTargets(UUID userId, int count);
+    
     Mono<ErrorReviewCountResponse> getErrorReviewCount(UUID userId);
 }

@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
+import reactor.core.publisher.Flux;
 
 import java.util.UUID;
 
@@ -111,6 +112,14 @@ public class UserRestController {
         return queryService.validateWordleGuess(userId, request.guess())
                 .map(ResponseEntity::ok)
                 .defaultIfEmpty(ResponseEntity.notFound().build());
+    }
+
+    @PostMapping("/api/v1/users/{userId}:crosswordTargets")
+    @com.vocabest.core.adapter.in.web.security.RequireOwnership("#userId")
+    public Mono<ResponseEntity<Flux<WordBankResponse>>> getCrosswordTargets(
+            @PathVariable UUID userId,
+            @RequestParam(name = "count", defaultValue = "10") int count) {
+        return Mono.just(ResponseEntity.ok(queryService.getCrosswordTargets(userId, count)));
     }
 
     @PostMapping("/api/v1/users/{userId}:submitAnswer")

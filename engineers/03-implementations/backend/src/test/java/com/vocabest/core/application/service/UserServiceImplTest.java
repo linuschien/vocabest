@@ -337,4 +337,17 @@ class UserServiceImplTest {
                 .expectNextMatches(res -> res.word().equals("apple"))
                 .verifyComplete();
     }
+
+    @Test
+    void getCrosswordTargets_shouldReturnWordBankResponseFlux() {
+        WordBank wordBank1 = new WordBank(UUID.randomUUID(), "apple", "noun", "蘋果", TargetLevel.JUNIOR_HIGH, 1, 10, LocalDateTime.now(), LocalDateTime.now(), null);
+        WordBank wordBank2 = new WordBank(UUID.randomUUID(), "banana", "noun", "香蕉", TargetLevel.JUNIOR_HIGH, 1, 10, LocalDateTime.now(), LocalDateTime.now(), null);
+        when(userRepository.findById(testUserId)).thenReturn(Mono.just(testUser));
+        when(wordBankRepository.findRandomCrosswordTargets(TargetLevel.JUNIOR_HIGH.name(), 2)).thenReturn(Flux.just(wordBank1, wordBank2));
+
+        StepVerifier.create(userService.getCrosswordTargets(testUserId, 2))
+                .expectNextMatches(res -> res.word().equals("apple"))
+                .expectNextMatches(res -> res.word().equals("banana"))
+                .verifyComplete();
+    }
 }

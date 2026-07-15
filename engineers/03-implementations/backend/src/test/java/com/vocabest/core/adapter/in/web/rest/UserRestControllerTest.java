@@ -19,6 +19,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import reactor.core.publisher.Mono;
+import reactor.core.publisher.Flux;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -259,5 +260,18 @@ class UserRestControllerTest {
                 .exchange()
                 .expectStatus().isOk()
                 .expectBody().jsonPath("$.valid").isEqualTo(true);
+    }
+
+    @Test
+    void testGetCrosswordTargets() {
+        UUID id = UUID.randomUUID();
+        com.vocabest.core.adapter.in.web.dto.WordBankResponse response1 = new com.vocabest.core.adapter.in.web.dto.WordBankResponse(UUID.randomUUID(), "apple", "noun", "蘋果", "JUNIOR_HIGH", 1, 10);
+        com.vocabest.core.adapter.in.web.dto.WordBankResponse response2 = new com.vocabest.core.adapter.in.web.dto.WordBankResponse(UUID.randomUUID(), "banana", "noun", "香蕉", "JUNIOR_HIGH", 1, 10);
+        when(queryService.getCrosswordTargets(id, 10)).thenReturn(Flux.just(response1, response2));
+
+        client.post().uri("/api/v1/users/{id}:crosswordTargets?count=10", id)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBodyList(com.vocabest.core.adapter.in.web.dto.WordBankResponse.class).hasSize(2);
     }
 }

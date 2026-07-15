@@ -291,6 +291,36 @@ paths:
                 $ref: "#/components/schemas/WordleValidationResponse"
         "404":
           $ref: "#/components/responses/NotFound"
+  /users/{userId}:crosswordTargets:
+    post:
+      operationId: getCrosswordTargets
+      tags:
+        - Users
+      summary: Get a list of target words and clues for a crossword puzzle
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - name: count
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/WordBankResponse"
+        "404":
+          $ref: "#/components/responses/NotFound"
   /users/{userId}/daily-progresses:
     post:
       operationId: createDailyProgress
