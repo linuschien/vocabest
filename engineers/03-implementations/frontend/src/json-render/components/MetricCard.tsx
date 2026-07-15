@@ -88,8 +88,8 @@ export default function MetricCard({ element }: any) {
 
   // Default: plain number card
   return (
-    <div className="bg-card text-card-foreground rounded-lg border shadow-sm p-6 flex flex-col justify-center" id={id}>
-      <h3 className="text-sm font-medium text-muted-foreground mb-1">{label}</h3>
+    <div className="bg-card text-card-foreground rounded-lg border shadow-sm p-6 flex flex-row items-center justify-between gap-4" id={id}>
+      <h3 className="text-sm font-medium text-muted-foreground">{label}</h3>
       <div className="text-3xl font-bold">{value}</div>
     </div>
   );
