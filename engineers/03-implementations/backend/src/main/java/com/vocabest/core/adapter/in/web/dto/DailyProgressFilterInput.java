@@ -6,6 +6,8 @@ public record DailyProgressFilterInput(
     UUID id,
     UUID userId,
     String date,
+    String startDate,
+    String endDate,
     Integer targetQuestions,
     Integer answeredQuestions,
     Integer correctQuestions,

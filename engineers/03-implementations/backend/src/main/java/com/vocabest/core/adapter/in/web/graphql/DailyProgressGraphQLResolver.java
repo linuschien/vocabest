@@ -22,6 +22,27 @@ public class DailyProgressGraphQLResolver {
     @QueryMapping
     @com.vocabest.core.adapter.in.web.security.RequireOwnership("#filter?.userId()")
     public Flux<DailyProgress> listDailyProgresses(@Argument DailyProgressFilterInput filter) {
+        if (filter != null && filter.startDate() != null && filter.endDate() != null) {
+            java.time.LocalDate start = java.time.LocalDate.parse(filter.startDate());
+            java.time.LocalDate end = java.time.LocalDate.parse(filter.endDate());
+            
+            Flux<DailyProgress> flux;
+            if (filter.userId() != null) {
+                flux = repository.findByUserIdAndDateBetween(filter.userId(), start, end);
+            } else {
+                flux = repository.findByDateBetween(start, end);
+            }
+            
+            return flux.filter(dp -> {
+                if (filter.id() != null && !filter.id().equals(dp.id())) return false;
+                if (filter.targetQuestions() != null && !filter.targetQuestions().equals(dp.targetQuestions())) return false;
+                if (filter.answeredQuestions() != null && !filter.answeredQuestions().equals(dp.answeredQuestions())) return false;
+                if (filter.correctQuestions() != null && !filter.correctQuestions().equals(dp.correctQuestions())) return false;
+                if (filter.wrongQuestions() != null && !filter.wrongQuestions().equals(dp.wrongQuestions())) return false;
+                return true;
+            });
+        }
+
         java.time.LocalDate filterDate = null;
         if (filter != null && filter.date() != null) {
             filterDate = java.time.LocalDate.parse(filter.date());

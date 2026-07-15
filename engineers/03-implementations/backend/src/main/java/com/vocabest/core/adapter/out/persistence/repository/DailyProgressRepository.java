@@ -10,4 +10,6 @@ import reactor.core.publisher.Mono;
 
 public interface DailyProgressRepository extends R2dbcRepository<DailyProgress, UUID> {
     Mono<DailyProgress> findByUserIdAndDate(UUID userId, LocalDate date);
+    reactor.core.publisher.Flux<DailyProgress> findByUserIdAndDateBetween(UUID userId, LocalDate startDate, LocalDate endDate);
+    reactor.core.publisher.Flux<DailyProgress> findByDateBetween(LocalDate startDate, LocalDate endDate);
 }

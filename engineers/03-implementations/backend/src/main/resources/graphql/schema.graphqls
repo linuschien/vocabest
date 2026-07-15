@@ -45,6 +45,8 @@ input DailyProgressFilterInput {
   id: UUID
   userId: UUID
   date: String
+  startDate: String
+  endDate: String
   targetQuestions: Int
   answeredQuestions: Int
   correctQuestions: Int
