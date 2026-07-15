@@ -1,0 +1,86 @@
+{
+  "root": "dashboard-container",
+  "elements": {
+    "dashboard-container": {
+      "type": "Container:page",
+      "props": {
+        "id": "learning-stats-container"
+      },
+      "children": [
+        "header-section",
+        "controls-section",
+        "summary-grid",
+        "chart-section"
+      ]
+    },
+    "header-section": {
+      "type": "div",
+      "props": { "className": "mb-4" },
+      "children": ["title", "subtitle"]
+    },
+    "title": {
+      "type": "Heading",
+      "props": {
+        "text": "學習數據分析",
+        "level": "h1"
+      }
+    },
+    "subtitle": {
+      "type": "Text",
+      "props": {
+        "text": "回顧您的學習成效與目標達成進度",
+        "className": "text-muted-foreground mt-1 block"
+      }
+    },
+    "controls-section": {
+      "type": "ProgressTimeControls",
+      "props": {
+        "id": "progress-time-controls"
+      }
+    },
+    "summary-grid": {
+      "type": "Grid",
+      "props": {
+        "id": "summary-grid",
+        "columns": 3,
+        "gap": "md",
+        "className": "w-full my-4"
+      },
+      "children": [
+        "total-answered",
+        "avg-accuracy",
+        "target-met"
+      ]
+    },
+    "total-answered": {
+      "type": "MetricCard",
+      "props": {
+        "id": "total-answered-card",
+        "label": "總答題數",
+        "value": { "$state": "/data/stats/totalAnswered" }
+      }
+    },
+    "avg-accuracy": {
+      "type": "MetricCard",
+      "props": {
+        "id": "avg-accuracy-card",
+        "label": "平均答對率 (%)",
+        "value": { "$state": "/data/stats/avgAccuracy" }
+      }
+    },
+    "target-met": {
+      "type": "MetricCard",
+      "props": {
+        "id": "target-met-card",
+        "label": "達成目標天數",
+        "value": { "$state": "/data/stats/targetMetDays" }
+      }
+    },
+    "chart-section": {
+      "type": "ProgressChart",
+      "props": {
+        "id": "progress-chart"
+      }
+    }
+  }
+}

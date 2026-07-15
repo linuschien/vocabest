@@ -17,6 +17,8 @@ export interface DailyProgressFilterInput {
   id?: string;
   userId?: string;
   date?: string;
+  startDate?: string;
+  endDate?: string;
   targetQuestions?: number;
   answeredQuestions?: number;
   correctQuestions?: number;

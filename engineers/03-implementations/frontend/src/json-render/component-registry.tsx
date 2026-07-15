@@ -11,6 +11,8 @@ import AlertDialog from './components/AlertDialog';
 import MetricCard from './components/MetricCard';
 import UserMenuDropdown from './components/UserMenuDropdown';
 import ErrorReviewButton from './components/ErrorReviewButton';
+import ProgressTimeControls from './components/ProgressTimeControls';
+import ProgressChart from './components/ProgressChart';
 
 // ── Adapter: ComponentRenderProps → BaseComponentProps ──────────────────────
 function adapt(Comp: ComponentType<any>): ComponentType<any> {
@@ -95,6 +97,8 @@ export const componentRegistry: Record<string, ComponentType<any>> = {
   'MetricCard':  MetricCard,   // KPI metric card
   'UserMenuDropdown': adapt(UserMenuDropdown),
   'ErrorReviewButton': ErrorReviewButton, // 弱點特訓入口按鈕（含 badge）
+  'ProgressTimeControls': adapt(ProgressTimeControls),
+  'ProgressChart': adapt(ProgressChart),
 
   // ── 5. Native HTML passthrough ───────────────────────────────────────────
   'div': ({ element, children }: any) => (
