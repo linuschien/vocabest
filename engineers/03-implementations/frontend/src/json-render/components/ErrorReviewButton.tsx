@@ -23,22 +23,22 @@ export default function ErrorReviewButton({ element, emit }: any) {
       id={id}
       onClick={handleClick}
       className={[
-        'h-20 w-full flex flex-col items-center justify-center rounded-lg border px-4 shadow-sm',
+        'h-9 w-full flex flex-row gap-2 items-center justify-center rounded-md border px-4 py-2 shadow-sm text-sm font-medium',
         'transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring',
         hasErrors
           ? 'border-primary bg-primary hover:bg-primary/90 text-primary-foreground shadow-md cursor-pointer'
           : 'border-border bg-muted/40 hover:bg-muted/60 cursor-pointer',
       ].join(' ')}
     >
-      <span className={`text-sm font-semibold ${!hasErrors ? 'text-muted-foreground' : ''}`}>
+      <span className={`whitespace-nowrap ${!hasErrors ? 'text-muted-foreground' : ''}`}>
         🛡️ 弱點特訓
       </span>
       {hasErrors ? (
-        <span className="mt-1 inline-flex items-center rounded-full bg-destructive text-destructive-foreground px-2.5 py-0.5 text-xs font-medium shadow-sm">
+        <span className="inline-flex items-center rounded-full bg-destructive text-destructive-foreground px-2 py-0.5 text-xs font-medium shadow-sm whitespace-nowrap">
           待複習: {count} 題
         </span>
       ) : (
-        <span className="text-xs text-muted-foreground mt-1">今日無錯題，繼續保持！</span>
+        <span className="text-xs text-muted-foreground whitespace-nowrap">今日無錯題</span>
       )}
     </button>
   );

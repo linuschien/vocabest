@@ -128,7 +128,6 @@
         "id": "start-daily-task-btn",
         "label": "⚔️ 開始今日任務",
         "variant": "outline",
-        "className": "h-24 flex flex-col items-center justify-center text-base font-semibold shadow-sm col-span-2",
         "disabled": null
       },
       "children": [],
@@ -167,7 +166,6 @@
         "id": "nav-dictionary-btn",
         "label": "📜 單字卷軸",
         "variant": "outline",
-        "className": "h-20 flex flex-col items-center justify-center shadow-sm",
         "disabled": null
       },
       "children": [],
@@ -188,7 +186,6 @@
         "id": "nav-wordle-btn",
         "label": "🧩 Wordle 挑戰",
         "variant": "outline",
-        "className": "h-20 flex flex-col items-center justify-center shadow-sm col-span-2",
         "disabled": null
       },
       "children": [],
