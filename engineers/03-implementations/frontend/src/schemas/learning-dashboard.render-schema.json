@@ -76,13 +76,23 @@
         "title": "出發探險"
       },
       "children": [
-        "quick-start-grid"
+        "main-quest-title",
+        "main-quest-grid",
+        "side-quest-title",
+        "side-quest-grid"
       ]
     },
-    "quick-start-grid": {
+    "main-quest-title": {
+      "type": "Text",
+      "props": { 
+        "text": "主線任務",
+        "className": "text-sm font-bold text-muted-foreground mb-3 block" 
+      }
+    },
+    "main-quest-grid": {
       "type": "Grid",
       "props": {
-        "id": "quick-start-grid",
+        "id": "main-quest-grid",
         "columns": 2,
         "gap": "md",
         "className": "w-full"
@@ -90,7 +100,25 @@
       "children": [
         "start-daily-task-btn",
         "error-review-btn",
-        "nav-dictionary-btn",
+        "nav-dictionary-btn"
+      ]
+    },
+    "side-quest-title": {
+      "type": "Text",
+      "props": { 
+        "text": "支線任務",
+        "className": "text-sm font-bold text-muted-foreground mt-6 mb-3 block" 
+      }
+    },
+    "side-quest-grid": {
+      "type": "Grid",
+      "props": {
+        "id": "side-quest-grid",
+        "columns": 2,
+        "gap": "md",
+        "className": "w-full"
+      },
+      "children": [
         "nav-wordle-btn"
       ]
     },
@@ -160,7 +188,7 @@
         "id": "nav-wordle-btn",
         "label": "🧩 Wordle 挑戰",
         "variant": "outline",
-        "className": "h-20 flex flex-col items-center justify-center shadow-sm",
+        "className": "h-20 flex flex-col items-center justify-center shadow-sm col-span-2",
         "disabled": null
       },
       "children": [],
