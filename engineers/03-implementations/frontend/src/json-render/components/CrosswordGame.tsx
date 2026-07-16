@@ -417,7 +417,7 @@ export default function CrosswordGame({ element }: any) {
         </div>
 
         {/* Right Area: Clues (Sticky) */}
-        <div className="w-full xl:w-[450px] shrink-0 flex flex-col gap-6 text-sm xl:sticky xl:top-4 self-start">
+        <div className="w-full xl:w-[450px] shrink-0 flex flex-col gap-6 text-sm xl:sticky xl:top-24 self-start">
           
           <div className="flex flex-col sm:flex-row xl:flex-col gap-6">
             <div className="flex-1 flex flex-col gap-2 p-4 bg-card shadow-sm border border-border rounded-xl">
