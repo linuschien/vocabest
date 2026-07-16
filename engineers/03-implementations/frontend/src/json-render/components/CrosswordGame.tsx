@@ -162,7 +162,7 @@ export default function CrosswordGame({ element }: any) {
       refetch();
     } else {
       let finalLayout = newLayout;
-      if (finalLayout.cols > finalLayout.rows) {
+      if (finalLayout.rows > finalLayout.cols) {
         finalLayout = transposeLayout(finalLayout);
       }
       setLayout(finalLayout);
@@ -321,7 +321,7 @@ export default function CrosswordGame({ element }: any) {
   });
 
   const getCellClass = (x: number, y: number) => {
-    if (layout.table[y][x] === '-') return 'w-10 h-10 shrink-0 bg-transparent border-transparent';
+    if (layout.table[y][x] === '-') return 'bg-transparent border-transparent pointer-events-none';
     
     const isSelected = selectedCell?.x === x && selectedCell?.y === y;
     
@@ -340,7 +340,7 @@ export default function CrosswordGame({ element }: any) {
 
     const isLocked = isCellLocked(x, y);
 
-    let baseClass = 'w-10 h-10 shrink-0 border-2 flex items-center justify-center text-xl font-bold uppercase transition-colors cursor-pointer ';
+    let baseClass = 'border-2 flex items-center justify-center text-sm md:text-xl font-bold uppercase transition-colors cursor-pointer ';
     
     if (isWon || isLocked) {
       return baseClass + 'bg-green-500 text-white border-green-600';
@@ -388,30 +388,35 @@ export default function CrosswordGame({ element }: any) {
 
         {/* Left Area: Grid */}
         <div className="flex flex-col items-center flex-1 min-w-0 w-full">
-          <div className="bg-card border border-border p-4 rounded-xl shadow-sm mb-6 max-w-full overflow-x-auto">
-            <div className="flex flex-col" style={{ width: 'max-content' }}>
-              {layout.table.map((row, y) => (
-                <div key={y} className="flex">
-                  {row.map((cell, x) => (
-                    <div 
-                      key={`${x}-${y}`} 
-                      className={getCellClass(x, y)}
-                      onClick={() => handleCellClick(x, y)}
-                    >
-                      {cell !== '-' && (
-                        <span className="relative">
-                          {userGrid[y]?.[x] || ''}
-                          {layout.result.find(w => w.startx - 1 === x && w.starty - 1 === y) && (
-                            <span className="absolute -top-3 -left-3 text-[10px] font-normal text-muted-foreground">
-                              {layout.result.find(w => w.startx - 1 === x && w.starty - 1 === y)?.position}
-                            </span>
-                          )}
-                        </span>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              ))}
+          <div className="bg-card border border-border p-4 rounded-xl shadow-sm mb-6 w-full flex justify-center">
+            <div 
+              className="grid gap-0" 
+              style={{ 
+                gridTemplateColumns: `repeat(${layout.cols}, minmax(0, 1fr))`,
+                width: '100%',
+                maxWidth: `${layout.cols * 44}px`
+              }}
+            >
+              {layout.table.map((row, y) => 
+                row.map((cell, x) => (
+                  <div 
+                    key={`${x}-${y}`} 
+                    className={`${getCellClass(x, y)} aspect-square`}
+                    onClick={() => handleCellClick(x, y)}
+                  >
+                    {cell !== '-' && (
+                      <span className="relative flex items-center justify-center w-full h-full">
+                        {userGrid[y]?.[x] || ''}
+                        {layout.result.find(w => w.startx - 1 === x && w.starty - 1 === y) && (
+                          <span className="absolute top-0.5 left-1 text-[10px] md:text-xs font-normal text-muted-foreground leading-none">
+                            {layout.result.find(w => w.startx - 1 === x && w.starty - 1 === y)?.position}
+                          </span>
+                        )}
+                      </span>
+                    )}
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>
