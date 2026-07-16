@@ -28,3 +28,6 @@
 - **[Epic 5: 權限控制與後台管理 (Access Control & Admin Management)](./US-05-access-control-and-admin.md)**
   - US 5.1 一般使用者個人資料存取限制
   - US 5.2 系統管理員全站資料存取權限
+- **[Epic 6: 支線任務與遊戲化 (Gamified Side Quests)](./US-06-side-quests.md)**
+  - US 6.1 Wordle 拼字猜謎
+  - US 6.2 Crossword 填字遊戲
