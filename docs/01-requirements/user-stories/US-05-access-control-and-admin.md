@@ -31,7 +31,8 @@
 ### 驗收條件 (Acceptance Criteria)
 - **AC1 (字庫管理與檢索)**：系統管理員可以檢視、新增、修改、刪除字庫 (WordBank) 的所有內容。列表檢視頁面必須實作分頁 (Pagination) 機制，並支援與前台一致的檢索條件：「單字模糊查詢」、「開頭字母 (A-Z)」、「難度等級」。單字欄位需支援多重詞性設定。
 - **AC2 (題庫 Drill-down)**：在字庫列表介面中，系統管理員可點擊特定單字進行「下鑽 (Drill-down)」，進入專屬於該單字的題庫檢視頁面，並在此管理關聯的測驗題目 (StaticQuestionBank)。
-- **AC3 (使用者管理)**：系統管理員可以檢視全站所有使用者 (User) 的資料與學習進度，進行總體數據的追蹤。
+- **AC3 (使用者管理)**：系統管理員可以檢視全站所有使用者 (User) 的資料與學習進度，進行總體數據的追蹤。列表或明細中需呈現以下資訊：
+  - **使用者基本資訊與設定**：包含帳號 (`email`)、角色 (`role`)、目標等級 (`target_level`)、每日目標題數 (`daily_target_questions`)、目前連續學習天數 (`learning_streak`)、最高連續學習天數 (`max_learning_streak`)、最高單日答題數 (`max_daily_questions`)。
+  - **累計學習數據**：透過彙整該使用者的 `daily_progress` 紀錄，顯示其「總答題數 (Total Questions Answered)」、「總答對數 (Total Correct Answers)」，以及計算出的「總正確率 (Overall Accuracy)」。
 - **AC4 (權限阻擋)**：一般使用者若嘗試呼叫管理員專屬 API 端點，系統須阻擋請求並回傳 HTTP `403 Forbidden`。
 - **AC5 (預設管理員)**：系統預設應將 `linus.chien@gmail.com` 綁定為系統管理員 (Admin) 角色。
-- **AC6 (全站題庫直接檢視)**：系統管理員也可不透過單字下鑽，直接進入「全站題庫清單 (Global Question Bank List)」介面。此介面同樣需具備分頁機制，並套用與字庫相同的檢索過濾條件（單字模糊查詢、開頭字母、難度等級），以便跨單字批次檢視所有題目。
