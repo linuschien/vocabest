@@ -79,12 +79,8 @@ describe('CrosswordGame', () => {
     renderComponent();
     
     // Check clues
-    expect(screen.getByText('貓 (n.)')).toBeInTheDocument();
+    expect(screen.getByText('2.')).toBeInTheDocument();
     expect(screen.getByText('車 (n.)')).toBeInTheDocument();
-
-    // Check keyboard
-    expect(screen.getByText('a')).toBeInTheDocument();
-    expect(screen.getByText('⌫')).toBeInTheDocument();
   });
 
   it('allows clicking clues and typing', async () => {
@@ -95,18 +91,15 @@ describe('CrosswordGame', () => {
     await user.click(screen.getByText('貓 (n.)'));
     
     // Type c, a, t
-    await user.click(screen.getByText('c', { selector: 'button' }));
-    await user.click(screen.getByText('a', { selector: 'button' }));
-    await user.click(screen.getByText('t', { selector: 'button' }));
+    await user.keyboard('c');
+    await user.keyboard('a');
+    await user.keyboard('t');
 
     // Backspace once to remove 't'
-    await user.click(screen.getByText('⌫'));
+    await user.keyboard('{Backspace}');
     
-    // We expect 1 't' from the keyboard, but no 't' in the grid.
-    // Wait, the keyboard 't' is uppercase in style but lower in dom? 
-    // It's rendered as {key} which is 't', but uppercase via CSS.
-    // Let's just type 't' again to finish the word.
-    await user.click(screen.getByText('t', { selector: 'button' }));
+    // Type 't' again to finish the word.
+    await user.keyboard('t');
   });
 
   it('handles win condition correctly', async () => {
@@ -115,9 +108,9 @@ describe('CrosswordGame', () => {
     
     // Type 'cat' for Across
     await user.click(screen.getByText('貓 (n.)'));
-    await user.click(screen.getByText('c', { selector: 'button' }));
-    await user.click(screen.getByText('a', { selector: 'button' }));
-    await user.click(screen.getByText('t', { selector: 'button' }));
+    await user.keyboard('c');
+    await user.keyboard('a');
+    await user.keyboard('t');
 
     // Type 'car' for Down. The 'c' is shared and locked?
     // Wait, 'cat' is fully correct, so 'c' is locked!
@@ -126,8 +119,8 @@ describe('CrosswordGame', () => {
     
     // Because 'c' is locked, advanceCell will skip it. 
     // We just type 'a' and 'r'
-    await user.click(screen.getByText('a', { selector: 'button' }));
-    await user.click(screen.getByText('r', { selector: 'button' }));
+    await user.keyboard('a');
+    await user.keyboard('r');
 
     // Should show win message
     await waitFor(() => {

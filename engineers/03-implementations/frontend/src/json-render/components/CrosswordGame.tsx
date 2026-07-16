@@ -58,38 +58,57 @@ function isConnected(table: string[][]) {
   return connectedLetters === totalLetters;
 }
 
-function Keyboard({ onKeyPress, disabled }: { onKeyPress: (key: string) => void, disabled: boolean }) {
-  const keys = [
-    ['q','w','e','r','t','y','u','i','o','p'],
-    ['a','s','d','f','g','h','j','k','l'],
-    ['z','x','c','v','b','n','m', 'Backspace']
-  ];
+function transposeLayout(layout: any) {
+  const newRows = layout.cols;
+  const newCols = layout.rows;
+  const newTable = Array.from({ length: newRows }, () => Array(newCols).fill('-'));
+  
+  for (let y = 0; y < layout.rows; y++) {
+    for (let x = 0; x < layout.cols; x++) {
+      newTable[x][y] = layout.table[y][x];
+    }
+  }
 
-  return (
-    <div className="flex flex-col gap-2 mt-8 max-w-full overflow-x-auto pb-4">
-      {keys.map((row, i) => (
-        <div key={i} className="flex justify-center gap-1.5">
-          {row.map((key) => {
-            const isBackspace = key === 'Backspace';
-            return (
-              <button
-                key={key}
-                disabled={disabled}
-                onClick={() => onKeyPress(key)}
-                className={`
-                  flex items-center justify-center rounded-md font-bold text-sm uppercase transition-all
-                  ${isBackspace ? 'px-4 bg-muted text-muted-foreground w-16' : 'w-10 bg-muted text-muted-foreground'}
-                  h-14 hover:opacity-80 active:scale-95 disabled:opacity-50 disabled:pointer-events-none
-                `}
-              >
-                {isBackspace ? '⌫' : key}
-              </button>
-            );
-          })}
-        </div>
-      ))}
-    </div>
-  );
+  const newResult = layout.result.map((w: any) => {
+    if (w.orientation === 'none') return w;
+    return {
+      ...w,
+      startx: w.starty,
+      starty: w.startx,
+      orientation: w.orientation === 'across' ? 'down' : 'across'
+    };
+  });
+
+  const startCoords = newResult
+    .filter((w: any) => w.orientation !== 'none')
+    .map((w: any) => ({ x: w.startx, y: w.starty }));
+  
+  const uniqueCoords = Array.from(new Set<string>(startCoords.map((c: any) => `${c.x},${c.y}`)))
+    .map((str: string) => {
+      const [x, y] = str.split(',').map(Number);
+      return { x, y };
+    })
+    .sort((a, b) => {
+      if (a.y !== b.y) return a.y - b.y;
+      return a.x - b.x;
+    });
+
+  uniqueCoords.forEach((coord, index) => {
+    const newPos = index + 1;
+    newResult.forEach((w: any) => {
+      if (w.startx === coord.x && w.starty === coord.y) {
+        w.position = newPos;
+      }
+    });
+  });
+
+  return {
+    ...layout,
+    table: newTable,
+    result: newResult,
+    rows: newRows,
+    cols: newCols
+  };
 }
 
 export default function CrosswordGame({ element }: any) {
@@ -142,8 +161,12 @@ export default function CrosswordGame({ element }: any) {
       setRetryCount(c => c + 1);
       refetch();
     } else {
-      setLayout(newLayout);
-      const initialGrid = Array(newLayout.rows).fill(null).map(() => Array(newLayout.cols).fill(''));
+      let finalLayout = newLayout;
+      if (finalLayout.cols > finalLayout.rows) {
+        finalLayout = transposeLayout(finalLayout);
+      }
+      setLayout(finalLayout);
+      const initialGrid = Array(finalLayout.rows).fill(null).map(() => Array(finalLayout.cols).fill(''));
       setUserGrid(initialGrid);
       setRetryCount(0);
     }
@@ -363,9 +386,8 @@ export default function CrosswordGame({ element }: any) {
           </div>
         )}
 
-        {/* Left Area: Grid and Keyboard */}
+        {/* Left Area: Grid */}
         <div className="flex flex-col items-center flex-1 min-w-0 w-full">
-
           <div className="bg-card border border-border p-4 rounded-xl shadow-sm mb-6 max-w-full overflow-x-auto">
             <div className="flex flex-col" style={{ width: 'max-content' }}>
               {layout.table.map((row, y) => (
@@ -392,93 +414,85 @@ export default function CrosswordGame({ element }: any) {
               ))}
             </div>
           </div>
-
-          {/* Floating Clue for smaller screens */}
-          {activeWord && (
-            <div className="xl:hidden sticky top-4 w-full bg-primary text-primary-foreground p-3 rounded-lg shadow-lg font-medium text-center z-10 mb-4 animate-in slide-in-from-top-2">
-              {activeWord.position}. {activeWord.orientation === 'across' ? '橫向' : '直向'}: {activeWord.clue}
-            </div>
-          )}
-
-          <div className="w-full">
-            <Keyboard onKeyPress={handleKeyPress} disabled={isWon} />
-          </div>
         </div>
 
-        {/* Right Area: Clues */}
-        <div className="w-full xl:w-96 shrink-0 flex flex-col gap-6 text-sm">
-          <div className="flex flex-col gap-2 p-4 bg-muted/30 rounded-lg max-h-[40vh] xl:max-h-[70vh] overflow-y-auto">
-            <h3 className="font-bold text-lg mb-2 sticky top-0 bg-muted/90 backdrop-blur-sm py-1 z-10">橫向 (Across)</h3>
-            {layout.result.filter(w => w.orientation === 'across').map(w => {
-              const isCorrect = isWordCorrect(w);
-              return (
-                <div 
-                  key={w.position} 
-                  className={`flex gap-2 p-1 rounded cursor-pointer transition-colors
-                    ${isCorrect ? 'opacity-50 line-through' : ''}
-                    ${selectedWordIndex !== null && layout.result[selectedWordIndex] === w ? 'bg-yellow-100 text-yellow-900 font-medium' : 'hover:bg-muted'}
-                  `}
-                  onClick={() => {
-                    setSelectedWordIndex(layout.result.indexOf(w));
-                    let firstX = w.startx - 1;
-                    let firstY = w.starty - 1;
-                    let found = false;
-                    for (let i = 0; i < w.answer.length; i++) {
-                      const cx = w.orientation === 'across' ? firstX + i : firstX;
-                      const cy = w.orientation === 'down' ? firstY + i : firstY;
-                      if (!isCellLocked(cx, cy)) {
-                        setSelectedCell({x: cx, y: cy});
-                        found = true;
-                        break;
-                      }
-                    }
-                    if (!found) {
-                      setSelectedCell({x: firstX, y: firstY});
-                    }
-                  }}
-                >
-                  <span className="font-bold min-w-[20px]">{w.position}.</span>
-                  <span>{w.clue}</span>
-                </div>
-              );
-            })}
-          </div>
+        {/* Right Area: Clues (Sticky) */}
+        <div className="w-full xl:w-[450px] shrink-0 flex flex-col gap-6 text-sm xl:sticky xl:top-4 self-start">
           
-          <div className="flex flex-col gap-2 p-4 bg-muted/30 rounded-lg max-h-[40vh] xl:max-h-[70vh] overflow-y-auto">
-            <h3 className="font-bold text-lg mb-2 sticky top-0 bg-muted/90 backdrop-blur-sm py-1 z-10">直向 (Down)</h3>
-            {layout.result.filter(w => w.orientation === 'down').map(w => {
-              const isCorrect = isWordCorrect(w);
-              return (
-                <div 
-                  key={w.position} 
-                  className={`flex gap-2 p-1 rounded cursor-pointer transition-colors
-                    ${isCorrect ? 'opacity-50 line-through' : ''}
-                    ${selectedWordIndex !== null && layout.result[selectedWordIndex] === w ? 'bg-yellow-100 text-yellow-900 font-medium' : 'hover:bg-muted'}
-                  `}
-                  onClick={() => {
-                    setSelectedWordIndex(layout.result.indexOf(w));
-                    let firstX = w.startx - 1;
-                    let firstY = w.starty - 1;
-                    let found = false;
-                    for (let i = 0; i < w.answer.length; i++) {
-                      const cx = w.orientation === 'across' ? firstX + i : firstX;
-                      const cy = w.orientation === 'down' ? firstY + i : firstY;
-                      if (!isCellLocked(cx, cy)) {
-                        setSelectedCell({x: cx, y: cy});
-                        found = true;
-                        break;
+          <div className="flex flex-col sm:flex-row xl:flex-col gap-6">
+            <div className="flex-1 flex flex-col gap-2 p-4 bg-card shadow-sm border border-border rounded-xl">
+              <h3 className="font-bold text-lg mb-2 text-primary">橫向 (Across)</h3>
+              {layout.result.filter(w => w.orientation === 'across').map(w => {
+                const isCorrect = isWordCorrect(w);
+                return (
+                  <div 
+                    key={w.position} 
+                    className={`flex gap-2 p-2 rounded-lg cursor-pointer transition-colors
+                      ${isCorrect ? 'opacity-50 line-through' : ''}
+                      ${selectedWordIndex !== null && layout.result[selectedWordIndex] === w ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'}
+                    `}
+                    onClick={() => {
+                      setSelectedWordIndex(layout.result.indexOf(w));
+                      let firstX = w.startx - 1;
+                      let firstY = w.starty - 1;
+                      let found = false;
+                      for (let i = 0; i < w.answer.length; i++) {
+                        const cx = w.orientation === 'across' ? firstX + i : firstX;
+                        const cy = w.orientation === 'down' ? firstY + i : firstY;
+                        if (!isCellLocked(cx, cy)) {
+                          setSelectedCell({x: cx, y: cy});
+                          found = true;
+                          break;
+                        }
                       }
-                    }
-                    if (!found) {
-                      setSelectedCell({x: firstX, y: firstY});
-                    }
-                  }}
-                >
-                  <span className="font-bold min-w-[20px]">{w.position}.</span>
-                  <span>{w.clue}</span>
-                </div>
-              );
-            })}
+                      if (!found) {
+                        setSelectedCell({x: firstX, y: firstY});
+                      }
+                    }}
+                  >
+                    <span className="font-bold min-w-[24px] text-muted-foreground">{w.position}.</span>
+                    <span>{w.clue}</span>
+                  </div>
+                );
+              })}
+            </div>
+            
+            <div className="flex-1 flex flex-col gap-2 p-4 bg-card shadow-sm border border-border rounded-xl">
+              <h3 className="font-bold text-lg mb-2 text-primary">直向 (Down)</h3>
+              {layout.result.filter(w => w.orientation === 'down').map(w => {
+                const isCorrect = isWordCorrect(w);
+                return (
+                  <div 
+                    key={w.position} 
+                    className={`flex gap-2 p-2 rounded-lg cursor-pointer transition-colors
+                      ${isCorrect ? 'opacity-50 line-through' : ''}
+                      ${selectedWordIndex !== null && layout.result[selectedWordIndex] === w ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'}
+                    `}
+                    onClick={() => {
+                      setSelectedWordIndex(layout.result.indexOf(w));
+                      let firstX = w.startx - 1;
+                      let firstY = w.starty - 1;
+                      let found = false;
+                      for (let i = 0; i < w.answer.length; i++) {
+                        const cx = w.orientation === 'across' ? firstX + i : firstX;
+                        const cy = w.orientation === 'down' ? firstY + i : firstY;
+                        if (!isCellLocked(cx, cy)) {
+                          setSelectedCell({x: cx, y: cy});
+                          found = true;
+                          break;
+                        }
+                      }
+                      if (!found) {
+                        setSelectedCell({x: firstX, y: firstY});
+                      }
+                    }}
+                  >
+                    <span className="font-bold min-w-[24px] text-muted-foreground">{w.position}.</span>
+                    <span>{w.clue}</span>
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
 
