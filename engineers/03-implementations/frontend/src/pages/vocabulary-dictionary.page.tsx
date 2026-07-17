@@ -61,9 +61,12 @@ export default function VocabularyDictionaryPage() {
       if (trigger) trigger(newPage);
     });
     
-    // Explicitly initialize the active filter with the correct page size
+    // Explicitly initialize the active filter, restoring the saved page if it exists
     const trigger = store.get('/actions/triggerSearch') as (page: number) => void;
-    if (trigger) trigger(1);
+    if (trigger) {
+      const savedPage = store.get('/form/page');
+      trigger(savedPage !== undefined ? Number(savedPage) : 1);
+    }
     
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // IMPORTANT: Empty dependency array prevents infinite loops!
