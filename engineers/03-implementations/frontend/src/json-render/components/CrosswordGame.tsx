@@ -2,7 +2,7 @@ import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import { useStateStore, useStateValue } from '@json-render/react';
 import { useGetCrosswordTargets } from '@/hooks/use-get-crossword-targets';
 import { ErrorBoundary } from '@/components/ErrorBoundary';
-import { RotateCcw } from 'lucide-react';
+import { RotateCcw, Keyboard as KeyboardIcon, X } from 'lucide-react';
 // @ts-ignore
 import clg from 'crossword-layout-generator';
 
@@ -56,6 +56,40 @@ function isConnected(table: string[][]) {
     }
   }
   return connectedLetters === totalLetters;
+}
+
+function Keyboard({ onKeyPress, disabled }: { onKeyPress: (key: string) => void, disabled: boolean }) {
+  const keys = [
+    ['q','w','e','r','t','y','u','i','o','p'],
+    ['a','s','d','f','g','h','j','k','l'],
+    ['z','x','c','v','b','n','m', 'Backspace']
+  ];
+
+  return (
+    <div className="flex flex-col gap-2 w-full max-w-3xl mx-auto pb-safe">
+      {keys.map((row, i) => (
+        <div key={i} className="flex justify-center gap-1.5 w-full">
+          {i === 1 && <div className="w-[5%]" />}
+          {row.map((key) => {
+            const isSpecial = key === 'Backspace';
+            return (
+              <button
+                key={key}
+                disabled={disabled}
+                onClick={() => onKeyPress(key)}
+                className={`flex items-center justify-center font-bold rounded-lg transition-all active:scale-95 uppercase bg-muted border border-border hover:bg-accent text-foreground shadow-sm ${
+                  isSpecial ? 'px-4 py-4 sm:py-5 text-sm min-w-[50px] sm:min-w-[70px]' : 'flex-1 py-4 sm:py-5 text-base max-w-[50px]'
+                } ${disabled ? 'opacity-50 pointer-events-none' : ''}`}
+              >
+                {key === 'Backspace' ? '⌫' : key}
+              </button>
+            );
+          })}
+          {i === 1 && <div className="w-[5%]" />}
+        </div>
+      ))}
+    </div>
+  );
 }
 
 function transposeLayout(layout: any) {
@@ -133,6 +167,7 @@ export default function CrosswordGame({ element }: any) {
 
   const [selectedCell, setSelectedCell] = useState<{x: number, y: number} | null>(null);
   const [selectedWordIndex, setSelectedWordIndex] = useState<number | null>(null);
+  const [showKeyboard, setShowKeyboard] = useState(false);
 
   const resetGame = () => {
     setSelectedCell(null);
@@ -501,6 +536,21 @@ export default function CrosswordGame({ element }: any) {
           </div>
         </div>
 
+        {/* Floating Keyboard Panel */}
+        {showKeyboard && (
+          <div className="fixed bottom-0 left-0 right-0 z-[100] bg-background/95 backdrop-blur-xl border-t border-border shadow-[0_-20px_40px_rgba(0,0,0,0.15)] p-4 pt-6 pb-8 animate-in slide-in-from-bottom-full">
+            <Keyboard onKeyPress={handleKeyPress} disabled={isWon} />
+          </div>
+        )}
+
+        {/* Floating Action Button (FAB) for Keyboard Toggle */}
+        <button
+          onClick={() => setShowKeyboard(!showKeyboard)}
+          className="fixed bottom-6 right-6 z-[110] p-4 bg-primary text-primary-foreground rounded-full shadow-2xl hover:scale-105 active:scale-95 transition-all focus:outline-none focus:ring-4 focus:ring-primary/30"
+          title={showKeyboard ? "收起鍵盤" : "顯示鍵盤"}
+        >
+          {showKeyboard ? <X className="w-7 h-7" /> : <KeyboardIcon className="w-7 h-7" />}
+        </button>
       </div>
     </ErrorBoundary>
   );
