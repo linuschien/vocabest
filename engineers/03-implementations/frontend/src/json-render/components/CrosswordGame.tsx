@@ -66,7 +66,7 @@ function Keyboard({ onKeyPress, disabled }: { onKeyPress: (key: string) => void,
   ];
 
   return (
-    <div className="flex flex-col gap-2 w-full max-w-3xl mx-auto pb-safe">
+    <div className="flex flex-col gap-1.5 w-full max-w-2xl mx-auto pb-safe pointer-events-auto">
       {keys.map((row, i) => (
         <div key={i} className="flex justify-center gap-1.5 w-full">
           {i === 1 && <div className="w-[5%]" />}
@@ -77,8 +77,8 @@ function Keyboard({ onKeyPress, disabled }: { onKeyPress: (key: string) => void,
                 key={key}
                 disabled={disabled}
                 onClick={() => onKeyPress(key)}
-                className={`flex items-center justify-center font-bold rounded-lg transition-all active:scale-95 uppercase bg-muted border border-border hover:bg-accent text-foreground shadow-sm ${
-                  isSpecial ? 'px-4 py-4 sm:py-5 text-sm min-w-[50px] sm:min-w-[70px]' : 'flex-1 py-4 sm:py-5 text-base max-w-[50px]'
+                className={`flex items-center justify-center font-bold rounded-lg transition-all active:scale-95 uppercase bg-card/90 backdrop-blur-sm border border-border/60 hover:bg-accent hover:border-accent shadow-md text-foreground ${
+                  isSpecial ? 'px-3 py-2.5 sm:py-3 text-sm min-w-[45px] sm:min-w-[60px]' : 'flex-1 py-2.5 sm:py-3 text-sm max-w-[45px]'
                 } ${disabled ? 'opacity-50 pointer-events-none' : ''}`}
               >
                 {key === 'Backspace' ? '⌫' : key}
@@ -538,7 +538,7 @@ export default function CrosswordGame({ element }: any) {
 
         {/* Floating Keyboard Panel */}
         {showKeyboard && (
-          <div className="fixed bottom-0 left-0 right-0 z-[100] bg-background/95 backdrop-blur-xl border-t border-border shadow-[0_-20px_40px_rgba(0,0,0,0.15)] p-4 pt-6 pb-8 animate-in slide-in-from-bottom-full">
+          <div className="fixed bottom-0 left-0 right-0 z-[100] p-2 pb-6 animate-in slide-in-from-bottom-full pointer-events-none">
             <Keyboard onKeyPress={handleKeyPress} disabled={isWon} />
           </div>
         )}
