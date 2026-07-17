@@ -11,6 +11,12 @@ enum Role {
   ADMIN
 }
 
+type UserStats {
+  totalQuestionsAnswered: Int
+  totalCorrectAnswers: Int
+  overallAccuracy: String
+}
+
 type User {
   id: UUID!
   email: String
@@ -20,6 +26,7 @@ type User {
   maxLearningStreak: Int
   maxDailyQuestions: Int
   dailyTargetQuestions: Int
+  stats: UserStats
 }
 
 input UserFilterInput {
