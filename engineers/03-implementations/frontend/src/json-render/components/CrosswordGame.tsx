@@ -460,14 +460,14 @@ export default function CrosswordGame({ element }: any) {
         <div className="w-full xl:w-[450px] shrink-0 flex flex-col gap-6 text-sm xl:sticky xl:top-24 self-start">
           
           <div className="flex flex-col sm:flex-row xl:flex-col gap-6">
-            <div className="flex-1 flex flex-col gap-2 p-4 bg-card shadow-sm border border-border rounded-xl">
+            <div className="flex-1 flex flex-col gap-1 p-4 bg-card shadow-sm border border-border rounded-xl">
               <h3 className="font-bold text-lg mb-2 text-primary">橫向 (Across)</h3>
               {layout.result.filter(w => w.orientation === 'across').map(w => {
                 const isCorrect = isWordCorrect(w);
                 return (
                   <div 
                     key={w.position} 
-                    className={`flex gap-2 p-2 rounded-lg cursor-pointer transition-colors
+                    className={`flex gap-2 px-2 py-1.5 rounded-lg cursor-pointer transition-colors
                       ${isCorrect ? 'opacity-50 line-through' : ''}
                       ${selectedWordIndex !== null && layout.result[selectedWordIndex] === w ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'}
                     `}
@@ -497,14 +497,14 @@ export default function CrosswordGame({ element }: any) {
               })}
             </div>
             
-            <div className="flex-1 flex flex-col gap-2 p-4 bg-card shadow-sm border border-border rounded-xl">
+            <div className="flex-1 flex flex-col gap-1 p-4 bg-card shadow-sm border border-border rounded-xl">
               <h3 className="font-bold text-lg mb-2 text-primary">直向 (Down)</h3>
               {layout.result.filter(w => w.orientation === 'down').map(w => {
                 const isCorrect = isWordCorrect(w);
                 return (
                   <div 
                     key={w.position} 
-                    className={`flex gap-2 p-2 rounded-lg cursor-pointer transition-colors
+                    className={`flex gap-2 px-2 py-1.5 rounded-lg cursor-pointer transition-colors
                       ${isCorrect ? 'opacity-50 line-through' : ''}
                       ${selectedWordIndex !== null && layout.result[selectedWordIndex] === w ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'}
                     `}
