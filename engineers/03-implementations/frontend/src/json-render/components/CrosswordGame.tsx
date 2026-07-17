@@ -77,8 +77,10 @@ function Keyboard({ onKeyPress, disabled }: { onKeyPress: (key: string) => void,
                 key={key}
                 disabled={disabled}
                 onClick={() => onKeyPress(key)}
-                className={`flex items-center justify-center font-bold rounded-lg transition-all active:scale-95 uppercase bg-card/90 backdrop-blur-sm border border-border/60 hover:bg-accent hover:border-accent shadow-md text-foreground ${
-                  isSpecial ? 'px-3 py-2.5 sm:py-3 text-sm min-w-[45px] sm:min-w-[60px]' : 'flex-1 py-2.5 sm:py-3 text-sm max-w-[45px]'
+                className={`flex items-center justify-center font-bold rounded-lg transition-all active:scale-95 uppercase backdrop-blur-md shadow-sm ${
+                  isSpecial 
+                    ? 'bg-destructive/10 border border-destructive/20 text-destructive hover:bg-destructive/20 hover:border-destructive/30 px-3 py-2.5 sm:py-3 text-sm min-w-[45px] sm:min-w-[60px]' 
+                    : 'bg-primary/10 border border-primary/20 text-primary hover:bg-primary/20 hover:border-primary/30 flex-1 py-2.5 sm:py-3 text-sm max-w-[45px]'
                 } ${disabled ? 'opacity-50 pointer-events-none' : ''}`}
               >
                 {key === 'Backspace' ? '⌫' : key}
@@ -460,14 +462,14 @@ export default function CrosswordGame({ element }: any) {
         <div className="w-full xl:w-[450px] shrink-0 flex flex-col gap-6 text-sm xl:sticky xl:top-24 self-start">
           
           <div className="flex flex-col sm:flex-row xl:flex-col gap-6">
-            <div className="flex-1 flex flex-col gap-1 p-4 bg-card shadow-sm border border-border rounded-xl">
+            <div className="flex-1 flex flex-col gap-0 p-4 bg-card shadow-sm border border-border rounded-xl">
               <h3 className="font-bold text-lg mb-2 text-primary">橫向 (Across)</h3>
               {layout.result.filter(w => w.orientation === 'across').map(w => {
                 const isCorrect = isWordCorrect(w);
                 return (
                   <div 
                     key={w.position} 
-                    className={`flex gap-2 px-2 py-1.5 rounded-lg cursor-pointer transition-colors
+                    className={`flex gap-2 px-2 py-0.5 rounded-lg cursor-pointer transition-colors
                       ${isCorrect ? 'opacity-50 line-through' : ''}
                       ${selectedWordIndex !== null && layout.result[selectedWordIndex] === w ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'}
                     `}
@@ -497,14 +499,14 @@ export default function CrosswordGame({ element }: any) {
               })}
             </div>
             
-            <div className="flex-1 flex flex-col gap-1 p-4 bg-card shadow-sm border border-border rounded-xl">
+            <div className="flex-1 flex flex-col gap-0 p-4 bg-card shadow-sm border border-border rounded-xl">
               <h3 className="font-bold text-lg mb-2 text-primary">直向 (Down)</h3>
               {layout.result.filter(w => w.orientation === 'down').map(w => {
                 const isCorrect = isWordCorrect(w);
                 return (
                   <div 
                     key={w.position} 
-                    className={`flex gap-2 px-2 py-1.5 rounded-lg cursor-pointer transition-colors
+                    className={`flex gap-2 px-2 py-0.5 rounded-lg cursor-pointer transition-colors
                       ${isCorrect ? 'opacity-50 line-through' : ''}
                       ${selectedWordIndex !== null && layout.result[selectedWordIndex] === w ? 'bg-primary/10 text-primary font-medium' : 'hover:bg-muted'}
                     `}
