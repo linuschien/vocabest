@@ -8,9 +8,21 @@ export interface ResponseType {
 }
 
 const QUERY = gql`
-  query listUsers($filter: String) {
+  query listUsers($filter: UserFilterInput) {
     listUsers(filter: $filter) {
       id
+      email
+      role
+      targetLevel
+      learningStreak
+      maxLearningStreak
+      maxDailyQuestions
+      dailyTargetQuestions
+      stats {
+        totalQuestionsAnswered
+        totalCorrectAnswers
+        overallAccuracy
+      }
     }
   }
 `;

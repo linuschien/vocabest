@@ -4,7 +4,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { JSONUIProvider, createStateStore } from '@json-render/react';
 import { componentRegistry } from '@/json-render/component-registry';
 import { vi, describe, it, expect, beforeEach } from 'vitest';
-import AdminDashboardPage from './admin-dashboard.page';
+import UserManagementPage from './user-management.page';
 
 const store = createStateStore({ modals: {}, form: {}, data: {} });
 const executeBehavior = vi.fn();
@@ -29,7 +29,7 @@ function renderPage() {
     <MemoryRouter>
       <QueryClientProvider client={qc}>
         <JSONUIProvider registry={componentRegistry} store={store} handlers={testHandlers as any}>
-          <AdminDashboardPage />
+          <UserManagementPage />
         </JSONUIProvider>
       </QueryClientProvider>
     </MemoryRouter>
@@ -43,7 +43,7 @@ beforeEach(() => {
   vi.clearAllMocks();
 });
 
-describe('AdminDashboardPage', () => {
+describe('UserManagementPage', () => {
   it('renders page correctly', async () => {
     renderPage();
     expect(await screen.findByText('Users')).toBeInTheDocument();

@@ -22,7 +22,7 @@ export default function GlobalLayout() {
       }
       store.set('/modals/onboarding-modal', true);
     } else if (action === 'admin') {
-      navigate('/admin-dashboard');
+      navigate('/user-management');
     }
   };
 

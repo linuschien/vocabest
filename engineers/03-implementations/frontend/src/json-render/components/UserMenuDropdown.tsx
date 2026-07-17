@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useStateStore, useStateValue } from '@json-render/react';
 import { useNavigate } from 'react-router-dom';
-import { User, Settings, Shield, BarChart } from 'lucide-react';
+import { User, Settings, Users, BarChart } from 'lucide-react';
 
 export default function UserMenuDropdown({ element, emit }: any) {
   const [isOpen, setIsOpen] = useState(false);
@@ -77,8 +77,8 @@ export default function UserMenuDropdown({ element, emit }: any) {
                 onClick={handleOpenAdmin}
                 className="flex items-center w-full px-4 py-2 text-left text-sm hover:bg-accent hover:text-accent-foreground"
               >
-                <Shield className="w-4 h-4 mr-2" />
-                Admin Dashboard
+                <Users className="w-4 h-4 mr-2" />
+                User Management
               </button>
             )}
           </div>

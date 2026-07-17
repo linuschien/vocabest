@@ -1,11 +1,11 @@
 {
-    "ui_id": "admin-dashboard",
+    "ui_id": "user-management",
     "domain_module": "Admin",
     "root_element": {
-        "id": "admin-container",
+        "id": "user-management-container",
         "abstract_type": "Container",
         "semantic_variant": "page",
-        "label": "Admin Dashboard",
+        "label": "User Management",
         "children": [
             {
                 "id": "user-management-section",
@@ -20,22 +20,16 @@
                         "label": "Users",
                         "data_ref": "listUsers",
                         "columns": [
-                            {
-                                "field": "email",
-                                "label": "Email",
-                                "sortable": true,
-                                "default_sort": "asc"
-                            },
-                            {
-                                "field": "role",
-                                "label": "Role",
-                                "sortable": true
-                            },
-                            {
-                                "field": "learningStreak",
-                                "label": "Learning Streak",
-                                "sortable": true
-                            }
+                            { "field": "email", "label": "Email", "sortable": true, "default_sort": "asc" },
+                            { "field": "role", "label": "Role", "sortable": true },
+                            { "field": "targetLevel", "label": "Target Level", "sortable": true },
+                            { "field": "learningStreak", "label": "Learning Streak", "sortable": true },
+                            { "field": "maxLearningStreak", "label": "Max Streak", "sortable": true },
+                            { "field": "maxDailyQuestions", "label": "Max Daily Qs", "sortable": true },
+                            { "field": "dailyTargetQuestions", "label": "Target Qs", "sortable": true },
+                            { "field": "stats.totalQuestionsAnswered", "label": "Total Answered", "sortable": false },
+                            { "field": "stats.totalCorrectAnswers", "label": "Total Correct", "sortable": false },
+                            { "field": "stats.overallAccuracy", "label": "Accuracy (%)", "sortable": false }
                         ]
                     }
                 ]

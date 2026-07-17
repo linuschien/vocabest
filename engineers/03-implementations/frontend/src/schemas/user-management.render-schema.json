@@ -1,11 +1,11 @@
 {
-  "root": "admin-container",
+  "root": "user-management-container",
   "elements": {
-    "admin-container": {
+    "user-management-container": {
       "type": "Container:page",
       "props": {
-        "id": "admin-container",
-        "label": "Admin Dashboard"
+        "id": "user-management-container",
+        "label": "User Management"
       },
       "children": [
         "user-management-section",
@@ -28,22 +28,16 @@
         "id": "user-table",
         "label": "Users",
         "columns": [
-          {
-            "field": "email",
-            "label": "Email",
-            "sortable": true,
-            "default_sort": "asc"
-          },
-          {
-            "field": "role",
-            "label": "Role",
-            "sortable": true
-          },
-          {
-            "field": "learningStreak",
-            "label": "Learning Streak",
-            "sortable": true
-          }
+          { "field": "email", "label": "Email", "sortable": true, "default_sort": "asc" },
+          { "field": "role", "label": "Role", "sortable": true },
+          { "field": "targetLevel", "label": "Target Level", "sortable": true },
+          { "field": "learningStreak", "label": "Learning Streak", "sortable": true },
+          { "field": "maxLearningStreak", "label": "Max Streak", "sortable": true },
+          { "field": "maxDailyQuestions", "label": "Max Daily Qs", "sortable": true },
+          { "field": "dailyTargetQuestions", "label": "Target Qs", "sortable": true },
+          { "field": "stats.totalQuestionsAnswered", "label": "Total Answered", "sortable": false },
+          { "field": "stats.totalCorrectAnswers", "label": "Total Correct", "sortable": false },
+          { "field": "stats.overallAccuracy", "label": "Accuracy (%)", "sortable": false }
         ],
         "data": {
           "$bindState": "/data/listUsers"
