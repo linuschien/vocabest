@@ -29,7 +29,7 @@ public class WordBankGraphQLResolver {
         return Mono.deferContextual(ctx -> {
             User user = ctx.getOrDefault("CURRENT_USER", null);
             logger.debug("listWordBanks requested with filter: {}, user targetLevel: {}", filter, user != null ? user.targetLevel() : "null");
-            if (user != null && user.role() != Role.ADMIN && user.targetLevel() != null) {
+            if (user != null && user.targetLevel() != null) {
                 WordBankFilterInput overriddenFilter = new WordBankFilterInput(
                     filter != null ? filter.word() : null,
                     filter != null ? filter.startingLetter() : null,
