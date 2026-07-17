@@ -7,6 +7,14 @@ export default function DataTable({ element, children, emit, on }: any) {
   const navigate = useNavigate();
   const { id, label, columns, data, rowActions, pageSize = 10, totalElements: totalElementsProp, currentPage: currentPageProp } = element?.props ?? {};
   
+  const getFieldValue = (obj: any, path: string) => {
+    if (!obj || typeof path !== 'string') return undefined;
+    if (path.includes('.')) {
+      return path.split('.').reduce((acc, part) => acc && acc[part], obj);
+    }
+    return obj[path];
+  };
+  
   // If the library auto-resolves the binding, the prop itself will be the value instead of the {$bindState} object.
   const isAutoResolvedCurrentPage = typeof currentPageProp === 'number';
   const boundCurrentPagePath = currentPageProp?.$bindState;
@@ -58,7 +66,7 @@ export default function DataTable({ element, children, emit, on }: any) {
     } else if (action.type === 'modal') {
       store.set(`/modals/${action.modalId}`, true);
     } else if (action.type === 'speak') {
-      const text = action.field ? row[action.field] : row.word;
+      const text = action.field ? getFieldValue(row, action.field) : row.word;
       if (text && 'speechSynthesis' in window) {
         window.speechSynthesis.cancel();
         const utter = new SpeechSynthesisUtterance(text);
@@ -91,8 +99,8 @@ export default function DataTable({ element, children, emit, on }: any) {
 
   if (sortConfig) {
     currentRows.sort((a, b) => {
-      const aValue = a[sortConfig.field];
-      const bValue = b[sortConfig.field];
+      const aValue = getFieldValue(a, sortConfig.field);
+      const bValue = getFieldValue(b, sortConfig.field);
       if (aValue < bValue) return sortConfig.direction === 'asc' ? -1 : 1;
       if (aValue > bValue) return sortConfig.direction === 'asc' ? 1 : -1;
       return 0;
@@ -170,13 +178,13 @@ export default function DataTable({ element, children, emit, on }: any) {
                     <td 
                       key={col.field} 
                       className="px-6 py-4 font-medium text-card-foreground whitespace-normal break-words min-w-[120px]"
-                      title={row[col.field]}
+                      title={getFieldValue(row, col.field)}
                     >
                       {col.speak ? (
                         <span className="inline-flex items-center gap-1.5">
                           <button
                             onClick={() => {
-                              const text = row[col.field];
+                              const text = getFieldValue(row, col.field);
                               if (text && 'speechSynthesis' in window) {
                                 window.speechSynthesis.cancel();
                                 const utter = new SpeechSynthesisUtterance(text);
@@ -185,15 +193,15 @@ export default function DataTable({ element, children, emit, on }: any) {
                                 window.speechSynthesis.speak(utter);
                               }
                             }}
-                            title={`Pronounce "${row[col.field]}"`}
+                            title={`Pronounce "${getFieldValue(row, col.field)}"`}
                             className="text-muted-foreground hover:text-primary transition-colors flex-shrink-0"
-                            aria-label={`Pronounce ${row[col.field]}`}
+                            aria-label={`Pronounce ${getFieldValue(row, col.field)}`}
                           >
                             🔊
                           </button>
-                          {row[col.field]}
+                          {getFieldValue(row, col.field)}
                         </span>
-                      ) : row[col.field]}
+                      ) : getFieldValue(row, col.field)}
                     </td>
                   ))}
                   {(children?.length > 0 || visibleActions.length > 0) && (
