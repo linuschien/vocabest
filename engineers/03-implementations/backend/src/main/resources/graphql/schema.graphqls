@@ -83,6 +83,7 @@ type QuizQuestion {
 }
 
 input QuizQuestionFilterInput {
+  wordBankId: UUID
   word: String
   startingLetter: String
   difficultyLevel: Int

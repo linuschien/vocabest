@@ -108,12 +108,12 @@ public class UserServiceImpl implements UserCommandService, UserQueryService {
         log.info("Fetching next question for user: {}", userId);
         return userRepository.findById(userId)
                 .flatMap(user -> {
-                    QuizQuestionFilterInput filter = new QuizQuestionFilterInput(null, null, null, user.targetLevel().name(), null, null);
+                    QuizQuestionFilterInput filter = new QuizQuestionFilterInput(null, null, null, null, user.targetLevel().name(), null, null);
                     return quizQuestionRepository.count(filter)
                             .flatMap(count -> {
                                 if (count == 0) return Mono.empty();
                                 int randIndex = random.nextInt(count.intValue());
-                                QuizQuestionFilterInput searchFilter = new QuizQuestionFilterInput(null, null, null, user.targetLevel().name(), randIndex, 1);
+                                QuizQuestionFilterInput searchFilter = new QuizQuestionFilterInput(null, null, null, null, user.targetLevel().name(), randIndex, 1);
                                 return quizQuestionRepository.search(searchFilter).next();
                             });
                 })

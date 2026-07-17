@@ -56,7 +56,7 @@ class QuizQuestionRepositoryCustomImplTest {
     @Test
     @SuppressWarnings("unchecked")
     void search_shouldReturnFluxOfQuestions() {
-        QuizQuestionFilterInput filter = new QuizQuestionFilterInput("word", "A", 1, "JUNIOR_HIGH", 0, 10);
+        QuizQuestionFilterInput filter = new QuizQuestionFilterInput(null, "word", "A", 1, "JUNIOR_HIGH", 0, 10);
         
         when(executeSpec.map(any(BiFunction.class))).thenReturn(quizQuestionRowsFetchSpec);
         when(quizQuestionRowsFetchSpec.all()).thenReturn(Flux.just(testQuestion));
@@ -80,7 +80,7 @@ class QuizQuestionRepositoryCustomImplTest {
     @Test
     @SuppressWarnings("unchecked")
     void count_shouldReturnMonoOfLong() {
-        QuizQuestionFilterInput filter = new QuizQuestionFilterInput("word", "A", 1, "JUNIOR_HIGH", 0, 10);
+        QuizQuestionFilterInput filter = new QuizQuestionFilterInput(null, "word", "A", 1, "JUNIOR_HIGH", 0, 10);
         
         when(executeSpec.map(any(BiFunction.class))).thenReturn(longRowsFetchSpec);
         when(longRowsFetchSpec.one()).thenReturn(Mono.just(testCount));

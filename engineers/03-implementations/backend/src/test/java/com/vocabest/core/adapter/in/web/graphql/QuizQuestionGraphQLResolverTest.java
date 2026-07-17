@@ -32,7 +32,10 @@ class QuizQuestionGraphQLResolverTest {
         QuizQuestion entity = new QuizQuestion(UUID.randomUUID(), UUID.randomUUID(), "cloze", "trans", "opt", "d1", "d2", "d3", "root", "mnem", LocalDateTime.now(), LocalDateTime.now(), null);
         when(repository.search(any())).thenReturn(Flux.just(entity));
 
-        StepVerifier.create(resolver.listQuizQuestions(new QuizQuestionFilterInput("word", "w", 1, "JUNIOR_HIGH", 0, 20)))
+        QuizQuestionFilterInput filter = new QuizQuestionFilterInput(
+                null, "apple", "a", 1, "JUNIOR_HIGH", 0, 20
+        );
+        StepVerifier.create(resolver.listQuizQuestions(filter))
                 .expectNextMatches(e -> e.contextualCloze().equals("cloze"))
                 .verifyComplete();
     }

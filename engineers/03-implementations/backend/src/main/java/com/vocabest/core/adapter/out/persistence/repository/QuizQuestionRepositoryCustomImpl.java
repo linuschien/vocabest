@@ -31,6 +31,10 @@ public class QuizQuestionRepositoryCustomImpl implements QuizQuestionRepositoryC
         int index = 0;
 
         if (filter != null) {
+            if (filter.wordBankId() != null) {
+                sql.append("AND q.word_bank_id = $").append(++index).append(" ");
+                bindings.add(filter.wordBankId());
+            }
             if (filter.word() != null && !filter.word().isBlank()) {
                 sql.append("AND LOWER(w.word) LIKE $").append(++index).append(" ");
                 bindings.add("%" + filter.word().toLowerCase() + "%");
