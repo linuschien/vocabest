@@ -154,7 +154,7 @@ export default function DataTable({ element, children, emit, on }: any) {
                   </div>
                 </th>
               ))}
-              {(children?.length > 0 || visibleActions.length > 0) && <th className="px-6 py-3 text-right w-48">Actions</th>}
+              {(children?.length > 0 || visibleActions.length > 0) && <th className="px-6 py-3 text-right w-48">{element?.props?.actionsLabel || 'Actions'}</th>}
             </tr>
           </thead>
           <tbody>

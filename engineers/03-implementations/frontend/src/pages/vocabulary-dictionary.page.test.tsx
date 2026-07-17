@@ -67,7 +67,7 @@ describe('VocabularyDictionaryPage', () => {
     const user = userEvent.setup();
     renderPage();
 
-    await user.click(await screen.findByRole('button', { name: /View Quizzes/i }));
+    await user.click(await screen.findByRole('button', { name: /🔍/i }));
     expect(mockUseNavigate).toHaveBeenCalledWith('/wordbank-quizzes');
   });
 

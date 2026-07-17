@@ -196,6 +196,7 @@
       "props": {
         "id": "word-table",
         "label": "Words",
+        "actionsLabel": "View Quizzes",
         "totalElements": {
           "$bindState": "/data/listWordBanksTotal"
         },
@@ -237,7 +238,7 @@
         "rowActions": [
           {
             "id": "drilldown-wordbank",
-            "label": "🔍 View Quizzes",
+            "label": "🔍",
             "type": "navigate",
             "path": "/wordbank-quizzes",
             "variant": "outline",
