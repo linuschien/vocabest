@@ -8,156 +8,9 @@
         "label": "Admin Dashboard"
       },
       "children": [
-        "question-filter-section",
-        "question-list-section",
         "user-management-section",
-        "create-question-modal",
-        "confirm-delete-question-modal"
+        "edit-user-modal"
       ]
-    },
-    "question-filter-section": {
-      "type": "div",
-      "props": {
-        "id": "question-filter-section",
-        "label": "Question Filters"
-      },
-      "children": [
-        "question-filter-stack"
-      ]
-    },
-    "question-filter-stack": {
-      "type": "Stack",
-      "props": {
-        "id": "question-filter-stack",
-        "label": "Filters"
-      },
-      "children": [
-        "question-search-field",
-        "question-difficulty-select"
-      ]
-    },
-    "question-search-field": {
-      "type": "Input",
-      "props": {
-        "id": "question-search-field",
-        "label": "Search Question",
-        "placeholder": "Select Search Question",
-        "checks": null,
-        "validateOn": null,
-        "type": "text",
-        "value": {
-          "$bindState": "/form/question-search-field"
-        }
-      },
-      "children": []
-    },
-    "question-difficulty-select": {
-      "type": "Select",
-      "props": {
-        "id": "question-difficulty-select",
-        "label": "Difficulty Level",
-        "placeholder": "Select Difficulty Level",
-        "options": [
-          "1",
-          "2",
-          "3",
-          "4",
-          "5",
-          "6"
-        ],
-        "checks": null,
-        "validateOn": null,
-        "value": {
-          "$bindState": "/form/question-difficulty-select"
-        }
-      },
-      "children": []
-    },
-    "question-list-section": {
-      "type": "div",
-      "props": {
-        "id": "question-list-section",
-        "label": "Global Question Bank"
-      },
-      "children": [
-        "question-actions-stack",
-        "global-question-table"
-      ]
-    },
-    "question-actions-stack": {
-      "type": "Stack",
-      "props": {
-        "id": "question-actions-stack",
-        "label": "Actions"
-      },
-      "children": [
-        "create-question-btn",
-        "delete-question-btn"
-      ]
-    },
-    "create-question-btn": {
-      "type": "Button",
-      "props": {
-        "id": "create-question-btn",
-        "label": "Add Question",
-        "variant": "primary",
-        "disabled": null
-      },
-      "children": [],
-      "on": {
-        "press": [
-          {
-            "action": "openModal",
-            "params": {
-              "id": "create-question-modal"
-            }
-          }
-        ]
-      }
-    },
-    "delete-question-btn": {
-      "type": "Button",
-      "props": {
-        "id": "delete-question-btn",
-        "label": "Delete Question",
-        "variant": "danger",
-        "disabled": null
-      },
-      "children": [],
-      "on": {
-        "press": [
-          {
-            "action": "openModal",
-            "params": {
-              "id": "confirm-delete-question-modal"
-            }
-          }
-        ]
-      }
-    },
-    "global-question-table": {
-      "type": "DataTable",
-      "props": {
-        "id": "global-question-table",
-        "label": "Questions",
-        "columns": [
-          {
-            "field": "contextualCloze",
-            "label": "Contextual Cloze",
-            "sortable": false
-          },
-          {
-            "field": "difficultyLevel",
-            "label": "Difficulty Level",
-            "sortable": true,
-            "default_sort": "asc"
-          }
-        ],
-        "data": {
-          "$bindState": "/data/listQuizQuestions"
-        }
-      },
-      "children": []
     },
     "user-management-section": {
       "type": "div",
@@ -198,123 +51,48 @@
       },
       "children": []
     },
-    "create-question-modal": {
+    "edit-user-modal": {
       "type": "Dialog",
       "props": {
-        "id": "create-question-modal",
-        "label": "Create Question",
-        "title": "Create Question",
+        "id": "edit-user-modal",
+        "label": "Edit User",
+        "title": "Edit User Role",
         "description": null,
-        "openPath": "/modals/create-question-modal"
+        "openPath": "/modals/edit-user-modal"
       },
       "children": [
-        "wordbank-id-input",
-        "contextual-sentence-input",
-        "word-difficulty-select",
-        "submit-question-btn"
+        "user-role-select",
+        "submit-user-btn"
       ],
       "visible": {
-        "$state": "/modals/create-question-modal"
+        "$state": "/modals/edit-user-modal"
       }
     },
-    "wordbank-id-input": {
-      "type": "Input",
-      "props": {
-        "id": "wordbank-id-input",
-        "name": "wordBankId",
-        "label": "WordBank ID",
-        "required": true,
-        "value": {
-          "$bindState": "/form/wordbank-id-input"
-        }
-      },
-      "children": []
-    },
-    "contextual-sentence-input": {
-      "type": "Input",
-      "props": {
-        "id": "contextual-sentence-input",
-        "name": "contextualCloze",
-        "label": "Contextual Sentence",
-        "required": true,
-        "value": {
-          "$bindState": "/form/contextual-sentence-input"
-        }
-      },
-      "children": []
-    },
-    "word-difficulty-select": {
+    "user-role-select": {
       "type": "Select",
       "props": {
-        "id": "word-difficulty-select",
-        "name": "difficultyLevel",
-        "label": "Difficulty",
+        "id": "user-role-select",
+        "name": "role",
+        "label": "Role",
         "options": [
-          "1",
-          "2",
-          "3",
-          "4",
-          "5",
-          "6"
+          "USER",
+          "ADMIN"
         ],
+        "placeholder": "Select Role",
+        "checks": null,
+        "validateOn": null,
         "value": {
-          "$bindState": "/form/word-difficulty-select"
+          "$bindState": "/form/user-role-select"
         }
       },
       "children": []
     },
-    "submit-question-btn": {
+    "submit-user-btn": {
       "type": "Button",
       "props": {
-        "id": "submit-question-btn",
+        "id": "submit-user-btn",
         "label": "Save",
-        "variant": "primary"
-      },
-      "children": [],
-      "on": {
-        "press": [
-          {
-            "action": "executeBehavior",
-            "params": {
-              "ref": "createQuizQuestion",
-              "payload": {
-                "wordBankId": {
-                  "$state": "/form/wordbank-id-input"
-                },
-                "contextualCloze": {
-                  "$state": "/form/contextual-sentence-input"
-                },
-                "difficultyLevel": {
-                  "$state": "/form/word-difficulty-select"
-                }
-              }
-            }
-          }
-        ]
-      }
-    },
-    "confirm-delete-question-modal": {
-      "type": "AlertDialog",
-      "props": {
-        "id": "confirm-delete-question-modal",
-        "label": "Confirm Deletion",
-        "title": "Confirm Deletion",
-        "description": null,
-        "openPath": "/modals/confirm-delete-question-modal"
-      },
-      "children": [
-        "confirm-delete-btn"
-      ],
-      "visible": {
-        "$state": "/modals/confirm-delete-question-modal"
-      }
-    },
-    "confirm-delete-btn": {
-      "type": "Button",
-      "props": {
-        "id": "confirm-delete-btn",
-        "label": "Confirm",
-        "variant": "danger",
+        "variant": "primary",
         "disabled": null
       },
       "children": [],
@@ -323,10 +101,13 @@
           {
             "action": "executeBehavior",
             "params": {
-              "ref": "deleteQuizQuestion",
+              "ref": "updateUserRole",
               "payload": {
                 "id": {
-                  "$state": "/data/activeQuizQuestionId"
+                  "$state": "/data/activeUserId"
+                },
+                "role": {
+                  "$state": "/form/user-role-select"
                 }
               }
             }

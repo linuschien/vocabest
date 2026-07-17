@@ -46,7 +46,7 @@ beforeEach(() => {
 describe('AdminDashboardPage', () => {
   it('renders page correctly', async () => {
     renderPage();
-    expect(await screen.findByRole('button', { name: /Add Question/i })).toBeInTheDocument();
+    expect(await screen.findByText('Users')).toBeInTheDocument();
   });
 
   it('renders empty table when no data', async () => {
@@ -56,50 +56,23 @@ describe('AdminDashboardPage', () => {
   });
 
   it('renders rows when data exists', async () => {
-    store.set('/data/listQuizQuestions', [{ id: '1', contextualCloze: 'The apple is ___.', difficultyLevel: '1' }]);
+    store.set('/data/listUsers', [{ id: '1', email: 'test@example.com', role: 'USER', learningStreak: 5 }]);
     renderPage();
-    expect(await screen.findByText('The apple is ___.')).toBeInTheDocument();
+    expect(await screen.findByText('test@example.com')).toBeInTheDocument();
   });
 
-  it('opens create question modal and calls executeBehavior on save', async () => {
-    store.set('/modals/create-question-modal', true);
+  it('opens edit user modal and calls executeBehavior on save', async () => {
+    store.set('/modals/edit-user-modal', true);
+    store.set('/data/activeUserId', 'user-123');
     const user = userEvent.setup();
     renderPage();
 
-    await screen.findByRole('button', { name: /Save/i });
-    const textboxes = await screen.findAllByRole('textbox');
-    // The last two textboxes in the DOM will be the ones in the modal
-    await user.type(textboxes[textboxes.length - 2], 'uuid-1234');
-    await user.type(textboxes[textboxes.length - 1], 'Testing ___');
-    
-    // submit
-    await user.click(await screen.findByRole('button', { name: /Save/i }));
+    const saveBtn = await screen.findByRole('button', { name: /Save/i });
+    await user.click(saveBtn);
 
     expect(executeBehavior).toHaveBeenCalledWith(
       expect.objectContaining({
-        ref: 'createQuizQuestion',
-        payload: expect.objectContaining({
-          wordBankId: 'uuid-1234',
-          contextualCloze: 'Testing ___'
-        })
-      })
-    );
-  });
-
-  it('calls deleteQuizQuestion', async () => {
-    store.set('/modals/confirm-delete-question-modal', true);
-    store.set('/data/activeQuizQuestionId', 'test-q-id');
-    const user = userEvent.setup();
-    renderPage();
-
-    await user.click(await screen.findByRole('button', { name: /Confirm/i }));
-
-    expect(executeBehavior).toHaveBeenCalledWith(
-      expect.objectContaining({
-        ref: 'deleteQuizQuestion',
-        payload: {
-          id: 'test-q-id'
-        }
+        ref: 'updateUserRole'
       })
     );
   });

@@ -57,64 +57,6 @@
                 "label": "Word List",
                 "children": [
                     {
-                        "id": "admin-actions-stack",
-                        "abstract_type": "Stack",
-                        "semantic_variant": "action-bar",
-                        "label": "Admin Actions",
-                        "children": [
-                            {
-                                "id": "create-wordbank-btn",
-                                "abstract_type": "Trigger",
-                                "semantic_variant": "primary",
-                                "label": "Add Word",
-                                "behavior_ref": "US-05-02: 系統管理員全站資料存取權限",
-                                "interactions": [
-                                    {
-                                        "on_event": "on_click",
-                                        "target_id": "create-wordbank-modal",
-                                        "behavior_ref": "nielsen:control"
-                                    }
-                                ]
-                            },
-                            {
-                                "id": "drilldown-questions-btn",
-                                "abstract_type": "Trigger",
-                                "semantic_variant": "secondary",
-                                "label": "Manage Questions (Drill-down)",
-                                "behavior_ref": "US-05-02: 系統管理員全站資料存取權限"
-                            },
-                            {
-                                "id": "delete-wordbank-btn",
-                                "abstract_type": "Trigger",
-                                "semantic_variant": "destructive",
-                                "label": "Delete Word",
-                                "data_ref": "deleteWordBank",
-                                "behavior_ref": "US-05-02: 系統管理員全站資料存取權限",
-                                "confirm_delete": {
-                                    "keyword_label": "Please type the word to confirm deletion",
-                                    "keyword_value": "{{wordBank.word}}"
-                                },
-                                "feedback": {
-                                    "on_success": {
-                                        "type": "toast",
-                                        "message_key": "Word deleted"
-                                    },
-                                    "on_error": {
-                                        "type": "dialog",
-                                        "message_key": "Error deleting word"
-                                    }
-                                },
-                                "interactions": [
-                                    {
-                                        "on_event": "on_click",
-                                        "target_id": "confirm-delete-modal",
-                                        "behavior_ref": "nielsen:error-prevention"
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    {
                         "id": "word-table",
                         "abstract_type": "Table",
                         "semantic_variant": "data-table",
@@ -143,62 +85,6 @@
                                 "sortable": true
                             }
                         ]
-                    }
-                ]
-            },
-            {
-                "id": "create-wordbank-modal",
-                "abstract_type": "Overlay",
-                "semantic_variant": "modal",
-                "label": "Create Word",
-                "children": [
-                    {
-                        "id": "submit-wordbank-btn",
-                        "abstract_type": "Trigger",
-                        "semantic_variant": "primary",
-                        "label": "Save",
-                        "data_ref": "createWordBank",
-                        "behavior_ref": "US-05-02: 系統管理員全站資料存取權限",
-                        "feedback": {
-                            "on_success": {
-                                "type": "toast",
-                                "message_key": "Word created"
-                            },
-                            "on_error": {
-                                "type": "dialog",
-                                "message_key": "Validation failed"
-                            }
-                        }
-                    }
-                ]
-            },
-            {
-                "id": "confirm-delete-modal",
-                "abstract_type": "Overlay",
-                "semantic_variant": "confirm-dialog",
-                "label": "Confirm Deletion",
-                "children": [
-                    {
-                        "id": "confirm-delete-btn",
-                        "abstract_type": "Trigger",
-                        "semantic_variant": "destructive",
-                        "label": "Confirm",
-                        "data_ref": "deleteWordBank",
-                        "behavior_ref": "US-05-02: 系統管理員全站資料存取權限",
-                        "confirm_delete": {
-                            "keyword_label": "Please type the word to confirm deletion",
-                            "keyword_value": "{{wordBank.word}}"
-                        },
-                        "feedback": {
-                            "on_success": {
-                                "type": "toast",
-                                "message_key": "Deleted"
-                            },
-                            "on_error": {
-                                "type": "dialog",
-                                "message_key": "Failed to delete"
-                            }
-                        }
                     }
                 ]
             }

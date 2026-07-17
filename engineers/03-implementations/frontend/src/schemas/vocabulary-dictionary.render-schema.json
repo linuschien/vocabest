@@ -10,9 +10,7 @@
       "children": [
         "dict-level-header",
         "filter-section",
-        "word-list-section",
-        "create-wordbank-modal",
-        "confirm-delete-modal"
+        "word-list-section"
       ]
     },
 
@@ -190,80 +188,8 @@
         "label": "Word List"
       },
       "children": [
-        "admin-actions-stack",
         "word-table"
       ]
-    },
-    "admin-actions-stack": {
-      "type": "Stack",
-      "props": {
-        "id": "admin-actions-stack",
-        "label": "Admin Actions"
-      },
-      "children": [
-        "create-wordbank-btn"
-      ]
-    },
-    "create-wordbank-btn": {
-      "type": "Button",
-      "props": {
-        "id": "create-wordbank-btn",
-        "label": "Add Word",
-        "variant": "primary",
-        "disabled": null,
-        "adminOnly": true
-      },
-      "children": [],
-      "on": {
-        "press": [
-          {
-            "action": "openModal",
-            "params": {
-              "id": "create-wordbank-modal"
-            }
-          }
-        ]
-      }
-    },
-    "drilldown-questions-btn": {
-      "type": "Button",
-      "props": {
-        "id": "drilldown-questions-btn",
-        "label": "Manage Questions (Drill-down)",
-        "variant": "secondary",
-        "disabled": null
-      },
-      "children": [],
-      "on": {
-        "press": [
-          {
-            "action": "navigate",
-            "params": {
-              "path": "/admin-dashboard"
-            }
-          }
-        ]
-      }
-    },
-    "delete-wordbank-btn": {
-      "type": "Button",
-      "props": {
-        "id": "delete-wordbank-btn",
-        "label": "Delete Word",
-        "variant": "danger",
-        "disabled": null
-      },
-      "children": [],
-      "on": {
-        "press": [
-          {
-            "action": "openModal",
-            "params": {
-              "id": "confirm-delete-modal"
-            }
-          }
-        ]
-      }
     },
     "word-table": {
       "type": "DataTable",
@@ -310,27 +236,11 @@
         ],
         "rowActions": [
           {
-            "id": "edit-wordbank",
-            "label": "Edit",
-            "type": "modal",
-            "modalId": "create-wordbank-modal",
-            "variant": "outline",
-            "adminOnly": true
-          },
-          {
             "id": "drilldown-wordbank",
-            "label": "Manage Questions",
+            "label": "🔍 View Quizzes",
             "type": "navigate",
-            "path": "/admin-dashboard",
+            "path": "/wordbank-quizzes",
             "variant": "outline",
-            "adminOnly": true
-          },
-          {
-            "id": "delete-wordbank",
-            "label": "Delete",
-            "type": "modal",
-            "modalId": "confirm-delete-modal",
-            "variant": "danger",
             "adminOnly": true
           }
         ],

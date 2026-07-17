@@ -1,0 +1,143 @@
+{
+  "root": "wordbank-quizzes-container",
+  "elements": {
+    "wordbank-quizzes-container": {
+      "type": "Container:page",
+      "props": {
+        "id": "wordbank-quizzes-container",
+        "label": "Word Bank Quizzes"
+      },
+      "children": [
+        "question-list-section"
+      ]
+    },
+    "question-filter-section": {
+      "type": "div",
+      "props": {
+        "id": "question-filter-section",
+        "label": "Question Filters"
+      },
+      "children": [
+        "question-filter-stack"
+      ]
+    },
+    "question-filter-stack": {
+      "type": "Stack",
+      "props": {
+        "id": "question-filter-stack",
+        "label": "Filters",
+        "direction": "horizontal",
+        "gap": "md",
+        "align": "end",
+        "justify": "start",
+        "className": "flex-wrap"
+      },
+      "children": [
+        "question-search-field",
+        "question-difficulty-select"
+      ]
+    },
+    "question-search-field": {
+      "type": "Input",
+      "props": {
+        "id": "question-search-field",
+        "name": "search",
+        "label": "Search Question",
+        "placeholder": "Select Search Question",
+        "checks": null,
+        "validateOn": null,
+        "type": "text",
+        "value": {
+          "$bindState": "/form/question-search-field"
+        }
+      },
+      "children": []
+    },
+    "question-difficulty-select": {
+      "type": "Select",
+      "props": {
+        "id": "question-difficulty-select",
+        "name": "difficulty",
+        "label": "Difficulty Level",
+        "placeholder": "Select Difficulty Level",
+        "options": [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5",
+          "6"
+        ],
+        "checks": null,
+        "validateOn": null,
+        "value": {
+          "$bindState": "/form/question-difficulty-select"
+        }
+      },
+      "children": []
+    },
+    "question-list-section": {
+      "type": "div",
+      "props": {
+        "id": "question-list-section",
+        "label": "Global Question Bank"
+      },
+      "children": [
+        "global-question-table"
+      ]
+    },
+    "global-question-table": {
+      "type": "DataTable",
+      "props": {
+        "id": "global-question-table",
+        "label": "Questions",
+        "columns": [
+          {
+            "field": "contextualCloze",
+            "label": "Contextual Cloze",
+            "sortable": false
+          },
+          {
+            "field": "chineseTranslation",
+            "label": "Translation",
+            "sortable": false
+          },
+          {
+            "field": "correctAnswer",
+            "label": "Correct Answer",
+            "sortable": false
+          },
+          {
+            "field": "distractor1",
+            "label": "Distractor 1",
+            "sortable": false
+          },
+          {
+            "field": "distractor2",
+            "label": "Distractor 2",
+            "sortable": false
+          },
+          {
+            "field": "distractor3",
+            "label": "Distractor 3",
+            "sortable": false
+          },
+          {
+            "field": "explanationRootAffix",
+            "label": "Root/Affix",
+            "sortable": false
+          },
+          {
+            "field": "explanationMnemonic",
+            "label": "Mnemonic",
+            "sortable": false
+          }
+        ],
+        "data": {
+          "$bindState": "/data/listQuizQuestions"
+        }
+      },
+      "children": []
+    }
+  }
+}

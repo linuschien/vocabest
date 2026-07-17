@@ -8,9 +8,17 @@ export interface ResponseType {
 }
 
 const QUERY = gql`
-  query listQuizQuestions($filter: String) {
+  query listQuizQuestions($filter: QuizQuestionFilterInput) {
     listQuizQuestions(filter: $filter) {
       id
+      contextualCloze
+      correctAnswer
+      chineseTranslation
+      distractor1
+      distractor2
+      distractor3
+      explanationRootAffix
+      explanationMnemonic
     }
   }
 `;

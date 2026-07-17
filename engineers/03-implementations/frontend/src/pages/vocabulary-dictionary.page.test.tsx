@@ -67,50 +67,8 @@ describe('VocabularyDictionaryPage', () => {
     const user = userEvent.setup();
     renderPage();
 
-    await user.click(await screen.findByRole('button', { name: /Manage Questions/i }));
-    expect(mockUseNavigate).toHaveBeenCalledWith('/admin-dashboard');
-  });
-
-  it('submits create word bank form', async () => {
-    store.set('/modals/create-wordbank-modal', true);
-    const user = userEvent.setup();
-    renderPage();
-
-    await screen.findByRole('button', { name: /Save/i });
-    const textboxes = await screen.findAllByRole('textbox');
-    // The last three textboxes will be in the modal
-    await user.type(textboxes[textboxes.length - 3], 'banana');
-    await user.type(textboxes[textboxes.length - 2], 'noun');
-    await user.type(textboxes[textboxes.length - 1], '香蕉');
-
-    await user.click(await screen.findByRole('button', { name: /Save/i }));
-
-    expect(executeBehavior).toHaveBeenCalledWith(
-      expect.objectContaining({
-        ref: 'createWordBank',
-        payload: expect.objectContaining({
-          word: 'banana',
-          partsOfSpeech: 'noun',
-          chineseTranslation: '香蕉'
-        })
-      })
-    );
-  });
-
-  it('submits delete confirm', async () => {
-    store.set('/modals/confirm-delete-modal', true);
-    store.set('/data/activeWordBankId', 'wb-123');
-    const user = userEvent.setup();
-    renderPage();
-
-    await user.click(await screen.findByRole('button', { name: /Confirm/i }));
-
-    expect(executeBehavior).toHaveBeenCalledWith(
-      expect.objectContaining({
-        ref: 'deleteWordBank',
-        payload: { id: 'wb-123' }
-      })
-    );
+    await user.click(await screen.findByRole('button', { name: /View Quizzes/i }));
+    expect(mockUseNavigate).toHaveBeenCalledWith('/wordbank-quizzes');
   });
 
   it('triggers search when search button is clicked', async () => {
