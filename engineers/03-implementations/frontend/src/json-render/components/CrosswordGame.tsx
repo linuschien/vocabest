@@ -79,8 +79,8 @@ function Keyboard({ onKeyPress, disabled }: { onKeyPress: (key: string) => void,
                 onClick={() => onKeyPress(key)}
                 className={`flex items-center justify-center font-bold rounded-lg transition-all active:scale-95 uppercase backdrop-blur-md shadow-sm ${
                   isSpecial 
-                    ? 'bg-destructive/10 border border-destructive/20 text-destructive hover:bg-destructive/20 hover:border-destructive/30 px-3 py-2.5 sm:py-3 text-sm min-w-[45px] sm:min-w-[60px]' 
-                    : 'bg-primary/10 border border-primary/20 text-primary hover:bg-primary/20 hover:border-primary/30 flex-1 py-2.5 sm:py-3 text-sm max-w-[45px]'
+                    ? 'bg-destructive/10 border border-destructive/20 text-destructive hover:bg-destructive/20 hover:border-destructive/30 px-3 py-3 sm:py-4 text-base sm:text-lg min-w-[50px] sm:min-w-[70px]' 
+                    : 'bg-primary/10 border border-primary/20 text-primary hover:bg-primary/20 hover:border-primary/30 flex-1 py-3 sm:py-4 text-base sm:text-lg max-w-[60px]'
                 } ${disabled ? 'opacity-50 pointer-events-none' : ''}`}
               >
                 {key === 'Backspace' ? '⌫' : key}
@@ -402,7 +402,10 @@ export default function CrosswordGame({ element }: any) {
 
   return (
     <ErrorBoundary>
-      <div className="flex flex-col xl:flex-row items-start justify-center w-full max-w-7xl mx-auto p-4 gap-8 select-none isolate" id={element?.props?.id}>
+      <div 
+        className={`flex flex-col lg:flex-row items-start justify-center w-full max-w-7xl mx-auto p-4 gap-8 select-none isolate transition-all duration-300 ${showKeyboard ? 'pb-[320px]' : ''}`} 
+        id={element?.props?.id}
+      >
         
         {/* Win Modal Overlay */}
         {isWon && (
@@ -459,9 +462,9 @@ export default function CrosswordGame({ element }: any) {
         </div>
 
         {/* Right Area: Clues (Sticky) */}
-        <div className="w-full xl:w-[450px] shrink-0 flex flex-col gap-6 text-sm xl:sticky xl:top-24 self-start">
+        <div className="w-full lg:w-[350px] xl:w-[450px] shrink-0 flex flex-col gap-6 text-sm lg:sticky lg:top-24 self-start">
           
-          <div className="flex flex-col sm:flex-row xl:flex-col gap-6">
+          <div className="flex flex-col sm:flex-row lg:flex-col gap-6">
             <div className="flex-1 flex flex-col gap-0 p-4 bg-card shadow-sm border border-border rounded-xl">
               <h3 className="font-bold text-lg mb-2 text-primary">橫向 (Across)</h3>
               {layout.result.filter(w => w.orientation === 'across').map(w => {
