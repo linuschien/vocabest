@@ -124,20 +124,24 @@ def generate_command(args):
         target_level = word_data['target_level']
         target_count = get_target_question_count(word_data['exam_frequency'])
         
+        missing_indices = []
         if getattr(args, 'override', False):
             cursor.execute("DELETE FROM quiz_question WHERE word_bank_id = ?", (word_id,))
-            existing_count = 0
+            missing_indices = list(range(target_count))
             print(f"[{idx}/{total_words}] Cleared existing questions for '{word_text}' ({target_level}) due to --override.")
         else:
-            # Check how many we already have
-            cursor.execute("SELECT COUNT(*) FROM quiz_question WHERE word_bank_id = ?", (word_id,))
-            existing_count = cursor.fetchone()[0]
+            # Check which indices are missing
+            for i in range(target_count):
+                q_uuid = str(uuid.uuid5(uuid.NAMESPACE_DNS, f"{word_id}_{i}"))
+                cursor.execute("SELECT 1 FROM quiz_question WHERE id = ?", (q_uuid,))
+                if not cursor.fetchone():
+                    missing_indices.append(i)
         
-        if existing_count >= target_count:
-            print(f"[{idx}/{total_words}] Skipping '{word_text}' ({target_level}): already has {existing_count}/{target_count} questions.")
+        if not missing_indices:
+            print(f"[{idx}/{total_words}] Skipping '{word_text}' ({target_level}): already has {target_count}/{target_count} questions.")
             continue # Already generated
             
-        needed = target_count - existing_count
+        needed = len(missing_indices)
         print(f"[{idx}/{total_words}] Generating {needed} question(s) for '{word_text}' ({target_level}) (Target: {target_count})...")
         
         system_prompt = (
@@ -173,6 +177,7 @@ def generate_command(args):
             "3. Distractors should be semantically plausible in the sentence structure but logically incorrect in meaning.\n"
             "4. Distractors must match the target level.\n"
             "5. DO NOT use LaTeX formatting (e.g., use -> or → instead of \\rightarrow).\n"
+            "6. CRITICAL: The `chinese_translation` field MUST NOT contain ANY blanks or underscores (___). Only translate the complete sentence.\n"
             f"CRITICAL: The sentence complexity and vocabulary used in the contextual_cloze MUST be appropriate for a {word_data['target_level']} student in Taiwan."
         )
         
@@ -256,13 +261,13 @@ def generate_command(args):
                 text = text.replace('\\\\rightarrow', '→')
                 return text
             
-            for idx, q in enumerate(questions_list):
+            for target_idx, q in zip(missing_indices, questions_list):
                 # Sanitize LaTeX out of explanations
                 q['explanation_root_affix'] = sanitize(q.get('explanation_root_affix', ''))
                 q['explanation_mnemonic'] = sanitize(q.get('explanation_mnemonic', ''))
                 
-                # Use deterministic UUID5 based on word ID and index offset
-                q_uuid = str(uuid.uuid5(uuid.NAMESPACE_DNS, f"{word_id}_{existing_count + idx}"))
+                # Use deterministic UUID5 based on word ID and missing index
+                q_uuid = str(uuid.uuid5(uuid.NAMESPACE_DNS, f"{word_id}_{target_idx}"))
                 
                 cursor.execute('''
                     INSERT OR REPLACE INTO quiz_question 
