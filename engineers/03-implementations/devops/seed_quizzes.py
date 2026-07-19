@@ -7,6 +7,7 @@ import json
 import os
 import sys
 import time
+import concurrent.futures
 from collections import defaultdict
 from pathlib import Path
 
@@ -188,21 +189,29 @@ def generate_command(args):
                 print("  -> Sending request to Google AI Studio...")
                 for attempt in range(5):
                     try:
-                        google_resp = google_client.models.generate_content(
-                            model=args.google_model,
-                            contents=user_prompt,
-                            config=types.GenerateContentConfig(
-                                system_instruction=system_prompt,
-                                temperature=0.7,
+                        def make_google_call():
+                            return google_client.models.generate_content(
+                                model=args.google_model,
+                                contents=user_prompt,
+                                config=types.GenerateContentConfig(
+                                    system_instruction=system_prompt,
+                                    temperature=0.7,
+                                )
                             )
-                        )
+                        
+                        with concurrent.futures.ThreadPoolExecutor(max_workers=1) as executor:
+                            future = executor.submit(make_google_call)
+                            google_resp = future.result(timeout=180) # 3 minutes timeout
+                            
                         raw_content = google_resp.text.strip()
                         response = True
                         break  # Success, exit the retry loop
                     except Exception as e:
+                        err_msg = "Timeout (3 minutes)" if isinstance(e, concurrent.futures.TimeoutError) else str(e)
+                        
                         # For both APIError and general Exception, we check if it's the last attempt
                         if attempt < 4:
-                            print(f"  -> Google AI Studio error ({e}). Retrying in 2 seconds... ({attempt+1}/5)")
+                            print(f"  -> Google AI Studio error ({err_msg}). Retrying in 2 seconds... ({attempt+1}/5)")
                             time.sleep(2)
                         else:
                             # Final attempt failed
