@@ -182,6 +182,22 @@ public class UserServiceImpl implements UserCommandService, UserQueryService {
                         wb.examFrequency()
                 ));
     }
+    
+    @Override
+    public Flux<WordBankResponse> getMemoryGameTargets(UUID userId, int count) {
+        return userRepository.findById(userId)
+                .flatMapMany(user -> wordBankRepository.findRandomMemoryGameTargets(
+                        user.targetLevel() != null ? user.targetLevel().name() : null, count))
+                .map(wb -> new WordBankResponse(
+                        wb.id(),
+                        wb.word(),
+                        wb.partsOfSpeech(),
+                        wb.chineseTranslation(),
+                        wb.targetLevel() != null ? wb.targetLevel().name() : null,
+                        wb.difficultyLevel(),
+                        wb.examFrequency()
+                ));
+    }
 
     @Override
     public Mono<User> whoami() {

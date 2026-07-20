@@ -6,6 +6,7 @@ import com.vocabest.core.adapter.in.web.dto.SubmitAnswerResponse;
 import com.vocabest.core.adapter.in.web.dto.UserOnboardRequest;
 import com.vocabest.core.adapter.in.web.dto.UserPatchRequest;
 import com.vocabest.core.adapter.in.web.dto.UserRequest;
+import com.vocabest.core.adapter.in.web.dto.WordBankResponse;
 import com.vocabest.core.adapter.out.persistence.model.Role;
 import com.vocabest.core.adapter.out.persistence.model.TargetLevel;
 import com.vocabest.core.adapter.out.persistence.model.User;
@@ -143,6 +144,19 @@ class UserRestControllerTest {
         client.delete().uri("/api/v1/users/{id}", id)
                 .exchange()
                 .expectStatus().isNoContent();
+    }
+
+    @Test
+    void testGetMemoryGameTargets() {
+        UUID id = UUID.randomUUID();
+        WordBankResponse wordBank = new WordBankResponse(UUID.randomUUID(), "word", "n", "chinese", "JUNIOR_HIGH", 1, 0);
+        when(queryService.getMemoryGameTargets(id, 8)).thenReturn(Flux.just(wordBank));
+
+        client.post().uri("/api/v1/users/{id}:memoryGameTargets?count=8", id)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody()
+                .jsonPath("$[0].word").isEqualTo("word");
     }
 
     @Test

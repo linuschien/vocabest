@@ -24,5 +24,7 @@ public interface UserQueryService {
     
     Flux<com.vocabest.core.adapter.in.web.dto.WordBankResponse> getCrosswordTargets(UUID userId, int count);
     
+    Flux<com.vocabest.core.adapter.in.web.dto.WordBankResponse> getMemoryGameTargets(UUID userId, int count);
+    
     Mono<ErrorReviewCountResponse> getErrorReviewCount(UUID userId);
 }

@@ -122,6 +122,14 @@ public class UserRestController {
         return Mono.just(ResponseEntity.ok(queryService.getCrosswordTargets(userId, count)));
     }
 
+    @PostMapping("/api/v1/users/{userId}:memoryGameTargets")
+    @com.vocabest.core.adapter.in.web.security.RequireOwnership("#userId")
+    public Mono<ResponseEntity<Flux<WordBankResponse>>> getMemoryGameTargets(
+            @PathVariable UUID userId,
+            @RequestParam(name = "count", defaultValue = "8") int count) {
+        return Mono.just(ResponseEntity.ok(queryService.getMemoryGameTargets(userId, count)));
+    }
+
     @PostMapping("/api/v1/users/{userId}:submitAnswer")
     @com.vocabest.core.adapter.in.web.security.RequireOwnership("#userId")
     public Mono<ResponseEntity<SubmitAnswerResponse>> submitAnswer(@PathVariable UUID userId, @Valid @RequestBody SubmitAnswerRequest req) {
