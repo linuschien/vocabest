@@ -30,7 +30,5 @@ export function useGetMemoryGameTargets(userId?: string, count: number = 8, enab
     },
     enabled: !!userId && count > 0 && enabled,
     refetchOnWindowFocus: false, // Prevent words from changing mid-game
-    refetchOnMount: false,
-    staleTime: Infinity,
   });
 }

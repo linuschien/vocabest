@@ -51,7 +51,7 @@ export default function MemoryGame({ element }: any) {
   
   const config = DIFFICULTIES[difficulty];
   
-  const { data: targets, isLoading, isError, refetch } = useGetMemoryGameTargets(userId, config.pairs, gameState === 'playing');
+  const { data: targets, isLoading, isFetching, isError, refetch } = useGetMemoryGameTargets(userId, config.pairs, gameState === 'playing');
 
   const [cards, setCards] = useState<Card[]>([]);
   const [flippedIndices, setFlippedIndices] = useState<number[]>([]);
@@ -64,7 +64,7 @@ export default function MemoryGame({ element }: any) {
 
   // Setup Game Board
   useEffect(() => {
-    if (gameState === 'playing' && targets && targets.length === config.pairs) {
+    if (gameState === 'playing' && !isFetching && targets && targets.length === config.pairs) {
       const newCards: Card[] = [];
       targets.forEach(t => {
         newCards.push({
@@ -99,7 +99,7 @@ export default function MemoryGame({ element }: any) {
       
       return () => clearInterval(id);
     }
-  }, [gameState, targets, config.pairs]);
+  }, [gameState, targets, config.pairs, isFetching]);
 
   // Clean up timer on unmount or win
   useEffect(() => {
@@ -250,7 +250,7 @@ export default function MemoryGame({ element }: any) {
     );
   }
 
-  if (isLoading || !targets || targets.length !== config.pairs) {
+  if (isLoading || isFetching || !targets || targets.length !== config.pairs) {
     return (
       <div className="flex flex-col items-center justify-center w-full max-w-lg mx-auto p-8 text-muted-foreground" id={element?.props?.id}>
         <RotateCcw className="w-8 h-8 animate-spin mb-4" />
