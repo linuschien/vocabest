@@ -14,7 +14,7 @@ export const memoryGameTargetKeys = {
   byUser: (userId: string, count: number) => ['memoryGameTargets', userId, count] as const,
 };
 
-export function useGetMemoryGameTargets(userId?: string, count: number = 8) {
+export function useGetMemoryGameTargets(userId?: string, count: number = 8, enabled: boolean = true) {
   return useQuery({
     queryKey: userId ? memoryGameTargetKeys.byUser(userId, count) : memoryGameTargetKeys.all,
     queryFn: async () => {
@@ -28,7 +28,7 @@ export function useGetMemoryGameTargets(userId?: string, count: number = 8) {
       }
       return response.json() as Promise<WordBankResponse[]>;
     },
-    enabled: !!userId && count > 0,
+    enabled: !!userId && count > 0 && enabled,
     refetchOnWindowFocus: false, // Prevent words from changing mid-game
     refetchOnMount: false,
     staleTime: Infinity,

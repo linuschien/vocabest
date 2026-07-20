@@ -51,7 +51,7 @@ export default function MemoryGame({ element }: any) {
   
   const config = DIFFICULTIES[difficulty];
   
-  const { data: targets, isLoading, isError, refetch } = useGetMemoryGameTargets(userId, config.pairs);
+  const { data: targets, isLoading, isError, refetch } = useGetMemoryGameTargets(userId, config.pairs, gameState === 'playing');
 
   const [cards, setCards] = useState<Card[]>([]);
   const [flippedIndices, setFlippedIndices] = useState<number[]>([]);
@@ -111,7 +111,7 @@ export default function MemoryGame({ element }: any) {
   const startGame = (diff: Difficulty) => {
     setDifficulty(diff);
     setGameState('playing');
-    refetch();
+    // We don't need to manually refetch here because the query will automatically run when enabled becomes true (gameState === 'playing')
   };
 
   const showToast = (msg: string) => {
