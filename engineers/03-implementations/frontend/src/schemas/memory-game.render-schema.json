@@ -1,0 +1,42 @@
+{
+  "root": "memory-game-container",
+  "elements": {
+    "memory-game-container": {
+      "type": "Container:page",
+      "props": {
+        "id": "memory-game-container",
+        "label": "🧠 翻牌對對碰 (Memory Game)"
+      },
+      "children": [
+        "header-section",
+        "memory-game"
+      ]
+    },
+    "header-section": {
+      "type": "div",
+      "props": { "className": "mb-4" },
+      "children": ["title", "subtitle"]
+    },
+    "title": {
+      "type": "Heading",
+      "props": {
+        "text": "🧠 翻牌對對碰 (Memory Game)",
+        "level": "h1"
+      }
+    },
+    "subtitle": {
+      "type": "Text",
+      "props": {
+        "text": "找出並配對所有的英文單字與中文翻譯！",
+        "className": "text-muted-foreground mt-1 block"
+      }
+    },
+    "memory-game": {
+      "type": "MemoryGame",
+      "props": {
+        "id": "memory-game-board"
+      },
+      "children": []
+    }
+  }
+}

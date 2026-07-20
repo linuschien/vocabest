@@ -120,7 +120,8 @@
       },
       "children": [
         "nav-wordle-btn",
-        "nav-crossword-btn"
+        "nav-crossword-btn",
+        "nav-memory-game-btn"
       ]
     },
     "start-daily-task-btn": {
@@ -216,6 +217,26 @@
             "action": "navigate",
             "params": {
               "path": "/crossword"
+            }
+          }
+        ]
+      }
+    },
+    "nav-memory-game-btn": {
+      "type": "Button",
+      "props": {
+        "id": "nav-memory-game-btn",
+        "label": "🧠 翻牌對對碰",
+        "variant": "outline",
+        "disabled": null
+      },
+      "children": [],
+      "on": {
+        "press": [
+          {
+            "action": "navigate",
+            "params": {
+              "path": "/memory-game"
             }
           }
         ]

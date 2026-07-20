@@ -12,6 +12,7 @@ import VocabularyDictionaryPage from '@/pages/vocabulary-dictionary.page';
 import LearningStatisticsPage from '@/pages/learning-statistics.page';
 import WordlePage from '@/pages/wordle.page';
 import CrosswordPage from '@/pages/crossword.page';
+import MemoryGamePage from '@/pages/memory-game.page';
 
 import GlobalLayout from '@/components/layout/GlobalLayout';
 
@@ -32,6 +33,7 @@ function App() {
               <Route path="/learning-statistics" element={<LearningStatisticsPage />} />
               <Route path="/wordle" element={<WordlePage />} />
               <Route path="/crossword" element={<CrosswordPage />} />
+              <Route path="/memory-game" element={<MemoryGamePage />} />
             </Route>
           </Routes>
         </BehaviorProvider>

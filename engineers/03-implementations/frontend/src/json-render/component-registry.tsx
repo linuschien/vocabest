@@ -15,6 +15,7 @@ import ProgressTimeControls from './components/ProgressTimeControls';
 import ProgressChart from './components/ProgressChart';
 import WordleGame from './components/WordleGame';
 import CrosswordGame from './components/CrosswordGame';
+import MemoryGame from './components/MemoryGame';
 
 // ── Adapter: ComponentRenderProps → BaseComponentProps ──────────────────────
 function adapt(Comp: ComponentType<any>): ComponentType<any> {
@@ -103,6 +104,7 @@ export const componentRegistry: Record<string, ComponentType<any>> = {
   'ProgressChart': adapt(ProgressChart),
   'WordleGame': adapt(WordleGame),
   'CrosswordGame': adapt(CrosswordGame),
+  'MemoryGame': adapt(MemoryGame),
 
   // ── 5. Native HTML passthrough ───────────────────────────────────────────
   'div': ({ element, children }: any) => (

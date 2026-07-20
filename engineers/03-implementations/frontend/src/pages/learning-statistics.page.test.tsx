@@ -53,7 +53,7 @@ beforeEach(() => {
     user: { id: 'u1', email: 'dev@test.com' }
   });
   store.set('/state', {
-    stats: { viewMode: 'week', currentDate: new Date().toISOString() }
+    stats: { viewMode: 'week', currentDate: '2026-07-15T12:00:00Z' }
   });
   vi.clearAllMocks();
 });
