@@ -192,7 +192,7 @@ export default function MemoryGame({ element }: any) {
               unmatchedCards = unmatchedCards.map(c => ({ ...c, isShaking: true }));
               unmatchedCards = shuffleArray(unmatchedCards);
               
-              const next = [];
+              const next: Card[] = [];
               let mIdx = 0;
               let uIdx = 0;
               for (let i = 0; i < prev.length; i++) {
@@ -265,7 +265,8 @@ export default function MemoryGame({ element }: any) {
 
   // Calculate grid columns based on card count
   const totalCards = config.pairs * 2;
-  const gridCols = totalCards <= 8 ? 'grid-cols-4' : totalCards <= 12 ? 'grid-cols-4 sm:grid-cols-6' : 'grid-cols-4 sm:grid-cols-5';
+  let gridCols = 'grid-cols-4';
+  if (totalCards === 20) gridCols = 'grid-cols-4 sm:grid-cols-5';
 
   return (
     <ErrorBoundary>
@@ -311,7 +312,7 @@ export default function MemoryGame({ element }: any) {
             return (
               <div 
                 key={card.id}
-                className={`relative aspect-[3/4] cursor-pointer group transform-style-3d transition-transform duration-500 ${card.isShaking ? 'animate-shake' : ''}`}
+                className={`relative aspect-[4/3] cursor-pointer group transform-style-3d transition-transform duration-500 ${card.isShaking ? 'animate-shake' : ''}`}
                 onClick={() => handleCardClick(index)}
                 style={{ transform: isVisible ? 'rotateY(180deg)' : 'rotateY(0deg)' }}
               >
