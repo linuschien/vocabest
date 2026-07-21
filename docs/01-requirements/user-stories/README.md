@@ -31,3 +31,5 @@
 - **[Epic 6: 支線任務與遊戲化 (Gamified Side Quests)](./US-06-side-quests.md)**
   - US 6.1 Wordle 拼字猜謎
   - US 6.2 Crossword 填字遊戲
+  - US 6.3 Memory Game 翻牌對對碰
+  - US 6.4 Audio Bingo 聽音辨位賓果
