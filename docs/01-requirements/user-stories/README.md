@@ -25,6 +25,7 @@
   - US 3.2 答對時的正向增強
 - **[Epic 4: 個人化錯題追蹤 (Personalized Error Tracking)](./US-04-personalized-error-tracking.md)**
   - US 4.1 錯題自動收錄與演算法排程
+  - US 4.2 關鍵任務日誌 (Critical Mission Log)
 - **[Epic 5: 權限控制與後台管理 (Access Control & Admin Management)](./US-05-access-control-and-admin.md)**
   - US 5.1 一般使用者個人資料存取限制
   - US 5.2 系統管理員全站資料存取權限
