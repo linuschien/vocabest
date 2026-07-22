@@ -19,7 +19,6 @@ import java.util.HashMap;
 import java.util.UUID;
 
 @Controller
-@com.vocabest.core.adapter.in.web.security.AdminOnly
 public class QuizQuestionGraphQLResolver {
 
     private final QuizQuestionRepository repository;
@@ -31,6 +30,7 @@ public class QuizQuestionGraphQLResolver {
     }
 
     @QueryMapping
+    @com.vocabest.core.adapter.in.web.security.AdminOnly
     public Flux<QuizQuestion> listQuizQuestions(@Argument QuizQuestionFilterInput filter) {
         return repository.search(filter);
     }

@@ -15,8 +15,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler extends DataFetcherExceptionResolverAdapter {
+
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
     @ExceptionHandler(WebExchangeBindException.class)
     public Mono<ResponseEntity<Map<String, Object>>> handleValidationException(WebExchangeBindException ex) {
@@ -33,6 +38,7 @@ public class GlobalExceptionHandler extends DataFetcherExceptionResolverAdapter 
 
     @ExceptionHandler(Exception.class)
     public Mono<ResponseEntity<Map<String, Object>>> handleGeneralException(Exception ex) {
+        log.error("Unhandled REST Exception", ex);
         return Mono.just(ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(Map.of(
                         "success", false,
@@ -42,6 +48,7 @@ public class GlobalExceptionHandler extends DataFetcherExceptionResolverAdapter 
 
     @Override
     protected GraphQLError resolveToSingleError(Throwable ex, DataFetchingEnvironment env) {
+        log.error("GraphQL Execution Error at path {}", env.getExecutionStepInfo().getPath(), ex);
         return GraphqlErrorBuilder.newError()
                 .message(ex.getMessage() != null ? ex.getMessage() : "GraphQL Execution Error")
                 .path(env.getExecutionStepInfo().getPath())

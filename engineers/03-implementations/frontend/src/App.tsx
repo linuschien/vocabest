@@ -13,6 +13,7 @@ import LearningStatisticsPage from '@/pages/learning-statistics.page';
 import WordlePage from '@/pages/wordle.page';
 import CrosswordPage from '@/pages/crossword.page';
 import MemoryGamePage from '@/pages/memory-game.page';
+import CriticalMissionLogPage from '@/pages/critical-mission-log.page';
 
 import GlobalLayout from '@/components/layout/GlobalLayout';
 
@@ -34,6 +35,7 @@ function App() {
               <Route path="/wordle" element={<WordlePage />} />
               <Route path="/crossword" element={<CrosswordPage />} />
               <Route path="/memory-game" element={<MemoryGamePage />} />
+              <Route path="/critical-mission-log" element={<CriticalMissionLogPage />} />
             </Route>
           </Routes>
         </BehaviorProvider>

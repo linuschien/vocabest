@@ -100,7 +100,8 @@
       "children": [
         "start-daily-task-btn",
         "error-review-btn",
-        "nav-dictionary-btn"
+        "nav-dictionary-btn",
+        "nav-critical-mission-log-btn"
       ]
     },
     "side-quest-title": {
@@ -177,6 +178,26 @@
             "action": "navigate",
             "params": {
               "path": "/vocabulary-dictionary"
+            }
+          }
+        ]
+      }
+    },
+    "nav-critical-mission-log-btn": {
+      "type": "Button",
+      "props": {
+        "id": "nav-critical-mission-log-btn",
+        "label": "📓 關鍵任務日誌",
+        "variant": "outline",
+        "disabled": null
+      },
+      "children": [],
+      "on": {
+        "press": [
+          {
+            "action": "navigate",
+            "params": {
+              "path": "/critical-mission-log"
             }
           }
         ]

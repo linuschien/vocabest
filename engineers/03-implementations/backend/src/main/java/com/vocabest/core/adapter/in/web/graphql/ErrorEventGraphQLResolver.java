@@ -10,6 +10,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import reactor.core.publisher.Mono;
 import org.springframework.graphql.data.method.annotation.BatchMapping;
+import org.springframework.graphql.data.method.annotation.SchemaMapping;
 import com.vocabest.core.adapter.out.persistence.model.QuizQuestion;
 import com.vocabest.core.adapter.out.persistence.repository.QuizQuestionRepository;
 import com.vocabest.core.adapter.in.web.dto.ErrorEventPage;
@@ -35,6 +36,12 @@ public class ErrorEventGraphQLResolver {
     @com.vocabest.core.adapter.in.web.security.RequireOwnership("#filter?.userId()")
     public Mono<ErrorEventPage> listErrorEvents(@Argument ErrorEventFilterInput filter) {
         return repository.search(filter);
+    }
+
+    @SchemaMapping(typeName = "ErrorEvent", field = "timestamp")
+    public java.time.OffsetDateTime timestamp(ErrorEvent event) {
+        if (event.timestamp() == null) return null;
+        return event.timestamp().atOffset(java.time.ZoneOffset.UTC);
     }
 
     @BatchMapping

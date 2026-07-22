@@ -20,6 +20,14 @@ public class ErrorEventRepositoryCustomImpl implements ErrorEventRepositoryCusto
         this.databaseClient = databaseClient;
     }
 
+    private LocalDateTime parseDate(String dateStr, String defaultTime) {
+        if (dateStr.contains("T")) {
+            return java.time.ZonedDateTime.parse(dateStr).withZoneSameInstant(java.time.ZoneOffset.UTC).toLocalDateTime();
+        } else {
+            return LocalDateTime.parse(dateStr + defaultTime, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        }
+    }
+
     @Override
     public Mono<ErrorEventPage> search(ErrorEventFilterInput filter) {
         StringBuilder query = new StringBuilder("SELECT * FROM error_event WHERE 1=1");
@@ -34,7 +42,7 @@ public class ErrorEventRepositoryCustomImpl implements ErrorEventRepositoryCusto
         }
 
         if (filter.startDate() != null) {
-            LocalDateTime start = LocalDateTime.parse(filter.startDate() + "T00:00:00", DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+            LocalDateTime start = parseDate(filter.startDate(), "T00:00:00");
             bindings.add(start);
             String condition = " AND timestamp >= $" + bindings.size();
             query.append(condition);
@@ -42,7 +50,7 @@ public class ErrorEventRepositoryCustomImpl implements ErrorEventRepositoryCusto
         }
 
         if (filter.endDate() != null) {
-            LocalDateTime end = LocalDateTime.parse(filter.endDate() + "T23:59:59", DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+            LocalDateTime end = parseDate(filter.endDate(), "T23:59:59");
             bindings.add(end);
             String condition = " AND timestamp <= $" + bindings.size();
             query.append(condition);

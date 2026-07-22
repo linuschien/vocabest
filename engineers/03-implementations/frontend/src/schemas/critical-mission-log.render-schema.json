@@ -1,0 +1,46 @@
+{
+  "root": "page-container",
+  "elements": {
+    "page-container": {
+      "type": "Container:page",
+      "props": {
+        "id": "critical-mission-log-page"
+      },
+      "children": ["header-nav", "viewer-section"]
+    },
+    "header-nav": {
+      "type": "Container:dict-header",
+      "props": { "id": "header-nav" },
+      "children": ["header-icon", "header-title"]
+    },
+    "header-icon": {
+      "type": "Text",
+      "props": {
+        "id": "header-icon",
+        "className": "text-3xl",
+        "text": "📓"
+      },
+      "children": []
+    },
+    "header-title": {
+      "type": "Text",
+      "props": {
+        "id": "header-title",
+        "className": "text-2xl font-black text-primary uppercase tracking-wider",
+        "text": "關鍵任務日誌"
+      },
+      "children": []
+    },
+    "viewer-section": {
+      "type": "div",
+      "props": {
+        "className": "w-full flex justify-center"
+      },
+      "children": ["log-viewer"]
+    },
+    "log-viewer": {
+      "type": "CriticalMissionLogViewer",
+      "props": {}
+    }
+  }
+}
