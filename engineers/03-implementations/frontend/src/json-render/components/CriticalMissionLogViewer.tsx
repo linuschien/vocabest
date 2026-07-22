@@ -167,19 +167,19 @@ export default function CriticalMissionLogViewer({ element }: any) {
 
                 {/* 2. 案發現場對比 */}
                 <div className="px-6 md:px-8 pb-6 md:pb-8 grid grid-cols-2 gap-4 border-b border-border bg-muted/30">
-                  <div className="flex flex-col p-4 rounded-xl border border-green-200 bg-green-50 dark:border-green-900 dark:bg-green-950/20">
-                    <span className="text-xs font-bold text-green-600 dark:text-green-400 mb-1 flex items-center gap-1">
+                  <div className="flex items-center justify-between p-3 rounded-xl border border-green-200 bg-green-50 dark:border-green-900 dark:bg-green-950/20 gap-2">
+                    <span className="text-xs font-bold text-green-600 dark:text-green-400 flex items-center gap-1 whitespace-nowrap shrink-0">
                       <CheckCircle2 className="w-3 h-3" /> 正確答案
                     </span>
-                    <span className="text-sm md:text-base font-bold text-green-700 dark:text-green-300 truncate" title={currentEvent.quizQuestion.correctAnswer}>
+                    <span className="text-sm md:text-base font-bold text-green-700 dark:text-green-300 truncate text-right" title={currentEvent.quizQuestion.correctAnswer}>
                       {currentEvent.quizQuestion.correctAnswer}
                     </span>
                   </div>
-                  <div className="flex flex-col p-4 rounded-xl border border-red-200 bg-red-50 dark:border-red-900 dark:bg-red-950/20">
-                    <span className="text-xs font-bold text-red-600 dark:text-red-400 mb-1 flex items-center gap-1">
+                  <div className="flex items-center justify-between p-3 rounded-xl border border-red-200 bg-red-50 dark:border-red-900 dark:bg-red-950/20 gap-2">
+                    <span className="text-xs font-bold text-red-600 dark:text-red-400 flex items-center gap-1 whitespace-nowrap shrink-0">
                       <XCircle className="w-3 h-3" /> 你當時選了
                     </span>
-                    <span className="text-sm md:text-base font-bold text-red-700 dark:text-red-300 line-through opacity-80 truncate" title={currentEvent.selectedDistractor}>
+                    <span className="text-sm md:text-base font-bold text-red-700 dark:text-red-300 line-through opacity-80 truncate text-right" title={currentEvent.selectedDistractor}>
                       {currentEvent.selectedDistractor}
                     </span>
                   </div>
