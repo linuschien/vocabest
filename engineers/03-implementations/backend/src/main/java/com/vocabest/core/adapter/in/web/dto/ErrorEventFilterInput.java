@@ -1,11 +1,16 @@
 package com.vocabest.core.adapter.in.web.dto;
 
 import java.util.UUID;
+import java.time.LocalDateTime;
 
 public record ErrorEventFilterInput(
     UUID id,
     UUID userId,
     UUID quizQuestionId,
-    java.time.LocalDateTime timestamp,
-    String selectedDistractor
+    LocalDateTime timestamp,
+    String selectedDistractor,
+    String startDate,
+    String endDate,
+    Integer page,
+    Integer size
 ) {}

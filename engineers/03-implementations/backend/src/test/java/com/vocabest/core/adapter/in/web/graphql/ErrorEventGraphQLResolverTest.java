@@ -31,12 +31,14 @@ class ErrorEventGraphQLResolverTest {
     void testListErrorEvents() {
         UUID wordId = UUID.randomUUID();
         ErrorEvent entity = new ErrorEvent(UUID.randomUUID(), UUID.randomUUID(), wordId, LocalDateTime.now(), "dist", LocalDateTime.now(), LocalDateTime.now(), null);
-        when(repository.findAll(any(Example.class))).thenReturn(Flux.just(entity));
+        com.vocabest.core.adapter.in.web.dto.ErrorEventPage page = new com.vocabest.core.adapter.in.web.dto.ErrorEventPage(java.util.List.of(entity), 1);
+        when(repository.search(any())).thenReturn(reactor.core.publisher.Mono.just(page));
 
         UUID filterUserId = UUID.randomUUID();
-        StepVerifier.create(resolver.listErrorEvents(new ErrorEventFilterInput(null, filterUserId, null, null, null))
+        ErrorEventFilterInput filter = new ErrorEventFilterInput(null, filterUserId, null, null, null, null, null, null, null);
+        StepVerifier.create(resolver.listErrorEvents(filter)
                 .contextWrite(reactor.util.context.Context.of("CURRENT_USER", new com.vocabest.core.adapter.out.persistence.model.User(filterUserId, "test", com.vocabest.core.adapter.out.persistence.model.Role.LEARNER, null, 0, 0, 0, 0, null, null, null))))
-                .expectNextMatches(e -> e.quizQuestionId().equals(wordId))
+                .expectNextMatches(p -> p.content().get(0).quizQuestionId().equals(wordId) && p.totalElements() == 1)
                 .verifyComplete();
     }
 }

@@ -66,6 +66,7 @@ type ErrorEvent {
   quizQuestionId: UUID
   timestamp: DateTime
   selectedDistractor: String
+  quizQuestion: QuizQuestion
 }
 
 input ErrorEventFilterInput {
@@ -74,6 +75,10 @@ input ErrorEventFilterInput {
   quizQuestionId: UUID
   timestamp: DateTime
   selectedDistractor: String
+  startDate: String
+  endDate: String
+  page: Int
+  size: Int
 }
 
 type QuizQuestion {
@@ -87,6 +92,7 @@ type QuizQuestion {
   distractor3: String
   explanationRootAffix: String
   explanationMnemonic: String
+  wordBank: WordBank
 }
 
 input QuizQuestionFilterInput {
@@ -138,10 +144,15 @@ type WordBankPage {
   totalElements: Int
 }
 
+type ErrorEventPage {
+  content: [ErrorEvent]
+  totalElements: Int
+}
+
 type Query {
   listUsers(filter: UserFilterInput): [User]
   listDailyProgresses(filter: DailyProgressFilterInput): [DailyProgress]
-  listErrorEvents(filter: ErrorEventFilterInput): [ErrorEvent]
+  listErrorEvents(filter: ErrorEventFilterInput): ErrorEventPage
   listQuizQuestions(filter: QuizQuestionFilterInput): [QuizQuestion]
   listWordBanks(filter: WordBankFilterInput): WordBankPage
   listWordMasteries(filter: WordMasteryFilterInput): [WordMastery]

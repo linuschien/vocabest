@@ -8,28 +8,52 @@ import org.springframework.graphql.data.method.annotation.QueryMapping;
 import org.springframework.stereotype.Controller;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
-import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import org.springframework.graphql.data.method.annotation.BatchMapping;
+import com.vocabest.core.adapter.out.persistence.model.QuizQuestion;
+import com.vocabest.core.adapter.out.persistence.repository.QuizQuestionRepository;
+import com.vocabest.core.adapter.in.web.dto.ErrorEventPage;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.HashMap;
+import java.util.UUID;
 
 @Controller
 public class ErrorEventGraphQLResolver {
 
     private final ErrorEventRepository repository;
+    private final QuizQuestionRepository quizQuestionRepository;
 
-    public ErrorEventGraphQLResolver(ErrorEventRepository repository) {
+    public ErrorEventGraphQLResolver(ErrorEventRepository repository, QuizQuestionRepository quizQuestionRepository) {
         this.repository = repository;
+        this.quizQuestionRepository = quizQuestionRepository;
     }
 
     @QueryMapping
     @com.vocabest.core.adapter.in.web.security.RequireOwnership("#filter?.userId()")
-    public Flux<ErrorEvent> listErrorEvents(@Argument ErrorEventFilterInput filter) {
-        ErrorEvent probe = new ErrorEvent(
-            filter != null ? filter.id() : null, 
-            filter != null ? filter.userId() : null, 
-            filter != null ? filter.quizQuestionId() : null, 
-            filter != null ? filter.timestamp() : null, 
-            filter != null ? filter.selectedDistractor() : null, 
-            null, null, null);
-        ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreNullValues();
-        return repository.findAll(Example.of(probe, matcher));
+    public Mono<ErrorEventPage> listErrorEvents(@Argument ErrorEventFilterInput filter) {
+        return repository.search(filter);
+    }
+
+    @BatchMapping
+    public Mono<Map<ErrorEvent, QuizQuestion>> quizQuestion(List<ErrorEvent> events) {
+        Set<UUID> quizIds = events.stream()
+                .map(ErrorEvent::quizQuestionId)
+                .filter(id -> id != null)
+                .collect(Collectors.toSet());
+
+        return quizQuestionRepository.findAllById(quizIds)
+                .collectMap(QuizQuestion::id)
+                .map(quizMap -> {
+                    Map<ErrorEvent, QuizQuestion> result = new HashMap<>();
+                    for (ErrorEvent event : events) {
+                        if (event.quizQuestionId() != null) {
+                            result.put(event, quizMap.get(event.quizQuestionId()));
+                        }
+                    }
+                    return result;
+                });
     }
 }
