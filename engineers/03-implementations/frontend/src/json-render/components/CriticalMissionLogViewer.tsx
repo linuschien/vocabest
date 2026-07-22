@@ -77,7 +77,7 @@ export default function CriticalMissionLogViewer({ element }: any) {
 
   return (
     <ErrorBoundary>
-      <div className="flex flex-col w-full max-w-4xl mx-auto p-4 md:p-8" id={element?.props?.id}>
+      <div className="flex flex-col w-full max-w-4xl mx-auto px-4 md:px-8 pb-8 pt-2" id={element?.props?.id}>
         
         {/* Time Range Selector */}
         <div className="flex flex-wrap items-center justify-center gap-2 mb-8 bg-card p-2 rounded-xl border border-border shadow-sm">
@@ -153,7 +153,7 @@ export default function CriticalMissionLogViewer({ element }: any) {
               <div className="bg-card border-2 border-border shadow-xl rounded-3xl overflow-hidden flex flex-col transition-all">
                 
                 {/* 1. 情境回放 */}
-                <div className="bg-muted/30 p-6 md:p-8 border-b border-border">
+                <div className="bg-muted/30 p-6 md:p-8 pb-4">
                   <div className="text-sm font-bold text-muted-foreground mb-3 flex items-center gap-2 uppercase tracking-wider">
                     <RotateCcw className="w-4 h-4" /> 情境回放 (Contextual Cloze)
                   </div>
@@ -166,12 +166,12 @@ export default function CriticalMissionLogViewer({ element }: any) {
                 </div>
 
                 {/* 2. 案發現場對比 */}
-                <div className="p-6 md:p-8 grid grid-cols-1 sm:grid-cols-2 gap-4 border-b border-border bg-card">
+                <div className="px-6 md:px-8 pb-6 md:pb-8 grid grid-cols-2 gap-4 border-b border-border bg-muted/30">
                   <div className="flex flex-col p-4 rounded-xl border border-green-200 bg-green-50 dark:border-green-900 dark:bg-green-950/20">
                     <span className="text-xs font-bold text-green-600 dark:text-green-400 mb-1 flex items-center gap-1">
                       <CheckCircle2 className="w-3 h-3" /> 正確答案
                     </span>
-                    <span className="text-lg font-bold text-green-700 dark:text-green-300">
+                    <span className="text-sm md:text-base font-bold text-green-700 dark:text-green-300 truncate" title={currentEvent.quizQuestion.correctAnswer}>
                       {currentEvent.quizQuestion.correctAnswer}
                     </span>
                   </div>
@@ -179,7 +179,7 @@ export default function CriticalMissionLogViewer({ element }: any) {
                     <span className="text-xs font-bold text-red-600 dark:text-red-400 mb-1 flex items-center gap-1">
                       <XCircle className="w-3 h-3" /> 你當時選了
                     </span>
-                    <span className="text-lg font-bold text-red-700 dark:text-red-300 line-through opacity-80">
+                    <span className="text-sm md:text-base font-bold text-red-700 dark:text-red-300 line-through opacity-80 truncate" title={currentEvent.selectedDistractor}>
                       {currentEvent.selectedDistractor}
                     </span>
                   </div>
