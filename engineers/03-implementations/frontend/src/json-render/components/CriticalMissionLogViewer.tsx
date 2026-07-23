@@ -71,6 +71,7 @@ export default function CriticalMissionLogViewer({ element }: any) {
       window.speechSynthesis.cancel();
       const utter = new SpeechSynthesisUtterance(text);
       utter.lang = 'en-US';
+      utter.rate = 0.9;
       window.speechSynthesis.speak(utter);
     }
   };
@@ -123,31 +124,38 @@ export default function CriticalMissionLogViewer({ element }: any) {
           ) : currentEvent ? (
             <div className="w-full flex flex-col gap-6">
               
-              {/* Pagination Header */}
-              <div className="flex items-center justify-between px-2">
-                <button 
-                  onClick={handlePrev} 
-                  disabled={absoluteIndex === 0 || isFetching}
-                  className="p-2 rounded-full hover:bg-muted disabled:opacity-30 transition-colors"
-                  data-testid="prev-card-btn"
-                >
-                  <ChevronLeft className="w-6 h-6" />
-                </button>
-                <div className="font-mono font-bold text-sm bg-muted px-4 py-1.5 rounded-full text-muted-foreground flex items-center gap-2">
+              {/* Pagination Status Pill */}
+              <div className="flex justify-center mb-2">
+                <div className="font-mono font-bold text-sm bg-muted px-4 py-1.5 rounded-full text-muted-foreground flex items-center gap-2 border border-border shadow-sm">
                   <span>第 {absoluteIndex + 1} 筆</span>
                   <span className="opacity-50">/</span>
                   <span>共 {totalElements} 筆</span>
                   {isFetching && <RotateCcw className="w-3 h-3 animate-spin ml-2" />}
                 </div>
+              </div>
+
+              {/* Flashcard Container (Carousel) */}
+              <div className="w-full relative group">
+                
+                {/* Left Button */}
+                <button 
+                  onClick={handlePrev} 
+                  disabled={absoluteIndex === 0 || isFetching}
+                  className="absolute -left-3 md:-left-6 top-1/2 -translate-y-1/2 z-10 p-2 md:p-3 bg-background border-2 border-border shadow-xl rounded-full hover:bg-muted disabled:opacity-0 disabled:pointer-events-none transition-all"
+                  data-testid="prev-card-btn"
+                >
+                  <ChevronLeft className="w-6 h-6 md:w-8 md:h-8 text-foreground" />
+                </button>
+
+                {/* Right Button */}
                 <button 
                   onClick={handleNext} 
                   disabled={absoluteIndex === totalElements - 1 || isFetching}
-                  className="p-2 rounded-full hover:bg-muted disabled:opacity-30 transition-colors"
+                  className="absolute -right-3 md:-right-6 top-1/2 -translate-y-1/2 z-10 p-2 md:p-3 bg-background border-2 border-border shadow-xl rounded-full hover:bg-muted disabled:opacity-0 disabled:pointer-events-none transition-all"
                   data-testid="next-card-btn"
                 >
-                  <ChevronRight className="w-6 h-6" />
+                  <ChevronRight className="w-6 h-6 md:w-8 md:h-8 text-foreground" />
                 </button>
-              </div>
 
               {/* Flashcard */}
               <div className="bg-card border-2 border-border shadow-xl rounded-3xl overflow-hidden flex flex-col transition-all">
@@ -231,6 +239,7 @@ export default function CriticalMissionLogViewer({ element }: any) {
                 </div>
 
               </div>
+            </div>
             </div>
           ) : (
             <div className="flex flex-col items-center text-muted-foreground">
