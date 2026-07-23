@@ -124,16 +124,6 @@ export default function CriticalMissionLogViewer({ element }: any) {
           ) : currentEvent ? (
             <div className="w-full flex flex-col gap-6">
               
-              {/* Pagination Status Pill */}
-              <div className="flex justify-center mb-2">
-                <div className="font-mono font-bold text-sm bg-muted px-4 py-1.5 rounded-full text-muted-foreground flex items-center gap-2 border border-border shadow-sm">
-                  <span>第 {absoluteIndex + 1} 筆</span>
-                  <span className="opacity-50">/</span>
-                  <span>共 {totalElements} 筆</span>
-                  {isFetching && <RotateCcw className="w-3 h-3 animate-spin ml-2" />}
-                </div>
-              </div>
-
               {/* Flashcard Container (Carousel) */}
               <div className="w-full relative group">
                 
@@ -162,8 +152,17 @@ export default function CriticalMissionLogViewer({ element }: any) {
                 
                 {/* 1. 情境回放 */}
                 <div className="bg-muted/30 p-6 md:p-8 pb-4">
-                  <div className="text-sm font-bold text-muted-foreground mb-3 flex items-center gap-2 uppercase tracking-wider">
-                    <RotateCcw className="w-4 h-4" /> 情境回放 (Contextual Cloze)
+                  <div className="flex items-center justify-between mb-3">
+                    <div className="text-sm font-bold text-muted-foreground flex items-center gap-2 uppercase tracking-wider">
+                      <RotateCcw className="w-4 h-4" /> 情境回放 (Contextual Cloze)
+                    </div>
+                    {/* Pagination Status (Integrated) */}
+                    <div data-testid="pagination-status" className="font-mono font-bold text-xs bg-muted px-3 py-1 rounded-full text-muted-foreground flex items-center gap-1.5 shadow-inner border border-border/50">
+                      <span>{absoluteIndex + 1}</span>
+                      <span className="opacity-50">/</span>
+                      <span>{totalElements}</span>
+                      {isFetching && <RotateCcw className="w-3 h-3 animate-spin ml-1" />}
+                    </div>
                   </div>
                   <div className="text-lg md:text-xl font-medium leading-relaxed mb-3 text-foreground">
                     {currentEvent.quizQuestion.contextualCloze}

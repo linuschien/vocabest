@@ -87,8 +87,7 @@ describe('CriticalMissionLogViewer', () => {
     renderComponent();
     
     // Check total and current page text
-    expect(screen.getByText('第 1 筆')).toBeInTheDocument();
-    expect(screen.getByText('共 2 筆')).toBeInTheDocument();
+    expect(screen.getByTestId('pagination-status')).toHaveTextContent('1/2');
 
     // Check specific fields requested by user
     expect(screen.getByText('An ___ a day keeps the doctor away.')).toBeInTheDocument();
@@ -109,7 +108,7 @@ describe('CriticalMissionLogViewer', () => {
     fireEvent.click(nextBtn!);
 
     // Should show dog next
-    expect(screen.getByText('第 2 筆')).toBeInTheDocument();
+    expect(screen.getByTestId('pagination-status')).toHaveTextContent('2/2');
     expect(screen.getByText('The ___ barked loudly.')).toBeInTheDocument();
     expect(screen.getAllByText('dog').length).toBeGreaterThan(0);
     expect(screen.getByText('cat')).toBeInTheDocument();
